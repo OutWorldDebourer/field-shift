@@ -9,6 +9,9 @@ use serde::{Deserialize, Serialize};
 
 pub use geosfp::{daily, Day};
 
+static INFLIGHT: std::sync::LazyLock<std::sync::Mutex<std::collections::HashMap<String, std::sync::Arc<tokio::sync::Mutex<()>>>>> =
+    std::sync::LazyLock::new(Default::default);
+
 pub fn routes() -> Router<AppState> { Router::new().route("/", get(route)) }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -29,6 +32,14 @@ pub async fn forecast(state: &AppState, lat: f64, lon: f64, days: usize) -> anyh
     let run = geosfp::latest_full_run(&state.http).await?;
     let (i, j) = geosfp::index(lat, lon);
     let key = format!("geosfp:v1:{run}:{i}:{j}");
+    // One read per cell at a time: a second request for the same cell (the evidence build and the dashboard card
+    // usually ask together) waits for the first and then finds it in the cache, instead of doubling the load on NCCS.
+    let gate = {
+        let mut m = INFLIGHT.lock().unwrap_or_else(|e| e.into_inner());
+        m.retain(|_, g| std::sync::Arc::strong_count(g) > 1);
+        m.entry(key.clone()).or_default().clone()
+    };
+    let _held = gate.lock().await;
     let full: Forecast = common::cache::get_or_fetch(&state.db, "geos-fp", &key, 6, || async {
         let d = geosfp::daily(&state.http, &run, i, j, lon).await?;
         Ok(Forecast {

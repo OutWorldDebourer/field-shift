@@ -50,6 +50,8 @@ fn parse_ascii(text: &str) -> Vec<f64> {
 
 async fn block(http: reqwest::Client, url: String, what: String) -> anyhow::Result<Vec<f64>> {
     for attempt in 0..3 {
+        // Back off before a retry: the server refuses connections when it is busy.
+        if attempt > 0 { tokio::time::sleep(std::time::Duration::from_millis(1500 * attempt)).await; }
         match http.get(&url).timeout(std::time::Duration::from_secs(60)).send().await.and_then(|r| r.error_for_status()) {
             Ok(r) => {
                 let vals = parse_ascii(&r.text().await?);

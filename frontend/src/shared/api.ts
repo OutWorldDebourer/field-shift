@@ -115,7 +115,7 @@ export async function exampleIntake(site: string | null, l: Lang): Promise<Intak
 /** NASA GEOS-FP forecast for the field's cell; null when the backend or the network does not answer. */
 export async function getForecast(lat: number, lon: number, days: number): Promise<Forecast | null> {
   try {
-    const f = await req<Forecast>(`/api/forecast?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}&days=${days}`, { timeout: 30000 });
+    const f = await req<Forecast>(`/api/forecast?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}&days=${days}`, { timeout: 90000 });
     return f && Array.isArray(f.days) ? f : null;
   } catch { return null; }
 }

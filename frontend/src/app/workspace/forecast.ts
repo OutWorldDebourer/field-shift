@@ -47,6 +47,13 @@ export function outlookNow(a: ClientAnalysis): Outlook | null | undefined {
   return olCache.has(`${cell(a)}:${fc.months}`) ? null : undefined;
 }
 
+/** Forget failed (null) reads for this field so the next load asks the server again. */
+function forgetFailed(a: ClientAnalysis): void {
+  const c = cell(a);
+  for (const [k, v] of fcCache) if (v === null && k.startsWith(c + ':')) fcCache.delete(k);
+  for (const [k, v] of olCache) if (v === null && k.startsWith(c + ':')) olCache.delete(k);
+}
+
 /** Fetch whatever the current choices need; resolves when both are known (or failed). */
 export async function loadForecast(a: ClientAnalysis): Promise<void> {
   if (a.offline) return;
@@ -114,9 +121,9 @@ export function sourcesHtml(a: ClientAnalysis): string {
   const lines = [`NASA POWER · ${esc(t('t2m'))} · ${esc(last)} · ~50 km · ${esc(t('regional'))}`];
   if (f) lines.push(`<b>${esc(t('fc_label'))}</b> · ${esc(f.source)}${f.run ? ' · ' + esc(t('fc_run', { r: f.run })) : ''} · ${esc(f.resolution)}`);
   else if (f === undefined && !a.offline) lines.push(`<span class="fc__wait">${esc(t('fc_loading'))}</span>`);
-  else if (f === null && !a.offline) lines.push(esc(t('fc_na')));
+  else if (f === null && !a.offline) lines.push(`${esc(t('fc_na'))} <button type="button" class="fc__retry" data-fcretry>${esc(t('ap_retry'))}</button>`);
   if (o) lines.push(`<b>${esc(t('fc_outlook_label'))}</b> · ${esc(t('fc_outlook_src', { a: `${o.anomaly_c > 0 ? '+' : ''}${fmt(o.anomaly_c, 1)} °C` }))}`);
-  else if (fc.months && o === null && !a.offline) lines.push(esc(t('fc_outlook_na')));
+  else if (fc.months && o === null && !a.offline) lines.push(`${esc(t('fc_outlook_na'))} <button type="button" class="fc__retry" data-fcretry>${esc(t('ap_retry'))}</button>`);
   const p = ev.projection as Proj | null;
   if (fc.proj && p?.d_temp_c != null) {
     const r = p.d_temp_range?.length === 2 ? ` · ${esc(t('db_proj_range', { a: sg(p.d_temp_range[0]), b: sg(p.d_temp_range[1]) + ' °C' }))}` : '';
@@ -143,6 +150,8 @@ export function tableHtml(a: ClientAnalysis): string {
 export function wireForecast(root: HTMLElement, a: () => ClientAnalysis, rerender: () => void): void {
   const after = () => { save(); rerender(); void withForecastLoad(root, a(), rerender); };
   root.addEventListener('click', (e) => {
+    // A failed read is remembered so the card does not keep asking; "Retry" forgets it and asks again.
+    if ((e.target as HTMLElement).closest('[data-fcretry]')) { forgetFailed(a()); after(); return; }
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-fcdays]');
     if (!b) return;
     fc.days = +b.dataset.fcdays!; after();
