@@ -156,6 +156,22 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode) ->
         t("Before", "Antes"), esc(&if prev.is_empty() { t("not stated", "no indicado") } else { prev.join(", ") }),
         t("Readings", "Lecturas"), ev["readings"].as_array().map(|r| r.len()).unwrap_or(0)));
 
+    // What the farmer told us (intake form and consultant notes)
+    if let Some(f) = st.facts.as_ref().and_then(|f| f.as_object()).filter(|f| !f.is_empty()) {
+        let labels: [(&str, &str, &str); 12] = [("crop_now", "Crop now", "Cultivo actual"), ("crops_before", "Crops before", "Cultivos anteriores"), ("irrigation", "Irrigation", "Riego"),
+            ("soil_type", "Soil type", "Tipo de suelo"), ("organic_matter", "Organic matter added", "Materia orgánica"), ("residues", "Residues", "Rastrojos"),
+            ("pests_seen", "Pests or damage seen", "Plagas o daños vistos"), ("products_recent", "Products applied recently", "Productos aplicados"),
+            ("last_fertilizer", "Last fertilizer", "Último abono"), ("soil_test", "Soil test", "Análisis de suelo"), ("next_crop", "Next crop wanted", "Próximo cultivo"), ("harvest_use", "Harvest use", "Destino de la cosecha")];
+        let rows: String = labels.iter().filter_map(|(k, en, es_)| {
+            let v = f.get(*k)?;
+            let txt = match v { Value::Array(a) => a.iter().filter_map(Value::as_str).collect::<Vec<_>>().join(", "), Value::String(s) => s.clone(), _ => return None };
+            (!txt.trim().is_empty()).then(|| format!("<tr><td>{}</td><td>{}</td></tr>", if es { es_ } else { en }, esc(&txt)))
+        }).collect();
+        if !rows.is_empty() {
+            h.push_str(&format!("<h2>{}</h2><div class=\"scroll\"><table><tbody>{rows}</tbody></table></div>", t("What the farmer told us", "Lo que nos contó el agricultor")));
+        }
+    }
+
     // Readings: grid rows on desktop, stacked cards on a phone; licences listed once below.
     h.push_str(&format!("<h2>{}</h2>", t("NASA and satellite readings", "Lecturas de la NASA y satelitales")));
     let readings = ev["readings"].as_array().cloned().unwrap_or_default();
@@ -250,6 +266,27 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode) ->
     let mut gaps: Vec<String> = ev["gaps"].as_array().into_iter().flatten().map(|g| bi(&g["text"], lang)).collect();
     for s in st.sections.iter().filter(|s| s.key != "sheet" && s.key != "field") {
         let Some(c) = &s.content else { continue };
+        if s.key == "organic" {
+            h.push_str(&format!("<h2>{}</h2><p>{}</p>", esc(&bi(&c["title"], lang)), esc(&bi(&c["summary"], lang))));
+            h.push_str(&format!("<div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>", t("Natural enemy or beneficial", "Enemigo natural o benéfico"), t("Controls", "Controla"), t("Source", "Fuente")));
+            for a in c["agents"].as_array().into_iter().flatten() {
+                let kind = a["kind"].as_str().unwrap_or("");
+                let kind_l = match (kind, es) { ("insect", true) => "insecto", ("fungus", true) => "hongo", ("bacterium", true) => "bacteria", ("mite", true) => "ácaro", ("nematode", true) => "nematodo", (k, _) => k };
+                h.push_str(&format!("<tr><td>{} <i>{}</i> <span class=\"mono\">({}){}</span></td><td>{}</td><td class=\"cite\"><a href=\"{}\">{}</a></td></tr>",
+                    esc(&bi(&a["name"], lang)), esc(a["scientific"].as_str().unwrap_or("")), esc(kind_l),
+                    if a["for_reported_pest"] == true { t(" · for your pest", " · para su plaga") } else { String::new() },
+                    esc(&cap(&bi(&a["targets"], lang))), esc(a["citation"]["url"].as_str().unwrap_or("")), esc(a["citation"]["title"].as_str().unwrap_or(""))));
+            }
+            h.push_str("</tbody></table></div>");
+            for p in c["practices"].as_array().into_iter().flatten() {
+                let cites: Vec<String> = p["citations"].as_array().into_iter().flatten().map(|x| format!("<a href=\"{}\">{}</a>", esc(x["url"].as_str().unwrap_or("")), esc(x["title"].as_str().unwrap_or("")))).collect();
+                h.push_str(&format!("<p><b>{}.</b> {} <span class=\"cite\">{}</span></p>", esc(&bi(&p["title"], lang)), esc(&bi(&p["body"], lang)), cites.join(" · ")));
+            }
+            let list = |k: &str| c[k].as_array().into_iter().flatten().map(|x| format!("<li>{}</li>", esc(&bi(x, lang)))).collect::<String>();
+            h.push_str(&format!("<h3>{}</h3><ul class=\"gaps\">{}</ul><h3>{}</h3><ul class=\"gaps\">{}</ul>", t("When to act", "Cuándo actuar"), list("timing"), t("What harms your allies", "Lo que daña a sus aliados"), list("avoid")));
+            for g in c["gaps"].as_array().into_iter().flatten() { gaps.push(bi(g, lang)); }
+            continue;
+        }
         h.push_str(&format!("<h2>{}</h2>", esc(&bi(&c["title"], lang))));
         let summary = bi(&c["summary"], lang);
         if !summary.is_empty() { h.push_str(&format!("<p>{}</p>", esc(&summary))); }

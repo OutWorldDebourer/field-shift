@@ -2,9 +2,11 @@
 //! and fills the result sections from the cited advice engine. The consultant may only cite numbers from here.
 mod advise;
 mod crop_pests;
+pub mod intake;
 mod from_earthdata;
 mod from_imagery;
 mod from_power;
+mod organic;
 pub mod reading;
 
 use axum::Router;

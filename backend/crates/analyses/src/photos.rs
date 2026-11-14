@@ -4,6 +4,8 @@ use std::path::PathBuf;
 
 pub const MAX_PHOTOS_PER_MESSAGE: usize = 10;
 pub const MAX_PHOTO_BYTES: usize = 12 * 1024 * 1024;
+/// PDFs (e.g. an earlier technical sheet). Kept under the model request limit once base64-encoded.
+pub const MAX_PDF_BYTES: usize = 15 * 1024 * 1024;
 
 pub fn uploads_dir(state: &AppState) -> PathBuf { state.config.root.join("backend").join("uploads") }
 
@@ -19,6 +21,7 @@ fn ext_for(mime: &str) -> Option<&'static str> {
         "image/jpeg" | "image/jpg" => Some("jpg"),
         "image/png" => Some("png"),
         "image/webp" => Some("webp"),
+        "application/pdf" => Some("pdf"),
         _ => None,
     }
 }
@@ -26,7 +29,8 @@ fn ext_for(mime: &str) -> Option<&'static str> {
 /// Saves one photo and records it; returns its id and public URL.
 pub async fn save(state: &AppState, analysis: &str, mime: &str, bytes: Vec<u8>) -> ApiResult<StoredPhoto> {
     let ext = ext_for(mime).ok_or_else(|| ApiError::BadRequest(format!("unsupported image type {mime}")))?;
-    if bytes.len() > MAX_PHOTO_BYTES { return Err(ApiError::BadRequest("photo larger than 12 MB".into())); }
+    let limit = if mime == "application/pdf" { MAX_PDF_BYTES } else { MAX_PHOTO_BYTES };
+    if bytes.len() > limit { return Err(ApiError::BadRequest(format!("file larger than {} MB", limit / (1024 * 1024)))); }
     let dir = uploads_dir(state).join(analysis);
     tokio::fs::create_dir_all(&dir).await.map_err(|e| ApiError::Other(e.into()))?;
     let r = sqlx::query("INSERT INTO photos (analysis_id, file_path, mime, bytes) VALUES (?, '', ?, ?)")

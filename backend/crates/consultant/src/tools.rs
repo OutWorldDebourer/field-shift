@@ -35,6 +35,12 @@ pub fn definitions() -> Value {
               "summary_en": bi("One line, English, what was learned for this topic."), "summary_es": bi("Same in Spanish.") } } },
         { "name": "get_sheet", "description": "Read the technical sheet as it stands: each section's state, summary and item titles, the guided topics and the information gaps. Use it to point the farmer to what the sheet already says and to give the closing recommendations.",
           "input_schema": { "type": "object", "additionalProperties": false, "properties": {} } },
+        { "name": "record_facts", "description": "Record what the farmer told you (or what an attached document says) as short plain answers. Use only the fields you learned; they appear on the technical sheet as 'What the farmer told us'.",
+          "input_schema": { "type": "object", "additionalProperties": false, "properties": {
+            "crop_now": { "type": "string" }, "crops_before": { "type": "array", "items": { "type": "string" } }, "irrigation": { "type": "string" },
+            "soil_type": { "type": "string" }, "organic_matter": { "type": "string" }, "residues": { "type": "string" },
+            "pests_seen": { "type": "string" }, "products_recent": { "type": "string" }, "last_fertilizer": { "type": "string" },
+            "soil_test": { "type": "string" }, "next_crop": { "type": "string" }, "harvest_use": { "type": "string" } } } },
         { "name": "record_gap", "description": "Record an information gap the farmer could not answer (e.g. last fertilizer unknown). It is shown as a declared gap, never guessed.",
           "strict": true,
           "input_schema": { "type": "object", "additionalProperties": false, "required": ["text_en", "text_es"],
@@ -79,6 +85,10 @@ pub async fn execute(state: &AppState, id: &str, name: &str, input: &Value, fx: 
             let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;
             let next_needs = st.steps.iter().find(|x| Some(&x.key) == next.as_ref()).map(|x| x.needs.iter().map(|n| n.en.clone()).collect::<Vec<_>>());
             Ok(json!({ "ok": true, "next_topic": next, "next_topic_needs": next_needs, "all_done": next.is_none() }))
+        }
+        "record_facts" => {
+            let merged = store::merge_facts(&state.db, id, input).await.map_err(|e| e.to_string())?;
+            Ok(json!({ "ok": true, "facts": merged }))
         }
         "get_sheet" => {
             let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;

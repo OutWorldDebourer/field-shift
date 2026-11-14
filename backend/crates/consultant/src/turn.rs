@@ -8,6 +8,8 @@ use serde_json::{json, Value};
 pub struct NewPhoto {
     pub mime: String,
     pub bytes: Vec<u8>,
+    /// Original file name (shown for documents).
+    pub name: Option<String>,
 }
 
 pub struct TurnInput {
@@ -42,7 +44,11 @@ pub async fn run_turn(state: &AppState, id: &str, input: TurnInput) -> ApiResult
 
     let mut saved = vec![];
     for p in &input.photos { saved.push(photos::save(state, id, &p.mime, p.bytes.clone()).await?); }
-    let mut refs: Vec<PhotoRef> = saved.iter().map(|p| PhotoRef { url: p.url.clone(), tag: None }).collect();
+    let mut refs: Vec<PhotoRef> = saved.iter().zip(&input.photos).map(|(p, n)| PhotoRef {
+        url: p.url.clone(), tag: None,
+        kind: Some(if p.mime == "application/pdf" { "pdf".into() } else { "image".into() }),
+        name: n.name.clone(),
+    }).collect();
     let user_msg = store::add_message(&state.db, id, "user", input.text.trim(), &refs).await?;
     photos::set_message(state, &saved.iter().map(|p| p.id).collect::<Vec<_>>(), user_msg).await?;
 
@@ -60,7 +66,8 @@ pub async fn run_turn(state: &AppState, id: &str, input: TurnInput) -> ApiResult
         (demo::reply(state, &before, &input).await?, true, vec![])
     };
     for (i, tag) in tags {
-        if let Some(r) = refs.get_mut(i.saturating_sub(1)) { r.tag = Some(tag); }
+        // Photo numbers count images only (documents are numbered separately).
+        if let Some(r) = refs.iter_mut().filter(|r| r.kind.as_deref() != Some("pdf")).nth(i.saturating_sub(1)) { r.tag = Some(tag); }
     }
     if refs.iter().any(|r| r.tag.is_some()) {
         sqlx::query("UPDATE messages SET meta = ? WHERE id = ?").bind(json!({ "photos": refs })).bind(user_msg).execute(&state.db).await?;
@@ -77,7 +84,19 @@ async fn live(state: &AppState, id: &str, st: &AnalysisState, input: &TurnInput,
     let mut messages = history(st);
     // Each photo in full, then (for the first four large ones) its quarters at native resolution for tiny insects.
     let mut content: Vec<Value> = vec![];
+    let (mut n_photo, mut n_doc) = (0, 0);
     for (i, p) in saved.iter().enumerate() {
+        if p.mime == "application/pdf" {
+            // Documents (an earlier technical sheet, a lab report…) go to Claude as PDF document blocks.
+            n_doc += 1;
+            let name = input.photos.get(i).and_then(|x| x.name.clone()).unwrap_or_else(|| format!("document {n_doc}"));
+            content.push(json!({ "type": "text", "text": format!("Document {n_doc} ({name}):") }));
+            content.push(json!({ "type": "document", "source": { "type": "base64", "media_type": "application/pdf",
+                "data": base64::Engine::encode(&base64::engine::general_purpose::STANDARD, &p.bytes) }, "title": name }));
+            continue;
+        }
+        n_photo += 1;
+        let i = n_photo - 1;
         content.push(json!({ "type": "text", "text": format!("Photo {}:", i + 1) }));
         let (media, data) = crate::tiles::model_view(&p.bytes, &p.mime);
         content.push(json!({ "type": "image", "source": { "type": "base64", "media_type": media, "data": data } }));
@@ -89,7 +108,7 @@ async fn live(state: &AppState, id: &str, st: &AnalysisState, input: &TurnInput,
         }
     }
     content.push(json!({ "type": "text", "text": prompt::context_note(st, &input.lang) }));
-    let text = if input.text.trim().is_empty() { "(photos only)".to_string() } else { input.text.trim().to_string() };
+    let text = if !input.text.trim().is_empty() { input.text.trim().to_string() } else if n_doc > 0 { "(documents attached)".to_string() } else { "(photos only)".to_string() };
     content.push(json!({ "type": "text", "text": text }));
     push(&mut messages, "user", Value::Array(content));
 

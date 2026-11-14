@@ -37,12 +37,19 @@ fn check_query(q: &str) -> ApiResult<&str> {
 /// Resolves free text to a crop record: seed first, then cached AI research, else researches it once with Claude.
 pub async fn resolve(state: &AppState, q: &str) -> ApiResult<CropRecord> {
     let q = check_query(q)?;
-    if let Some(m) = normalize::best(q, seed::all()) {
-        return seed::get(&m.key).cloned().ok_or(ApiError::NotFound);
-    }
+    // Farmers write "arveja (arverjita)", "maíz o frijol", "pea / peas": try the whole text, then each part,
+    // against the seed and the cached research before paying for a new research call.
+    let mut tries = vec![q.to_string()];
+    tries.extend(q.split(|c: char| matches!(c, '(' | ')' | ',' | '/' | ';')).flat_map(|p| p.split(" o ").flat_map(|x| x.split(" or ")))
+        .map(|p| p.trim().to_string()).filter(|p| p.chars().count() >= 3 && p != q));
     let cached = store::researched(&state.db).await;
-    if let Some(m) = normalize::best(q, &cached) {
-        return cached.into_iter().find(|c| c.key == m.key).ok_or(ApiError::NotFound);
+    for t in &tries {
+        if let Some(m) = normalize::best(t, seed::all()) {
+            return seed::get(&m.key).cloned().ok_or(ApiError::NotFound);
+        }
+        if let Some(m) = normalize::best(t, &cached) {
+            return cached.into_iter().find(|c| c.key == m.key).ok_or(ApiError::NotFound);
+        }
     }
     let _guard = RESEARCH_LOCK.lock().await;
     // Another request may have researched it while we waited.

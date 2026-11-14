@@ -58,7 +58,7 @@ fn parse_ring(wkt: &str) -> Vec<[f64; 2]> {
 pub async fn load(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> { load_raw(db, id).await.map(with_prediagnosis) }
 
 async fn load_raw(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
-    let a = sqlx::query("SELECT lang, location_mode, example_site, crop_current_record, crop_history, demo_mode, steps FROM analyses WHERE id = ?")
+    let a = sqlx::query("SELECT lang, location_mode, example_site, crop_current_record, crop_history, demo_mode, steps, facts FROM analyses WHERE id = ?")
         .bind(id).fetch_optional(db).await?.ok_or(ApiError::NotFound)?;
     let history: Option<Value> = a.try_get("crop_history")?;
     Ok(AnalysisState {
@@ -72,6 +72,7 @@ async fn load_raw(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
         messages: messages(db, id).await?,
         prediagnosis: None,
         steps: vec![],
+        facts: a.try_get("facts")?,
         next_step: None,
         sections: sections(db, id).await?,
         evidence: latest_evidence(db, id).await?,
@@ -193,6 +194,9 @@ pub async fn complete_step(db: &MySqlPool, id: &str, key: &str, summary: &Bi) ->
     let v = crate::steps::mark_done(stored, key, summary);
     sqlx::query("UPDATE analyses SET steps = ? WHERE id = ?").bind(&v).bind(id).execute(db).await?;
     sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = ? AND state <> 'gaps'").bind(id).bind(key).execute(db).await?;
+    if key == "pests" {
+        sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = 'organic' AND content IS NOT NULL").bind(id).execute(db).await?;
+    }
     let (_, next) = crate::steps::from_stored(Some(&v));
     if next.is_none() {
         sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = 'sheet'").bind(id).execute(db).await?;
@@ -222,4 +226,18 @@ To start: what are you growing now, and what grew on this plot before?", place)
     };
     add_message(db, id, "assistant", &body, &[]).await?;
     Ok(())
+}
+
+/// Merges non-empty answers into the stored facts (later answers replace earlier ones for the same field).
+pub async fn merge_facts(db: &MySqlPool, id: &str, new: &Value) -> ApiResult<Value> {
+    let old: Option<Value> = sqlx::query_scalar("SELECT facts FROM analyses WHERE id = ?").bind(id).fetch_optional(db).await?.ok_or(ApiError::NotFound)?;
+    let mut merged = old.filter(|v| v.is_object()).unwrap_or_else(|| serde_json::json!({}));
+    if let (Some(m), Some(n)) = (merged.as_object_mut(), new.as_object()) {
+        for (k, v) in n {
+            let empty = v.is_null() || v.as_str().map(|s| s.trim().is_empty()).unwrap_or(false) || v.as_array().map(|a| a.is_empty()).unwrap_or(false);
+            if !empty { m.insert(k.clone(), v.clone()); }
+        }
+    }
+    sqlx::query("UPDATE analyses SET facts = ? WHERE id = ?").bind(&merged).bind(id).execute(db).await?;
+    Ok(merged)
 }

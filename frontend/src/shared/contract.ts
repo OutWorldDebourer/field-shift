@@ -165,3 +165,55 @@ export interface GlossaryTerm { key: string; term: Bi; short: Bi; scale?: Bi }
 // GET  /api/export/:id/sheet                         → HTML technical sheet (print to PDF) ; /sheet.pdf when available
 // GET  /api/export/:id/series.csv                    → CSV of all series
 // POST /api/export/:id/share                         → { url }
+
+// ---------------------------------------------------------------- iteration 3 (2026-11-14): documents, intake, organic
+
+/** A file attached to a chat message: photos and, since iteration 3, PDF documents (e.g. an earlier technical sheet). */
+// ChatMessage.photos[] items gain: kind?: 'image' | 'pdf'; name?: string (original file name); bytes?: number.
+
+/** Structured answers that feed the five topics at once (the "load information" panel). All optional. */
+export interface IntakeForm {
+  crop_now?: string;
+  crops_before?: string[];
+  irrigation?: string;           // "furrow from the canal", "drip", "well"…
+  soil_type?: string;            // "sandy loam", "clay"…
+  organic_matter?: string;       // "guinea-pig manure every season"…
+  residues?: string;             // "incorporated", "burned", "piled at the edge"…
+  pests_seen?: string;           // "red spider mite under the leaves"…
+  products_recent?: string;
+  last_fertilizer?: string;      // "urea 2 bags/ha in October" or "unknown"
+  soil_test?: string;            // "none" / "2024, pH 7.8"
+  next_crop?: string;
+  harvest_use?: string;          // "market", "family"…
+}
+
+/** One natural enemy or beneficial microorganism, always with its citation. */
+export interface BioAgent {
+  name: Bi; scientific: string;
+  kind: 'insect' | 'mite' | 'fungus' | 'bacterium' | 'nematode' | 'virus' | string;
+  targets: Bi;                    // what it controls
+  for_reported_pest?: boolean;    // matches a pest the farmer reported
+  crop?: string;                  // crop record it comes from
+  citation: { title: string; url: string };
+  note?: string;
+}
+
+/** Content of the "organic" section (biological and ecological pest management). */
+export interface OrganicContent {
+  title: Bi;
+  summary: Bi;
+  agents: BioAgent[];             // grouped by kind in the UI
+  practices: { title: Bi; body: Bi; citations: { title: string; url: string }[]; basis?: string }[];
+  timing: Bi[];                   // when to act, from NASA degree-days and the GEOS-FP forecast
+  avoid: Bi[];                    // what harms natural enemies
+  gaps: Bi[];
+}
+
+// Iteration 3 endpoints:
+// POST /api/consultant/:id/message  multipart field "photos" now also accepts application/pdf (≤ 20 MB each, ≤ 10 files total);
+//      the consultant reads PDFs (e.g. an earlier Field Shift technical sheet) and uses what they say.
+// POST /api/analyses/:id/intake  JSON IntakeForm → AnalysisState (resolves crops, completes the topics it covers,
+//      builds the evidence and advice, and adds a short consultant message summarising what was loaded).
+// GET  /api/analyses/examples  → each example gains intake_example: IntakeForm (labelled example answers).
+// AnalysisState gains facts?: IntakeForm (what the farmer has told so far) and sections gains key "organic"
+//      (state ready once the pests topic is done) whose content is OrganicContent.

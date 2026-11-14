@@ -36,9 +36,11 @@ async fn message(
             "lang" => input.lang = if field.text().await.unwrap_or_default() == "es" { "es".into() } else { "en".into() },
             "demo" => input.force_demo = field.text().await.unwrap_or_default() == "1",
             "photos" | "photos[]" => {
-                let mime = field.content_type().unwrap_or("application/octet-stream").to_string();
+                let name = field.file_name().map(|n| n.chars().take(120).collect::<String>());
+                let mut mime = field.content_type().unwrap_or("application/octet-stream").to_string();
+                if mime == "application/octet-stream" && name.as_deref().map(|n| n.to_lowercase().ends_with(".pdf")).unwrap_or(false) { mime = "application/pdf".into(); }
                 let bytes = field.bytes().await.map_err(|e| ApiError::BadRequest(e.to_string()))?.to_vec();
-                input.photos.push(NewPhoto { mime, bytes });
+                input.photos.push(NewPhoto { mime, bytes, name });
             }
             _ => {}
         }

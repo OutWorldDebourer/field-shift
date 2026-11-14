@@ -4,7 +4,7 @@ use common::geo::Field;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-pub const SECTION_KEYS: [&str; 6] = ["field", "soil", "pests", "nutrition", "rotation", "sheet"];
+pub const SECTION_KEYS: [&str; 7] = ["field", "soil", "pests", "nutrition", "rotation", "sheet", "organic"];
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Bi {
@@ -33,6 +33,12 @@ pub struct PhotoRef {
     pub url: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag: Option<String>,
+    /// "image" or "pdf" (absent on older messages = image).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub kind: Option<String>,
+    /// Original file name, for documents.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -72,6 +78,8 @@ pub struct AnalysisState {
     pub prediagnosis: Option<Value>,
     /// The guided topics in order, and the first one still open (None when all are done).
     pub steps: Vec<crate::steps::Step>,
+    /// What the farmer has told so far (intake form and consultant notes).
+    pub facts: Option<Value>,
     pub next_step: Option<String>,
 }
 

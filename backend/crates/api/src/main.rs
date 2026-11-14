@@ -36,6 +36,7 @@ pub fn app(state: AppState) -> Router {
         .nest("/forecast", forecast::routes())
         .nest("/crops", crops::routes())
         .route("/analyses/{id}/evidence", post(build_evidence))
+        .route("/analyses/{id}/intake", post(intake))
         .nest("/analyses", analyses::routes())
         .nest("/consultant", consultant::routes())
         .nest("/export", export::routes());
@@ -51,6 +52,12 @@ pub fn app(state: AppState) -> Router {
         .unwrap_or_else(|_| state.config.root.join("frontend").join("dist"));
     let static_files = tower_http::services::ServeDir::new(&dist).append_index_html_on_directories(true);
     Router::new().nest("/api", api).fallback_service(static_files).layer(cors).with_state(state)
+}
+
+async fn intake(State(s): State<AppState>, Path(id): Path<String>, Json(form): Json<evidence::intake::IntakeForm>) -> common::ApiResult<Json<analyses::AnalysisState>> {
+    let lang = analyses::store::load(&s.db, &id).await?.lang;
+    evidence::intake::apply(&s, &id, &form, &lang).await.map_err(common::ApiError::Other)?;
+    Ok(Json(analyses::store::load(&s.db, &id).await?))
 }
 
 async fn build_evidence(State(s): State<AppState>, Path(id): Path<String>) -> common::ApiResult<Json<serde_json::Value>> {

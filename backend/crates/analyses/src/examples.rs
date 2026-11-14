@@ -11,6 +11,9 @@ pub struct ExampleSite {
     /// Crop story used by the scripted demo mode.
     pub crop_now: &'static str,
     pub crop_before: &'static str,
+    /// Example answers for the "load information" panel (the data the consultant needs for every section).
+    pub intake_example: serde_json::Value,
+    pub intake_example_es: serde_json::Value,
 }
 
 /// A real irrigated plot (~5 ha) in the lower Huaral (Chancay) valley, Lima region, Peru, traced by hand on the
@@ -31,6 +34,26 @@ pub fn all() -> Vec<ExampleSite> {
         field: FieldOut { area_ha: (field.area_ha() * 10.0).round() / 10.0, center: field.center, ring: field.ring, label: "Huaral valley, Peru".into() },
         crop_now: "pea",
         crop_before: "lettuce",
+        intake_example: serde_json::json!({
+            "crop_now": "pea (arverjita)", "crops_before": ["lettuce", "sweet potato"],
+            "irrigation": "furrow irrigation from the Chancay river canal, every 8–10 days",
+            "soil_type": "sandy loam", "organic_matter": "guinea-pig and chicken manure before sowing, about 2 t/ha",
+            "residues": "lettuce residues piled at the field edge",
+            "pests_seen": "small green insects under young leaves; some leaves with winding tunnels",
+            "products_recent": "one insecticide spray three weeks ago (name not known)",
+            "last_fertilizer": "urea, one bag before flowering", "soil_test": "none",
+            "next_crop": "maize or another vegetable", "harvest_use": "fresh pods for the Lima market"
+        }),
+        intake_example_es: serde_json::json!({
+            "crop_now": "arveja (arverjita)", "crops_before": ["lechuga", "camote"],
+            "irrigation": "riego por surcos con agua del canal del río Chancay, cada 8–10 días",
+            "soil_type": "franco arenoso", "organic_matter": "estiércol de cuy y gallina antes de sembrar, unas 2 t/ha",
+            "residues": "los restos de lechuga se amontonan al borde del campo",
+            "pests_seen": "insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías",
+            "products_recent": "una aplicación de insecticida hace tres semanas (no sé el nombre)",
+            "last_fertilizer": "urea, una bolsa antes de la floración", "soil_test": "ninguno",
+            "next_crop": "maíz u otra hortaliza", "harvest_use": "vainas frescas para el mercado de Lima"
+        }),
     }]
 }
 

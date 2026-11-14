@@ -116,6 +116,9 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     };
     pests["crop_pests"] = json!(crop_pests);
     pests["thresholds"] = adv["pest_thresholds"].clone();
+    // Organic / biological management: ready together with the pest-care topic.
+    let organic = crate::organic::build(&cur_rec, st.facts.as_ref(), &ev);
+    store::set_section(&state.db, analysis_id, "organic", st_of("pests"), None, Some(&organic)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
     store::set_section(&state.db, analysis_id, "pests", st_of("pests"), None, Some(&pests)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 
     // Rotation (annual, semi-perennial) or the perennial system
