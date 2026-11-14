@@ -16,3 +16,4 @@ tools/.venv/
 *.tmp
 research/cache/
 frontend/dist/
+backend/cache/

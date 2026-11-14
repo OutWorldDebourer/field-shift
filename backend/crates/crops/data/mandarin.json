@@ -1,0 +1,303 @@
+{
+  "key": "mandarin",
+  "names": {
+    "en": [
+      "mandarin",
+      "mandarin orange",
+      "tangerine",
+      "clementine",
+      "satsuma",
+      "citrus"
+    ],
+    "es": [
+      "mandarina",
+      "mandarinas",
+      "mandarino",
+      "mandarinita",
+      "tangerina",
+      "clementina",
+      "satsuma",
+      "cítrico",
+      "cítricos",
+      "citrus"
+    ]
+  },
+  "scientific_name": "Citrus reticulata Blanco",
+  "family": "Rutaceae",
+  "crop_type": "perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.7,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Citrus, no ground cover, 70% canopy"
+      },
+      "mid": {
+        "value": 0.65,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Citrus, no ground cover, 70% canopy; mid-season lower due to stomatal closure at peak ET"
+      },
+      "end": {
+        "value": 0.7,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Citrus, no ground cover, 70% canopy"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 900,
+        "max": 1200
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management: Training Manual No. 3 - Irrigation Water Needs (Table 5, Approximate values of seasonal crop water needs)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e02.htm"
+      },
+      "note": "Citrus, total growing period 240-365 days"
+    },
+    "temperature": {
+      "base": {
+        "value": 13,
+        "unit": "°C",
+        "citation": {
+          "title": "Effect of Climate on Fruit Development (Citrus Flowering short course 1997)",
+          "author": "Goldschmidt, E.E. / University of Florida IFAS",
+          "year": 1997,
+          "url": "https://irrec.ifas.ufl.edu/postharvest/pdfs/short_course_and_workshop/citrus_flowering_97/Goldschmidt-Effect_of_Climate_on_Fruit_Development.pdf"
+        },
+        "note": "Little growth occurs in citrus tree organs below 13 °C (55 °F)"
+      },
+      "optimum": {
+        "value": {
+          "min": 23,
+          "max": 34
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Citrus reticulata",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=718"
+        },
+        "note": "ECOCROP optimal temperature range"
+      },
+      "max": {
+        "value": 38,
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Citrus reticulata",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=718"
+        },
+        "note": "ECOCROP absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "ECOCROP data sheet: Citrus reticulata",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=718"
+        },
+        "note": "Family Rutaceae, not Fabaceae; species identity per ECOCROP sheet"
+      },
+      "typical_range": {
+        "gap": "Not a nitrogen-fixing legume"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Citrus leafminer",
+          "es": "Minador de la hoja de los cítricos"
+        },
+        "scientific_name": "Phyllocnistis citrella",
+        "citation": {
+          "title": "Artrópodos plaga en agroecosistemas de aguacate y mandarina en el valle de Cañete, Lima, Perú (Scientia 32(1):16-22)",
+          "author": "Collantes, R., Rodríguez B., A.R.",
+          "year": 2022,
+          "url": "https://revistas.up.ac.pa/index.php/scientia/article/download/2883/2561"
+        },
+        "lower_threshold": {
+          "value": 10.4,
+          "unit": "°C",
+          "citation": {
+            "title": "The effect of temperature on development and fecundity of Phyllocnistis citrella Stainton (Türkiye Entomoloji Dergisi 28(2):83-93)",
+            "author": "Elekçioğlu, N.Z., Uygun, N.",
+            "year": 2004,
+            "url": "https://dergipark.org.tr/en/download/article-file/64917"
+          },
+          "note": "Egg-to-adult, linear regression over 15-35 °C"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Most frequent mandarin pest in Cañete valley (10-50% presence)"
+      },
+      {
+        "name": {
+          "en": "Spirea aphid",
+          "es": "Pulgón verde de los cítricos"
+        },
+        "scientific_name": "Aphis spiraecola",
+        "citation": {
+          "title": "Artrópodos plaga en agroecosistemas de aguacate y mandarina en el valle de Cañete, Lima, Perú (Scientia 32(1):16-22)",
+          "author": "Collantes, R., Rodríguez B., A.R.",
+          "year": 2022,
+          "url": "https://revistas.up.ac.pa/index.php/scientia/article/download/2883/2561"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "10-40% presence on mandarin shoots, Cañete"
+      },
+      {
+        "name": {
+          "en": "Citrus rust mite",
+          "es": "Ácaro tostador / arañita del tostado"
+        },
+        "scientific_name": "Phyllocoptruta oleivora",
+        "citation": {
+          "title": "Artrópodos plaga en agroecosistemas de aguacate y mandarina en el valle de Cañete, Lima, Perú (Scientia 32(1):16-22)",
+          "author": "Collantes, R., Rodríguez B., A.R.",
+          "year": 2022,
+          "url": "https://revistas.up.ac.pa/index.php/scientia/article/download/2883/2561"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Damages mandarin fruit, Cañete"
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Mealybug destroyer",
+          "es": "Cryptolaemus (mariquita depredadora)"
+        },
+        "scientific_name": "Cryptolaemus montrouzieri",
+        "kind": "insect",
+        "controls": {
+          "en": "Mealybugs (cochinilla harinosa)",
+          "es": "Chanchitos blancos / cochinilla harinosa"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator of aphids, whiteflies, mealybugs and other soft-bodied pests",
+          "es": "Depredador generalista de pulgones, moscas blancas, chanchitos blancos y otras plagas de cuerpo blando"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Western predatory mite",
+          "es": "Ácaro depredador"
+        },
+        "scientific_name": "Galendromus occidentalis",
+        "kind": "mite",
+        "controls": {
+          "en": "Spider mites (Tetranychus urticae, T. pacificus) and other pest mites",
+          "es": "Arañitas rojas (Tetranychus urticae, T. pacificus) y otros ácaros plaga"
+        },
+        "citation": {
+          "title": "Senasa autorizó importación de ácaro de Israel para manejo de plagas en cultivos agrícolas",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/peru/senasa-autorizo-importacion-de-acaro-de-israel-para-manejo-de-plagas-en-cultivos-agricolas-noticia/"
+        },
+        "note": "Imported by SENASA from Israel in 2025 for crops such as citrus and grapevine; new species for Peru, released after quarantine"
+      },
+      {
+        "name": {
+          "en": "Beauveria",
+          "es": "Beauveria"
+        },
+        "scientific_name": "Beauveria bassiana",
+        "kind": "fungus",
+        "controls": {
+          "en": "Insect pests such as whiteflies and mealybugs (entomopathogen)",
+          "es": "Insectos plaga como mosca blanca y chanchitos blancos (entomopatógeno)"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Soil-borne root-rot fungi and grey mould",
+          "es": "Hongos de pudrición de raíces y moho gris"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      }
+    ],
+    "rotation_notes": {
+      "gap": "Perennial orchard crop; no cited botanical-family rotation guidance found"
+    }
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "key": "pineapple",
+  "names": {
+    "en": [
+      "pineapple",
+      "pineapples",
+      "ananas"
+    ],
+    "es": [
+      "piña",
+      "piñas",
+      "piñita",
+      "ananá",
+      "ananás"
+    ]
+  },
+  "scientific_name": "Ananas comosus (L.) Merr.",
+  "family": "Bromeliaceae",
+  "crop_type": "semi-perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.5,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Pineapple, bare soil (assumes 50% plastic mulch, sprinkler); can be reduced by 0.10 under drip below mulch"
+      },
+      "mid": {
+        "value": 0.3,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Pineapple, bare soil; very low transpiration (CAM)"
+      },
+      "end": {
+        "value": 0.3,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Pineapple, bare soil"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 800,
+        "max": 2500
+      },
+      "unit": "mm/year",
+      "citation": {
+        "title": "ECOCROP data sheet: Ananas comosus",
+        "author": "FAO ECOCROP",
+        "year": null,
+        "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=402"
+      },
+      "note": "ECOCROP optimal annual rainfall (rainfed requirement, not an irrigation demand)"
+    },
+    "temperature": {
+      "base": {
+        "gap": "No cited base temperature found (ECOCROP absolute minimum 10 °C is a survival limit, not a base)"
+      },
+      "optimum": {
+        "value": {
+          "min": 21,
+          "max": 30
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Ananas comosus",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=402"
+        },
+        "note": "ECOCROP optimal temperature range"
+      },
+      "max": {
+        "value": 36,
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Ananas comosus",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=402"
+        },
+        "note": "ECOCROP absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "ECOCROP data sheet: Ananas comosus",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=402"
+        },
+        "note": "Family Bromeliaceae, not Fabaceae; species identity per ECOCROP sheet"
+      },
+      "typical_range": {
+        "gap": "Not a nitrogen-fixing legume"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Pink pineapple mealybug",
+          "es": "Cochinilla harinosa de la piña"
+        },
+        "scientific_name": "Dysmicoccus brevipes",
+        "citation": {
+          "title": "Identification of Dysmicoccus brevipes and its association with PMWaV-1, -2, and -3 in Hawaiiana cultivar and MD-2 hybrid pineapple in Peru (Bulletin of Entomological Research)",
+          "author": "Carrasco-Lozano, E.C., Carrillo-Ordóñez, G.A., Torres-Suarez, G., Noa-Carrazana, J.C.",
+          "year": 2025,
+          "url": "https://doi.org/10.1017/S000748532510014X"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Associated with mealybug wilt viruses (PMWaV) in Peru; also reported in Junín by Arellano et al. (2015)"
+      },
+      {
+        "name": {
+          "en": "Pineapple fruit borer",
+          "es": "Gusano perforador / broca de la piña"
+        },
+        "scientific_name": "Strymon megarus",
+        "citation": {
+          "title": "Insect pests and other pineapple (Ananas comosus var. comosus) crop arthropods in Chanchamayo and Satipo, Department of Junín, Peru (Ecología Aplicada 14(2):175-189)",
+          "author": "Arellano, G., Vergara, C., Bello, S.",
+          "year": 2015,
+          "url": "https://revistas.lamolina.edu.pe/index.php/eau/article/download/94/93/402"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Chanchamayo and Satipo, Junín"
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Beauveria",
+          "es": "Beauveria"
+        },
+        "scientific_name": "Beauveria bassiana",
+        "kind": "fungus",
+        "controls": {
+          "en": "Pineapple mealybug (Dysmicoccus brevipes)",
+          "es": "Cochinilla de la piña (Dysmicoccus brevipes)"
+        },
+        "citation": {
+          "title": "Control de Dysmicoccus brevipes (Hemiptera: Pseudococcidae) en el fruto de piña, San Carlos, Costa Rica (Agronomía Costarricense 37(1):103-111)",
+          "author": "Miranda Vindas, A., Blanco Metzler, H.",
+          "year": 2013,
+          "url": "https://www.scielo.sa.cr/pdf/ac/v37n1/a08v37n1.pdf"
+        },
+        "note": "Evaluated in Costa Rica; field incidence was not better than the chemical control"
+      },
+      {
+        "name": {
+          "en": "Metarhizium",
+          "es": "Metarhizium"
+        },
+        "scientific_name": "Metarhizium anisopliae",
+        "kind": "fungus",
+        "controls": {
+          "en": "Pineapple mealybug (Dysmicoccus brevipes)",
+          "es": "Cochinilla de la piña (Dysmicoccus brevipes)"
+        },
+        "citation": {
+          "title": "Control de Dysmicoccus brevipes (Hemiptera: Pseudococcidae) en el fruto de piña, San Carlos, Costa Rica (Agronomía Costarricense 37(1):103-111)",
+          "author": "Miranda Vindas, A., Blanco Metzler, H.",
+          "year": 2013,
+          "url": "https://www.scielo.sa.cr/pdf/ac/v37n1/a08v37n1.pdf"
+        },
+        "note": "Evaluated in Costa Rica; field incidence was not better than the chemical control"
+      },
+      {
+        "name": {
+          "en": "Mealybug destroyer",
+          "es": "Cryptolaemus (mariquita depredadora)"
+        },
+        "scientific_name": "Cryptolaemus montrouzieri",
+        "kind": "insect",
+        "controls": {
+          "en": "Mealybugs (cochinilla harinosa)",
+          "es": "Chanchitos blancos / cochinilla harinosa"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru; the source does not name this crop or pair agents with specific pests"
+      }
+    ],
+    "rotation_notes": {
+      "gap": "No cited botanical-family rotation guidance found for pineapple"
+    }
+  }
+}

@@ -1,7 +1,7 @@
-//! export service (stub, filled in by its milestone).
-use axum::Router;
-use common::AppState;
+//! Exports for the agronomist: the cited technical sheet (printable HTML → PDF), the CSV of every series, share links.
+mod csv;
+mod html;
+mod routes;
+mod sheet;
 
-pub fn routes() -> Router<AppState> {
-    Router::new()
-}
+pub use routes::routes;

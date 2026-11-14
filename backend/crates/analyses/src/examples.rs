@@ -13,18 +13,18 @@ pub struct ExampleSite {
     pub crop_before: &'static str,
 }
 
-/// A ~2.1 ha irrigated plot outline in the lower Huaral (Chancay) valley, Lima region, Peru.
-/// Drawn as a 150 m x 140 m quadrilateral around the pilot point used in research/01_api_tests.md.
+/// A real irrigated plot (~5 ha) in the lower Huaral (Chancay) valley, Lima region, Peru, traced by hand on the
+/// Sentinel-2 L2A scene of 2026-11-13 (Contains modified Copernicus Sentinel data 2026). Centre about 11.473 S, 77.206 W.
 pub fn huaral_ring() -> Vec<[f64; 2]> {
-    let (lat, lon) = (-11.47_f64, -77.21_f64);
-    let dlat = 70.0 / 110_574.0;
-    let dlon = 75.0 / (111_320.0 * lat.to_radians().cos());
-    vec![[lon - dlon, lat - dlat], [lon + dlon, lat - dlat * 0.92], [lon + dlon * 0.96, lat + dlat], [lon - dlon, lat + dlat * 1.02]]
+    vec![
+        [-77.207403, -11.471998], [-77.206417, -11.471659], [-77.204745, -11.472721],
+        [-77.205638, -11.473648], [-77.206692, -11.474191], [-77.207426, -11.473287],
+    ]
 }
 
 pub fn all() -> Vec<ExampleSite> {
     let ring = huaral_ring();
-    let field = Field { center: LatLon { lat: -11.47, lon: -77.21 }, ring };
+    let field = Field { center: LatLon { lat: -11.4729, lon: -77.2061 }, ring };
     vec![ExampleSite {
         id: "huaral",
         name: Bi::new("Huaral valley, Peru", "Valle de Huaral, Perú"),
@@ -39,8 +39,8 @@ pub fn get(id: &str) -> Option<ExampleSite> { all().into_iter().find(|s| s.id ==
 #[cfg(test)]
 mod tests {
     #[test]
-    fn huaral_is_about_two_hectares() {
+    fn huaral_is_about_five_hectares() {
         let s = super::get("huaral").unwrap();
-        assert!((1.9..2.3).contains(&s.field.area_ha), "{}", s.field.area_ha);
+        assert!((4.5..5.6).contains(&s.field.area_ha), "{}", s.field.area_ha);
     }
 }

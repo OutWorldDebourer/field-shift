@@ -100,7 +100,7 @@ pub fn doy_normals(days: &[Day]) -> Vec<DoyNormal> {
         let w = |k: usize| -> Option<f64> {
             let (mut s, mut n) = (0.0, 0usize);
             for o in -7i32..=7 {
-                let j = (i as i32 + o).rem_euclid(365) as usize;
+                let j = (i + o).rem_euclid(365) as usize;
                 s += acc[j][k].0;
                 n += acc[j][k].1;
             }
@@ -144,7 +144,7 @@ pub mod tests {
         (0..n).map(|i| {
             let date = start + Duration::days(i);
             let t = 20.0 + 5.0 * (2.0 * std::f64::consts::PI * date.ordinal0() as f64 / 365.0).cos();
-            let wet = date.ordinal0() % 10 == 0;
+            let wet = date.ordinal0().is_multiple_of(10);
             Day { date, t2m: Some(t), tmax: Some(t + 4.0), tmin: Some(t - 4.0), rain: Some(if wet { 10.0 + (date.year() % 7) as f64 } else { 0.0 }),
                   rh: Some(70.0), ws: Some(2.0), rs: Some(20.0), tdew: None, ps: None, et0: Some(4.0) }
         }).collect()

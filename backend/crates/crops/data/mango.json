@@ -1,0 +1,237 @@
+{
+  "key": "mango",
+  "names": {
+    "en": [
+      "mango",
+      "mangoes",
+      "mangos"
+    ],
+    "es": [
+      "mango",
+      "mangos",
+      "manguito",
+      "mango kent",
+      "mango edward"
+    ]
+  },
+  "scientific_name": "Mangifera indica L.",
+  "family": "Anacardiaceae",
+  "crop_type": "perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.8,
+        "unit": "-",
+        "citation": {
+          "title": "Evapotranspiration and crop coefficient of 'Kent' mango in an important fruit-growing hub in Brazil (Irrigation and Drainage 73(4):1391-1407)",
+          "author": "da Silva, M.J., de Moura, M.S.B., Carvalho, H.F. de S. et al.",
+          "year": 2024,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/handle/doc/1165598?mode=full"
+        },
+        "note": "Not in FAO-56 Table 12. Vegetative growth (VG) phase, 'Kent', São Francisco valley, Brazil; phase-based, mapped to initial"
+      },
+      "mid": {
+        "value": 0.97,
+        "unit": "-",
+        "citation": {
+          "title": "Evapotranspiration and crop coefficient of 'Kent' mango in an important fruit-growing hub in Brazil (Irrigation and Drainage 73(4):1391-1407)",
+          "author": "da Silva, M.J., de Moura, M.S.B., Carvalho, H.F. de S. et al.",
+          "year": 2024,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/handle/doc/1165598?mode=full"
+        },
+        "note": "Floral induction (FI) phase (FI+FL 0.85, fruit drop 0.80); peak recommended value"
+      },
+      "end": {
+        "value": 0.74,
+        "unit": "-",
+        "citation": {
+          "title": "Evapotranspiration and crop coefficient of 'Kent' mango in an important fruit-growing hub in Brazil (Irrigation and Drainage 73(4):1391-1407)",
+          "author": "da Silva, M.J., de Moura, M.S.B., Carvalho, H.F. de S. et al.",
+          "year": 2024,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/handle/doc/1165598?mode=full"
+        },
+        "note": "Fruit formation + maturation (FF+MF) phase"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 600,
+        "max": 1500
+      },
+      "unit": "mm/year",
+      "citation": {
+        "title": "ECOCROP data sheet: Mangifera indica",
+        "author": "FAO ECOCROP",
+        "year": null,
+        "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1416"
+      },
+      "note": "ECOCROP optimal annual rainfall (rainfed requirement, not an irrigation demand)"
+    },
+    "temperature": {
+      "base": {
+        "value": 15,
+        "unit": "°C",
+        "citation": {
+          "title": "The water relations and irrigation requirements of mango (Mangifera indica L.): a review (Experimental Agriculture)",
+          "author": "Carr, M.K.V.",
+          "year": 2014,
+          "url": "https://doi.org/10.1017/S0014479713000288"
+        },
+        "note": "Shoot extension stops when daily mean air temperature falls below about 15 °C"
+      },
+      "optimum": {
+        "value": {
+          "min": 24,
+          "max": 30
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Mangifera indica",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1416"
+        },
+        "note": "ECOCROP optimal range; Carr (2014) gives 24-27 °C for vegetative growth"
+      },
+      "max": {
+        "value": 48,
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Mangifera indica",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1416"
+        },
+        "note": "ECOCROP absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "ECOCROP data sheet: Mangifera indica",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1416"
+        },
+        "note": "Family Anacardiaceae, not Fabaceae; species identity per ECOCROP sheet"
+      },
+      "typical_range": {
+        "gap": "Not a nitrogen-fixing legume"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Mediterranean fruit fly",
+          "es": "Mosca de la fruta del Mediterráneo"
+        },
+        "scientific_name": "Ceratitis capitata",
+        "citation": {
+          "title": "Prospección de problemas fitosanitarios a la cosecha y postcosecha del mango (Mangifera indica L.) en el valle de Yaután, provincia de Casma – Ancash (Ecología Aplicada 22(2))",
+          "author": "Palomo Herrera et al. / UNALM",
+          "year": 2023,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2023_v22_n2_a13_527_Palomo_et_al_Fitosanitaria_mango.htm"
+        },
+        "lower_threshold": {
+          "value": 9.7,
+          "unit": "°C",
+          "citation": {
+            "title": "Mediterranean Fruit Fly phenology model",
+            "author": "UC Statewide IPM Program (Tassan et al. 1982)",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/mediterranean-fruit-fly/"
+          },
+          "note": "Eggs and larvae (air temperature); pupae and pre-egglaying adults use other thresholds"
+        },
+        "degree_days_per_generation": {
+          "gap": "UC IPM gives stage values only (eggs & larvae 142.8, pupae 182.4, pre-egglaying adults 44.2 °C·day), no single generation total"
+        },
+        "note": "Fruit flies (Ceratitis, Anastrepha) reported on export mango in Casma, Ancash"
+      },
+      {
+        "name": {
+          "en": "South American fruit fly",
+          "es": "Mosca de la fruta sudamericana"
+        },
+        "scientific_name": "Anastrepha fraterculus",
+        "citation": {
+          "title": "Midagri inauguró moderno centro para el control y erradicación de la mosca de la fruta (Agraria.pe)",
+          "author": "Agraria.pe",
+          "year": 2024,
+          "url": "https://agraria.pe/noticias/midagri-inauguro-moderno-centro-para-el-control-y-erradicaci-37703"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Described as the species causing most damage to mango in northern Peru (SENASA sterile-fly centre, Piura)"
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Fruit fly parasitoid",
+          "es": "Parasitoide de moscas de la fruta"
+        },
+        "scientific_name": "Diachasmimorpha longicaudata",
+        "kind": "insect",
+        "controls": {
+          "en": "Fruit fly larvae (Anastrepha, Ceratitis)",
+          "es": "Larvas de moscas de la fruta (Anastrepha, Ceratitis)"
+        },
+        "citation": {
+          "title": "Dispersión espacio-temporal de Diachasmimorpha longicaudata (Hymenoptera: Braconidae) en una plantación de mango del Pacífico Central de Costa Rica (MSc thesis)",
+          "author": "Zambrano Bosquez, J.P. / Universidad de Costa Rica",
+          "year": 2019,
+          "url": "https://repositorio.ucr.ac.cr/server/api/core/bitstreams/7a315c25-927b-4ed2-a127-2f0bca9ab38f/content"
+        },
+        "note": "Released in a mango plantation, Costa Rica (no Peruvian source found)"
+      },
+      {
+        "name": {
+          "en": "Mealybug destroyer",
+          "es": "Cryptolaemus (mariquita depredadora)"
+        },
+        "scientific_name": "Cryptolaemus montrouzieri",
+        "kind": "insect",
+        "controls": {
+          "en": "Mealybugs (cochinilla harinosa)",
+          "es": "Chanchitos blancos / cochinilla harinosa"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru; the source does not name this crop or pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator of aphids, whiteflies, mealybugs and other soft-bodied pests",
+          "es": "Depredador generalista de pulgones, moscas blancas, chanchitos blancos y otras plagas de cuerpo blando"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru; the source does not name this crop or pair agents with specific pests"
+      }
+    ],
+    "rotation_notes": {
+      "gap": "Perennial orchard crop; no cited botanical-family rotation guidance found"
+    }
+  }
+}

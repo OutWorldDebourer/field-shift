@@ -110,6 +110,7 @@ pub fn build_summary(d: &PowerDaily, opts: &Options) -> anyhow::Result<PowerSumm
             "Regional context: POWER is a ~50 km reanalysis/satellite product, not a field measurement.",
             "Irrigation is not modelled in the water balance; a negative balance is the demand irrigation must cover.",
             "Pest generations are degree-day estimates from published laboratory thresholds; they indicate pressure, not observed populations.",
+            "Recent days may come from POWER's near-real-time streams (GEOS-IT, FLASHFLUX; see attribution.upstream_sources) rather than MERRA-2 / CERES SYN1deg; large recent anomalies should be cross-checked with another source.",
             "Season start defaults to 1 August (southern hemisphere, Peru's August-July campaign) or 1 January (northern hemisphere).",
         ],
     })

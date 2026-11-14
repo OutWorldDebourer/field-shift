@@ -1,0 +1,270 @@
+{
+  "key": "strawberry",
+  "names": {
+    "en": [
+      "strawberry",
+      "strawberries",
+      "garden strawberry"
+    ],
+    "es": [
+      "fresa",
+      "fresas",
+      "fresita",
+      "fresitas",
+      "frutilla",
+      "frutillas",
+      "frutillita"
+    ]
+  },
+  "scientific_name": "Fragaria × ananassa Duch.",
+  "family": "Rosaceae",
+  "crop_type": "semi-perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.4,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Strawberries"
+      },
+      "mid": {
+        "value": 0.85,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Strawberries"
+      },
+      "end": {
+        "value": 0.75,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Strawberries"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 300,
+        "max": 450
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Crop Guide: Growing Strawberry",
+        "author": "Haifa Group",
+        "year": null,
+        "url": "https://www.haifa-group.com/crop-guide/vegetables/strawberry-fertilizer/crop-guide-growing-strawberry"
+      },
+      "note": "Average irrigation water over the growing season (commercial crop guide)"
+    },
+    "temperature": {
+      "base": {
+        "value": 7,
+        "unit": "°C",
+        "citation": {
+          "title": "No Evidence of Excessive Leaf Production by Strawberries Grown in the Subtropics (Agriculture 9:197)",
+          "author": "Menzel, C.M.",
+          "year": 2019,
+          "url": "https://era.dpi.qld.gov.au/id/eprint/7106/1/agriculture-09-00197.pdf"
+        },
+        "note": "Base for leaf-production GDD in the subtropics (other studies use 0-10 °C)"
+      },
+      "optimum": {
+        "value": {
+          "min": 20,
+          "max": 26
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "No Evidence of Excessive Leaf Production by Strawberries Grown in the Subtropics (Agriculture 9:197)",
+          "author": "Menzel, C.M.",
+          "year": 2019,
+          "url": "https://era.dpi.qld.gov.au/id/eprint/7106/1/agriculture-09-00197.pdf"
+        },
+        "note": "Leaf expansion greatest at mean day temperatures of 20-26 °C, optimum 23 °C (Darrow, cited)"
+      },
+      "max": {
+        "value": 28,
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Fragaria x ananassa",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1112"
+        },
+        "note": "ECOCROP absolute maximum (optimal 11-24 °C)"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "ECOCROP data sheet: Fragaria x ananassa",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1112"
+        },
+        "note": "Family Rosaceae, not Fabaceae; species identity per ECOCROP sheet"
+      },
+      "typical_range": {
+        "gap": "Not a nitrogen-fixing legume"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Two-spotted spider mite",
+          "es": "Arañita roja"
+        },
+        "scientific_name": "Tetranychus urticae",
+        "citation": {
+          "title": "Resistencia de Tetranychus urticae (Acari: Tetranychidae) al spirodiclofen en el departamento de Lima (thesis, UNALM)",
+          "author": "Flores Bernedo, J.C.",
+          "year": 2020,
+          "url": "https://alicia.concytec.gob.pe/vufind/Record/UNAL_984d8334b86eb579097416706d20f594/Details"
+        },
+        "lower_threshold": {
+          "value": 11.7,
+          "unit": "°C",
+          "citation": {
+            "title": "Twospotted Spider Mite phenology model",
+            "author": "UC Statewide IPM Program (Carey & Bradley 1982)",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/PHENOLOGY/ma-2spotted_spider_mite.html"
+          },
+          "note": "Carey & Bradley (1982), lab study on cotton"
+        },
+        "degree_days_per_generation": {
+          "value": 108.6,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Twospotted Spider Mite phenology model",
+            "author": "UC Statewide IPM Program (Carey & Bradley 1982)",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/PHENOLOGY/ma-2spotted_spider_mite.html"
+          },
+          "note": "Egg to adult, on cotton"
+        },
+        "note": "Sampled in strawberry fields of Aucallama, Chancay, Huaral and Santa Rosa de Quives (Lima)"
+      },
+      {
+        "name": {
+          "en": "Western flower thrips",
+          "es": "Trips"
+        },
+        "scientific_name": "Frankliniella occidentalis",
+        "citation": {
+          "title": "Cultivo de fresa (INIA, Estación Experimental Donoso, Huaral)",
+          "author": "Olivera Soto, J. / INIA",
+          "year": null,
+          "url": "https://pgc-snia.inia.gob.pe:8443/jspui/bitstream/inia/752/1/Olivera-Cultivo_de_Fresa.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Listed with Thrips tabaci in INIA Huaral strawberry manual (server unreachable; seen in search index)"
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Predatory mite",
+          "es": "Ácaro depredador"
+        },
+        "scientific_name": "Phytoseiulus persimilis",
+        "kind": "mite",
+        "controls": {
+          "en": "Two-spotted spider mite (Tetranychus urticae)",
+          "es": "Arañita roja (Tetranychus urticae)"
+        },
+        "citation": {
+          "title": "Ensayos de control biológico de araña roja y trips en el cultivo de la fresa en Huelva (Vida Rural 336:36-39)",
+          "author": "García, Calvo, Molina / IFAPA",
+          "year": 2011,
+          "url": "https://www.mapa.gob.es/ministerio/pags/Biblioteca/Revistas/pdf%5FVrural%2FVrural%5F2011%5F336%5F36%5F39%2Epdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Predatory mite",
+          "es": "Ácaro depredador"
+        },
+        "scientific_name": "Neoseiulus californicus",
+        "kind": "mite",
+        "controls": {
+          "en": "Two-spotted spider mite (Tetranychus urticae)",
+          "es": "Arañita roja (Tetranychus urticae)"
+        },
+        "citation": {
+          "title": "Ensayos de control biológico de araña roja y trips en el cultivo de la fresa en Huelva (Vida Rural 336:36-39)",
+          "author": "García, Calvo, Molina / IFAPA",
+          "year": 2011,
+          "url": "https://www.mapa.gob.es/ministerio/pags/Biblioteca/Revistas/pdf%5FVrural%2FVrural%5F2011%5F336%5F36%5F39%2Epdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Minute pirate bug",
+          "es": "Chinche depredadora"
+        },
+        "scientific_name": "Orius laevigatus",
+        "kind": "insect",
+        "controls": {
+          "en": "Thrips (Frankliniella occidentalis, Thrips tabaci)",
+          "es": "Trips (Frankliniella occidentalis, Thrips tabaci)"
+        },
+        "citation": {
+          "title": "Ensayos de control biológico de araña roja y trips en el cultivo de la fresa en Huelva (Vida Rural 336:36-39)",
+          "author": "García, Calvo, Molina / IFAPA",
+          "year": 2011,
+          "url": "https://www.mapa.gob.es/ministerio/pags/Biblioteca/Revistas/pdf%5FVrural%2FVrural%5F2011%5F336%5F36%5F39%2Epdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Soil-borne root-rot fungi and grey mould",
+          "es": "Hongos de pudrición de raíces y moho gris"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru; the source does not name this crop or pair agents with specific pests"
+      }
+    ],
+    "rotation_notes": {
+      "en": "Do not plant after tomato, potato, pepper or eggplant (Solanaceae), which host Verticillium wilt; a 3-5 year rotation away from hosts is recommended.",
+      "es": "No sembrar después de tomate, papa, ají/pimiento o berenjena (Solanáceas), hospederos de la marchitez por Verticillium; se recomienda rotar 3-5 años fuera de hospederos.",
+      "citation": {
+        "title": "Strawberry Disease - Verticillium Wilt",
+        "author": "Penn State Extension",
+        "year": null,
+        "url": "https://extension.psu.edu/strawberry-disease-verticillium-wilt"
+      }
+    }
+  }
+}

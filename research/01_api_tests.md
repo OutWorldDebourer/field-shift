@@ -38,3 +38,7 @@ Notes:
 - The OPeNDAP granule id must be the full CMR GranuleUR (with its `_u9loH5HD` suffix); a single index `[974]` returns no value, use a range `[974:975]`.
 - SMAP at 9 km reads the desert around the valley (0.05 m³/m³ is very dry): it is regional context, not the irrigated field's moisture. Compute the EASE-Grid index from the cell centre, the first attempt landed one cell east.
 - GRACE is read with `h5py` from the project's tools environment (`tools/.venv`, git-ignored); the downloaded file is cached in `research/cache/` (git-ignored).
+
+## Cross-check of the 2026 warm anomaly (2026-11-14, during the build)
+
+NASA POWER shows the Huaral field running +4 to +5 °C above its 1985–2024 normal from May 2026 on (Oct 2026: 22.5 °C vs normal 17.7 °C). The newest POWER days come from near-real-time streams (GEOS-IT, FLASHFlux), so we checked an independent reanalysis: ERA5 via the Open-Meteo archive API (research only, not shipped) gives monthly means at the same point of 22.46 °C (Oct 2026) and 22.70 °C (Nov 1–5), against 16.13 °C in Oct 2025. Both sources agree on Oct–Nov; for Jun–Sep 2026 POWER runs about 1.5–2 °C warmer than ERA5. Conclusion: the warm 2026 is real (a strong coastal warm event); the app labels the latest weeks as provisional.

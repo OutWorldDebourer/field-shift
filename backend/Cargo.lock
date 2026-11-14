@@ -561,6 +561,8 @@ dependencies = [
  "axum",
  "chrono",
  "common",
+ "imagery",
+ "power",
  "reqwest",
  "serde",
  "serde_json",
@@ -573,11 +575,11 @@ dependencies = [
 name = "export"
 version = "0.1.0"
 dependencies = [
+ "analyses",
  "anyhow",
  "axum",
  "chrono",
  "common",
- "reqwest",
  "serde",
  "serde_json",
  "sqlx",

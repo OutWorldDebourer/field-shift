@@ -1,0 +1,295 @@
+{
+  "key": "avocado",
+  "names": {
+    "en": [
+      "avocado",
+      "avocados",
+      "avocado pear",
+      "alligator pear",
+      "hass avocado"
+    ],
+    "es": [
+      "palta",
+      "paltas",
+      "paltita",
+      "palto",
+      "palta hass",
+      "palta fuerte",
+      "aguacate",
+      "aguacates"
+    ]
+  },
+  "scientific_name": "Persea americana Mill.",
+  "family": "Lauraceae",
+  "crop_type": "perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.6,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Avocado, no ground cover"
+      },
+      "mid": {
+        "value": 0.85,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Avocado, no ground cover"
+      },
+      "end": {
+        "value": 0.75,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Avocado, no ground cover"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 500,
+        "max": 2000
+      },
+      "unit": "mm/year",
+      "citation": {
+        "title": "ECOCROP data sheet: Persea americana",
+        "author": "FAO ECOCROP",
+        "year": null,
+        "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1659"
+      },
+      "note": "ECOCROP optimal annual rainfall (rainfed requirement, not an irrigation demand)"
+    },
+    "temperature": {
+      "base": {
+        "value": {
+          "min": 0.3,
+          "max": 7.5
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Phenological variations of avocado cv. Hass and their relationship with thermal time under tropical conditions (Heliyon)",
+          "author": "Ramírez-Gil, J.G. et al.",
+          "year": 2023,
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10558874/"
+        },
+        "note": "Base temperature per phenological stage of cv. Hass in Colombia; authors reject a generalized 10 °C base for the tropics"
+      },
+      "optimum": {
+        "value": {
+          "min": 14,
+          "max": 40
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Persea americana",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1659"
+        },
+        "note": "ECOCROP optimal temperature range"
+      },
+      "max": {
+        "value": 45,
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Persea americana",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1659"
+        },
+        "note": "ECOCROP absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "ECOCROP data sheet: Persea americana",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1659"
+        },
+        "note": "Family Lauraceae, not Fabaceae; species identity per ECOCROP sheet"
+      },
+      "typical_range": {
+        "gap": "Not a nitrogen-fixing legume"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Avocado spider mite",
+          "es": "Arañita roja del palto"
+        },
+        "scientific_name": "Oligonychus sp.",
+        "citation": {
+          "title": "Artrópodos plaga en agroecosistemas de aguacate y mandarina en el valle de Cañete, Lima, Perú (Scientia 32(1):16-22)",
+          "author": "Collantes, R., Rodríguez B., A.R.",
+          "year": 2022,
+          "url": "https://revistas.up.ac.pa/index.php/scientia/article/download/2883/2561"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "20-35% presence on avocado foliage, Cañete; O. yothersi is the species usually reported in Peru"
+      },
+      {
+        "name": {
+          "en": "Fiorinia scale",
+          "es": "Queresa fiorinia"
+        },
+        "scientific_name": "Fiorinia fioriniae",
+        "citation": {
+          "title": "Artrópodos plaga en agroecosistemas de aguacate y mandarina en el valle de Cañete, Lima, Perú (Scientia 32(1):16-22)",
+          "author": "Collantes, R., Rodríguez B., A.R.",
+          "year": 2022,
+          "url": "https://revistas.up.ac.pa/index.php/scientia/article/download/2883/2561"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Foliage, Cañete"
+      },
+      {
+        "name": {
+          "en": "Fern scale",
+          "es": "Queresa"
+        },
+        "scientific_name": "Pinnaspis aspidistrae",
+        "citation": {
+          "title": "Artrópodos plaga en agroecosistemas de aguacate y mandarina en el valle de Cañete, Lima, Perú (Scientia 32(1):16-22)",
+          "author": "Collantes, R., Rodríguez B., A.R.",
+          "year": 2022,
+          "url": "https://revistas.up.ac.pa/index.php/scientia/article/download/2883/2561"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Foliage, Cañete"
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Western predatory mite",
+          "es": "Ácaro depredador"
+        },
+        "scientific_name": "Galendromus occidentalis",
+        "kind": "mite",
+        "controls": {
+          "en": "Spider mites (Tetranychus urticae, T. pacificus) and other pest mites",
+          "es": "Arañitas rojas (Tetranychus urticae, T. pacificus) y otros ácaros plaga"
+        },
+        "citation": {
+          "title": "Senasa autorizó importación de ácaro de Israel para manejo de plagas en cultivos agrícolas",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/peru/senasa-autorizo-importacion-de-acaro-de-israel-para-manejo-de-plagas-en-cultivos-agricolas-noticia/"
+        },
+        "note": "Imported by SENASA in 2025 against pest mites in crops such as citrus and grapevine; the source does not name avocado"
+      },
+      {
+        "name": {
+          "en": "Mealybug destroyer",
+          "es": "Cryptolaemus (mariquita depredadora)"
+        },
+        "scientific_name": "Cryptolaemus montrouzieri",
+        "kind": "insect",
+        "controls": {
+          "en": "Mealybugs (cochinilla harinosa)",
+          "es": "Chanchitos blancos / cochinilla harinosa"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator of aphids, whiteflies, mealybugs and other soft-bodied pests",
+          "es": "Depredador generalista de pulgones, moscas blancas, chanchitos blancos y otras plagas de cuerpo blando"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Soil-borne root-rot fungi and grey mould",
+          "es": "Hongos de pudrición de raíces y moho gris"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Beauveria",
+          "es": "Beauveria"
+        },
+        "scientific_name": "Beauveria bassiana",
+        "kind": "fungus",
+        "controls": {
+          "en": "Insect pests such as whiteflies and mealybugs (entomopathogen)",
+          "es": "Insectos plaga como mosca blanca y chanchitos blancos (entomopatógeno)"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      }
+    ],
+    "rotation_notes": {
+      "gap": "Perennial orchard crop; no cited botanical-family rotation guidance found"
+    }
+  }
+}

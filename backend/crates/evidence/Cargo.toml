@@ -16,3 +16,5 @@ chrono.workspace = true
 anyhow.workspace = true
 tracing.workspace = true
 analyses = { path = "../analyses" }
+power = { path = "../power" }
+imagery = { path = "../imagery" }

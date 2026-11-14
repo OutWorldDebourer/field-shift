@@ -1,0 +1,289 @@
+{
+  "key": "grape",
+  "names": {
+    "en": [
+      "grape",
+      "grapes",
+      "grapevine",
+      "vine",
+      "table grape",
+      "wine grape"
+    ],
+    "es": [
+      "uva",
+      "uvas",
+      "uvita",
+      "vid",
+      "parra",
+      "viña",
+      "viñedo",
+      "uva de mesa"
+    ]
+  },
+  "scientific_name": "Vitis vinifera L.",
+  "family": "Vitaceae",
+  "crop_type": "perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.3,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Grapes, table or raisin"
+      },
+      "mid": {
+        "value": 0.85,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Grapes, table or raisin (wine grapes 0.70)"
+      },
+      "end": {
+        "value": 0.45,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Grapes, table or raisin"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 500,
+        "max": 1200
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "FAO Land & Water, Crop information: Grape",
+        "author": "FAO",
+        "year": null,
+        "url": "https://www.fao.org/land-water/databases-and-software/crop-information/grape/ru/"
+      },
+      "note": "Depends mainly on climate and length of growing period; FAO crop page now returns 404, value as indexed"
+    },
+    "temperature": {
+      "base": {
+        "value": 10,
+        "unit": "°C",
+        "citation": {
+          "title": "FAO Land & Water, Crop information: Grape",
+          "author": "FAO",
+          "year": null,
+          "url": "https://www.fao.org/land-water/databases-and-software/crop-information/grape/zh"
+        },
+        "note": "Rapid shoot growth starts when mean daily temperature reaches 10 °C; also the Winkler GDD base"
+      },
+      "optimum": {
+        "value": {
+          "min": 18,
+          "max": 30
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Vitis vinifera",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2160"
+        },
+        "note": "ECOCROP optimal temperature range"
+      },
+      "max": {
+        "value": 38,
+        "unit": "°C",
+        "citation": {
+          "title": "ECOCROP data sheet: Vitis vinifera",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2160"
+        },
+        "note": "ECOCROP absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "ECOCROP data sheet: Vitis vinifera",
+          "author": "FAO ECOCROP",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2160"
+        },
+        "note": "Family Vitaceae, not Fabaceae; species identity per ECOCROP sheet"
+      },
+      "typical_range": {
+        "gap": "Not a nitrogen-fixing legume"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Vine mealybug",
+          "es": "Chanchito blanco de la vid"
+        },
+        "scientific_name": "Planococcus ficus",
+        "citation": {
+          "title": "Plaga del chanchito blanco está en todas las zonas productoras de uva de Perú todo el año",
+          "author": "León Carrasco, J.C. / Agraria.pe",
+          "year": 2017,
+          "url": "https://agraria.pe/noticias/plaga-del-chanchito-blanco-esta-en-todas-las-zonas-14363"
+        },
+        "lower_threshold": {
+          "value": 11.11,
+          "unit": "°C",
+          "citation": {
+            "title": "Effect of Temperature on the Development and Longevity of Planococcus ficus (Hemiptera: Pseudococcidae) (Ann. Entomol. Soc. Am. 103(6):943-948)",
+            "author": "Varikou, K., Birouraki, A., Bagis, N., Kontodimas, D.C.",
+            "year": 2010,
+            "url": "https://bioone.org/journals/annals-of-the-entomological-society-of-america/volume-103/issue-6/AN10043/Effect-of-Temperature-on-the-Development-and-Longevity-of-Planococcus/10.1603/AN10043.full"
+          },
+          "note": "Egg to adult, linear model (non-linear model gives 14.20 °C)"
+        },
+        "degree_days_per_generation": {
+          "value": 555.56,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Effect of Temperature on the Development and Longevity of Planococcus ficus (Hemiptera: Pseudococcidae) (Ann. Entomol. Soc. Am. 103(6):943-948)",
+            "author": "Varikou, K., Birouraki, A., Bagis, N., Kontodimas, D.C.",
+            "year": 2010,
+            "url": "https://bioone.org/journals/annals-of-the-entomological-society-of-america/volume-103/issue-6/AN10043/Effect-of-Temperature-on-the-Development-and-Longevity-of-Planococcus/10.1603/AN10043.full"
+          },
+          "note": "Egg to adult, linear model"
+        },
+        "note": "Present in all Peruvian grape zones year-round"
+      },
+      {
+        "name": {
+          "en": "Peruvian red mealybug",
+          "es": "Chanchito rojo"
+        },
+        "scientific_name": "Oregmopyga peruviana",
+        "citation": {
+          "title": "El chanchito rojo es una llamada de atención para la agroexportación (Agraria.pe)",
+          "author": "Ramos, E. / Agraria.pe",
+          "year": 2025,
+          "url": "https://agraria.pe/noticias/el-chanchito-rojo-es-una-llamada-de-atencion-para-la-agroexp-39538"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        },
+        "note": "Spreading in Ica table grapes; caused container rejections"
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Mealybug parasitoid",
+          "es": "Parasitoide de chanchito blanco"
+        },
+        "scientific_name": "Anagyrus vladimiri",
+        "kind": "insect",
+        "controls": {
+          "en": "Vine and citrus mealybugs (Planococcus ficus, P. citri)",
+          "es": "Chanchitos blancos de la vid y cítricos (Planococcus ficus, P. citri)"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Mealybug destroyer",
+          "es": "Cryptolaemus (mariquita depredadora)"
+        },
+        "scientific_name": "Cryptolaemus montrouzieri",
+        "kind": "insect",
+        "controls": {
+          "en": "Mealybugs (cochinilla harinosa)",
+          "es": "Chanchitos blancos / cochinilla harinosa"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator of aphids, whiteflies, mealybugs and other soft-bodied pests",
+          "es": "Depredador generalista de pulgones, moscas blancas, chanchitos blancos y otras plagas de cuerpo blando"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      },
+      {
+        "name": {
+          "en": "Western predatory mite",
+          "es": "Ácaro depredador"
+        },
+        "scientific_name": "Galendromus occidentalis",
+        "kind": "mite",
+        "controls": {
+          "en": "Spider mites (Tetranychus urticae, T. pacificus) and other pest mites",
+          "es": "Arañitas rojas (Tetranychus urticae, T. pacificus) y otros ácaros plaga"
+        },
+        "citation": {
+          "title": "Senasa autorizó importación de ácaro de Israel para manejo de plagas en cultivos agrícolas",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/peru/senasa-autorizo-importacion-de-acaro-de-israel-para-manejo-de-plagas-en-cultivos-agricolas-noticia/"
+        },
+        "note": "Imported by SENASA from Israel in 2025 for crops such as citrus and grapevine; new species for Peru, released after quarantine"
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Soil-borne root-rot fungi and grey mould",
+          "es": "Hongos de pudrición de raíces y moho gris"
+        },
+        "citation": {
+          "title": "Senasa: Así Perú redujo uso de plaguicidas químicos en 209 mil hectáreas de cultivos",
+          "author": "Gestión (reporting SENASA)",
+          "year": 2025,
+          "url": "https://gestion.pe/economia/senasa-asi-peru-redujo-uso-de-plaguicidas-quimicos-en-209-mil-hectareas-de-cultivos-noticia/"
+        },
+        "note": "Listed by SENASA among the most used biocontrol agents in Peru (crops named include citrus, avocado, grapevine); the source does not pair agents with specific pests"
+      }
+    ],
+    "rotation_notes": {
+      "gap": "Perennial orchard crop; no cited botanical-family rotation guidance found"
+    }
+  }
+}
