@@ -151,3 +151,4 @@
 /* Street map is light: give the white instruments and the top bar a dark backing so they stay legible */
 .is-street .fs::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 72px; background: linear-gradient(rgba(8, 16, 26, 0.88), rgba(8, 16, 26, 0)); z-index: 650; pointer-events: none; }
 .is-street .instr, .is-street .fs__credit .mono, .is-street .fs__area-tag, .is-street .leaflet-control-scale-line { background: rgba(8, 16, 26, 0.84); padding: 2px 7px; border-radius: 6px; }
+.fs__tiles { position: absolute; z-index: 1001; left: 50%; top: 84px; transform: translateX(-50%); margin: 0; padding: 6px 14px; background: rgba(8, 16, 26, 0.86); color: #f5f8f9; font-size: 0.875rem; }

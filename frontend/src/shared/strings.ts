@@ -203,6 +203,8 @@ const S = {
   prov_tip: { en: 'Latest weeks come from near-real-time data and may change.', es: 'Las últimas semanas vienen de datos casi en tiempo real y pueden cambiar.' },
   fs_search_go: { en: 'Search', es: 'Buscar' },
   fs_base: { en: 'Map view', es: 'Vista del mapa' },
+  fs_map_loading_tiles: { en: 'Loading map…', es: 'Cargando mapa…' },
+  fs_street_down: { en: 'The street map is not responding; back to satellite.', es: 'El mapa de calles no responde; volvemos al satélite.' },
   fs_base_sat: { en: 'Satellite', es: 'Satélite' },
   fs_base_map: { en: 'Map', es: 'Mapa' },
   fs_place_here: { en: 'Here: zoom in and draw your field', es: 'Aquí: acércate y dibuja tu campo' },

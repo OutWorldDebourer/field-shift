@@ -36,12 +36,14 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   let map: Leaflet.Map | null = null;
   let L: typeof Leaflet | null = null;
   let layer: Leaflet.LayerGroup | null = null;
+  let stopResize: (() => void) | null = null;
 
   host.innerHTML = `<div class="fs">
     <div class="fs__map" id="fs-map" role="region" aria-label="${esc(t('fs_map_label'))}" data-i18n-attr="aria-label:fs_map_label"><p class="fs__loading mono">${esc(t('fs_map_loading'))}</p></div>
     <div class="reticle fs__reticle" id="fs-reticle" hidden><i></i></div>
     <div class="fs__area-tag ground-label" id="fs-area-tag" hidden></div>
     <div class="fs__alt instr" id="fs-alt" aria-hidden="true"></div>
+    <p class="fs__tiles pill" id="fs-tiles" role="status" hidden>${esc(t('fs_map_loading_tiles'))}</p>
     <div class="fs__base seg" role="radiogroup" aria-label="${esc(t('fs_base'))}" data-i18n-attr="aria-label:fs_base">
       <button type="button" role="radio" data-base="sat" aria-checked="true"><span data-i18n="fs_base_sat">${esc(t('fs_base_sat'))}</span></button>
       <button type="button" role="radio" data-base="map" aria-checked="false"><span data-i18n="fs_base_map">${esc(t('fs_base_map'))}</span></button>
@@ -299,7 +301,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   });
   finishBtn.addEventListener('click', finishDraw);
   useBtn.addEventListener('click', use);
-  const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`; });
+  const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`; $('#fs-tiles', host).textContent = t('fs_map_loading_tiles'); });
 
   renderMode(); renderTools(); renderReadout();
 
@@ -319,6 +321,22 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     map = L.map(el, { zoomControl: false, attributionControl: false, worldCopyJump: true, maxZoom: 16, zoomSnap: 0.5 }).setView([-11.47, -77.21], 13);
     L.control.zoom({ position: 'topright' }).addTo(map);
     const sat = eoxLayer(L).addTo(map), street = streetLayer(L);
+    // Keep Leaflet's size in step with its container (pane or window resizes without a window resize event).
+    const ro = new ResizeObserver(() => { map?.invalidateSize({ pan: false }); placeReticle(); });
+    ro.observe(el);
+    stopResize = () => ro.disconnect();
+    // A visible "loading map" state, and a fallback when the street map server does not answer.
+    const tilesNote = $('#fs-tiles', host);
+    let pending = 0, failures = 0;
+    for (const lyr of [sat, street]) {
+      lyr.on('loading', () => { pending++; setTimeout(() => { if (pending > 0) tilesNote.hidden = false; }, 700); });
+      lyr.on('load', () => { pending = Math.max(0, pending - 1); if (!pending) tilesNote.hidden = true; failures = 0; });
+    }
+    street.on('tileerror', () => {
+      if (++failures < 6 || !map || !map.hasLayer(street)) return;
+      failures = 0; toast(t('fs_street_down'));
+      (host.querySelector('[data-base=sat]') as HTMLButtonElement | null)?.click();
+    });
     host.querySelectorAll<HTMLButtonElement>('[data-base]').forEach((b) => b.addEventListener('click', () => {
       if (!map) return;
       const toMap = b.dataset.base === 'map';
@@ -364,5 +382,5 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     }
   })().catch(() => { $('#fs-map', host).innerHTML = `<p class="fs__loading mono">${esc(t('fs_search_err'))}</p>`; toast(t('fs_search_err')); });
 
-  return () => { offLang(); map?.remove(); map = null; L = null; layer = null; };
+  return () => { offLang(); stopResize?.(); map?.remove(); map = null; L = null; layer = null; };
 }
