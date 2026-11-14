@@ -1,0 +1,8 @@
+# 8. Uso de IA ("SI")
+
+Las reglas de Space Apps piden declarar dónde y cómo se usaron herramientas de IA. El registro completo es `AI_USE.md` en la raíz del proyecto; esta página lo resume.
+
+- **Para construir el producto.** Claude (Anthropic), mediante Claude Code, escribió la mayor parte del código y la documentación bajo la dirección del equipo: el backend en Rust, el frontend en TypeScript, el globo Three.js (Claude Fable 5.2), la investigación de la base de conocimiento de cultivos (cada valor citado; los valores sin fuente quedan como vacíos) y las auditorías de diseño (agentes auditores independientes que puntúan cada pantalla).
+- **Dentro del producto.** El consultor es Claude (`claude-opus-5-5`) vía la API de Anthropic. Lee las palabras y fotos del agricultor, pide la información que falta y solo puede citar números del paquete de evidencia construido con datos de la NASA y satelitales. Los cultivos fuera de la base semilla reciben una ficha investigada con búsqueda web, marcada "investigado por IA, verificar". Si el modelo no está disponible, responde un modo demo guionizado claramente señalado.
+- **Imágenes y voz.** Las imágenes ilustrativas recortadas de cuadros de diseño asistidos por IA llevan la etiqueta visible "SI-assisted visuals". Las imágenes satelitales mostradas como evidencia siempre son reales y con licencia, nunca generadas. La narración de los videos usa texto a voz de Gemini (voz Algenib) y se reconoce en los créditos y metadatos.
+- **No generado por IA:** la idea del proyecto, la forma de resolver el reto y la entrevista a la agrónoma pertenecen al equipo.

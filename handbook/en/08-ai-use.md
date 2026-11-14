@@ -1,0 +1,8 @@
+# 8. Use of AI ("SI")
+
+The Space Apps rules ask every team to state where and how AI tools were used. The full log is `AI_USE.md` at the project root; this page summarises it.
+
+- **Building the product.** Claude (Anthropic), through Claude Code, wrote most of the code and documentation under the team's direction: the Rust backend, the TypeScript frontend, the Three.js globe (Claude Fable 5.2), the crop knowledge base research (every value cited, values without a source left as gaps) and the design audits (independent auditor agents scoring each screen).
+- **Inside the product.** The consultant is Claude (`claude-opus-5-5`) through the Anthropic API. It reads the farmer's words and photos, asks for missing information, and may only cite numbers from the evidence package built from NASA and satellite data. Crops outside the seed knowledge base get a trait card researched with web search, labelled "AI-researched, verify". When the model is unavailable, a clearly labelled scripted demo mode answers instead.
+- **Visuals and voice.** Illustrative images cropped from AI-assisted design frames carry the visible "SI-assisted visuals" tag. Satellite imagery shown as evidence is always real and licensed, never generated. Demo film narration uses Gemini text-to-speech (voice Algenib) and is acknowledged in the film credits and metadata.
+- **Not AI-generated:** the project idea, the choice of how to solve the challenge, and the agronomist interview belong to the team.
