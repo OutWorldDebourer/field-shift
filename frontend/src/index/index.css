@@ -246,3 +246,18 @@ body.is-scrolled:not(.is-day) .top::before { opacity: 0; }
   .hero .btn--glass { background: rgba(5, 12, 20, 0.86); }
   .hero__text::before { background: radial-gradient(130% 95% at 30% 50%, rgba(3, 8, 16, 0.8), rgba(3, 8, 16, 0.5) 70%, rgba(3, 8, 16, 0.1)); }
 }
+
+/* Round 3 */
+.hud { transition: opacity 0.3s; }
+body.hud-busy .hud { opacity: 0; }
+.phone .drow--compact .drow__src .badge { font-size: 0.75rem; height: 20px; }
+.phone .drow__label { font-size: 0.875rem; }
+.phone__foot { font-size: 0.75rem; color: var(--ink); }
+.scroll-cue { color: #fff; text-shadow: 0 1px 10px #000, 0 0 3px #000; background: rgba(3, 8, 16, 0.4); padding: 4px 14px; border-radius: 999px; }
+#lbl-field, #lbl-valley, .data__field { text-shadow: 0 0 8px #000, 0 1px 3px #000; }
+.get { min-height: auto; padding-bottom: 40px; }
+section.dash { min-height: auto; padding-top: 60px; }
+@media (max-width: 600px) {
+  .hud { align-items: flex-end; }
+  .hud__br .instr, body.is-ground .hud__br .instr { white-space: normal; overflow: visible; text-overflow: clip; max-width: 62vw; line-height: 1.35; }
+}

@@ -17,7 +17,15 @@ function photoTile(p: { url: string; tag?: string }, n: number): string {
     ${p.tag ? `<div class="reticle is-locking"><i></i></div><figcaption class="tile__tag">${esc(tag)}</figcaption>` : ''}</figure>`;
 }
 
-function para(s: string): string { return s.split(/\n{2,}/).map((x) => `<p>${esc(x).replace(/\n/g, '<br>')}</p>`).join(''); }
+/** Plain text with the consultant's light markdown: **bold** and "- " list lines. */
+function para(s: string): string {
+  const inline = (x: string) => esc(x).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  return s.split(/\n{2,}/).map((block) => {
+    const lines = block.split('\n');
+    if (lines.every((l) => /^\s*[-·•]\s+/.test(l))) return `<ul class="bul">${lines.map((l) => `<li>${inline(l.replace(/^\s*[-·•]\s+/, ''))}</li>`).join('')}</ul>`;
+    return `<p>${lines.map((l) => (/^\s*-\s+/.test(l) ? '• ' + inline(l.replace(/^\s*-\s+/, '')) : inline(l))).join('<br>')}</p>`;
+  }).join('');
+}
 
 export function messageHtml(m: ChatMessage): string {
   if (m.role === 'status') return `<li class="msg msg--status"><p class="status-line">${icon('orbit')}${esc(m.body)}</p></li>`;

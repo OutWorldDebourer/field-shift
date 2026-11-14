@@ -79,11 +79,11 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): stri
   const preview = (k: SectionKey) => {
     if (k !== 'field' || !a.evidence) return '';
     const pickR = keyReadings(a.evidence);
-    return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r, undefined, shortLabel(r))).join('')}</div>` : '';
+    return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r, undefined, shortLabel(r), true)).join('')}</div>` : '';
   };
   return `<header class="secs__head"><h2 class="serif">${esc(t('ws_sections'))}</h2>
       <span class="secs__count mono">${esc(t('ws_progress', { done, total: secs.length }))}</span></header>
-    <ul class="secs__list">${secs.map((s) => {
+    <ul class="secs__list" data-secs-list>${secs.map((s) => {
       const isOpen = open === s.key;
       return `<li class="sec sec--${s.state}${isOpen ? ' is-open' : ''}">
         <button type="button" class="sec__head" aria-expanded="${isOpen}" aria-controls="sec-${s.key}" data-sec="${s.key}">
@@ -94,7 +94,7 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): stri
         ${!isOpen ? preview(s.key) : ''}
         <div class="sec__body" id="sec-${s.key}" ${isOpen ? '' : 'hidden'}>${isOpen ? sectionBody(a, s.key) : ''}</div>
       </li>`;
-    }).join('')}</ul>`;
+    }).join('')}</ul><p class="secs__more" data-more aria-hidden="true">${icon('down')}${esc(t('ws_more_below'))}</p>`;
 }
 
 /** The section worth a glance on phone: one with gaps, else in progress, else the rotation. */
@@ -106,7 +106,7 @@ export function peekSection(a: ClientAnalysis): Section {
 export function peekHtml(a: ClientAnalysis, k: SectionKey): string {
   const s = getSection(a, k);
   const line = s.note ? pick(s.note) : s.content ? pick(s.content.summary) : t(STATE_KEY[s.state]);
-  return `${ring(s.state, 34, META[k].icon)}<span class="peek__t"><b>${esc(t(META[k].title))}</b> · ${esc(t(STATE_KEY[s.state]))}<small>${esc(line)}</small></span>${icon('chevron', 'peek__chev')}`;
+  return `${ring(s.state, 34, META[k].icon)}<span class="peek__t"><b>${esc(t(META[k].title))} · ${esc(t(STATE_KEY[s.state]))}</b><small>${esc(line)}</small></span>${icon('chevron', 'peek__chev')}`;
 }
 
 /** Phone row of round buttons. */

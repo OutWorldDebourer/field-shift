@@ -7,6 +7,7 @@ import type { EvidencePackage, Reading } from '../../shared/contract';
 import { ndviChart, seasonChart, timelineStrip } from '../../shared/charts';
 import { normalPeriod } from '../../shared/evidence';
 import { dataRow, sourceLine, valueText, badge, shortRes, resKm } from '../../shared/datarow';
+import { shortLabel } from '../../shared/evidence';
 import { esc } from '../../shared/dom';
 import { fmt, fmtDateShort, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
@@ -29,6 +30,9 @@ export function tilesFor(ev: EvidencePackage, max = 6): Reading[] {
   return ev.readings.filter((r) => r.id !== 'projection').sort((a, b) => rank(a) - rank(b)).slice(0, max);
 }
 
+let mapBase = '';
+export function setMapBase(s: string) { mapBase = s; document.querySelectorAll('[data-mapbase]').forEach((e) => { e.textContent = s; }); }
+
 export function layerLegend(ev: EvidencePackage | null, key: LayerKey): string {
   const r = ev?.readings.find((x) => x.id === LAYERS.find((l) => l.key === key)!.reading);
   if (!r) return `<p class="dmap__note">${esc(t(ev ? 'ly_na' : 'db_no_evidence'))}</p>`;
@@ -36,7 +40,7 @@ export function layerLegend(ev: EvidencePackage | null, key: LayerKey): string {
   const note = r.badge === 'field-level' ? t('db_layer_field', { res: shortRes(r.resolution) }) : t('db_layer_cell', { res: shortRes(r.resolution) });
   return `<p class="dmap__val"><b>${esc(pick(r.label))}</b> <span class="${r.key ? 'amber' : ''}">${esc(v.text)}</span></p>
     <p class="dmap__src mono">${sourceLine(r)}</p>
-    <p class="dmap__note">${badge(r.badge)} ${esc(note)}</p>${ev ? `<p class="dmap__scale mono">${esc(scaleNote(ev))}</p>` : ''}`;
+    <p class="dmap__note">${badge(r.badge)} ${esc(note)}</p>${ev ? `<p class="dmap__scale mono">${esc(scaleNote(ev))}</p>` : ''}<p class="dmap__base mono" data-mapbase>${esc(mapBase)}</p>`;
 }
 
 function scaleNote(ev: EvidencePackage): string {
@@ -75,7 +79,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <p class="status-line" data-build-status hidden><i class="tick"></i>${esc(t('db_building'))}</p>
     </section></div></div>`;
   }
-  const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r)}</li>`).join('');
+  const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r).replace(/<div class="drow__label">[^<]*<\/div>/, `<div class="drow__label" title="${esc(pick(r.label))}">${esc(shortLabel(r) ?? pick(r.label))}</div>`)}</li>`).join('');
   const alerts = alertsFor(ev);
   const last = ev.climate_monthly.length ? ev.climate_monthly[ev.climate_monthly.length - 1].month : null;
   const tl = currentTimeline(a);
@@ -86,23 +90,24 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
     ${map}
     <div class="dash__side">
       <ul class="dash__tiles" aria-label="${esc(t('db_readings'))}">${tiles}</ul>
-      <div class="dash__row dash__row--3">
-        ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, true, !!opts.preview)}${currentPlan(a) ? `<p class="dash__plan">${esc(pick(currentPlan(a)!.name))}</p><p class="dash__plan-why">${esc(pick(currentPlan(a)!.why))}</p>` : ''}${opts.preview || a.readOnly ? '' : `<button type="button" class="btn btn--glass btn--sm" data-goto="rotation">${icon('rotation')}${esc(t('ws_open_rotation'))}</button>`}</section>` : ''}
-        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
-          ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${al.detail ? esc(al.detail) + ' · ' : ''}${esc(al.source)} · ${esc(fmtDateShort(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
-        </section>
-        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="dash__h">${esc(t('db_projection'))}</h3>
-          ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">+${fmt(proj.d_temp_c, 1)} °C</span> <span>${esc(proj.horizon)} · ${esc(proj.scenario)}</span></p>
-            ${proj.d_rain_pct != null ? `<p class="proj__r">${proj.d_rain_pct > 0 ? '+' : '−'}${Math.abs(proj.d_rain_pct)}% ${esc(t('db_rain'))}</p>` : ''}
-            <p class="dash__src mono">NEX-GDDP-CMIP6 · ${esc(proj.models.join(', '))} · ~25 km · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_projection_none'))}</p>`}
-        </section>`}
-      </div>
       <section class="glass dash__card dash__chart">
         <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}</h3>
           <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))}${normalPeriod(ev) ? ' ' + esc(normalPeriod(ev)!) : ''}</span></p></header>
         ${seasonChart(ev.climate_monthly, { w: 680, h: opts.preview ? 180 : 200 })}
         <p class="dash__src mono">NASA POWER · T2M · ${last ? esc(last) : ''} · ~50 km · ${esc(t('regional'))}</p>
       </section>
+      <div class="dash__row dash__row--3">
+        ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, true, !!opts.preview)}${currentPlan(a) ? `<p class="dash__plan">${esc(pick(currentPlan(a)!.name))}</p><p class="dash__plan-why">${esc(pick(currentPlan(a)!.why))}</p>` : ''}${opts.preview || a.readOnly ? '' : `<button type="button" class="btn btn--glass btn--sm" data-goto="rotation">${icon('rotation')}${esc(t('ws_open_rotation'))}</button>`}</section>` : ''}
+        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
+          ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${al.detail ? esc(al.detail) + ' · ' : ''}${esc(al.source)} · ${esc(fmtDateShort(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
+        </section>
+        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="serif dash__h3">${esc(t('db_projection'))}</h3><p class="proj__lbl mono">${esc(t('db_proj_label'))}</p>
+          ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">${proj.d_temp_c > 0 ? '+' : ''}${fmt(proj.d_temp_c, 2)} °C</span> <span>${esc(proj.horizon)} · ${esc(proj.scenario)}</span></p>
+            ${projRange(proj) ? `<p class="proj__r">${esc(projRange(proj)!)}</p>` : ''}${projBase(proj) ? `<p class="proj__r">${esc(t('db_proj_base', { p: projBase(proj)! }))}</p>` : ''}
+            ${proj.d_rain_pct != null ? `<p class="proj__r">${proj.d_rain_pct > 0 ? '+' : '−'}${fmt(Math.abs(proj.d_rain_pct), 1)}% ${esc(t('db_rain'))}</p>` : ''}
+            <details class="proj__models"><summary class="mono">NEX-GDDP-CMIP6 · ${esc(t('db_proj_models', { n: proj.models.length }))} · ~25 km</summary><p class="mono">${esc(proj.models.join(', '))}</p></details>` : `<p class="chart-empty">${esc(t('db_projection_none'))}</p>`}
+        </section>`}
+      </div>
       ${opts.preview ? '' : `<div class="dash__row">
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}</h3>${ndviChart(ev.ndvi_series, { w: 420, h: 150 })}
           <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
@@ -115,6 +120,10 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
   </div>`;
 }
 
+type Proj = NonNullable<EvidencePackage['projection']> & { d_temp_range?: [number, number]; baseline_period?: string };
+const projRange = (p: Proj) => (p.d_temp_range?.length === 2 ? t('db_proj_range', { a: `${p.d_temp_range[0] > 0 ? '+' : ''}${fmt(p.d_temp_range[0], 2)}`, b: `${p.d_temp_range[1] > 0 ? '+' : ''}${fmt(p.d_temp_range[1], 2)} °C` }) : null);
+const projBase = (p: Proj) => p.baseline_period ?? null;
+
 /** Live Leaflet map for the dashboard with the layer switch; returns a cleanup. */
 export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): Promise<() => void> {
   const host = root.querySelector<HTMLElement>('[data-dmap]');
@@ -126,7 +135,11 @@ export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): P
   L.control.zoom({ position: 'topright' }).addTo(map);
   map.attributionControl.setPrefix('Leaflet (BSD-2)');
   eoxLayer(L).addTo(map);
-  void addSnapshot(L, map, f.center.lat, f.center.lon, 1500);
+  setMapBase(t('db_map_base_old'));
+  void addSnapshot(L, map, f.center.lat, f.center.lon, 5000).then((m) => {
+    if (!m?.date) return;
+    setMapBase(t('db_map_base', { d: m.date }));
+  });
   const ringLL = f.ring.map(([lon, lat]) => [lat, lon] as [number, number]);
   const fieldStyle = { color: '#fff', weight: 2, fillOpacity: 0.08, fillColor: '#fff' };
   const outline = ringLL.length >= 3 ? L.polygon(ringLL, fieldStyle).addTo(map) : L.circleMarker([f.center.lat, f.center.lon], { radius: 8, color: '#fff', weight: 2, fillOpacity: 0.2 }).addTo(map);

@@ -47,3 +47,7 @@
 .dots { display: inline-flex; gap: 4px; }
 .dots i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--plan-light); }
 .dots i.on { background: var(--plan-light); }
+
+.dots { align-items: center; }
+.dots i { width: 13px; height: 13px; border-width: 2px; }
+.dots__n { font-family: var(--mono); font-size: 0.8125rem; font-weight: 500; margin-left: 6px; min-width: 2.2em; text-align: right; }

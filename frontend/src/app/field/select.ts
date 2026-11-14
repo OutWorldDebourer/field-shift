@@ -19,6 +19,13 @@ const KEY = 'fieldshift.lastField';
 export function mountFieldSelection(host: HTMLElement, opts: { site?: string | null; go?: boolean; onDone: (a: ClientAnalysis) => void }): () => void {
   let mode: Mode = 'example';
   let snapDate: string | null = null;
+  let snapBox: [number, number, number, number] | null = null;
+  /** The dated snapshot's date, only when it actually covers the field being shown. */
+  const coveredDate = (): string | null => {
+    const r = currentRing(); const pts = r.length >= 3 ? r : point ? [[point.lon, point.lat] as [number, number]] : [];
+    if (!snapDate || !snapBox || !pts.length) return null;
+    return pts.every(([lo, la]) => lo >= snapBox![0] && lo <= snapBox![2] && la >= snapBox![1] && la <= snapBox![3]) ? snapDate : null;
+  };
   let tool: Tool = 'none';
   let exampleId: string | null = opts.site ?? null;
   let exampleList: Example[] = [];
@@ -37,7 +44,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     <div class="fs__alt instr" id="fs-alt" aria-hidden="true"></div>
     <button type="button" class="fs__full pill" id="fs-full" aria-pressed="false">${icon('layers')}<span>${esc(t('fs_full'))}</span></button>
     <div class="fs__credit"><span class="mono" id="fs-img"></span><button type="button" class="fs__info" id="fs-info" aria-expanded="false" aria-controls="fs-lic" aria-label="${esc(t('fs_licences'))}">${icon('info')}</button>
-      <div class="fs__lic glass" id="fs-lic" hidden><p>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</p><p>Sentinel-2 L2A · Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer</p><p>Leaflet · BSD-2-Clause</p></div></div>
+      <div class="fs__lic glass" id="fs-lic" hidden><p>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</p><p>Sentinel-2 L2A · Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer</p><p>Place search: Nominatim · © OpenStreetMap contributors · ODbL</p><p>Leaflet · BSD-2-Clause</p></div></div>
     <aside class="fs__panel glass" aria-labelledby="fs-t">
       <h1 id="fs-t" class="serif fs__title" data-i18n="fs_title">${esc(t('fs_title'))}</h1>
       <p class="fs__lede" data-i18n="fs_lede">${esc(t('fs_lede'))}</p>
@@ -56,7 +63,6 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
         <div class="fs__qwrap">${icon('search')}<input id="fs-q" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fs-results" aria-autocomplete="list"
           placeholder="${esc(t('fs_search_ph'))}" data-i18n-attr="placeholder:fs_search_ph"></div>
         <ul class="fs__results" id="fs-results" role="listbox" hidden></ul>
-        <p class="fs__osm mono" data-i18n="fs_osm">${esc(t('fs_osm'))}</p>
       </div>
       <div class="fs__tools" role="toolbar" aria-label="${esc(t('fs_draw'))}">
         <button type="button" class="tool" data-tool="point" aria-pressed="false">${icon('point')}<span data-i18n="fs_point">${esc(t('fs_point'))}</span></button>
@@ -80,7 +86,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
 
   // ---------- render helpers ----------
   function renderMode() {
-    host.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.mode === mode)));
+    host.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => { b.setAttribute('aria-checked', String(b.dataset.mode === mode)); b.tabIndex = b.dataset.mode === mode ? 0 : -1; });
     host.querySelectorAll<HTMLElement>('[data-pane]').forEach((p) => { p.hidden = p.dataset.pane !== mode; });
   }
   function renderExamples() {
@@ -107,7 +113,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       : `<span class="mono fs__k">${esc(t('fs_point_only'))}</span><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`;
     useBtn.disabled = !(ring.length >= 3 || (point && tool !== 'draw'));
     $('#fs-why', host).hidden = !useBtn.disabled;
-    if (r.length >= 3) { areaTag.hidden = false; areaTag.innerHTML = `<b>${fmt(area, area < 10 ? 1 : 0)} ha</b><br><span>${esc(snapDate ? t('fs_img_date', { d: fmtDate(snapDate) }) : t('fs_img_base'))}</span>`; } else areaTag.hidden = true;
+    if (r.length >= 3) { areaTag.hidden = false; areaTag.innerHTML = `<b>${fmt(area, area < 10 ? 1 : 0)} ha</b><br><span>${esc(coveredDate() ? t('fs_img_date', { d: fmtDate(coveredDate()!) }) : t('fs_img_base'))}</span>`; } else areaTag.hidden = true;
     placeReticle();
   }
   function placeReticle() {
@@ -151,7 +157,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     mode = 'example'; exampleId = id; tool = 'none'; draft = [];
     ring = ex.field.ring.slice(); point = { lat: ex.field.center.lat, lon: ex.field.center.lon }; label = ex.field.label || pick(ex.name);
     renderMode(); renderExamples(); renderTools(); drawLayers();
-    if (map && L && ring.length >= 3) map.fitBounds(L.latLngBounds(ring.map(([lo, la]) => [la, lo] as [number, number])).pad(1.4), { animate: false });
+    if (map && ring.length >= 3) { const c = ringCenter(ring); map.setView([c.lat, c.lon], innerWidth < 760 ? 15 : 15.5, { animate: false }); }
     lockOn();
   }
   function setTool(tl: Tool) {
@@ -239,6 +245,15 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   results.addEventListener('click', (e) => { const li = (e.target as HTMLElement).closest<HTMLElement>('[data-i]'); if (li) goPlace(places[+li.dataset.i!]); });
 
   // ---------- wiring ----------
+  // Radiogroup keyboard: arrows move and select, one tab stop.
+  host.querySelector('.seg')!.addEventListener('keydown', (e) => {
+    const k = (e as KeyboardEvent).key;
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(k)) return;
+    const bs = [...host.querySelectorAll<HTMLButtonElement>('[data-mode]')];
+    const i = bs.findIndex((b) => b.dataset.mode === mode);
+    const n = bs[(i + (k === 'ArrowRight' || k === 'ArrowDown' ? 1 : -1) + bs.length) % bs.length];
+    n.focus(); n.click(); e.preventDefault();
+  });
   host.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.addEventListener('click', () => {
     mode = b.dataset.mode as Mode; renderMode();
     if (mode === 'example' && !exampleId && exampleList[0]) chooseExample(exampleList[0].id);
@@ -276,7 +291,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     L = await loadLeaflet();
     const el = $('#fs-map', host);
     el.innerHTML = '';
-    map = L.map(el, { zoomControl: false, attributionControl: false, worldCopyJump: true, maxZoom: 17 }).setView([-11.47, -77.21], 13);
+    map = L.map(el, { zoomControl: false, attributionControl: false, worldCopyJump: true, maxZoom: 16, zoomSnap: 0.5 }).setView([-11.47, -77.21], 13);
     L.control.zoom({ position: 'topright' }).addTo(map);
     eoxLayer(L).addTo(map);
     L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
@@ -293,7 +308,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       const mpp = (156543.03 * Math.cos((c.lat * Math.PI) / 180)) / 2 ** z;
       const km = (mpp * H) / (2 * Math.tan(Math.PI / 6)) / 1000;
       $('#fs-alt', host).textContent = t('alt', { km: km >= 10 ? Math.round(km) : km.toFixed(1) });
-      $('#fs-img', host).textContent = snapDate ? `Sentinel-2 L2A · ${snapDate} · EOX 2016 base` : t('eox_short');
+      $('#fs-img', host).textContent = coveredDate() ? `Sentinel-2 L2A ${coveredDate()} · EOX 2016 base` : t('eox_short');
     };
     map.on('move zoom resize', () => { placeReticle(); instr(); });
     instr();
@@ -304,7 +319,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { /* ignore */ }
     if (!exampleId && !saved?.field && exampleList[0]) exampleId = exampleList[0].id;
     const h = exampleList.find((e) => e.id === (exampleId ?? 'huaral')) ?? exampleList[0];
-    if (h) void addSnapshot(L, map, h.field.center.lat, h.field.center.lon, 1500).then((m) => { snapDate = m?.date ?? null; instr(); renderReadout(); });
+    if (h) void addSnapshot(L, map, h.field.center.lat, h.field.center.lon, 5000).then((m) => { snapDate = m?.date ?? null; snapBox = (m?.bbox as [number, number, number, number]) ?? null; instr(); renderReadout(); });
     if (exampleId) {
       chooseExample(exampleId);
       if (opts.go) void use();

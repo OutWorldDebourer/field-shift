@@ -21,8 +21,12 @@ export function keyReadings(ev: EvidencePackage | null | undefined): Reading[] {
 
 /** Short label for tight rows (hero phone, section peek); the full label stays in the title attribute. */
 export function shortLabel(r: Reading): string | undefined {
-  if (r.id.startsWith('temp')) return t('r_temp');
+  if (r.id.startsWith('temp')) return t('r_temp_vs');
   if (r.id.startsWith('soil_moisture')) return t('r_soil');
+  if (r.id === 'rain_30d' || r.id.startsWith('rain')) return t('r_rain');
+  if (r.id.startsWith('pest')) return t('r_pest');
+  if (r.id === 'slope') return t('r_slope');
+  if (r.id === 'grace') return t('r_storage');
   if (r.id.startsWith('water_balance')) return t('r_water');
   if (r.id.startsWith('ndvi')) return t('r_vigor');
   return undefined;

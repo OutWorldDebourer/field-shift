@@ -33,8 +33,9 @@ export function valueText(r: Reading, compact = false): { text: string; isWord: 
 
 /** Short resolution for tight spots: "~0.5° × 0.625° grid cell (about 50 km)" → "~50 km". */
 export function shortRes(res: string): string {
-  const m = res.match(/about\s*([\d.,]+\s*k?m)/i);
-  const out = m ? `~${m[1]}` : res.length > 14 ? res.slice(0, 13) + '…' : res;
+  const about = res.match(/(?:about|\(~)\s*([\d.,]+\s*k?m)\b/i);
+  const lead = res.match(/^~?\s*([\d.,]+\s*k?m)\b/i);
+  const out = about ? `~${about[1]}` : lead ? `${res.trim().startsWith('~') ? '~' : ''}${lead[1]}` : res.length > 14 ? res.slice(0, 13) + '…' : res;
   return out.replace(/ /g, ' ');
 }
 
@@ -57,10 +58,18 @@ export function sourceLine(r: Reading): string {
 
 /** Short source line for tiles and compact rows; the full line goes in a tooltip. */
 export function sourceShort(r: Reading): string {
-  return `${esc(r.source)} · ${esc(fmtDateShort(r.date))} · ${esc(shortRes(r.resolution))}`;
+  const b = basePeriod(r);
+  return `${esc(r.source)} · <span class="nw">${esc(fmtDateShort(r.date))}</span>${b ? ` · <span class="nw">vs ${b[1]}–${b[2]}</span>` : ''} · <span class="nw">${esc(shortRes(r.resolution))}</span>`;
 }
 
-const sourceFull = (r: Reading) => `${r.source} · ${r.dataset} · ${fmtDate(r.date)} · ${r.resolution} · ${r.license}`;
+const sourceFull = (r: Reading) => `${r.source} · ${r.dataset} · ${fmtDate(r.date)} · ${r.resolution} · ${r.license}${r.method ? ' · ' + r.method : ''}`;
+const basePeriod = (r: Reading) => (r.id.startsWith('temp') ? (r.method ?? '').match(/(\d{4})\s*[–-]\s*(\d{4})/) : null);
+
+/** Verdict without a repeated figure: "much warmer than normal (+5.0 °C)" → "much warmer than normal". */
+export function cleanVerdict(r: Reading): string {
+  const v = pick(r.verdict);
+  return v.replace(/\s*\((?:[+−-]?\d[^)]*)\)\s*$/, '');
+}
 
 /** Full data row with verdict, source, date, resolution, badge and sparkline. */
 export function dataRow(r: Reading): string {
@@ -70,22 +79,23 @@ export function dataRow(r: Reading): string {
     ${icon(readingIcon(r.id), 'drow__icon')}
     <div class="drow__label">${esc(pick(r.label))}</div>
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
-    <div class="drow__verdict">${v.isWord ? '' : esc(pick(r.verdict))}</div>
+    <div class="drow__verdict">${v.isWord ? '' : esc(cleanVerdict(r))}</div>
     ${sparkline(series)}
     <div class="drow__meta"><span class="drow__src" title="${esc(sourceFull(r))}">${sourceShort(r)}</span>${badge(r.badge)}</div>
   </div>`;
 }
 
 /** Compact row as in the hero phone: icon, label, value, source · scale, sparkline. */
-export function dataRowCompact(r: Reading, srcText?: string, label?: string): string {
+export function dataRowCompact(r: Reading, srcText?: string, label?: string, verdict = false): string {
   const v = valueText(r, true);
   const series = r.series?.map((p) => p.v) ?? [];
-  const src = srcText ?? `${r.source.replace(/\s+L2A$/, '')} · ${fmtDateShort(r.date)} · ${shortRes(r.resolution)}`;
+  const src = srcText ?? '';
   return `<div class="drow drow--compact" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
     <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}</div>
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
-    <div class="drow__src" title="${esc(sourceFull(r))}">${esc(src)} ${badge(r.badge)}</div>
+    ${verdict ? `<div class="drow__verdict drow__verdict--c">${esc(v.isWord ? '' : cleanVerdict(r))}</div>` : ''}
+    <div class="drow__src" title="${esc(sourceFull(r))}">${srcText ? esc(src) : sourceShort(r)} ${badge(r.badge)}</div>
     ${sparkline(series, 52, 22)}
   </div>`;
 }

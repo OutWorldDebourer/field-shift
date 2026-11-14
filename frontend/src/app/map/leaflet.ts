@@ -38,7 +38,10 @@ export async function addSnapshot(L: typeof Leaflet, map: Leaflet.Map, lat: numb
   const meta = await snapshotMeta(lat, lon, sizeM);
   if (!meta) return null;
   const b = meta.bbox ?? bboxAround(lat, lon, sizeM);
-  const overlay = L.imageOverlay(snapshotUrl(lat, lon, sizeM), [[b[1], b[0]], [b[3], b[2]]], { opacity: 1, className: 'snap-overlay', attribution: `${meta.source ?? 'Sentinel-2 L2A'} ${meta.date ?? ''} · ${meta.credit ?? t('snap_credit_fallback')}` });
+  const overlay = L.imageOverlay(snapshotUrl(lat, lon, sizeM), [[b[1], b[0]], [b[3], b[2]]], { opacity: 1, attribution: `${meta.source ?? 'Sentinel-2 L2A'} ${meta.date ?? ''} · ${meta.credit ?? t('snap_credit_fallback')}` });
   overlay.addTo(map);
+  // A thin hairline marks where the dated image ends and the 2016 base begins.
+  L.rectangle([[b[1], b[0]], [b[3], b[2]]], { color: '#fff', weight: 1, opacity: 0.75, fill: false, interactive: false }).addTo(map);
+  (meta as SnapshotMeta & { bbox: typeof b }).bbox = b;
   return meta;
 }

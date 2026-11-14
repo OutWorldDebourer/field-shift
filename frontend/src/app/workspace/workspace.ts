@@ -45,7 +45,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       <section class="view view--rotation" id="view-rotation" role="tabpanel" aria-labelledby="tab-rotation" hidden></section>
     </main>
     <footer class="ws__foot">
-      <p class="notice ws__notice">${icon('info')}<span data-i18n="prediag">${esc(t('prediag'))}</span></p>
+      <p class="notice ws__notice" id="ws-notice" data-short="${esc(t('foot_short'))}">${icon('info')}<span data-i18n="prediag">${esc(t('prediag'))}</span></p>
       <p class="instr ws__credit" id="ws-credit"></p>
     </footer>
     <div class="sheet-scrim" id="scrim" hidden></div>
@@ -59,6 +59,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   const isPhone = () => innerWidth < 900;
   let bd: Backdrop | null = null;
   let dashCleanup: (() => void) | null = null;
+  let shortCredit = '';
   let sheetReturn: HTMLElement | null = null;
 
   // backdrop: the field from above, darkened so white text stays readable
@@ -71,7 +72,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   bd = mountBackdrop($('#ws-bg'), {
     lat: a0.field.center.lat, lon: a0.field.center.lon, ring: a0.field.ring, sizeM: 2400, zoom: 1.08, focus,
     outline: state.view === 'rotation' ? 'plan' : 'measured', reticle: true,
-    onCredit: (c, d) => { set({ snapshotCredit: d ? `${c} · ${d}` : c }); },
+    onCredit: (c, d) => { shortCredit = d ? `${(c.match(/Contains modified Copernicus Sentinel data \d{4}/) ?? [c])[0]} · ${d}` : c; set({ snapshotCredit: d ? `${c} · ${d}` : c }); },
   });
 
   const chat = mountChat($('#chat'), () => state.analysis, (patch) => { set({ analysis: { ...state.analysis!, ...patch } }); });
@@ -93,11 +94,13 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     $('#si-tag').hidden = !a.messages.some((m) => m.photos?.some((p) => p.url.startsWith('/img/')));
     $$<HTMLButtonElement>('[data-tab]', host).forEach((b) => { const on = b.dataset.tab === state.view; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
     const credit = state.snapshotCredit;
-    $('#ws-credit').textContent = credit;
+    $('#ws-credit').innerHTML = `<span class="cr-long">${esc(credit)}</span><span class="cr-short">${esc(shortCredit || credit)}</span>`;
+    $('#ws-notice').dataset.short = t('foot_short');
   }
   function renderSections() {
     const a = state.analysis!;
     $('#secs').innerHTML = sectionsColumn(a, state.open);
+    requestAnimationFrame(moreCue);
     $('#secbar').innerHTML = sectionsRow(a);
     const p = peekSection(a);
     const peek = $('#peek');
@@ -119,6 +122,12 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     }
   }
   function renderAll() { renderBar(); renderSections(); renderView(); chat.render(state.analysis!); }
+
+  function moreCue() {
+    const secs = $('#secs'), more = secs.querySelector<HTMLElement>('[data-more]');
+    if (more) more.hidden = secs.scrollHeight - secs.scrollTop - secs.clientHeight < 24;
+  }
+  $('#secs').addEventListener('scroll', moreCue, { passive: true });
 
   // ---------- sheet (phone) ----------
   function openSheet(k: SectionKey, from: HTMLElement | null) {

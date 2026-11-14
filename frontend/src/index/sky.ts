@@ -33,7 +33,7 @@ export function mountSky(): Sky {
     instruments: false,
     anchor: innerWidth >= 900 ? { x: 0.5, y: 0.56 } : { x: 0.5, y: 0.5 },
     still: reducedMotion(),
-    onCamera: (c) => { cam = c; if (live) { drawInstruments(); camFns.forEach((f) => f()); } },
+    onCamera: (c) => { cam = c; if (live) { drawInstruments(); camFns.forEach((f) => f()); guardOverlay(); } },
     onReady: () => setTimeout(detect, 60),
   }); globe.setProgress(lastP); });
   onLang((l) => { globe?.setLang(l); drawInstruments(); });
@@ -45,6 +45,25 @@ export function mountSky(): Sky {
     update(lastP, lastDive);
   }
   setTimeout(detect, 1500);
+
+  /** Hide the globe's own ground label/reticle while it would sit under page text or a button. */
+  function guardOverlay() {
+    const cv = host.querySelectorAll('canvas');
+    const ov = cv[cv.length - 1] as HTMLCanvasElement | undefined;
+    const ts = cam?.targetScreen;
+    if (!ov || cv.length < 2) return;
+    let hide = false;
+    if (ts) {
+      for (const el of document.querySelectorAll<HTMLElement>('.hero__text, .ctas, .sec-title, .sec-lede, .ds, .step, .get__strip, .cta__title, .foot, .phone')) {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight || !r.width) continue;
+        // the label runs ~260 px right and ~90 px up from the target
+        if (ts.x + 270 > r.left && ts.x + 20 < r.right && ts.y + 70 > r.top && ts.y - 110 < r.bottom) { hide = true; break; }
+      }
+    }
+    ov.style.transition = 'opacity 0.3s';
+    ov.style.opacity = hide ? '0' : '1';
+  }
 
   function drawInstruments() {
     if (live && cam) {
@@ -104,7 +123,7 @@ export function mountSky(): Sky {
       place(lblField, pt.x + 70, pt.y + 82, heroA);
       if (heroA > 0) {
         if (!live) d += `M${pt.x - 8} ${pt.y + 4}L${vx} ${vy}L${vx + 236} ${vy}`;
-        d += `M${pt.x + 30} ${pt.y + 46}L${pt.x + 70} ${pt.y + 112}L${pt.x + 250} ${pt.y + 112}`;
+        d += `M${pt.x + 26} ${pt.y + 40}L${pt.x + 64} ${pt.y + 92}`;
       }
       place(lblHow, pt.x + Math.max(70, pt.rw * 0.55), pt.y - 12, live ? 0 : howA);
     } else {

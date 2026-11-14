@@ -66,7 +66,7 @@ export function rotationHtml(a: ClientAnalysis): string {
     </section>
     <section class="rot__cmp" aria-labelledby="rot-c">
       <header class="rot__cmphead"><h2 class="serif" id="rot-c">${esc(perennial && c ? t('sec_rotation') : t('rt_compare'))}</h2>
-        ${!perennial && c ? `<p class="mono rot__legend"><i></i>${esc(t('rt_plan_legend2'))} · ${esc(t('rt_dots_legend'))}</p>` : ''}</header>
+        ${!perennial && c ? `<p class="mono rot__legend"><span class="rot__swatch" aria-hidden="true"></span>${esc(t('rt_plan_legend2'))} · ${esc(t('rt_dots_legend'))}</p>` : ''}</header>
       ${right}
     </section>
     <footer class="rot__foot">${exportButtons(a, true)}<p class="mono">${esc(t('ex_cites'))}</p></footer>

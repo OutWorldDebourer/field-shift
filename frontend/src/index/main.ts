@@ -90,6 +90,13 @@ function onScroll() {
   $('#data-leaders').style.opacity = String(clamp((frac - 0.55) / 0.3));
   $('#data-field').style.opacity = String(clamp((frac - 0.55) / 0.3));
   if (y + H > data && y < get) drawDataLeaders();
+  // Corner instruments step aside while a title, card or button reaches the bottom band.
+  let busy = false;
+  for (const el of document.querySelectorAll<HTMLElement>('.sec-title, .sec-lede, .step, .ds, .get__strip, .get__note, .preview, .dash__open, .cta__title, .ctas, .foot, .hero__text')) {
+    const r = el.getBoundingClientRect();
+    if (r.bottom > H - 110 && r.top < H && r.width) { busy = true; break; }
+  }
+  document.body.classList.toggle('hud-busy', busy);
 }
 addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
 addEventListener('resize', () => { ground.layout(); drawDataLeaders(); onScroll(); });

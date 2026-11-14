@@ -94,5 +94,5 @@ export function timelineStrip(timeline: string[], startMonth: number, plan = fal
 
 export function dots(n: number, label: string): string {
   const v = Math.max(0, Math.min(5, Math.round(n)));
-  return `<span class="dots" role="img" aria-label="${esc(label)}: ${esc(t('sc_of5', { n: v }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= v ? 'on' : ''}"></i>`).join('')}</span>`;
+  return `<span class="dots" role="img" aria-label="${esc(label)}: ${esc(t('sc_of5', { n: v }))}">${[1, 2, 3, 4, 5].map((i) => `<i class="${i <= v ? 'on' : ''}"></i>`).join('')}<b class="dots__n" aria-hidden="true">${v}/5</b></span>`;
 }

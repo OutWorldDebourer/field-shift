@@ -193,3 +193,16 @@
 .drow--compact .drow__value { grid-row: 1; grid-column: 3; }
 .drow--compact .drow__spark { grid-row: 1; grid-column: 4; align-self: center; }
 .drow--compact .drow__src { grid-row: 2; grid-column: 2 / -1; padding-left: 0; white-space: normal; }
+
+/* Round 3 */
+.nw { white-space: nowrap; }
+.drow--compact .drow__verdict--c { grid-row: 2; grid-column: 2 / -1; font-size: 0.875rem; color: var(--ink); }
+.drow--compact .drow__verdict--c + .drow__src { grid-row: 3; }
+.drow--compact .drow__verdict--c:empty { display: none; }
+.badge { font-size: 0.8125rem; height: 24px; border-color: rgba(255, 255, 255, 0.8); }
+.badge--regional { border-color: rgba(255, 255, 255, 0.8); }
+.drow--compact .drow__src .badge { font-size: 0.75rem; height: 20px; }
+.lang button[aria-pressed='true'] { text-decoration-color: #fff; }
+:focus-visible { outline-color: #fff; box-shadow: 0 0 0 4px rgba(3, 8, 16, 0.7); }
+.demo-flag::before { background: #fff; }
+.ground-label b, .ground-label span { background: rgba(3, 8, 16, 0.55); padding: 0 4px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }

@@ -41,7 +41,7 @@
 .dash__h { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
 .dash__src { margin-top: 8px; font-size: 0.75rem; color: var(--ink-2); }
 .dash__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.dash__row--3 { grid-template-columns: 1fr 1.3fr 0.8fr; }
+.dash__row--3 { grid-template-columns: 1fr 1.25fr 1fr; }
 .dash__cal { display: grid; align-content: start; gap: 10px; }
 .dash__src { font-size: 0.8125rem; color: var(--ink); }
 .dmap__src { color: var(--ink) !important; font-size: 0.8125rem !important; }
@@ -87,3 +87,23 @@
 .dash__plan { font-weight: 600; font-size: 1rem; }
 .dash__plan-why { font-size: 0.9375rem; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .dash__cal .btn { justify-self: start; }
+
+/* Round 3 */
+.tile-m .drow__verdict { grid-row: 2; order: -1; font-size: 0.9375rem; color: var(--ink); }
+.tile-m .drow__value { grid-row: 3; }
+.tile-m .drow__meta { grid-row: 4; }
+.dash__card h3.dash__h, .dash__h3 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 1.375rem; margin-bottom: 8px; }
+.al small, .dmap__scale, .dmap__base { font-size: 0.8125rem !important; color: var(--ink) !important; }
+.dmap__base { margin-top: 2px; }
+.proj__lbl { font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); margin: -4px 0 8px; }
+.proj__v { font-size: 1.75rem; font-weight: 600; }
+.proj__models summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-size: 0.8125rem; list-style: none; }
+.proj__models summary::-webkit-details-marker { display: none; }
+.proj__models summary::after { content: '+'; margin-left: 8px; font-size: 1rem; }
+.proj__models[open] summary::after { content: '−'; }
+.proj__models p { font-size: 0.8125rem; color: var(--ink-2); }
+@media (max-width: 700px) {
+  .dmap__layers { position: static; order: -1; display: flex; flex-wrap: nowrap; overflow-x: auto; margin: 0; border-radius: 0; border: 0; border-bottom: 1px solid var(--rule); width: auto; right: auto; scrollbar-width: none; }
+  .dmap__layers button { flex: none; }
+  .dash .leaflet-top.leaflet-right { top: 8px; }
+}
