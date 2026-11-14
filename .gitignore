@@ -1,0 +1,16 @@
+# secrets: API keys and tokens never go to git
+env.txt
+.env
+.env.*
+!.env.example
+
+node_modules/
+target/
+.cloudflare/
+
+# regenerable or local-only
+research/api-samples/gibs_caps.xml
+.impeccable/review/
+.impeccable/build/
+tools/.venv/
+*.tmp

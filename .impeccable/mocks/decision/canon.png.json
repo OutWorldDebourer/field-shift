@@ -1,0 +1,6 @@
+{
+  "prompt": "Portrait mobile app screen filling the whole tall frame, flat, a standard agritech farm dashboard named Field Shift in English: top app bar with the name, a map tile with one field polygon in green, a row of three metric cards (Temp anomaly +1.2 °C, Rain 3 mm, NDVI 0.62), a small line chart of temperature over the season, and a list of three recommendation rows with chevrons. White background, green accent, clean card grid, subtle shadows. No logos, no people.",
+  "createdAt": "2026-11-14T06:50:42.959Z",
+  "tool": "generate-image.mjs",
+  "model": "gpt-image-2"
+}

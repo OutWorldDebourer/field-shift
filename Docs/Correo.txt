@@ -1,0 +1,26 @@
+You have a new message from the NASA Space Apps GO Team!
+
+The Hackathon is Kicking off! Plus, Global Offers are Live! 💻
+
+Hello NASA Space Apps community,
+
+The hackathon is kicking off, and Global Offers are now LIVE! Use these optional free tools & resources for your project:
+
+GoDaddy: Unleash your creativity with a free domain and one year of website hosting, exclusively available to all NASA Space Apps participants. Embark on your digital journey and showcase your project to the universe.
+Google Cloud: NASA Space Apps Challenge participants can use the Google Cloud Platform and its many products and services, including Firebase and the Google Maps API, to easily launch cloud-based applications (mobile, web, Internet of Things, and more) utilizing the best in big data, super intelligence, and machine learning.
+Meteomatics: Access the world’s most accurate weather, marine, environmental, and climate data. Use the API to customize data formats and integrate seamlessly into your project.
+Microsoft: NASA Space Apps Challenge participants can use Microsoft Azure, Planetary Computer, Microsoft Copilot, Github Copilot, and Teams to collaborate with your team, harness the power of coding assistants, access environmental monitoring data, process data sets, and more with these tools.
+Miro: A collaborative online whiteboard platform including Miro Education Plan, Miro Business Plan, and NASA Space Apps Hackathon Miro Board Templates.
+Claim your offers today!
+
+Please note that some Global Offers may ask for credit card information for verification reasons. However, these Global Offers are free for participants. You are not required to purchase anything to experience these Global Offers. If you have questions, please reach out to the support contact listed on the Global Offer or in Space Apps Connect.
+
+Kicking off the Hackathon:
+
+All Participant Guides are live! Read the Project Submission Guide for important deadlines and step-by-step guidance. Also, the Judging and Awards Guide provides information on Local and Global Award eligibility and the judging process.
+Navigating the Hackathon videos: Watch step-by-step tutorials!
+Participant FAQs: Read our FAQs to find answers to the most asked questions.
+Join Space Apps Connect Now! We will be sharing updates and reminders on Connect. This is where you can engage with participants and ask your questions. Local Leads, Navigators, subject matter experts, Global Collaborators, and the NASA Space Apps GO Team will be available to support you. Read the Space Apps Connect Guide to learn how to join.
+Good luck,
+
+The NASA Space Apps GO Team 

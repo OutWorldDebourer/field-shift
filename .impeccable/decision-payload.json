@@ -1,0 +1,133 @@
+{
+  "title": "Field Shift: choose the visual world",
+  "question": "Three worlds inside your pinned look (white, celeste, sunrise, NASA mood, Lemo-Opuscar type). Keep the lead, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Agroclimatic Bulletin",
+      "kicker": "THE ROLL",
+      "lineage": "daylight synoptic weather charts and agroclimatic bulletins",
+      "thesis": "Your field drawn as a weather station on a morning chart: one compound glyph carries heat, rain, water and pests.",
+      "palette": ["#FFFFFF", "#EAF4FB", "#3A8FD0", "#F2A65A", "#1B2B3A"],
+      "materials": ["hairline isobars on white chart paper", "station-model glyph", "Source Serif 4 and tracked Source Sans 3"],
+      "viewport": "The valley as a pale chart with celeste isobars; your field is the station glyph at center, one reading set large beside it, the source line underneath.",
+      "risk": "Farmers do not read synoptic charts; the glyph must teach itself or it becomes decoration.",
+      "raised": [
+        {"from": "challenger-exposure-record", "raise": "Anomaly is a strict nine-step celeste-to-sunrise ramp, the only tonal tokens: every warm step is a measured departure from the 40-year normal."},
+        {"from": "challenger-centre-rail", "raise": "A ruling engine draws every isobar, bracket and reticle at one device pixel from the live layout."},
+        {"from": "challenger-ticket-wallet", "raise": "Nothing disappears: each rotation option is stamped considered, set aside or chosen, and the export tears off as a stub for the engineer."},
+        {"from": "challenger-dark-console", "raise": "Panels persist over the chart; navigation changes their contents, never the map beneath."}
+      ],
+      "comp": ".impeccable/mocks/decision/assigned.png"
+    },
+    {
+      "id": "model-pick",
+      "label": "Daylight Mission Briefing",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Lemo-Opuscar Satellite Briefing, regraded from analyst grey to sunrise",
+      "thesis": "Real satellite imagery of your field at dawn, a thin reticle around it, and one sourced reading at a time.",
+      "palette": ["#FFFFFF", "#DCEEFA", "#2F7FC1", "#F6B26B", "#14212E"],
+      "materials": ["true-color Sentinel-2 imagery graded to morning light", "hairline reticle and measurement lines", "Source Serif 4 and tracked Source Sans 3"],
+      "viewport": "Full-bleed image of the valley warming at sunrise, the field outlined with corner brackets, a single large reading and its source in the white sky above.",
+      "risk": "It is the literal reading of the reference you showed, so it is also the most expected answer.",
+      "comp": ".impeccable/mocks/decision/model-pick.png"
+    },
+    {
+      "id": "challenger-reading-feed",
+      "label": "One Reading per Screen",
+      "verdict": "wins",
+      "lineage": "full-screen vertical feeds farmers already scroll every day",
+      "thesis": "The report becomes a vertical feed: each finding owns the whole phone screen over your field, one flick to the next.",
+      "palette": ["#FFFFFF", "#EAF4FB", "#3A8FD0", "#F2A65A", "#14212E"],
+      "materials": ["full-bleed field imagery with a white sky scrim", "right rail of sourced actions", "Source Serif 4 and tracked Source Sans 3"],
+      "viewport": "Your field fills the screen; the reading and verdict sit low-left, a right rail offers source, ask the consultant, add to sheet, share.",
+      "case": "Beats the bulletin on both axes: farmers already read their phone this way, and one reading per screen is the briefing's own discipline.",
+      "risk": "Can feel like social media; the three-rotation comparison needs a calm non-feed view.",
+      "comp": ".impeccable/mocks/decision/challenger-reading-feed.png",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-vertical-video-feed-surface-hero.webp"
+    },
+    {
+      "id": "challenger-field-course",
+      "label": "Field Course Map",
+      "verdict": "competitive",
+      "lineage": "orienteering maps: fixed terrain language, the course riding on top",
+      "thesis": "NASA data is the terrain in a fixed color language; the rotation plan rides above it as a numbered course, season to season.",
+      "palette": ["#FFFFFF", "#CFE7F7", "#9CCB7B", "#F2A65A", "#1B2B3A"],
+      "materials": ["map symbol legend", "sunrise-amber course line reserved for the plan", "condensed control numerals"],
+      "viewport": "Your field as terrain (celeste moisture, green vigor, white bare soil) with the rotation course drawn over it, controls numbered by season.",
+      "case": "Clearest split between data and plan; loses on audience, since few farmers know orienteering maps.",
+      "risk": "The legend has to be learned before the map pays off.",
+      "comp": ".impeccable/mocks/decision/challenger-field-course.png",
+      "hero": "https://impeccable.style/worlds/cards/notation-diagram-systems-orienteering-map-hero.webp"
+    },
+    {
+      "id": "challenger-exposure-record",
+      "label": "Exposure Record Sheets",
+      "verdict": "declined",
+      "lineage": "darkroom printer's exposure cards",
+      "thesis": "Overlapping translucent sheets over a backlit zone ramp.",
+      "palette": ["#F4F4F2", "#8E8E8A", "#2B2B2A", "#C2185B"],
+      "materials": ["tracing paper", "zone ramp"],
+      "viewport": "Stacked sheets with hatch densities over a field.",
+      "risk": "Farmers have no darkroom to identify with.",
+      "case": "Loses both axes.",
+      "kept": "A strict tonal ramp as the only tonal tokens, now the anomaly scale.",
+      "hero": "https://impeccable.style/worlds/cards/operate-b-exposure-record-zone-sheets-hero.webp"
+    },
+    {
+      "id": "challenger-centre-rail",
+      "label": "Centre-Rail Reference Page",
+      "verdict": "declined",
+      "lineage": "wide-margin scholarly editions",
+      "thesis": "Two text columns twinned around a rail of keys.",
+      "palette": ["#F1EBDD", "#1A1A1A", "#B23A2A"],
+      "materials": ["ruled hairlines", "small caps apparatus"],
+      "viewport": "Two narrow columns with a keyed centre rail.",
+      "risk": "Two columns collapse on a phone; bookish for a field tool.",
+      "case": "Loses both axes.",
+      "kept": "The ruling engine: every hairline drawn at one device pixel from live layout.",
+      "hero": "https://impeccable.style/worlds/cards/rw-centre-rail-reference-setting-hero.webp"
+    },
+    {
+      "id": "challenger-dark-console",
+      "label": "Dark Developer Console",
+      "verdict": "declined",
+      "lineage": "dark-first developer tools",
+      "thesis": "Graphite panels divided by hairline seams.",
+      "palette": ["#1E2124", "#2A2E33", "#7FD1B9", "#E5C07B"],
+      "materials": ["graphite panels", "hairline seams"],
+      "viewport": "Tiled persistent panels on graphite.",
+      "risk": "Dark contradicts the pinned daylight look and fails in bright sun.",
+      "case": "Loses both axes.",
+      "kept": "Persistent panels: navigation changes contents, not the layout.",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-dark-first-developer-console-hero.webp"
+    },
+    {
+      "id": "challenger-ticket-wallet",
+      "label": "Jet-Age Ticket Wallet",
+      "verdict": "declined",
+      "lineage": "airline carbon-copy coupon wallets",
+      "thesis": "Each season as a coupon torn off in sequence.",
+      "palette": ["#FFFFFF", "#1F2F5A", "#C8102E", "#6B3FA0"],
+      "materials": ["coupon stock", "carbon numerals"],
+      "viewport": "A wallet of season coupons with stamped states.",
+      "risk": "Travel ephemera is far from the farmer's world.",
+      "case": "Loses audience, ties on clarity.",
+      "kept": "Stamped states where nothing disappears, and the export as a tear-off stub.",
+      "hero": "https://impeccable.style/worlds/cards/vernacular-ephemera-jet-age-ticket-wallet-hero.webp"
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "comp", "toggle": true},
+  "canon": true,
+  "canonCard": {
+    "label": "The agritech dashboard standard",
+    "thesis": "What farm-data apps ship: a map, metric cards and charts, executed impeccably.",
+    "palette": ["#FFFFFF", "#F3F6F4", "#2E7D32", "#1F2933"],
+    "materials": ["card grid", "line charts", "map tiles"],
+    "viewport": "Map on top, metric cards below, a chart and a list of recommendations.",
+    "risk": "Indistinguishable from any farm dashboard by design.",
+    "comp": ".impeccable/mocks/decision/canon.png"
+  },
+  "steer": true
+}

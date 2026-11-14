@@ -1,0 +1,5 @@
+Dataset: 3B-DAY-L.MS.MRG.3IMERG.20261112-S000000-E235959.V07C.nc4
+/lon, -77.25, -77.15
+/lat, -11.45, -11.35
+/precipitation[0][0], 0.195, 0
+/precipitation[0][1], 0.035, 0.24

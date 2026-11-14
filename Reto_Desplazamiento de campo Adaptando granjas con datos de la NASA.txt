@@ -1,0 +1,46 @@
+Los agricultores de todo el mundo se enfrentan a cambios de temperatura, patrones de lluvia cambiantes, escasez de agua, fenómenos meteorológicos extremos y deterioro de la salud del suelo. Estas presiones dificultan la elección de rotaciones de cultivos que protejan los campos, conserven el agua y apoyen la resiliencia a largo plazo. Tu reto es crear una herramienta de apoyo a la toma de decisiones que utilice las observaciones terrestres de la NASA junto con información local del suelo, características de los cultivos y prioridades de los agricultores para ayudar a los agricultores a explorar estrategias de rotación que puedan fortalecer la salud del suelo y adaptar sus explotaciones a condiciones cambiantes.
+
+Antecedentes
+Los agricultores se enfrentan a decisiones cada vez más complejas a medida que las temperaturas cambian, las lluvias se vuelven menos predecibles y la salud del suelo empeora en muchas regiones. La escasez de agua, la erosión, el agotamiento de nutrientes y los fenómenos meteorológicos extremos añaden aún más incertidumbre. Seleccionar nuevos cultivos para añadir a una rotación puede ser difícil, porque un cultivo que mejora la salud del suelo en un lugar puede consumir demasiada agua, introducir enfermedades, entrar en conflicto con los mercados locales o quedar fuera de las temporadas de crecimiento previstas en otro lugar.
+
+Este desafío se inspira en parte en la experiencia agrícola multigeneracional: muchas familias han vivido temporadas en las que mejores herramientas para monitorizar las condiciones cambiantes podrían haber ayudado a identificar opciones de rotación más saludables y resilientes. Hoy en día, los conjuntos de datos ambientales a largo plazo de la NASA ofrecen nuevas formas de comprender las condiciones locales de cultivo, y las técnicas de SI abren oportunidades para traducir esos datos en conocimientos prácticos y amigables para los agricultores.
+
+Objetivos
+Podrías considerar combinar las observaciones terrestres de la NASA con información agrícola local para crear una aplicación, modelo, mapa interactivo u otra herramienta de apoyo a la toma de decisiones. El objetivo es ayudar a los agricultores a explorar opciones de rotación de cultivos que puedan mejorar la salud del suelo y fortalecer la resiliencia ante las condiciones cambiantes del tiempo y del agua.
+
+Puedes explorar conjuntos de datos de la NASA como SMAP, ECOSTRESS, GPM, Landsat, MODIS, NASA POWER, GRACE y GRACE-FO, y SRTM u otros productos de elevación de la NASA. Utilizando estos conjuntos de datos, puedes analizar patrones de temperatura, estrés térmico, precipitaciones, humedad del suelo, evaporación, riesgo de heladas, precipitaciones extremas, estrés vegetal y tendencias hídricas a largo plazo. También puedes considerar información local sobre el suelo, características de los cultivos y prioridades de los agricultores, como el uso del agua, el valor del forraje, el potencial fijador de nitrógeno, la reducción de la erosión, la mejora de la materia orgánica o la idoneidad para el mercado.
+
+Tu herramienta puede destacar momentos en los que los campos suelen estar vacíos, temporadas en las que los cultivos actuales parecen más vulnerables, o oportunidades de rotaciones que podrían interrumpir ciclos de plagas, reducir la demanda de agua, mejorar la infiltración o añadir ingresos suplementarios. Puedes comparar al menos tres estrategias de rotación, incluida la rotación existente. Para cada estrategia, puedes explicar por qué se sugirió, qué pruebas la respaldan, qué beneficios puede ofrecer, dónde existen carencias de información y cualquier riesgo que requiera una revisión local por parte de agricultores o expertos agrícolas.
+
+El resultado deseado es una herramienta de apoyo — que ayuda a identificar patrones y posibilidades, pero que no sustituye el juicio del agricultor ni la experiencia agrícola local.
+
+Consideraciones potenciales
+Puedes (aunque no estás obligado) considerar lo siguiente:
+
+Comprensión de Condiciones y Datos
+
+Explora cómo los cambios de temperatura, humedad del suelo, precipitaciones, evaporación y estrés vegetal se relacionan con la vulnerabilidad de los cultivos y la salud del suelo.
+Considera explicar términos científicos como evapotranspiración, anomalías de humedad del suelo, índices de vegetación (por ejemplo, NDVI), riesgo de heladas e indicadores de balance hídrico.
+Aclarar cómo las observaciones satelitales difieren de las mediciones terrestres y cómo combinar ambas puede mejorar la precisión.
+SI, modelado y fusión de datos
+
+Puedes comparar diferentes enfoques de SI o estadísticos para identificar patrones en las condiciones históricas del clima y del suelo.
+Considera cómo SI podría destacar transiciones estacionales, periodos de campos desnudos o épocas en que los cultivos actuales muestran mayor estrés.
+Explica cómo el modelo interpreta la incertidumbre y dónde sería necesaria la experiencia local para validar los resultados.
+Puedes considerar armonizar conjuntos de datos con diferentes resoluciones espaciales y temporales mediante muestreo reducido, agregado o remuestreo en una cuadrícula de análisis común. Armonizar la resolución puede ayudar a la SI a combinar la humedad del suelo de SMAP, la temperatura de la superficie terrestre de ECOSTRESS, la precipitación GPM, los índices de vegetación Landsat/MODIS, la biomasa GEDI y los conjuntos de datos de suelo en características coherentes que apoyen comparaciones claras y explicables de estrategias de rotación.
+Exploración de la Estrategia de Rotación
+
+Compara los escenarios de rotación examinando el ciclo de nutrientes, el riesgo de erosión, las contribuciones de materia orgánica, la alteración del ciclo de plagas, el uso de agua, el potencial de forraje o consideraciones de mercado.
+Podrías considerar mapear qué ideas de rotación se alinean mejor con las prioridades del agricultor, como conservar agua, generar ingresos suplementarios o mejorar la estructura del suelo.
+Incluye breves explicaciones sobre cómo los cultivos fijadores de nitrógeno, los cultivos de cobertura, los cultivos de raíces profundas o los cultivos tolerantes a la sequía contribuyen a la salud del suelo a largo plazo.
+Mapeo y visualización geoespacial
+
+Considera si los mapas interactivos podrían ayudar a los usuarios a explorar tendencias a lo largo del tiempo, como la humedad a largo plazo del suelo, las olas de calor o la disminución del almacenamiento de agua.
+Explora formas de visualizar vulnerabilidades a nivel de campo (por ejemplo, zonas de riesgo de erosión, puntos críticos de estrés hídrico, zonas propensas a heladas).
+Puedes incluir complementos opcionales como líneas de tiempo, superposiciones que comparen conjuntos de datos o deslizadores de escenarios que ajusten patrones de lluvia o temperatura.
+Diseño centrado en el agricultor
+
+Considera cómo hacer que la herramienta sea fácilmente interpretable para agricultores que puedan tener poca experiencia técnica o geoespacial.
+Piensa en formas de permitir que los agricultores introduzcan sus propias prioridades o limitaciones, como la disponibilidad de agua, las limitaciones de equipos o las preferencias de mercado.
+Comparte recordatorios de que la herramienta está pensada para apoyar—no reemplazar—la experiencia local, y destaca dónde el juicio humano es especialmente importante.
+Para información y recursos relacionados con este desafío, consulta la pestaña Recursos en la parte superior de la página. Se pueden añadir más recursos antes de que comience el hackatón.
