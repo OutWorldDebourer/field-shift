@@ -49,3 +49,4 @@ in `frontend/public/globe/CREDITS.md`. Imagery: NASA Blue Marble and VIIRS (publ
 The camera math, the ray-sphere set-up with nested feathered plates, the limb shading and the hairline
 drawing are adapted from the Satellite Briefing demo engine of Lemo-Opuscar (`engine.js`, `overlay.js`),
 © 2026 Lemomo/LemoLab, MIT.
+| `LICENSE-lemolab-engine.txt` | MIT licence of the Lemo-Opuscar Satellite Briefing engine adapted in camera.ts, shader.ts, overlay.ts |

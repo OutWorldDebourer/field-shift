@@ -44,7 +44,11 @@ pub fn app(state: AppState) -> Router {
         }))
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
         .allow_headers(tower_http::cors::Any);
-    Router::new().nest("/api", api).layer(cors).with_state(state)
+    // The built frontend (frontend/dist) is served from the same origin, so one binary runs the whole product.
+    let dist = std::env::var("FIELDSHIFT_DIST").map(std::path::PathBuf::from)
+        .unwrap_or_else(|_| state.config.root.join("frontend").join("dist"));
+    let static_files = tower_http::services::ServeDir::new(&dist).append_index_html_on_directories(true);
+    Router::new().nest("/api", api).fallback_service(static_files).layer(cors).with_state(state)
 }
 
 async fn build_evidence(State(s): State<AppState>, Path(id): Path<String>) -> common::ApiResult<Json<serde_json::Value>> {

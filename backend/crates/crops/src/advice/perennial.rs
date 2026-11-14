@@ -10,7 +10,7 @@ pub fn practices(c: &CropRecord, s: &FieldSignals) -> Vec<Practice> {
         "Las coberturas entre hileras aportan materia orgánica y mantienen hongos micorrícicos y vida del suelo; las leguminosas de la mezcla aportan nitrógeno.",
         refs::sare_cover_crops())];
     if s.bare_soil == Some(true) {
-        cover_evidence.push(signal("Satellite NDVI shows bare-soil periods on this field".into(), "El NDVI satelital muestra periodos de suelo desnudo en este campo".into()));
+        cover_evidence.push(signal_field("Satellite NDVI shows bare-soil periods on this field".into(), "El NDVI satelital muestra periodos de suelo desnudo en este campo".into()));
     }
     if let Some(w) = s.water_balance_mm { cover_evidence.push(signal(format!("Water balance: {w:.0} mm"), format!("Balance hídrico: {w:.0} mm"))); }
     if let crate::model::RotationNotes::Note { en, es, citation } = &c.traits.rotation_notes {

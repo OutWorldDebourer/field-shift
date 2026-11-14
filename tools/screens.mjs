@@ -10,7 +10,7 @@ if (!url || !prefix) { console.error('usage: node tools/screens.mjs <url> <out-p
 
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 for (const [name, vp, mobile] of [['desktop', { width: 1440, height: 900 }, false], ['mobile', { width: 390, height: 844 }, true]]) {
-  const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile });
+  const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: mobile && full !== '1' ? 2 : 1, isMobile: mobile, hasTouch: mobile });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(String(e)));

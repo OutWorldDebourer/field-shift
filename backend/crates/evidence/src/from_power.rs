@@ -107,6 +107,7 @@ pub fn pests(s: &Value) -> Vec<Value> {
             "name": p["pest"]["common_name"], "scientific": p["pest"]["scientific_name"],
             "generations_now": p["generations"].as_f64().map(|x| round(x, 1)),
             "generations_normal": p["normal_generations"]["mean"].as_f64().map(|x| round(x, 1)),
+            "difference": p["difference"].as_f64().map(|x| round(x, 1)),
             "citation": format!("{} ({}). {}. {}. {}", c["authors"].as_str().unwrap_or(""), c["year"], c["title"].as_str().unwrap_or(""), c["published_in"].as_str().unwrap_or(""), c["url"].as_str().unwrap_or("")),
         })
     }).collect()

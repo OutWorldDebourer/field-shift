@@ -193,8 +193,8 @@ pub fn advice(current: &CropRecord, previous: &[CropRecord], signals: &FieldSign
         ("bare-soil periods / periodos de suelo desnudo", signals.bare_soil.is_none()),
     ] {
         if missing {
-            gaps.push(L10n::new(format!("Field signal missing: {}.", name.split(" / ").next().unwrap_or(name)),
-                                format!("Falta la señal de campo: {}.", name.split(" / ").nth(1).unwrap_or(name))));
+            gaps.push(L10n::new(format!("NASA signal missing: {}.", name.split(" / ").next().unwrap_or(name)),
+                                format!("Falta la señal NASA: {}.", name.split(" / ").nth(1).unwrap_or(name))));
         }
     }
     Advice {
@@ -240,8 +240,14 @@ pub(crate) fn trait_evidence(crop: &CropRecord, label_en: &str, label_es: &str, 
     })
 }
 
+/// A climate signal from NASA POWER: regional context (~50 km grid), never a field measurement.
 pub(crate) fn signal(en: String, es: String) -> Evidence {
-    Evidence { kind: EvidenceKind::Signal, text: L10n::new(en + " (field signal, evidence package)", es + " (señal de campo, paquete de evidencias)"), citation: None }
+    Evidence { kind: EvidenceKind::Signal, text: L10n::new(en + " (NASA POWER, regional context ~50 km)", es + " (NASA POWER, contexto regional ~50 km)"), citation: None }
+}
+
+/// A satellite signal measured over the field outline (Sentinel-2 / Landsat, field-level).
+pub(crate) fn signal_field(en: String, es: String) -> Evidence {
+    Evidence { kind: EvidenceKind::Signal, text: L10n::new(en + " (Sentinel-2 / Landsat, field-level)", es + " (Sentinel-2 / Landsat, nivel de campo)"), citation: None }
 }
 
 pub(crate) fn guidance(en: &str, es: &str, c: Citation) -> Evidence {

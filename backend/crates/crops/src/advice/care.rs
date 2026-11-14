@@ -38,8 +38,8 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
         if warmer { "Monitoree las plagas cada semana: con el calor de esta campaña se desarrollan más rápido y las poblaciones crecen antes." } else { "Monitoree las plagas cada semana, sobre todo en épocas de calor: con más calor se desarrollan más rápido." },
         vec![refs::temperature_pest_development()], true));
     if let Some(g) = s.pest_generation_delta.filter(|g| *g != 0.0) {
-        items.push(item(format!("Estimated pest generations versus the 40-year baseline: {g:+.1} per season (field signal)."),
-                        format!("Generaciones de plaga estimadas frente a la línea base de 40 años: {g:+.1} por campaña (señal de campo)."), vec![], false));
+        items.push(item(format!("Estimated pest generations versus the 40-year baseline: {g:+.1} per season (NASA POWER degree-days, regional context)."),
+                        format!("Generaciones de plaga estimadas frente a la línea base de 40 años: {g:+.1} por campaña (grados-día NASA POWER, contexto regional)."), vec![], false));
     }
     if c.crop_type == CropType::Annual {
         items.push(item("Rotate to a crop of another botanical family to break pest and disease cycles.",
@@ -61,8 +61,8 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
         .filter(|p| p.lower_threshold.num().is_none() || p.degree_days_per_generation.num().is_none())
         .map(|p| p.name.en.clone()).collect();
     if !qualitative.is_empty() {
-        items.push(item(format!("No published degree-day threshold for: {}. Guidance for these pests is qualitative.", qualitative.join(", ")),
-                        format!("Sin umbral de grados-día publicado para: {}. La guía para estas plagas es cualitativa.",
+        items.push(item(format!("This crop's knowledge record has no published degree-day threshold for: {}. Guidance for these pests is qualitative unless the reference-pest table covers them.", qualitative.join(", ")),
+                        format!("La ficha de este cultivo no tiene umbral de grados-día publicado para: {}. La guía para estas plagas es cualitativa salvo que la tabla de plagas de referencia las incluya.",
                                 c.traits.pests.iter().filter(|p| p.lower_threshold.num().is_none() || p.degree_days_per_generation.num().is_none())
                                     .map(|p| p.name.es.as_str()).collect::<Vec<_>>().join(", ")),
                         vec![], false));
@@ -70,8 +70,8 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
     if !computable.is_empty() {
         let cits = c.traits.pests.iter().filter(|p| computable.contains(&p.name.en.as_str()))
             .filter_map(|p| p.degree_days_per_generation.citation().cloned()).collect();
-        items.push(item(format!("Generations can be estimated from published degree-days for: {}.", computable.join(", ")),
-                        format!("Se pueden estimar generaciones con grados-día publicados para: {}.",
+        items.push(item(format!("Published degree-day thresholds exist for: {} (cited). This version computes generations only for the reference pests in the table.", computable.join(", ")),
+                        format!("Existen umbrales de grados-día publicados para: {} (citados). Esta versión calcula generaciones solo para las plagas de referencia de la tabla.",
                                 c.traits.pests.iter().filter(|p| computable.contains(&p.name.en.as_str())).map(|p| p.name.es.as_str()).collect::<Vec<_>>().join(", ")),
                         cits, false));
     }

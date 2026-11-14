@@ -34,7 +34,7 @@ fn signals(ev: &Value) -> FieldSignals {
     FieldSignals {
         heat_stress_days: reading("heat_days"),
         water_balance_mm: reading("water_balance"),
-        pest_generation_delta: aphid.and_then(|a| Some(a["generations_now"].as_f64()? - a["generations_normal"].as_f64()?)),
+        pest_generation_delta: aphid.and_then(|a| a["difference"].as_f64()),
         bare_soil: ev["bare_soil"].as_array().map(|b| !b.is_empty()),
     }
 }
@@ -108,6 +108,8 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
             "timeline_es": s["sequence"].as_array().into_iter().flatten().filter_map(|x| x["es"].as_str()).collect::<Vec<_>>(),
             "scores": { "soil": sc["soil"], "water": sc["water"], "pest_break": sc["pest_break"], "income": sc["income"], "risk": sc["risk"] },
             "why": s["why"], "evidence": bi_join(&s["evidence"]), "gaps": bi_join(&s["gaps"]), "risks": bi_join(&s["risks"]),
+            "evidence_list": s["evidence"].as_array().into_iter().flatten().map(|e| e["text"].clone()).collect::<Vec<_>>(),
+            "gaps_list": s["gaps"].clone(), "risks_list": s["risks"].clone(),
             "citations": s["evidence"].as_array().into_iter().flatten().filter_map(|e| e.get("citation").filter(|c| !c.is_null()).map(|c| json!({ "title": c["title"], "url": c["url"] }))).collect::<Vec<_>>(),
         })
     }).collect();

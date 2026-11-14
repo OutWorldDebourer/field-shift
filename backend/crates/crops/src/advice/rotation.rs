@@ -181,7 +181,7 @@ fn green_manure_strategy(c: &CropRecord, previous: &[CropRecord], s: &FieldSigna
     ];
     evidence.extend(signals_evidence(s));
     if s.bare_soil == Some(true) {
-        evidence.push(signal("Satellite NDVI shows bare-soil periods on this field".into(), "El NDVI satelital muestra periodos de suelo desnudo en este campo".into()));
+        evidence.push(signal_field("Satellite NDVI shows bare-soil periods on this field".into(), "El NDVI satelital muestra periodos de suelo desnudo en este campo".into()));
     }
     let mut gaps = vec![income_gap(), L10n::new("No soil analysis in the evidence package: organic matter gain cannot be quantified.",
                                                   "No hay análisis de suelo en el paquete de evidencias: no se puede cuantificar la ganancia de materia orgánica.")];
