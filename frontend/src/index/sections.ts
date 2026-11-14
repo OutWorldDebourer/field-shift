@@ -2,6 +2,7 @@
 // Static text carries data-i18n keys so the EN | ES switch updates it in place.
 import { DEMO_EVIDENCE, HUARAL_FIELD } from '../shared/demo/huaral';
 import { findReading, normalPeriod, signed } from '../shared/evidence';
+import { provTag } from '../shared/datarow';
 import { esc } from '../shared/dom';
 import { fmt, fmtDate, t } from '../shared/i18n';
 import { icon, type IconName } from '../shared/icons';
@@ -80,7 +81,7 @@ export function anomalyItem(): string {
   if (!r || r.value == null) return '';
   const p = normalPeriod(DEMO_EVIDENCE) ?? '40-year';
   const d = fmtDate(r.date);
-  return `<li class="ds ds--key" data-ds="key" id="ds-key"><span class="ds__key">${esc(t('ix_anomaly', { v: signed(r.value, '°C'), p }))}</span><span class="ds__res mono">${esc(t('ix_anomaly_src', { d }))}</span></li>`;
+  return `<li class="ds ds--key" data-ds="key" id="ds-key"><span class="ds__key">${esc(t('ix_anomaly', { v: signed(r.value, '°C'), p }))}${provTag(r)}</span><span class="ds__res mono">${esc(t('ix_anomaly_src', { d }))}</span></li>`;
 }
 
 function data(): string {

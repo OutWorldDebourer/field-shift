@@ -120,3 +120,21 @@
   .fs__readout { order: -3; border-top: 0; padding-top: 0; }
   .fs__lede { order: -2; }
 }
+
+/* Polish pass */
+.fs__qrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.fs__qrow .btn { min-height: 48px; }
+.fs__area-tag.is-flip::before { left: auto; right: -12px; }
+.fs__area-tag.is-flip { text-align: right; }
+@media (max-width: 760px) {
+  .fs__title { order: -9; }
+  .fs__lede { order: -8; }
+  .fs__panel .seg { order: -7; }
+  .fs__pane { order: -6; }
+  .fs__search { order: -5; }
+  .fs__tools { order: -4; }
+  .fs__finish, .fs__hint { order: -3; }
+  .fs__readout { order: -2; }
+  .ex { padding: 8px 12px; }
+  .fs__panel { padding-bottom: 110px; }
+}

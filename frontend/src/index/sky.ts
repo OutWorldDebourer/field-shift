@@ -52,8 +52,8 @@ export function mountSky(): Sky {
     const ov = cv[cv.length - 1] as HTMLCanvasElement | undefined;
     const ts = cam?.targetScreen;
     if (!ov || cv.length < 2) return;
-    let hide = false;
-    if (ts) {
+    let hide = innerWidth < 900 && scrollY < ($('.hero').offsetHeight || innerHeight) * 0.8;
+    if (ts && !hide) {
       for (const el of document.querySelectorAll<HTMLElement>('.hero__text, .ctas, .sec-title, .sec-lede, .ds, .step, .get__strip, .cta__title, .foot, .phone')) {
         const r = el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > innerHeight || !r.width) continue;

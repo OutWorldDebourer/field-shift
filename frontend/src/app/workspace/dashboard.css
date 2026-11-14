@@ -107,3 +107,8 @@
   .dmap__layers button { flex: none; }
   .dash .leaflet-top.leaflet-right { top: 8px; }
 }
+
+.dash__line { font-size: 0.9375rem; margin: -2px 0 6px; }
+.dash__row--3 { align-items: start; }
+.proj__models summary { display: block; }
+.proj__models summary::after { display: inline; }

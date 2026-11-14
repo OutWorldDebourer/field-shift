@@ -30,6 +30,10 @@ export interface Reading {
   license: string;
   method?: string;
   series?: { t: string; v: number | null }[];
+  /** Optional (frontend addition): latest values come from near-real-time streams and may change. */
+  provisional?: boolean;
+  /** Optional (frontend addition): short caveat shown with the reading. */
+  note?: Bi;
 }
 
 export interface Gap { id: string; text: Bi }

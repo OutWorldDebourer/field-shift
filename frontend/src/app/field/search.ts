@@ -1,4 +1,5 @@
-// Place search with Nominatim (OpenStreetMap, ODbL): debounced, at most one request per second, aborts stale ones.
+// Place search with Nominatim (OpenStreetMap, ODbL). Usage policy: no search-as-you-type; one search per explicit
+// request (Enter or the Search button), at most one request per second, results cached per query.
 import { lang } from '../../shared/i18n';
 
 export interface Place { name: string; lat: number; lon: number; bbox?: [number, number, number, number] }
@@ -6,7 +7,12 @@ export interface Place { name: string; lat: number; lon: number; bbox?: [number,
 let last = 0;
 let ctl: AbortController | null = null;
 
+const cache = new Map<string, Place[]>();
+
 export async function searchPlaces(q: string): Promise<Place[]> {
+  const key = q.trim().toLowerCase() + '|' + lang();
+  const hit = cache.get(key);
+  if (hit) return hit;
   const wait = Math.max(0, last + 1000 - Date.now());
   if (wait) await new Promise((r) => setTimeout(r, wait));
   ctl?.abort();
@@ -16,10 +22,12 @@ export async function searchPlaces(q: string): Promise<Place[]> {
   const r = await fetch(url, { signal: ctl.signal, headers: { Accept: 'application/json' } });
   if (!r.ok) throw new Error(String(r.status));
   const rows = (await r.json()) as { display_name: string; lat: string; lon: string; boundingbox?: string[] }[];
-  return rows.map((x) => ({
+  const out = rows.map((x) => ({
     name: x.display_name, lat: +x.lat, lon: +x.lon,
     bbox: x.boundingbox ? [+x.boundingbox[2], +x.boundingbox[0], +x.boundingbox[3], +x.boundingbox[1]] : undefined,
-  }));
+  })) as Place[];
+  cache.set(key, out);
+  return out;
 }
 
 export function debounce<A extends unknown[]>(fn: (...a: A) => void, ms: number): (...a: A) => void {

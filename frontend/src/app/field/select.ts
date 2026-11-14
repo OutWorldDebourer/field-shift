@@ -8,7 +8,7 @@ import { ringAreaHa, ringCenter, fmtCoord } from '../../shared/geo';
 import { applyI18n, fmt, fmtDate, lang, onLang, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { addSnapshot, eoxLayer, loadLeaflet } from '../map/leaflet';
-import { debounce, searchPlaces, type Place } from './search';
+import { searchPlaces, type Place } from './search';
 import './field.css';
 
 type Mode = 'example' | 'gps';
@@ -60,8 +60,9 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       </div>
       <div class="fs__search" role="search">
         <label for="fs-q" class="fs__label" data-i18n="fs_search">${esc(t('fs_search'))}</label>
-        <div class="fs__qwrap">${icon('search')}<input id="fs-q" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fs-results" aria-autocomplete="list"
-          placeholder="${esc(t('fs_search_ph'))}" data-i18n-attr="placeholder:fs_search_ph"></div>
+        <div class="fs__qrow"><div class="fs__qwrap">${icon('search')}<input id="fs-q" type="search" enterkeyhint="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fs-results" aria-autocomplete="list" aria-describedby="fs-qhint"
+          placeholder="${esc(t('fs_search_ph'))}" data-i18n-attr="placeholder:fs_search_ph"></div><button type="button" class="btn btn--glass btn--sm" id="fs-go" data-i18n="fs_search_go">${esc(t('fs_search_go'))}</button></div>
+        <p class="sr-only" id="fs-qhint" data-i18n="fs_search_hint">${esc(t('fs_search_hint'))}</p>
         <ul class="fs__results" id="fs-results" role="listbox" hidden></ul>
       </div>
       <div class="fs__tools" role="toolbar" aria-label="${esc(t('fs_draw'))}">
@@ -130,7 +131,10 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const w = se.x - nw.x + pad * 2, h = se.y - nw.y + pad * 2;
     reticle.hidden = false;
     Object.assign(reticle.style, { left: x + 'px', top: y + 'px', width: Math.max(44, w) + 'px', height: Math.max(40, h) + 'px' });
-    areaTag.style.transform = `translate(${x + Math.max(44, w) + 10}px, ${y - 8}px)`;
+    const tagW = areaTag.offsetWidth || 160;
+    const flip = x + Math.max(44, w) + 14 + tagW > host.clientWidth - 8;
+    areaTag.classList.toggle('is-flip', flip);
+    areaTag.style.transform = `translate(${flip ? x - tagW - 14 : x + Math.max(44, w) + 10}px, ${y - 8}px)`;
   }
   function lockOn() { reticle.classList.remove('is-locking'); void reticle.offsetWidth; reticle.classList.add('is-locking'); }
 
@@ -229,13 +233,14 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     label = p.name.split(',').slice(0, 2).join(',');
     if (!ring.length && tool === 'none') { hint.textContent = t('fs_hint_draw'); }
   };
-  const run = debounce(async (v: string) => {
+  const run = async (v: string) => {
     if (v.trim().length < 3) { showResults(false); return; }
     try { places = await searchPlaces(v); active = -1; renderResults(); }
     catch (e) { if ((e as Error).name !== 'AbortError') { results.innerHTML = `<li class="fs__none">${esc(t('fs_search_err'))}</li>`; showResults(true); } }
-  }, 600);
-  q.addEventListener('input', () => run(q.value));
+  };
+  $('#fs-go', host).addEventListener('click', () => void run(q.value));
   q.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (results.hidden || active < 0)) { e.preventDefault(); void run(q.value); return; }
     if (results.hidden || !places.length) return;
     if (e.key === 'ArrowDown') { active = (active + 1) % places.length; renderResults(); e.preventDefault(); }
     else if (e.key === 'ArrowUp') { active = (active - 1 + places.length) % places.length; renderResults(); e.preventDefault(); }

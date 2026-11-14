@@ -3,7 +3,7 @@ import { DEMO_EVIDENCE, HUARAL_FIELD } from './demo/huaral';
 import { dataRowCompact, shortRes } from './datarow';
 import { keyReadings, normalPeriod, shortLabel } from './evidence';
 import { esc } from './dom';
-import { fmt, t } from './i18n';
+import { fmt, fmtDateShort, t } from './i18n';
 import { icon } from './icons';
 
 export function glassPhoneHtml(): string {
@@ -18,7 +18,7 @@ export function glassPhoneHtml(): string {
     </div>
     <div class="phone__rows">
       ${keyReadings(DEMO_EVIDENCE).map((r) => dataRowCompact(r, r.id.startsWith('temp') && normalPeriod(DEMO_EVIDENCE)
-        ? `${r.source} · ${normalPeriod(DEMO_EVIDENCE)} ${t('db_norm')}`
+        ? `${r.source} · ${fmtDateShort(r.date)} · vs ${normalPeriod(DEMO_EVIDENCE)}`
         : `${r.source.replace(/\s+L2A$/, '')} · ${shortRes(r.resolution)}`, shortLabel(r))).join('')}
     </div>
     <figcaption class="phone__foot mono">${esc(t('demo_data'))} · ${esc(t('huaral'))}</figcaption>

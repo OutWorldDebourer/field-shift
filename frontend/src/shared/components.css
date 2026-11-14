@@ -206,3 +206,5 @@
 :focus-visible { outline-color: #fff; box-shadow: 0 0 0 4px rgba(3, 8, 16, 0.7); }
 .demo-flag::before { background: #fff; }
 .ground-label b, .ground-label span { background: rgba(3, 8, 16, 0.55); padding: 0 4px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+.prov { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.85); font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: #fff; vertical-align: 3px; letter-spacing: 0.02em; }

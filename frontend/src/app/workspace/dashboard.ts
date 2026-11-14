@@ -6,7 +6,7 @@ import type { ClientAnalysis } from '../../shared/api';
 import type { EvidencePackage, Reading } from '../../shared/contract';
 import { ndviChart, seasonChart, timelineStrip } from '../../shared/charts';
 import { normalPeriod } from '../../shared/evidence';
-import { dataRow, sourceLine, valueText, badge, shortRes, resKm } from '../../shared/datarow';
+import { dataRow, sourceLine, valueText, badge, shortRes, resKm, provTag } from '../../shared/datarow';
 import { shortLabel } from '../../shared/evidence';
 import { esc } from '../../shared/dom';
 import { fmt, fmtDateShort, pick, t } from '../../shared/i18n';
@@ -38,7 +38,7 @@ export function layerLegend(ev: EvidencePackage | null, key: LayerKey): string {
   if (!r) return `<p class="dmap__note">${esc(t(ev ? 'ly_na' : 'db_no_evidence'))}</p>`;
   const v = valueText(r);
   const note = r.badge === 'field-level' ? t('db_layer_field', { res: shortRes(r.resolution) }) : t('db_layer_cell', { res: shortRes(r.resolution) });
-  return `<p class="dmap__val"><b>${esc(pick(r.label))}</b> <span class="${r.key ? 'amber' : ''}">${esc(v.text)}</span></p>
+  return `<p class="dmap__val"><b>${esc(pick(r.label))}</b> <span class="${r.key ? 'amber' : ''}">${esc(v.text)}</span>${provTag(r)}</p>
     <p class="dmap__src mono">${sourceLine(r)}</p>
     <p class="dmap__note">${badge(r.badge)} ${esc(note)}</p>${ev ? `<p class="dmap__scale mono">${esc(scaleNote(ev))}</p>` : ''}<p class="dmap__base mono" data-mapbase>${esc(mapBase)}</p>`;
 }
@@ -93,7 +93,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <section class="glass dash__card dash__chart">
         <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}</h3>
           <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))}${normalPeriod(ev) ? ' ' + esc(normalPeriod(ev)!) : ''}</span></p></header>
-        ${seasonChart(ev.climate_monthly, { w: 680, h: opts.preview ? 180 : 200 })}
+        ${seasonChart(ev.climate_monthly, { w: narrow() ? 380 : 680, h: narrow() ? 220 : opts.preview ? 180 : 200, provisional: !!ev.readings.find((r) => r.id.startsWith('temp'))?.provisional })}
         <p class="dash__src mono">NASA POWER · T2M · ${last ? esc(last) : ''} · ~50 km · ${esc(t('regional'))}</p>
       </section>
       <div class="dash__row dash__row--3">
@@ -109,7 +109,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
         </section>`}
       </div>
       ${opts.preview ? '' : `<div class="dash__row">
-        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}</h3>${ndviChart(ev.ndvi_series, { w: 420, h: 150 })}
+        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}</h3>${ndviLine(ev)}${ndviChart(ev.ndvi_series, { w: narrow() ? 360 : 420, h: 150 })}
           <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}</h3>
           ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(p.name)}</b> <i>${esc(p.scientific)}</i></span>
@@ -118,6 +118,12 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
         </section></div>`}
     </div>
   </div>`;
+}
+
+const narrow = () => typeof innerWidth === 'number' && innerWidth < 700;
+function ndviLine(ev: EvidencePackage): string {
+  const r = ev.readings.find((x) => x.id === 'ndvi');
+  return r ? `<p class="dash__line">${esc(pick(r.verdict))} · ${esc(valueText(r).text)} · ${esc(fmtDateShort(r.date))}</p>` : '';
 }
 
 type Proj = NonNullable<EvidencePackage['projection']> & { d_temp_range?: [number, number]; baseline_period?: string };
@@ -188,9 +194,10 @@ export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): P
     const nw = map.latLngToContainerPoint(b.getNorthWest()), se = map.latLngToContainerPoint(b.getSouthEast());
     const pad = 10, w = Math.max(30, se.x - nw.x + pad * 2), h = Math.max(26, se.y - nw.y + pad * 2);
     ret.hidden = w > host.clientWidth * 0.9;
-    Object.assign(ret.style, { left: nw.x - pad + 'px', top: nw.y - pad + 'px', width: w + 'px', height: h + 'px' });
+    Object.assign(ret.style, { left: host.offsetLeft + nw.x - pad + 'px', top: host.offsetTop + nw.y - pad + 'px', width: w + 'px', height: h + 'px' });
   };
   map.on('move zoom resize', placeRet);
+  new ResizeObserver(() => { map.invalidateSize(); placeRet(); }).observe(host);
   requestAnimationFrame(() => { map.invalidateSize(); setLayer('vigor'); placeRet(); });
   return () => map.remove();
 }

@@ -47,6 +47,12 @@ export function resKm(res: string): number | null {
   return a[2].toLowerCase() === 'km' ? v : v / 1000;
 }
 
+/** Visible "provisional" tag for readings flagged by the backend. */
+export function provTag(r: Pick<Reading, 'provisional' | 'note'>): string {
+  if (!r.provisional) return '';
+  return `<span class="prov" title="${esc(r.note ? pick(r.note) : t('prov_tip'))}">${esc(t('prov'))}</span>`;
+}
+
 export function badge(b: Reading['badge']): string {
   const field = b === 'field-level';
   return `<span class="badge ${field ? 'badge--field' : 'badge--regional'}" title="${esc(t(field ? 'field_level_tip' : 'regional_tip'))}">${esc(t(field ? 'field_level' : 'regional'))}</span>`;
@@ -78,7 +84,7 @@ export function dataRow(r: Reading): string {
   return `<div class="drow" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
     <div class="drow__label">${esc(pick(r.label))}</div>
-    <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
+    <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}${provTag(r)}</div>
     <div class="drow__verdict">${v.isWord ? '' : esc(cleanVerdict(r))}</div>
     ${sparkline(series)}
     <div class="drow__meta"><span class="drow__src" title="${esc(sourceFull(r))}">${sourceShort(r)}</span>${badge(r.badge)}</div>
@@ -93,7 +99,7 @@ export function dataRowCompact(r: Reading, srcText?: string, label?: string, ver
   return `<div class="drow drow--compact" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
     <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}</div>
-    <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
+    <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}${provTag(r)}</div>
     ${verdict ? `<div class="drow__verdict drow__verdict--c">${esc(v.isWord ? '' : cleanVerdict(r))}</div>` : ''}
     <div class="drow__src" title="${esc(sourceFull(r))}">${srcText ? esc(src) : sourceShort(r)} ${badge(r.badge)}</div>
     ${sparkline(series, 52, 22)}

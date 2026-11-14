@@ -6,7 +6,7 @@ import { fmt, fmtDate, lang, monthShort, t } from './i18n';
 
 type Climate = EvidencePackage['climate_monthly'];
 
-export function seasonChart(rows: Climate, opts: { w?: number; h?: number; id?: string } = {}): string {
+export function seasonChart(rows: Climate, opts: { w?: number; h?: number; id?: string; provisional?: boolean } = {}): string {
   const W = opts.w ?? 640, H = opts.h ?? 240, L = 40, R = 14, T = 16, B = 30;
   const valid = rows.filter((r) => r.normal_lo != null);
   if (valid.length < 2) return `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>`;
@@ -33,7 +33,7 @@ export function seasonChart(rows: Climate, opts: { w?: number; h?: number; id?: 
     <g class="grid">${ticks.join('')}</g>
     <path class="band" d="${band}"/><path class="mean" d="${mean}"/>
     <path class="line" d="${line}"/>
-    ${last ? `<circle class="dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/><text class="last" x="${last[0] - 8}" y="${last[1] - 12}" text-anchor="end">${esc(label)} °C</text>` : ''}
+    ${last ? `<circle class="dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/><text class="last" x="${last[0] - 8}" y="${last[1] - 12}" text-anchor="end">${esc(label)} °C${opts.provisional || (lastRow as { partial?: boolean } | undefined)?.partial ? ' · ' + esc(t('prov')) : ''}</text>` : ''}
     <g class="axis">${months}</g>
   </svg>`;
 }

@@ -82,7 +82,7 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): stri
     return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r, undefined, shortLabel(r), true)).join('')}</div>` : '';
   };
   return `<header class="secs__head"><h2 class="serif">${esc(t('ws_sections'))}</h2>
-      <span class="secs__count mono">${esc(t('ws_progress', { done, total: secs.length }))}</span></header>
+      <span class="secs__count mono">${esc(secs.some((s) => s.state === 'gaps') ? t('ws_progress_g', { done: done - secs.filter((s) => s.state === 'gaps').length, total: secs.length, g: secs.filter((s) => s.state === 'gaps').length }) : t('ws_progress', { done, total: secs.length }))}</span></header>
     <ul class="secs__list" data-secs-list>${secs.map((s) => {
       const isOpen = open === s.key;
       return `<li class="sec sec--${s.state}${isOpen ? ' is-open' : ''}">

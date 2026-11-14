@@ -5,6 +5,7 @@ import type { ClientAnalysis } from '../../shared/api';
 import type { SectionContent } from '../../shared/contract';
 import { dots, timelineStrip } from '../../shared/charts';
 import { derivedHeadline } from '../../shared/evidence';
+import { provTag } from '../../shared/datarow';
 import { esc } from '../../shared/dom';
 import { pick, t } from '../../shared/i18n';
 import { icon, type IconName } from '../../shared/icons';
@@ -60,6 +61,7 @@ export function rotationHtml(a: ClientAnalysis): string {
     <section class="rot__dx glass" aria-labelledby="rot-h">
       <p class="rot__label mono">${esc(t('rt_label'))}</p>
       <h2 class="serif rot__h" id="rot-h">${esc(pd ? pick(pd.headline) : c ? pick(c.summary) : t('rt_empty'))}</h2>
+      ${a.evidence?.readings.some((r) => r.provisional) && /warm|cálid|temperat/i.test(pd ? pick(pd.headline) : '') ? `<p class="rot__prov">${provTag(a.evidence!.readings.find((r) => r.provisional)!)} <span>${esc(pick(a.evidence!.readings.find((r) => r.provisional)!.note ?? { en: t('prov_tip'), es: t('prov_tip') }))}</span></p>` : ''}
       ${conf ? `<div class="conf"><span class="mono">${esc(t('rt_confidence'))}</span><span class="conf__bar" aria-hidden="true">${[1, 2, 3].map((i) => `<i class="${i <= confN ? 'on' : ''}"></i>`).join('')}</span><b>${esc(t(conf === 'high' ? 'conf_high' : conf === 'medium' ? 'conf_medium' : 'conf_low'))}</b></div>` : ''}
       <p class="rot__confirm">${icon('info')}${esc(t('rt_confirm'))}</p>
       <ul class="rot__minis">${mini('soil', 'soil', 'sec_soil')}${mini('pests', 'bug', 'sec_pests')}${mini('nutrition', 'nutrition', 'sec_nutrition')}</ul>
