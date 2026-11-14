@@ -2,13 +2,13 @@
 import type { ClientAnalysis } from '../shared/api';
 import type { SectionKey } from '../shared/contract';
 
-export type View = 'chat' | 'dashboard' | 'rotation';
+export type View = 'chat' | 'dashboard' | 'rotation' | 'organic';
 
 export interface AppState {
   analysis: ClientAnalysis | null;
   view: View;
   /** Section open in the phone bottom sheet / expanded on desktop. */
-  open: SectionKey | null;
+  open: SectionKey | 'organic' | null;
   busy: boolean;
   snapshotCredit: string;
 }
@@ -36,5 +36,5 @@ export function syncUrl(): void {
   } catch { /* ignore */ }
 }
 
-export const VIEWS: View[] = ['chat', 'dashboard', 'rotation'];
+export const VIEWS: View[] = ['chat', 'dashboard', 'rotation', 'organic'];
 export const isView = (v: string | null): v is View => !!v && (VIEWS as string[]).includes(v);

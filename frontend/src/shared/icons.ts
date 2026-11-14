@@ -44,6 +44,11 @@ const P: Record<string, string> = {
   mute: '<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4Z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/>',
   book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>',
   download: '<path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/>',
+  // iteration 3
+  ladybug: '<path d="M12 7.5a6.5 6.5 0 0 1 6.5 6.5v.5a6.5 6.5 0 0 1-13 0V14A6.5 6.5 0 0 1 12 7.5Z"/><path d="M9.2 8.2a2.8 2.8 0 0 1 5.6 0M12 7.5V21M10.2 5.8 8.6 3.6M13.8 5.8l1.6-2.2"/><circle cx="8.8" cy="12.6" r=".9" fill="currentColor"/><circle cx="15.2" cy="12.6" r=".9" fill="currentColor"/><circle cx="9.4" cy="16.8" r=".9" fill="currentColor"/><circle cx="14.6" cy="16.8" r=".9" fill="currentColor"/>',
+  clipboard: '<rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 4.5V3h6v1.5M8.5 10h7M8.5 13.5h7M8.5 17h4"/>',
+  pdf: '<path d="M6 3h8l4 4v14H6Z"/><path d="M14 3v4h4"/><path d="M8.6 17.5v-4h1.3a1.2 1.2 0 0 1 0 2.4H8.6M12.4 13.5v4h.9a1.6 1.6 0 0 0 1.6-1.6v-.8a1.6 1.6 0 0 0-1.6-1.6ZM16.8 17.5v-4h-.01M16.8 13.5h1.5M16.8 15.5h1.2" stroke-width="1.3"/>',
+  external: '<path d="M14 4h6v6M20 4l-8.5 8.5"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
 };
 
 export type IconName = keyof typeof P;

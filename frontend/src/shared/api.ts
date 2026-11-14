@@ -1,10 +1,11 @@
 // Typed client for the Rust backend (/api, see contract.ts) with timeouts and an offline fallback to the
 // bundled Huaral demo dataset. Anything served from the bundle is flagged `offline` so the UI can say "Demo data".
-import type { AnalysisState, Bi, ChatMessage, EvidencePackage, FieldGeom, Forecast, GlossaryTerm, Lang, Outlook, Section, SectionKey, Step } from './contract';
-import { DEMO_CROPS, DEMO_EXAMPLES, DEMO_EVIDENCE, DEMO_ID, demoAnalysis, demoReply } from './demo/huaral';
+import type { AnalysisState, Bi, ChatMessage, EvidencePackage, FieldGeom, Forecast, GlossaryTerm, IntakeForm, Lang, Outlook, Section, SectionKey, Step } from './contract';
+import { DEMO_CROPS, DEMO_EXAMPLES, DEMO_EVIDENCE, DEMO_ID, HUARAL_INTAKE_EXAMPLE, demoAnalysis, demoReply } from './demo/huaral';
 
-export type ClientAnalysis = AnalysisState & { offline?: boolean; readOnly?: boolean; shareToken?: string };
-export type Example = { id: string; name: Bi; field: FieldGeom & { area_ha: number; label: string } };
+/** facts: iteration 3 — what the farmer has told so far (AnalysisState.facts in the contract notes). */
+export type ClientAnalysis = AnalysisState & { offline?: boolean; readOnly?: boolean; shareToken?: string; facts?: IntakeForm | null };
+export type Example = { id: string; name: Bi; field: FieldGeom & { area_ha: number; label: string }; intake_example?: IntakeForm; intake_example_es?: IntakeForm };
 export type CropSuggestion = { key: string; label: Bi; scientific: string };
 export type SnapshotMeta = { scene_id?: string; date?: string; source?: string; credit?: string; bbox?: [number, number, number, number]; resolution_m?: number; badge?: string; license?: string };
 
@@ -72,7 +73,7 @@ export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[
     await new Promise((r) => setTimeout(r, 1400));
     const now = new Date().toISOString();
     const base = a.messages.reduce((m, x) => Math.max(m, x.id), 0);
-    const mine: ChatMessage = { id: base + 1, role: 'user', body: text, created_at: now, photos: photos.map((b) => ({ url: URL.createObjectURL(b) })) };
+    const mine: ChatMessage = { id: base + 1, role: 'user', body: text, created_at: now, photos: photos.map((b) => ({ url: URL.createObjectURL(b), ...(b.type === 'application/pdf' ? { kind: 'pdf', name: b instanceof File ? b.name : 'document.pdf', bytes: b.size } : {}) })) };
     const bi = demoReply(lang, photos.length > 0);
     const reply = { id: base + 2, role: 'assistant', body: bi[lang], _bi: bi, created_at: now } as ChatMessage;
     const sections = a.sections.map((s) => (photos.length && s.key === 'pests' ? { ...s, state: 'ready' as const, note: undefined } : s));
@@ -82,8 +83,26 @@ export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[
   fd.append('text', text);
   fd.append('lang', lang);
   if (forceDemo()) fd.append('demo', '1');
-  photos.forEach((b, i) => fd.append('photos', b, `photo-${i + 1}.${EXT[b.type] ?? 'jpg'}`));
+  // Images keep the iteration-2 naming; PDFs (iteration 3) go up with their real file name and type.
+  photos.forEach((b, i) => fd.append('photos', b, b.type === 'application/pdf' ? (b instanceof File && b.name ? b.name : `document-${i + 1}.pdf`) : `photo-${i + 1}.${EXT[b.type] ?? 'jpg'}`));
   return req(`/api/consultant/${encodeURIComponent(a.id)}/message`, { method: 'POST', body: fd, timeout: 180000 });
+}
+
+// ---------------------------------------------------------------- iteration 3
+
+/** POST the "load information" answers; the backend completes the topics they cover and returns the analysis. */
+export async function submitIntake(a: ClientAnalysis, form: IntakeForm): Promise<ClientAnalysis> {
+  const q = forceDemo() ? '?demo=1' : '';
+  return req<AnalysisState>(`/api/analyses/${encodeURIComponent(a.id)}/intake${q}`, { ...json(form), timeout: 240000 });
+}
+
+/** Example answers for an example site: the backend's `intake_example`, else the bundled labelled sample. */
+export async function exampleIntake(site: string | null, l: Lang): Promise<IntakeForm | null> {
+  const { list } = await examples();
+  const ex = list.find((x) => x.id === (site ?? 'huaral')) ?? list[0];
+  const remote = l === 'es' ? ex?.intake_example_es ?? ex?.intake_example : ex?.intake_example;
+  if (remote && Object.keys(remote).length) return remote;
+  return (site ?? 'huaral') === 'huaral' ? HUARAL_INTAKE_EXAMPLE[l] : null;
 }
 
 // ---------------------------------------------------------------- iteration 2

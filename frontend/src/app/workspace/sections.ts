@@ -1,6 +1,7 @@
 // The section column (Your field, Soil, Pest care, Nutrition, Rotation, Technical sheet) with progress rings.
 // States follow the guided steps when the backend sends them (pending / current topic / done, plus "with gaps"),
 // else the section states; a done card shows the step summary. On phone, round buttons open a bottom sheet.
+// Iteration 3: "What you told us" (facts) in Your field, and an Organic card below Pest care (not a guided topic).
 import type { ClientAnalysis } from '../../shared/api';
 import type { Bi, Section, SectionKey, SectionState, Step } from '../../shared/contract';
 import { dataRow, dataRowCompact } from '../../shared/datarow';
@@ -12,6 +13,8 @@ import { exportButtons } from './export';
 import { keyReadings, shortLabel } from '../../shared/evidence';
 import { displayState, getSection, ORDER, SHORT, stepsOf, TITLE } from './progress';
 import { SEC_ICON } from './rail';
+import { factsHtml } from './facts';
+import { organicBody, organicState } from './organic';
 
 export { getSection, ORDER };
 const FRACTION: Record<SectionState, number> = { empty: 0, progress: 0.5, gaps: 1, ready: 1, locked: 0 };
@@ -61,6 +64,7 @@ export function sectionBody(a: ClientAnalysis, k: SectionKey): string {
   if (k === 'field') {
     const rows = a.evidence?.readings ?? [];
     return `${stepSummary}${s.content ? `<p class="sec__summary">${esc(pick(s.content.summary))}</p>` : ''}
+      ${factsHtml(a)}
       ${rows.length ? `<div class="sec__rows">${rows.map((r) => dataRow(r)).join('')}</div>` : `<p class="sec__empty">${esc(t('db_no_evidence'))}</p>`}
       ${gapsList(a.evidence?.gaps.map((g) => g.text) ?? [])}
       <button type="button" class="btn btn--glass btn--sm" data-goto="dashboard">${icon('dashboard')}${esc(t('ws_open_dash'))}</button>`;
@@ -85,7 +89,21 @@ function gapsList(g: Bi[]): string {
 }
 
 /** Desktop column. `just` = keys whose step just turned done (short check animation). */
-export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null, just: SectionKey[] = []): string {
+/** Organic card: below Pest care, outside the six guided topics; state ready / in progress / not started. */
+function organicCard(a: ClientAnalysis, isOpen: boolean): string {
+  const st = organicState(a);
+  const label = t(st === 'ready' ? 'st_ready' : st === 'gaps' ? 'st_gaps' : st === 'progress' ? 'st_progress' : 'og_waiting');
+  return `<li class="sec sec--${st} sec--org${isOpen ? ' is-open' : ''}" data-seckey="organic">
+    <button type="button" class="sec__head" aria-expanded="${isOpen}" aria-controls="sec-organic" data-sec="organic">
+      ${ring(st, 40, 'ladybug')}
+      <span class="sec__titles"><span class="sec__title">${esc(t('ap_tab_org'))}</span><span class="sec__state">${esc(label)}</span></span>
+      ${icon('down', 'sec__chev')}
+    </button>
+    <div class="sec__body" id="sec-organic" ${isOpen ? '' : 'hidden'}>${isOpen ? organicBody(a) : ''}</div>
+  </li>`;
+}
+
+export function sectionsColumn(a: ClientAnalysis, open: SectionKey | 'organic' | null, just: SectionKey[] = []): string {
   const steps = stepsOf(a);
   const views = ORDER.map((k) => view(a, k, steps));
   const done = views.filter((v) => v.st === 'ready' || v.st === 'gaps').length;
@@ -108,7 +126,7 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null, just:
         </button>
         ${!isOpen ? preview(s.key) : ''}
         <div class="sec__body" id="sec-${s.key}" ${isOpen ? '' : 'hidden'}>${isOpen ? sectionBody(a, s.key) : ''}</div>
-      </li>`;
+      </li>${s.key === 'pests' ? organicCard(a, open === 'organic') : ''}`;
     }).join('')}</ul><p class="secs__more" data-more aria-hidden="true">${icon('down')}${esc(t('ws_more_below'))}</p>`;
 }
 

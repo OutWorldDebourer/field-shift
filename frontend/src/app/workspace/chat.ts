@@ -1,6 +1,7 @@
 // Glass chat with the consultant: progress rail of the six topics, bubbles, photo tiles (reticle on tagged photos),
-// status line, composer with up to 10 full-resolution photos (drag and drop, camera on phone), voice dictation
-// (transcribes into the box, never sends), crop inputs with suggestions, and the closing "enough information" card.
+// PDF document chips, status line, composer with up to 10 files — full-resolution photos and PDFs (drag and drop,
+// camera on phone) — voice dictation (transcribes into the box, never sends), crop inputs with suggestions, the
+// "Load information" button, the PDF hint, the example-site card and the closing "enough information" card.
 import { getAnalysis, sendMessage, suggestCrops, type ClientAnalysis, type CropSuggestion } from '../../shared/api';
 import type { ChatMessage, SectionKey } from '../../shared/contract';
 import { $, esc, toast } from '../../shared/dom';
@@ -9,7 +10,9 @@ import { icon } from '../../shared/icons';
 import { debounce } from '../field/search';
 import { chimeOn, setChime, unlockAudio } from './chime';
 import { micButtonHtml, mountDictation, voiceLineHtml } from './dictation';
-import { preparePhoto, MAX_PHOTOS, sizeText } from './photos';
+import { preparePhoto, MAX_PHOTOS } from './photos';
+import { ACCEPT, asPdf, docChipHtml, isPdfAttachment, isPdfFile, MAX_PDF_BYTES, previewHtml, type Attachment, type Pending } from './attach';
+import { exampleCardHtml } from './intake';
 import { stepsOf } from './progress';
 import { doneCardHtml, railHtml } from './rail';
 
@@ -34,7 +37,10 @@ function para(s: string): string {
 
 export function messageHtml(m: ChatMessage): string {
   if (m.role === 'status') return `<li class="msg msg--status"><p class="status-line">${icon('orbit')}${esc(m.body)}</p></li>`;
-  const photos = m.photos?.length ? `<div class="tiles tiles--msg">${m.photos.map((p, i) => photoTile(p, i + 1)).join('')}</div>` : '';
+  const all = (m.photos ?? []) as Attachment[];
+  const imgs = all.filter((p) => !isPdfAttachment(p)), docs = all.filter(isPdfAttachment);
+  const photos = (imgs.length ? `<div class="tiles tiles--msg">${imgs.map((p, i) => photoTile(p, i + 1)).join('')}</div>` : '')
+    + (docs.length ? `<div class="doc-chips">${docs.map(docChipHtml).join('')}</div>` : '');
   if (m.role === 'assistant') return `<li class="msg msg--ai"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span>
     <div class="msg__col"><span class="sr-only">${esc(t('ws_consultant'))}:</span><div class="bubble bubble--ai">${para(m.body)}</div>${photos}</div></li>`;
   return `<li class="msg msg--me"><div class="msg__col"><span class="sr-only">${esc(t('ws_you'))}:</span>${m.body ? `<div class="bubble bubble--me">${para(m.body)}</div>` : ''}${photos}</div></li>`;
@@ -46,6 +52,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   const coarse = matchMedia('(pointer: coarse)').matches;
   host.innerHTML = `<header class="chat__head">
       <h2 class="sr-only">${esc(t('ws_chat_label'))}</h2>
+      <div class="chat__crops">
       <button type="button" class="crops__sum" aria-expanded="false" aria-controls="crops"></button>
       <div class="crops" id="crops">
         <div class="crop" data-crop="now"><label for="crop-now" class="mono">${esc(t('ws_crop_now'))}</label>
@@ -55,7 +62,8 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
           <input id="crop-before" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="crop-before-list" aria-autocomplete="list" aria-describedby="crop-hint" placeholder="${esc(t('ws_crop_ph'))}">
           <ul id="crop-before-list" class="crop__list" role="listbox" hidden></ul></div>
         <p id="crop-hint" class="sr-only">${esc(t('ws_crop_hint'))}</p>
-      </div>
+      </div></div>
+      <button type="button" class="btn btn--glass btn--sm chat__intake" data-intake aria-haspopup="dialog">${icon('clipboard')}<span>${esc(t('in_btn'))}</span></button>
     </header>
     <nav class="rail" aria-label="${esc(t('rail_label'))}"></nav>
     <ol class="chat__log" aria-live="polite" aria-label="${esc(t('ws_chat_label'))}"></ol>
@@ -64,7 +72,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
       <ul class="composer__previews" hidden></ul>
       <div class="composer__row">
         <label class="icon-btn composer__cam" title="${esc(t('ws_add_photos'))}">${icon('camera')}<span class="sr-only">${esc(t('ws_add_photos'))}</span>
-          <input type="file" accept="image/*" ${coarse ? 'capture="environment"' : ''} multiple class="sr-only"></label>
+          <input type="file" accept="${ACCEPT}" multiple class="sr-only"></label>
         <label class="sr-only" for="composer-text">${esc(t('ws_input_ph'))}</label>
         <textarea id="composer-text" rows="1" placeholder="${esc(t('ws_input_ph'))}" enterkeyhint="send"></textarea>
         ${micButtonHtml()}
@@ -78,13 +86,12 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   const form = $<HTMLFormElement>('.composer', host), text = $<HTMLTextAreaElement>('textarea', host);
   const fileIn = $<HTMLInputElement>('input[type=file]', host), previews = $('.composer__previews', host);
   const drop = $('.chat__drop', host);
-  let files: { blob: Blob; url: string }[] = [];
+  let files: Pending[] = [];
   let sending = false;
 
   const renderPreviews = () => {
     previews.hidden = !files.length;
-    const loc = lang() === 'es' ? 'es-PE' : 'en-US';
-    previews.innerHTML = files.map((f, i) => `<li><img src="${f.url}" alt="${esc(t('ws_photo_size', { n: i + 1, s: sizeText(f.blob.size, loc) }))}"><span class="composer__size mono" aria-hidden="true">${esc(sizeText(f.blob.size, loc))}</span><button type="button" class="composer__rm" data-rm="${i}" aria-label="${esc(t('ws_remove_photo', { n: i + 1 }))}">${icon('close')}</button></li>`).join('');
+    previews.innerHTML = files.map(previewHtml).join('');
   };
   previews.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLElement>('[data-rm]');
@@ -94,13 +101,17 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     renderPreviews();
   });
   async function addFiles(list: FileList | File[]) {
-    const imgs = [...list].filter((f) => f.type.startsWith('image/'));
+    const all = [...list];
+    const ok = all.filter((f) => f.type.startsWith('image/') || isPdfFile(f));
+    if (ok.length < all.length) toast(t('ws_file_skip'));
+    const fit = ok.filter((f) => { if (isPdfFile(f) && f.size > MAX_PDF_BYTES) { toast(t('ws_pdf_big', { name: f.name }), 5000); return false; } return true; });
     const room = MAX_PHOTOS - files.length;
-    if (imgs.length > room) toast(t('ws_max_photos'));
+    if (fit.length > room) toast(t('ws_max_photos'));
     showPending(t('ws_status_preparing'));
-    for (const f of imgs.slice(0, Math.max(0, room))) {
+    for (const f of fit.slice(0, Math.max(0, room))) {
+      if (isPdfFile(f)) { const pdf = asPdf(f); files.push({ blob: pdf, url: URL.createObjectURL(pdf), kind: 'pdf', name: f.name }); continue; }
       const blob = await preparePhoto(f).catch(() => f);
-      files.push({ blob, url: URL.createObjectURL(blob) });
+      files.push({ blob, url: URL.createObjectURL(blob), kind: 'image', name: f.name });
     }
     hidePending();
     renderPreviews();
@@ -130,10 +141,10 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     unlockAudio();
     dict.stop();
     form.classList.add('is-busy');
-    const optimistic: ChatMessage = { id: -1, role: 'user', body, created_at: new Date().toISOString(), photos: files.map((f) => ({ url: f.url })) };
+    const optimistic: ChatMessage = { id: -1, role: 'user', body, created_at: new Date().toISOString(), photos: files.map((f) => (f.kind === 'pdf' ? { url: f.url, kind: 'pdf', name: f.name, bytes: f.blob.size } as Attachment : { url: f.url })) as ChatMessage['photos'] };
     log.insertAdjacentHTML('beforeend', messageHtml(optimistic));
     scrollEnd();
-    showPending(t(blobs.length ? 'ws_status_reading' : 'ws_status_checking'));
+    showPending(t(files.some((f) => f.kind === 'pdf') ? 'ws_status_reading_doc' : blobs.length ? 'ws_status_reading' : 'ws_status_checking'));
     try {
       const r = await sendMessage(a, body, blobs, lang());
       // Older turn responses carry no steps: read them from the analysis so the rail moves in the same update.
@@ -208,7 +219,10 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     rail.hidden = !!a.readOnly;
     // The consultant's greeting arrives with the analysis: the empty state only shows when there is no message at all.
     const shown = a.messages.filter((m) => m.role !== 'status' || m.body);
-    log.innerHTML = shown.length ? shown.map(messageHtml).join('') + doneCardHtml(a, steps) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p></li>`;
+    const hint = a.readOnly ? '' : `<li class="chat__hint">${icon('pdf')}<p>${esc(t('ws_pdf_hint'))}</p></li>`;
+    // The PDF hint and the example-site card sit right under the consultant's greeting.
+    const head = shown.length ? messageHtml(shown[0]) + hint + exampleCardHtml(a, steps) : '';
+    log.innerHTML = shown.length ? head + shown.slice(1).map(messageHtml).join('') + doneCardHtml(a, steps) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p><p class="chat__empty-hint">${icon('pdf')}${esc(t('ws_pdf_hint'))}</p>${exampleCardHtml(a, steps, true)}</li>`;
     const now = $<HTMLInputElement>('#crop-now', host), before = $<HTMLInputElement>('#crop-before', host);
     const sum = $('.crops__sum', host);
     const both = !!(a.crop_current && a.crop_history[0]);
@@ -234,6 +248,9 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     host.querySelector('[for=crop-before]')!.textContent = t('ws_crop_before');
     $('.composer__send', host).setAttribute('aria-label', t('ws_send'));
     $('.chat__drop p', host).textContent = t('ws_drop');
+    $('.chat__intake span', host).textContent = t('in_btn');
+    $('.composer__cam', host).title = t('ws_add_photos');
+    $('.composer__cam .sr-only', host).textContent = t('ws_add_photos');
     rail.setAttribute('aria-label', t('rail_label'));
     dict.relabel();
     renderPreviews();

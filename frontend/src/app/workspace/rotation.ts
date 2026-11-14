@@ -12,6 +12,7 @@ import { icon, type IconName } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
 import { exportButtons } from './export';
 import { getSection, ring } from './sections';
+import { organicLine, organicState } from './organic';
 
 type Strategy = NonNullable<SectionContent['strategies']>[number];
 const SCORES: { k: keyof Strategy['scores']; label: StrKey }[] = [
@@ -64,7 +65,8 @@ export function rotationHtml(a: ClientAnalysis): string {
       ${a.evidence?.readings.some((r) => r.provisional) && /warm|cálid|temperat/i.test(pd ? pick(pd.headline) : '') ? `<p class="rot__prov">${provTag(a.evidence!.readings.find((r) => r.provisional)!)} <span>${esc(pick(a.evidence!.readings.find((r) => r.provisional)!.note ?? { en: t('prov_tip'), es: t('prov_tip') }))}</span></p>` : ''}
       ${conf ? `<div class="conf"><span class="mono">${esc(t('rt_confidence'))}</span><span class="conf__bar" aria-hidden="true">${[1, 2, 3].map((i) => `<i class="${i <= confN ? 'on' : ''}"></i>`).join('')}</span><b>${esc(t(conf === 'high' ? 'conf_high' : conf === 'medium' ? 'conf_medium' : 'conf_low'))}</b></div>` : ''}
       <p class="rot__confirm">${icon('info')}${esc(t('rt_confirm'))}</p>
-      <ul class="rot__minis">${mini('soil', 'soil', 'sec_soil')}${mini('pests', 'bug', 'sec_pests')}${mini('nutrition', 'nutrition', 'sec_nutrition')}</ul>
+      <ul class="rot__minis">${mini('soil', 'soil', 'sec_soil')}${mini('pests', 'bug', 'sec_pests')}${mini('nutrition', 'nutrition', 'sec_nutrition')}
+        <li class="rot__mini">${ring(organicState(a), 34, 'ladybug')}<div><h4><button type="button" class="rot__minilink" data-goto="organic">${esc(t('ap_tab_org'))}</button></h4><p>${esc(organicLine(a))}</p></div></li></ul>
     </section>
     <section class="rot__cmp" aria-labelledby="rot-c">
       <header class="rot__cmphead"><h2 class="serif" id="rot-c">${esc(perennial && c ? t('sec_rotation') : t('rt_compare'))}</h2>

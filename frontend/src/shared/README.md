@@ -7,7 +7,7 @@
 - `strings.ts` — every UI string in EN and ES.
 - `i18n.ts` — language state (`?lang=`, localStorage), `t()`, `pick()`, number/date formatting.
 - `langswitch.ts` — EN | ES switch markup and wiring.
-- `api.ts` — typed client with timeouts and the offline demo fallback.
+- `api.ts` — typed client with timeouts and the offline demo fallback (iteration 3: PDFs in the "photos" field with their real name, `submitIntake`, `exampleIntake`).
 - `datarow.ts` — the data row (icon, label, value, verdict, source · date, badge, sparkline).
 - `evidence.ts` — reads the package without assuming which readings exist (key rows, normal period, short labels, derived headline).
 - `charts.ts` — SVG charts and the 12-month strip.

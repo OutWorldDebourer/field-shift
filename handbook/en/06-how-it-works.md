@@ -53,3 +53,10 @@ Open http://localhost:5173 (index) and http://localhost:5173/app.html (app). The
 - **Photos at full resolution.** Kept up to 12 MB; the model also receives the four quarters of each large photo at native resolution so small insects stay visible.
 - **Technical sheet.** Back link to the analysis, farmer photos, satellite picture, forecast and outlook, a glossary annex, and a ZIP package with the originals.
 
+## Iteration 3 (2026-11-14)
+
+- **Documents.** The chat accepts PDFs (up to 15 MB) besides photos. A farmer can attach the technical sheet of an earlier visit: the consultant reads it, says what it took from it and its date, records the answers and completes the topics it covers; NASA readings are always fresh.
+- **Load information.** A form with the answers each topic needs (crop now and before, irrigation, soil, organic matter, residues, pests seen, recent products, last fertilizer, soil test, next crop, harvest use; "I don't know" allowed). On the example site it opens pre-filled with labelled example answers, so judges see every section filled. `POST /api/analyses/{id}/intake`.
+- **Organic tab.** Biological and ecological pest management: natural enemies and beneficial microorganisms (insects, mites, fungi, bacteria) with their published sources, those matching the reported pests first (matched across the whole crop knowledge base); practices that keep them working; when to act from NASA degree-days and the GEOS-FP forecast; what harms them. No doses: those are the agronomist's call.
+- **What the farmer told us** appears in the Your field section and on the technical sheet.
+

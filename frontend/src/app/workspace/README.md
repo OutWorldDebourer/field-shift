@@ -1,7 +1,11 @@
 # workspace
 
-- `workspace.ts` — shell (top bar, tabs, backdrop, footer notice, phone bottom sheet) and event wiring (topic-done detection, chime, rail/topic clicks, glossary).
-- `chat.ts` — progress rail, chat log, photo tiles with reticle, composer (≤10 full-resolution photos with sizes, drag and drop, camera, voice dictation), crop inputs, closing card.
+- `workspace.ts` — shell (top bar, Chat | Dashboard | Rotation | Organic tabs, backdrop, footer notice, phone bottom sheet) and event wiring (topic-done detection, chime, rail/topic clicks, glossary, Load information).
+- `chat.ts` — progress rail, chat log, photo tiles with reticle, PDF chips, composer (≤10 files: full-resolution photos and PDFs, drag and drop, camera, voice dictation), crop inputs, "Load information" button, PDF hint, example-site card, closing card.
+- `attach.ts`, `attach.css` — iteration 3 attachments: PDFs (≤ 15 MB, real file name, type application/pdf) beside photos; composer document tile; message document chip (opens in a new tab); chat header and four-tab bar styles.
+- `intake.ts`, `intake.css` — "Load information" side sheet (dialog, focus trap, Esc): IntakeForm fields grouped by topic, crop suggestions, chips for earlier crops, "I don't know" per field; POST /api/analyses/:id/intake; example sites pre-fill with `intake_example` (`intake_example_es` in Spanish; bundled sample as fallback), auto-open once per analysis (localStorage), and the example card in the chat.
+- `facts.ts` — "What you told us" (AnalysisState.facts) in the Your field card.
+- `organic.ts`, `organic.css` — Organic view from section "organic" (OrganicContent): agents grouped by kind with citations and the soft-green "matches a pest you reported" badge, practices (agronomist-interview tag), when to act (NASA data tag), what harms your allies, gaps, empty state; plus the Organic section card and the rotation summary row.
 - `photos.ts` — originals kept unless > 12 MB or > 4096 px (then JPEG quality 0.92, ≤ 4096 px); size text.
 - `progress.ts` — guided steps (field → soil → pests → nutrition → rotation → sheet): backend `steps`, or derived from sections; display states; newly-done detection.
 - `rail.ts` — chips + "Next topic … I need …" line + chime toggle; the "We have enough information" card.

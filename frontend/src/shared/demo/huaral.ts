@@ -1,7 +1,7 @@
 // Offline fallback for the Huaral example. Every number here comes from `huaral-state.json`, a full AnalysisState
 // exported from the live backend (real NASA POWER, Sentinel-2, NASADEM readings and cited section content).
 // The UI labels it "Demo data" wherever it is used. Only the scripted chat (no figures) is written here.
-import type { AnalysisState, Bi, ChatMessage, EvidencePackage, Lang } from '../contract';
+import type { AnalysisState, Bi, ChatMessage, EvidencePackage, IntakeForm, Lang } from '../contract';
 import raw from './huaral-state.json';
 
 export const DEMO_ID = 'demo-huaral';
@@ -76,3 +76,22 @@ export const DEMO_CROPS: { key: string; label: Bi; scientific: string }[] = [
   ['onion', 'Onion', 'Cebolla', 'Allium cepa'], ['cotton', 'Cotton', 'Algodón', 'Gossypium barbadense'], ['pineapple', 'Pineapple', 'Piña', 'Ananas comosus'],
   ['alfalfa', 'Alfalfa', 'Alfalfa', 'Medicago sativa'], ['oat_vetch', 'Oat with vetch', 'Avena con vicia', 'Avena sativa + Vicia sativa'],
 ].map(([key, en, es, scientific]) => ({ key, label: { en, es }, scientific }));
+
+/** Labelled example answers for the "Load information" panel, used only when the backend's
+ *  /api/analyses/examples does not carry `intake_example` yet. They are sample answers, never data. */
+export const HUARAL_INTAKE_EXAMPLE: { en: IntakeForm; es: IntakeForm } = {
+  en: {
+    crop_now: 'Peas', crops_before: ['Lettuce', 'Maize'], irrigation: 'Furrow from the canal, every 8 to 10 days',
+    soil_type: 'Sandy loam, a little stony', organic_matter: 'Guinea-pig manure once a season', residues: 'Lettuce residues incorporated with the plough',
+    pests_seen: 'Tiny red mites under the leaves and pale specks on the upper side', products_recent: 'Abamectin about three weeks ago',
+    last_fertilizer: 'Urea, 2 bags per hectare in October', soil_test: "None, I don't know the pH",
+    next_crop: 'Maize or beans, not decided', harvest_use: 'Market in Huaral, some for the family',
+  },
+  es: {
+    crop_now: 'Arveja', crops_before: ['Lechuga', 'Maíz'], irrigation: 'Por surcos desde el canal, cada 8 a 10 días',
+    soil_type: 'Franco arenoso, algo pedregoso', organic_matter: 'Guano de cuy una vez por campaña', residues: 'Rastrojo de lechuga incorporado con el arado',
+    pests_seen: 'Arañitas rojas bajo las hojas y puntitos pálidos en el haz', products_recent: 'Abamectina hace unas tres semanas',
+    last_fertilizer: 'Urea, 2 sacos por hectárea en octubre', soil_test: 'Ninguno, no sé el pH',
+    next_crop: 'Maíz o frijol, sin decidir', harvest_use: 'Mercado de Huaral, algo para la familia',
+  },
+};

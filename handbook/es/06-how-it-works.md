@@ -53,3 +53,10 @@ Abre http://localhost:5173 (inicio) y http://localhost:5173/app.html (app). El b
 - **Fotos en resolución completa.** Se guardan hasta 12 MB; el modelo recibe además los cuatro cuartos de cada foto grande en resolución nativa para que los insectos pequeños se vean.
 - **Ficha técnica.** Enlace para volver al análisis, fotos del agricultor, imagen satelital, pronóstico y perspectiva, anexo de glosario y un paquete ZIP con los originales.
 
+## Iteración 3 (14-11-2026)
+
+- **Documentos.** El chat acepta PDF (hasta 15 MB) además de fotos. El agricultor puede adjuntar la ficha técnica de una visita anterior: el consultor la lee, dice qué tomó de ella y su fecha, registra las respuestas y completa los temas que cubre; las lecturas de la NASA siempre son nuevas.
+- **Cargar información.** Un formulario con lo que necesita cada tema (cultivo actual y anteriores, riego, suelo, materia orgánica, rastrojos, plagas vistas, productos recientes, último abono, análisis de suelo, próximo cultivo, destino de la cosecha; se permite "no sé"). En el sitio de ejemplo se abre con respuestas de ejemplo señaladas, para que los jurados vean todas las secciones llenas. `POST /api/analyses/{id}/intake`.
+- **Pestaña Orgánico.** Manejo biológico y ecológico de plagas: enemigos naturales y microorganismos benéficos (insectos, ácaros, hongos, bacterias) con su fuente publicada, primero los que coinciden con las plagas reportadas (buscados en toda la base de cultivos); prácticas que los mantienen; cuándo actuar según grados-día NASA y el pronóstico GEOS-FP; qué los daña. Sin dosis: eso lo decide el agrónomo.
+- **Lo que nos contó el agricultor** aparece en la sección Tu campo y en la ficha técnica.
+

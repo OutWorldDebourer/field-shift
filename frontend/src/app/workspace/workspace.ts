@@ -1,5 +1,6 @@
-// Workspace: frosted glass over the farmer's own field. Top bar (field chip, Chat | Dashboard | Rotation, EN | ES),
-// chat + section column, dashboard and rotation views, pre-diagnosis notice always visible, phone bottom sheet.
+// Workspace: frosted glass over the farmer's own field. Top bar (field chip, Chat | Dashboard | Rotation | Organic,
+// EN | ES), chat + section column, dashboard, rotation and organic views, pre-diagnosis notice always visible, phone
+// bottom sheet, and the "Load information" side sheet (auto-opened once for example sites).
 import { buildEvidence } from '../../shared/api';
 import { mountBackdrop, type Backdrop } from '../../shared/backdrop';
 import type { SectionKey, Step } from '../../shared/contract';
@@ -18,11 +19,14 @@ import { chime } from './chime';
 import { newlyDone, stepsOf } from './progress';
 import { flipLine } from './rail';
 import { copernicusGloss } from './credit';
+import { mountIntake } from './intake';
+import { organicHtml } from './organic';
 import './workspace.css';
 import './guided.css';
 
-const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot'; icon: 'chat' | 'dashboard' | 'rotation' }[] = [
+const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot' | 'ap_tab_org'; icon: 'chat' | 'dashboard' | 'rotation' | 'ladybug' }[] = [
   { v: 'chat', label: 'ap_tab_chat', icon: 'chat' }, { v: 'dashboard', label: 'ap_tab_dash', icon: 'dashboard' }, { v: 'rotation', label: 'ap_tab_rot', icon: 'rotation' },
+  { v: 'organic', label: 'ap_tab_org', icon: 'ladybug' },
 ];
 
 export function mountWorkspace(host: HTMLElement, onChangeField: () => void): void {
@@ -49,6 +53,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       </section>
       <section class="view view--dashboard" id="view-dashboard" role="tabpanel" aria-labelledby="tab-dashboard" hidden></section>
       <section class="view view--rotation" id="view-rotation" role="tabpanel" aria-labelledby="tab-rotation" hidden></section>
+      <section class="view view--organic" id="view-organic" role="tabpanel" aria-labelledby="tab-organic" hidden></section>
     </main>
     <footer class="ws__foot">
       <p class="notice ws__notice" id="ws-notice" data-short="${esc(t('foot_short'))}">${icon('info')}<span data-i18n="prediag">${esc(t('prediag'))}</span></p>
@@ -87,6 +92,10 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
 
   const chat = mountChat($('#chat'), () => state.analysis, (patch) => { set({ analysis: { ...state.analysis!, ...patch } }); });
   wireExports(ws, () => state.analysis);
+  const intake = mountIntake(ws, () => state.analysis!, (next) => {
+    const cur = state.analysis!;
+    set({ analysis: { ...cur, ...next, offline: cur.offline, readOnly: cur.readOnly, shareToken: cur.shareToken, evidence: next.evidence ?? cur.evidence } });
+  });
 
   // ---------- renderers ----------
   function renderBar() {
@@ -122,7 +131,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   function renderView() {
     const a = state.analysis!;
     ws.dataset.view = state.view;
-    (['chat', 'dashboard', 'rotation'] as View[]).forEach((v) => { $(`#view-${v}`).hidden = v !== state.view; });
+    (['chat', 'dashboard', 'rotation', 'organic'] as View[]).forEach((v) => { $(`#view-${v}`).hidden = v !== state.view; });
     bd?.setOutline(state.view === 'rotation' ? 'plan' : 'measured');
     bd?.layout();
     dashCleanup?.(); dashCleanup = null;
@@ -132,6 +141,8 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       void mountDashboardMap($('#view-dashboard'), a).then((c) => { dashCleanup = c; });
     } else if (state.view === 'rotation') {
       $('#view-rotation').innerHTML = rotationHtml(a);
+    } else if (state.view === 'organic') {
+      $('#view-organic').innerHTML = organicHtml(a);
     }
   }
   function renderAll() { renderBar(); renderSections(); renderView(); chat.render(state.analysis!); }
@@ -164,7 +175,9 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     const tab = el.closest<HTMLElement>('[data-tab]');
     if (tab) { set({ view: tab.dataset.tab as View }); return; }
     const sec = el.closest<HTMLElement>('[data-sec]');
-    if (sec) { const k = sec.dataset.sec as SectionKey; set({ open: state.open === k ? null : k }); return; }
+    if (sec) { const k = sec.dataset.sec as SectionKey | 'organic'; set({ open: state.open === k ? null : k }); return; }
+    const intakeBtn = el.closest<HTMLElement>('[data-intake]');
+    if (intakeBtn) { intake.open(intakeBtn); return; }
     const sh = el.closest<HTMLElement>('[data-sheet]');
     if (sh) { openSheet(sh.dataset.sheet as SectionKey, sh); return; }
     if (el.closest('[data-close]') || el.id === 'scrim') { closeSheet(); return; }
@@ -223,6 +236,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   renderAll();
   syncUrl();
   requestAnimationFrame(() => bd?.layout());
+  intake.autoOpen();
 
   // Kick off the evidence package when the backend has not built it yet.
   if (!a0.evidence && !a0.offline && !a0.readOnly) {
