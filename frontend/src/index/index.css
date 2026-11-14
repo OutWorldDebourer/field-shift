@@ -100,7 +100,7 @@ body.is-day .hud { opacity: 0; }
 /* ---------- How it works ---------- */
 .how { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 22vh var(--gutter) 120px; }
 .how { gap: 28px; }
-.how__top { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 40px; align-items: end; max-width: 1240px; margin-bottom: auto; padding-bottom: 12vh; }
+.how__top { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 40px; align-items: end; width: 100%; max-width: 1240px; margin: 0 auto auto; padding-bottom: 12vh; }
 .how__eyebrow { font-size: 0.8125rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); margin-bottom: 14px; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
 .how .sec-title { max-width: 20ch; }
 .how__head { padding: 24px 28px 26px; margin-left: -28px; border-radius: var(--r-lg); background: linear-gradient(100deg, rgba(5, 12, 20, 0.62), rgba(5, 12, 20, 0.28) 80%, rgba(5, 12, 20, 0)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
@@ -111,13 +111,13 @@ body.is-day .hud { opacity: 0; }
 .how__hook-t { display: block; margin-top: 10px; font-size: 1.0625rem; line-height: 1.45; }
 .how__hook-s { display: inline-block; margin-top: 12px; font-size: 0.75rem; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
 .step__c { grid-column: 1 / -1; align-self: end; padding-top: 12px; border-top: 1px solid var(--rule); font-size: 0.75rem; letter-spacing: 0.03em; color: var(--ink); }
-.how__stats { max-width: 1240px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding: 0; overflow: hidden; }
+.how__stats { width: 100%; max-width: 1240px; margin-inline: auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding: 0; overflow: hidden; }
 .stat { padding: 20px 22px 22px; border-left: 1px solid var(--rule); display: grid; align-content: start; gap: 6px; }
 .stat:first-child { border-left: 0; }
 .stat__v { font-size: 2.5rem; line-height: 1; font-weight: 400; }
 .stat__v small { font-size: 0.45em; color: var(--ink-2); }
 .stat__k { font-size: 0.9375rem; line-height: 1.35; color: var(--ink-2); }
-.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; max-width: 1240px; counter-reset: s; }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; width: 100%; max-width: 1240px; margin-inline: auto; counter-reset: s; }
 .step { padding: 26px 28px 24px; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto 1fr auto; align-items: center; column-gap: 14px; row-gap: 12px; }
 .step__n { font-size: 0.9375rem; letter-spacing: 0.06em; color: var(--ink-2); }
 .step__ico { width: 26px; height: 26px; justify-self: end; }
@@ -305,10 +305,9 @@ section.dash { min-height: auto; padding-top: 60px; }
   .hud__br .instr, body.is-ground .hud__br .instr { white-space: normal; overflow: visible; text-overflow: clip; max-width: 62vw; line-height: 1.35; }
 }
 
-/* Scroll reveal: letters type in, figures count (index/reveal.ts). Untouched under reduced motion. */
-.tw-w { display: inline-block; white-space: nowrap; }
-.tw-c { opacity: 0; }
-.tw.is-on .tw-c { animation: tw-in 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; animation-delay: calc(var(--tw-delay, 0ms) + var(--i) * var(--tw-step, 20ms)); }
-@keyframes tw-in { from { opacity: 0; filter: blur(3px); transform: translateY(0.18em); } to { opacity: 1; filter: none; transform: none; } }
-.tw-c { display: inline-block; }
+/* Scroll reveal (index/reveal.ts): an invisible copy keeps the final size, the typed copy sits on top with a caret. */
+.tw { position: relative; display: block; }
+.tw-ghost { visibility: hidden; }
+.tw-type { position: absolute; inset: 0; }
+.tw.is-on .tw-type::after { content: ''; display: inline-block; width: 0.08em; min-width: 2px; height: 0.95em; margin-left: 0.06em; vertical-align: -0.1em; background: currentColor; opacity: 0.8; }
 .stat__v, .how__hook-v { font-variant-numeric: tabular-nums; }
