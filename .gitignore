@@ -14,3 +14,4 @@ research/api-samples/gibs_caps.xml
 .impeccable/build/
 tools/.venv/
 *.tmp
+research/cache/

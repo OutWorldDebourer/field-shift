@@ -31,10 +31,10 @@ The token lives in `env.txt` under the label `earthdata` (git-ignored) and is se
 | Service | Test | Result |
 |---------|------|--------|
 | SMAP L4 (NSIDC, cloud OPeNDAP) | `https://opendap.earthdata.nasa.gov/collections/C3480440870-NSIDC_CPRD/granules/SMAP_L4_SM_gph_20261110T223000_Vv8013_001.h5_u9loH5HD.dap.csv?dap4.ce=/Geophysical_Data/sm_surface[974:975][1102:1103];...` | 200, ~2 s. Cell centred at -11.55, -77.07 (EASE-Grid 2.0, 9 km): surface 0.051 m³/m³, root zone 0.096 m³/m³ on 2026-11-10 22:30 UTC. |
-| GRACE/GRACE-FO mascon CRI v4 (PO.DAAC) | `HEAD` on the protected file | 200, 46 MB file for the whole 2002-2026 series; download once and extract the point. |
+| GRACE/GRACE-FO mascon CRI v4 (PO.DAAC) | Download of the 46 MB file (7.5 s), point extracted with `tools/grace_point.py` | 261 monthly values, 2002-04 to 2026-09, cell centred at -11.25, 282.75 (=-77.25). Range -6.96 to +14.43 cm; linear trend +0.24 cm/year (regional, ~300 km). Output: `api-samples/grace_huaral.json`. |
 | IMERG Late daily (GES DISC OPeNDAP) | `https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDL.07/2026/11/3B-DAY-L.MS.MRG.3IMERG.20261112-S000000-E235959.V07C.nc4.dap.csv?dap4.ce=/precipitation[0:0][1027:1028][785:786];/lon[1027:1028];/lat[785:786]` | 200, 0.7 s, after the owner authorized "NASA GESDISC DATA ARCHIVE" (401 before). 2026-11-12, cell -77.25 / -11.45: 0.195 mm/day; neighbours 0 to 0.24 mm/day (dry season on the desert coast). Variable order is [time][lon][lat]. |
 
 Notes:
 - The OPeNDAP granule id must be the full CMR GranuleUR (with its `_u9loH5HD` suffix); a single index `[974]` returns no value, use a range `[974:975]`.
 - SMAP at 9 km reads the desert around the valley (0.05 m³/m³ is very dry): it is regional context, not the irrigated field's moisture. Compute the EASE-Grid index from the cell centre, the first attempt landed one cell east.
-- No Python netCDF reader is installed; GRACE extraction will be done in the Rust backend or a small one-off tool.
+- GRACE is read with `h5py` from the project's tools environment (`tools/.venv`, git-ignored); the downloaded file is cached in `research/cache/` (git-ignored).
