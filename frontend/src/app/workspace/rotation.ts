@@ -24,10 +24,10 @@ const uniq = (c: Cite[]) => c.filter((x, i) => c.findIndex((y) => y.url === x.ur
 function strategyCol(s: Strategy, startMonth: number, idx: number): string {
   const tag = s.current ? `<span class="strat__tag">${esc(t('rt_current'))}</span>` : s.best_for ? `<span class="strat__tag strat__tag--best">${esc(pick(s.best_for))}</span>` : '';
   return `<article class="strat glass${s.best_for ? ' is-best' : ''}" aria-labelledby="strat-${idx}">
-    <header class="strat__head">${tag}<h3 class="serif" id="strat-${idx}">${s.current ? esc(t('rt_current')) + ' · ' : ''}${esc(pick(s.name))}</h3></header>
+    <header class="strat__head">${tag}<h3 class="serif" id="strat-${idx}">${esc(pick(s.name).replace(/\s*\((current plan|plan actual)\)\s*$/i, ''))}</h3></header>
     <p class="strat__tl mono">${esc(t(s.timeline.length === 12 ? 'rt_timeline' : 'rt_seasons'))}</p>
     ${timelineStrip(s.timeline, startMonth, true, true)}
-    <dl class="strat__scores">${SCORES.map((sc) => `<div><dt>${esc(t(sc.label))}${sc.k === 'risk' ? `<small>${esc(t('sc_risk_note'))}</small>` : ''}</dt><dd>${dots(s.scores[sc.k], t(sc.label))}</dd></div>`).join('')}</dl>
+    <dl class="strat__scores">${SCORES.map((sc) => `<div><dt>${esc(t(sc.label))}</dt><dd>${dots(s.scores[sc.k], t(sc.label))}</dd></div>`).join('')}</dl>
     <details class="strat__more"><summary>${esc(t('rt_more'))}</summary>
       <dl><dt>${esc(t('rt_why'))}</dt><dd>${esc(pick(s.why))}</dd><dt>${esc(t('rt_evidence'))}</dt><dd>${esc(pick(s.evidence))}</dd>
       <dt>${esc(t('rt_gaps'))}</dt><dd>${esc(pick(s.gaps))}</dd><dt>${esc(t('rt_risks'))}</dt><dd>${esc(pick(s.risks))}</dd>
@@ -46,7 +46,9 @@ export function rotationHtml(a: ClientAnalysis): string {
   const confN = conf === 'high' ? 3 : conf === 'medium' ? 2 : conf === 'low' ? 1 : 0;
   const mini = (k: 'soil' | 'pests' | 'nutrition', ic: IconName, title: StrKey) => {
     const s = getSection(a, k);
-    return `<li class="rot__mini">${ring(s.state, 34, ic)}<div><h4>${esc(t(title))}</h4><p>${esc(s.content ? pick(s.content.summary) : s.note ? pick(s.note) : t('ws_no_content'))}</p></div></li>`;
+    const titles = s.content?.items.slice(0, 3).map((it) => pick(it.title)).filter(Boolean) ?? [];
+    const line = titles.length ? titles.join(' · ') : s.content ? pick(s.content.summary) : s.note ? pick(s.note) : t('ws_no_content');
+    return `<li class="rot__mini">${ring(s.state, 34, ic)}<div><h4>${esc(t(title))}</h4><p>${esc(line)}</p></div></li>`;
   };
   const right = !c
     ? `<p class="rot__empty glass">${esc(t('rt_empty'))}</p>`
@@ -64,7 +66,7 @@ export function rotationHtml(a: ClientAnalysis): string {
     </section>
     <section class="rot__cmp" aria-labelledby="rot-c">
       <header class="rot__cmphead"><h2 class="serif" id="rot-c">${esc(perennial && c ? t('sec_rotation') : t('rt_compare'))}</h2>
-        ${!perennial && c ? `<p class="mono rot__legend"><i></i>${esc(t('rt_plan_legend'))}</p><p class="mono rot__legend rot__legend--dots">${esc(t('rt_dots_legend'))}</p>` : ''}</header>
+        ${!perennial && c ? `<p class="mono rot__legend"><i></i>${esc(t('rt_plan_legend2'))} · ${esc(t('rt_dots_legend'))}</p>` : ''}</header>
       ${right}
     </section>
     <footer class="rot__foot">${exportButtons(a, true)}<p class="mono">${esc(t('ex_cites'))}</p></footer>

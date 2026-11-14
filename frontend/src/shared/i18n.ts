@@ -80,6 +80,16 @@ export function fmtDate(iso: string): string {
   return d.toLocaleDateString(current === 'es' ? 'es-PE' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 }
 
+/** Short date for tight source lines: "13 Nov 2026"; ranges "11 Oct–9 Nov 2026". */
+export function fmtDateShort(iso: string): string {
+  const loc = current === 'es' ? 'es-PE' : 'en-GB';
+  const d = (x: string, year: boolean) => new Date(x + 'T12:00:00Z').toLocaleDateString(loc, { day: 'numeric', month: 'short', ...(year ? { year: 'numeric' } : {}), timeZone: 'UTC' }).replace('.', '');
+  const range = iso.match(/^(\d{4}-\d{2}-\d{2})\s*(?:to|→|–|-{1,2})\s*(\d{4}-\d{2}-\d{2})$/);
+  if (range) return `${d(range[1], false)}–${d(range[2], true)}`;
+  if (/^\d{4}-\d{2}-\d{2}/.test(iso)) return d(iso.slice(0, 10), true);
+  return iso;
+}
+
 export function monthShort(i: number): string {
   const d = new Date(Date.UTC(2026, i, 15));
   return d.toLocaleDateString(current === 'es' ? 'es-PE' : 'en-US', { month: 'short', timeZone: 'UTC' }).replace('.', '');

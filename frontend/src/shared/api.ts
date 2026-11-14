@@ -66,7 +66,8 @@ export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[
     const now = new Date().toISOString();
     const base = a.messages.reduce((m, x) => Math.max(m, x.id), 0);
     const mine: ChatMessage = { id: base + 1, role: 'user', body: text, created_at: now, photos: photos.map((b) => ({ url: URL.createObjectURL(b) })) };
-    const reply: ChatMessage = { id: base + 2, role: 'assistant', body: demoReply(lang, photos.length > 0)[lang], created_at: now };
+    const bi = demoReply(lang, photos.length > 0);
+    const reply = { id: base + 2, role: 'assistant', body: bi[lang], _bi: bi, created_at: now } as ChatMessage;
     const sections = a.sections.map((s) => (photos.length && s.key === 'pests' ? { ...s, state: 'ready' as const, note: undefined } : s));
     return { messages: [...a.messages, mine, reply], sections, demo_mode: true };
   }

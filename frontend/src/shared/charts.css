@@ -6,7 +6,7 @@
 .chart .mean { fill: none; stroke: rgba(255, 255, 255, 0.55); stroke-width: 1.2; stroke-dasharray: 3 4; }
 .chart .line { fill: none; stroke: var(--amber); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
 .chart .dot { fill: var(--amber); stroke: #10161c; stroke-width: 1.5; }
-.chart .last { fill: var(--amber); font-size: 12.5px; font-weight: 500; }
+.chart .last { fill: #fff; font-size: 12.5px; font-weight: 500; }
 .chart .line-w { fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
 .chart .dots circle { fill: #fff; stroke: rgba(10, 20, 30, 0.6); stroke-width: 1; }
 .chart-empty { font-size: 0.9375rem; color: var(--ink-2); padding: 18px 0; }
@@ -39,7 +39,7 @@
 .seq { display: flex; flex-wrap: wrap; gap: 6px 0; align-items: center; }
 .seq__c { display: inline-flex; align-items: center; min-width: 0; }
 .seq__c i { font-style: normal; color: var(--ink-2); padding: 0 6px; }
-.seq__c span { display: inline-block; max-width: 15ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 5px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.82); color: #0f1d29; font-size: 0.8125rem; font-weight: 600; }
+.seq__c span { display: inline-block; padding: 5px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.82); color: #0f1d29; font-size: 0.8125rem; font-weight: 600; }
 .seq--plan .seq__c span { background: var(--plan); color: #fff; }
 .seq__c.is-bare span { background: transparent; border: 1px dashed rgba(255, 255, 255, 0.5); color: var(--ink-2); }
 

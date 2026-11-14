@@ -83,6 +83,12 @@ function onScroll() {
   const inGround = y + H * 0.5 > data && y + H * 0.5 < cta;
   if (inGround && !sky.isLive()) { $('#hud-credit').textContent = groundCredit; $('#hud-alt').textContent = t('alt', { km: '0.7' }); }
   document.body.classList.toggle('is-ground', inGround);
+  document.body.classList.toggle('is-scrolled', y > 40);
+  // Leaders belong to "Read from space" only: fade them with how much of that section is on screen.
+  const dr = $('#data').getBoundingClientRect();
+  const frac = clamp((Math.min(dr.bottom, H) - Math.max(dr.top, 0)) / H);
+  $('#data-leaders').style.opacity = String(clamp((frac - 0.55) / 0.3));
+  $('#data-field').style.opacity = String(clamp((frac - 0.55) / 0.3));
   if (y + H > data && y < get) drawDataLeaders();
 }
 addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });

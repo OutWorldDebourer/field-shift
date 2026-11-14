@@ -5,7 +5,7 @@ import { createAnalysis, examples, type ClientAnalysis, type Example } from '../
 import type { FieldGeom } from '../../shared/contract';
 import { $, esc, toast } from '../../shared/dom';
 import { ringAreaHa, ringCenter, fmtCoord } from '../../shared/geo';
-import { applyI18n, fmt, lang, onLang, pick, t } from '../../shared/i18n';
+import { applyI18n, fmt, fmtDate, lang, onLang, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { addSnapshot, eoxLayer, loadLeaflet } from '../map/leaflet';
 import { debounce, searchPlaces, type Place } from './search';
@@ -17,7 +17,8 @@ type Tool = 'none' | 'point' | 'draw';
 const KEY = 'fieldshift.lastField';
 
 export function mountFieldSelection(host: HTMLElement, opts: { site?: string | null; go?: boolean; onDone: (a: ClientAnalysis) => void }): () => void {
-  let mode: Mode = opts.site ? 'example' : 'gps';
+  let mode: Mode = 'example';
+  let snapDate: string | null = null;
   let tool: Tool = 'none';
   let exampleId: string | null = opts.site ?? null;
   let exampleList: Example[] = [];
@@ -33,6 +34,10 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     <div class="fs__map" id="fs-map" role="region" aria-label="${esc(t('fs_map_label'))}" data-i18n-attr="aria-label:fs_map_label"><p class="fs__loading mono">${esc(t('fs_map_loading'))}</p></div>
     <div class="reticle fs__reticle" id="fs-reticle" hidden><i></i></div>
     <div class="fs__area-tag ground-label" id="fs-area-tag" hidden></div>
+    <div class="fs__alt instr" id="fs-alt" aria-hidden="true"></div>
+    <button type="button" class="fs__full pill" id="fs-full" aria-pressed="false">${icon('layers')}<span>${esc(t('fs_full'))}</span></button>
+    <div class="fs__credit"><span class="mono" id="fs-img"></span><button type="button" class="fs__info" id="fs-info" aria-expanded="false" aria-controls="fs-lic" aria-label="${esc(t('fs_licences'))}">${icon('info')}</button>
+      <div class="fs__lic glass" id="fs-lic" hidden><p>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</p><p>Sentinel-2 L2A · Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer</p><p>Leaflet · BSD-2-Clause</p></div></div>
     <aside class="fs__panel glass" aria-labelledby="fs-t">
       <h1 id="fs-t" class="serif fs__title" data-i18n="fs_title">${esc(t('fs_title'))}</h1>
       <p class="fs__lede" data-i18n="fs_lede">${esc(t('fs_lede'))}</p>
@@ -44,7 +49,6 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
         <ul class="fs__examples" id="fs-examples" aria-label="${esc(t('fs_examples'))}"></ul>
       </div>
       <div class="fs__pane" data-pane="gps">
-        <button type="button" class="btn btn--glass btn--sm" id="fs-locate">${icon('gps')}<span data-i18n="fs_gps_go">${esc(t('fs_gps_go'))}</span></button>
         <p class="fs__status" id="fs-gps-status" aria-live="polite"></p>
       </div>
       <div class="fs__search" role="search">
@@ -62,7 +66,9 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       <button type="button" class="btn btn--glass btn--sm fs__finish" id="fs-finish" hidden>${icon('polygon')}<span data-i18n="fs_finish">${esc(t('fs_finish'))}</span></button>
       <p class="fs__hint" id="fs-hint" aria-live="polite"></p>
       <div class="fs__readout" id="fs-readout" aria-live="polite"></div>
-      <button type="button" class="btn btn--solid fs__use" id="fs-use" disabled>${esc(t('fs_use'))}${icon('arrow')}</button>
+      <p class="fs__why" id="fs-why" data-i18n="fs_why">${esc(t('fs_why'))}</p>
+      <div class="fs__actions"><button type="button" class="btn btn--solid fs__use" id="fs-use" disabled>${esc(t('fs_use'))}${icon('arrow')}</button>
+</div>
       <div class="fs__error" id="fs-error" role="alert" hidden></div>
     </aside>
   </div>`;
@@ -79,13 +85,13 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   }
   function renderExamples() {
     examplesEl.innerHTML = exampleList.map((e) => `<li><button type="button" class="ex" data-ex="${esc(e.id)}" aria-pressed="${e.id === exampleId}">
-        <span class="ex__name">${esc(pick(e.name))}</span><span class="ex__meta mono">${esc(t('fs_huaral_meta', { ha: fmt(ringAreaHa(e.field.ring) || e.field.area_ha, 1) }))}</span></button></li>`).join('')
-      + `<li class="ex__soon mono">${esc(t('fs_coming'))}</li>`;
+        <span class="ex__name">${esc(pick(e.name))}</span><span class="ex__meta mono">${esc(t('fs_huaral_meta', { ha: fmt(ringAreaHa(e.field.ring) || e.field.area_ha, 1) }))}</span></button></li>`).join('');
     examplesEl.querySelectorAll<HTMLButtonElement>('[data-ex]').forEach((b) => b.addEventListener('click', () => chooseExample(b.dataset.ex!)));
   }
   function renderTools() {
     host.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tool === tool)));
     finishBtn.hidden = tool !== 'draw';
+    $('#fs-clear', host).hidden = !(ring.length || draft.length || point);
     finishBtn.disabled = draft.length < 3;
     hint.textContent = tool === 'point' ? t('fs_hint_point') : tool === 'draw' ? (draft.length && draft.length < 3 ? t('fs_hint_need3') : t('fs_hint_draw')) : '';
     map?.getContainer().classList.toggle('is-picking', tool !== 'none');
@@ -95,12 +101,13 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const r = currentRing();
     const area = ringAreaHa(r);
     const c = r.length >= 3 ? ringCenter(r) : point;
-    if (!c) { readout.innerHTML = `<span class="fs__none">${esc(t('fs_none'))}</span>`; useBtn.disabled = true; areaTag.hidden = true; return; }
+    if (!c) { readout.innerHTML = `<span class="fs__none">${esc(t('fs_none'))}</span>`; useBtn.disabled = true; $('#fs-why', host).hidden = false; areaTag.hidden = true; return; }
     readout.innerHTML = r.length >= 3
       ? `<span class="mono fs__k">${esc(t('fs_area'))}</span><b class="fs__area num">${fmt(area, area < 10 ? 1 : 0)} ha</b><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`
       : `<span class="mono fs__k">${esc(t('fs_point_only'))}</span><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`;
     useBtn.disabled = !(ring.length >= 3 || (point && tool !== 'draw'));
-    if (r.length >= 3) { areaTag.hidden = false; areaTag.innerHTML = `<b>${fmt(area, area < 10 ? 1 : 0)} ha</b>`; } else areaTag.hidden = true;
+    $('#fs-why', host).hidden = !useBtn.disabled;
+    if (r.length >= 3) { areaTag.hidden = false; areaTag.innerHTML = `<b>${fmt(area, area < 10 ? 1 : 0)} ha</b><br><span>${esc(snapDate ? t('fs_img_date', { d: fmtDate(snapDate) }) : t('fs_img_base'))}</span>`; } else areaTag.hidden = true;
     placeReticle();
   }
   function placeReticle() {
@@ -165,13 +172,14 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const st = $('#fs-gps-status', host);
     if (!('geolocation' in navigator)) { st.textContent = t('fs_gps_denied'); return; }
     st.textContent = t('fs_gps_locating');
+    const fail = () => { st.innerHTML = `${esc(t('fs_gps_denied'))} <button type="button" class="fs__retry">${esc(t('ap_retry'))}</button>`; st.querySelector('button')!.addEventListener('click', locate); };
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude: lat, longitude: lon, accuracy } = pos.coords;
       point = { lat, lon }; ring = []; exampleId = null; label = t('fs_my_field');
       st.textContent = t('fs_gps_ok', { m: Math.round(accuracy) });
       map?.setView([lat, lon], 17);
       renderExamples(); drawLayers(); lockOn();
-    }, () => { st.textContent = t('fs_gps_denied'); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+    }, fail, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
   }
 
   async function use() {
@@ -238,21 +246,38 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   }));
   host.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool as Tool)));
   $('#fs-clear', host).addEventListener('click', clearAll);
-  $('#fs-locate', host).addEventListener('click', locate);
+  $('#fs-full', host).addEventListener('click', (e) => {
+    const b = e.currentTarget as HTMLElement;
+    const on = !host.classList.contains('is-full');
+    host.classList.toggle('is-full', on); b.setAttribute('aria-pressed', String(on));
+    b.querySelector('span')!.textContent = t(on ? 'fs_full_off' : 'fs_full');
+    setTimeout(() => map?.invalidateSize(), 60);
+  });
+  $('#fs-info', host).addEventListener('click', (e) => {
+    const b = e.currentTarget as HTMLElement; const lic = $('#fs-lic', host);
+    lic.hidden = !lic.hidden; b.setAttribute('aria-expanded', String(!lic.hidden));
+  });
   finishBtn.addEventListener('click', finishDraw);
   useBtn.addEventListener('click', use);
   const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`; });
 
   renderMode(); renderTools(); renderReadout();
 
+  // Phone: the action bar is fixed to the viewport, so it must live outside the blurred panel (backdrop-filter
+  // creates a containing block for fixed children).
+  const actions = $('.fs__actions', host), panel = $('.fs__panel', host), fsEl = $('.fs', host);
+  const mq = matchMedia('(max-width: 760px)');
+  const placeActions = () => { if (mq.matches) fsEl.append(actions); else panel.insertBefore(actions, $('#fs-error', host)); };
+  mq.addEventListener('change', placeActions);
+  placeActions();
+
   // ---------- map (lazy) ----------
   void (async () => {
     L = await loadLeaflet();
     const el = $('#fs-map', host);
     el.innerHTML = '';
-    map = L.map(el, { zoomControl: false, attributionControl: true, worldCopyJump: true }).setView([-11.47, -77.21], 13);
+    map = L.map(el, { zoomControl: false, attributionControl: false, worldCopyJump: true, maxZoom: 17 }).setView([-11.47, -77.21], 13);
     L.control.zoom({ position: 'topright' }).addTo(map);
-    map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a> (BSD-2)');
     eoxLayer(L).addTo(map);
     L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
     layer = L.layerGroup().addTo(map);
@@ -262,20 +287,30 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       else if (tool === 'draw') { draft.push([lng, lat]); renderTools(); drawLayers(); }
     });
     map.on('dblclick', () => { if (tool === 'draw') finishDraw(); });
-    map.on('move zoom resize', placeReticle);
+    const instr = () => {
+      if (!map) return;
+      const c = map.getCenter(), z = map.getZoom(), H = map.getSize().y;
+      const mpp = (156543.03 * Math.cos((c.lat * Math.PI) / 180)) / 2 ** z;
+      const km = (mpp * H) / (2 * Math.tan(Math.PI / 6)) / 1000;
+      $('#fs-alt', host).textContent = t('alt', { km: km >= 10 ? Math.round(km) : km.toFixed(1) });
+      $('#fs-img', host).textContent = snapDate ? `Sentinel-2 L2A · ${snapDate} · EOX 2016 base` : t('eox_short');
+    };
+    map.on('move zoom resize', () => { placeReticle(); instr(); });
+    instr();
     const ex = await examples();
     exampleList = ex.list;
     renderExamples();
+    let saved: { field: FieldGeom; label: string } | null = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { /* ignore */ }
+    if (!exampleId && !saved?.field && exampleList[0]) exampleId = exampleList[0].id;
+    const h = exampleList.find((e) => e.id === (exampleId ?? 'huaral')) ?? exampleList[0];
+    if (h) void addSnapshot(L, map, h.field.center.lat, h.field.center.lon, 1500).then((m) => { snapDate = m?.date ?? null; instr(); renderReadout(); });
     if (exampleId) {
       chooseExample(exampleId);
-      const h = exampleList.find((e) => e.id === exampleId);
-      if (h) void addSnapshot(L, map, h.field.center.lat, h.field.center.lon, 1500);
       if (opts.go) void use();
-    } else {
-      try {
-        const saved = JSON.parse(localStorage.getItem(KEY) || 'null') as { field: FieldGeom; label: string } | null;
-        if (saved?.field) { ring = saved.field.ring; point = saved.field.center; label = saved.label; drawLayers(); map.setView([point.lat, point.lon], 16); }
-      } catch { /* ignore */ }
+    } else if (saved?.field) {
+      mode = 'gps'; renderMode();
+      ring = saved.field.ring; point = saved.field.center; label = saved.label; drawLayers(); map.setView([point.lat, point.lon], 16);
     }
   })().catch(() => { $('#fs-map', host).innerHTML = `<p class="fs__loading mono">${esc(t('fs_search_err'))}</p>`; toast(t('fs_search_err')); });
 

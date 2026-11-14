@@ -61,6 +61,8 @@ const CROPS: Record<string, { en: string; es: string }> = {
   fallow: { en: 'Fallow', es: 'Descanso' }, potato: { en: 'Potato', es: 'Papa' }, oat_vetch: { en: 'Oat + vetch', es: 'Avena + vicia' },
 };
 export const cropName = (k: string): string => CROPS[k]?.[lang()] ?? k.replace(/_/g, ' ');
+/** Short crop name for chips: text before a parenthesis ("Green manure (legume + …)" → "Green manure"). */
+export const cropShort = (k: string): string => cropName(k).replace(/\s*\(.*$/, '');
 
 /** Group a 12-slot timeline into runs [{crop, start, len}]. */
 export function runs(timeline: string[]): { crop: string; start: number; len: number }[] {
@@ -82,7 +84,7 @@ export function calendarStrip(timeline: string[], startMonth: number, plan = fal
 
 /** Season-by-season sequence for timelines that are not 12 months: one chip per season, arrows between. */
 export function sequenceStrip(timeline: string[], plan = false): string {
-  return `<ol class="seq${plan ? ' seq--plan' : ''}">${timeline.map((c, i) => `<li class="seq__c${c === 'bare' || c === 'fallow' ? ' is-bare' : ''}" title="${esc(cropName(c))}">${i ? '<i aria-hidden="true">→</i>' : ''}<span>${esc(cropName(c))}</span></li>`).join('')}</ol>`;
+  return `<ol class="seq${plan ? ' seq--plan' : ''}">${timeline.map((c, i) => `<li class="seq__c${c === 'bare' || c === 'fallow' ? ' is-bare' : ''}" title="${esc(cropName(c))}">${i ? '<i aria-hidden="true">→</i>' : ''}<span>${esc(cropShort(c))}</span></li>`).join('')}</ol>`;
 }
 
 /** 12-month strip when the timeline has 12 slots, otherwise the season sequence. */

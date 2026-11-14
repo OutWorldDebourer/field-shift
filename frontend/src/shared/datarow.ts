@@ -3,7 +3,7 @@
 import type { Reading } from './contract';
 import { esc } from './dom';
 import { icon, readingIcon } from './icons';
-import { fmt, fmtDate, pick, t } from './i18n';
+import { fmt, fmtDate, fmtDateShort, pick, t } from './i18n';
 
 /** Sparkline path for a series, drawn in a w×h box. */
 export function sparkline(values: (number | null)[], w = 64, h = 22, cls = 'drow__spark'): string {
@@ -23,8 +23,7 @@ export function sparkline(values: (number | null)[], w = 64, h = 22, cls = 'drow
 export function valueText(r: Reading, compact = false): { text: string; isWord: boolean } {
   if (r.value == null) return { text: pick(r.verdict), isWord: true };
   const signed = /anomaly|balance|projection|grace/.test(r.id);
-  const ratio = r.unit === '' || /ndvi/i.test(r.unit);
-  const digits = Math.abs(r.value) < 1 && ratio ? 2 : Math.abs(r.value) >= 100 ? 0 : 1;
+  const digits = Math.abs(r.value) < 1 ? 2 : Math.abs(r.value) >= 100 ? 0 : 1;
   const n = fmt(r.value, digits);
   const sign = signed && r.value > 0 ? '+' : '';
   const u = compact ? r.unit.replace(/\s+vs\s.*$/, '').replace(/^NDVI$/i, '') : r.unit;
@@ -35,8 +34,8 @@ export function valueText(r: Reading, compact = false): { text: string; isWord: 
 /** Short resolution for tight spots: "~0.5° × 0.625° grid cell (about 50 km)" → "~50 km". */
 export function shortRes(res: string): string {
   const m = res.match(/about\s*([\d.,]+\s*k?m)/i);
-  if (m) return `~${m[1]}`;
-  return res.length > 14 ? res.slice(0, 13) + '…' : res;
+  const out = m ? `~${m[1]}` : res.length > 14 ? res.slice(0, 13) + '…' : res;
+  return out.replace(/ /g, ' ');
 }
 
 /** Resolution in km parsed from the text, or null. */
@@ -56,6 +55,13 @@ export function sourceLine(r: Reading): string {
   return `${esc(r.source)} · ${esc(fmtDate(r.date))} · ${esc(r.resolution)}`;
 }
 
+/** Short source line for tiles and compact rows; the full line goes in a tooltip. */
+export function sourceShort(r: Reading): string {
+  return `${esc(r.source)} · ${esc(fmtDateShort(r.date))} · ${esc(shortRes(r.resolution))}`;
+}
+
+const sourceFull = (r: Reading) => `${r.source} · ${r.dataset} · ${fmtDate(r.date)} · ${r.resolution} · ${r.license}`;
+
 /** Full data row with verdict, source, date, resolution, badge and sparkline. */
 export function dataRow(r: Reading): string {
   const v = valueText(r);
@@ -66,7 +72,7 @@ export function dataRow(r: Reading): string {
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
     <div class="drow__verdict">${v.isWord ? '' : esc(pick(r.verdict))}</div>
     ${sparkline(series)}
-    <div class="drow__meta"><span class="drow__src">${sourceLine(r)}</span>${badge(r.badge)}</div>
+    <div class="drow__meta"><span class="drow__src" title="${esc(sourceFull(r))}">${sourceShort(r)}</span>${badge(r.badge)}</div>
   </div>`;
 }
 
@@ -74,13 +80,12 @@ export function dataRow(r: Reading): string {
 export function dataRowCompact(r: Reading, srcText?: string, label?: string): string {
   const v = valueText(r, true);
   const series = r.series?.map((p) => p.v) ?? [];
-  const src = srcText ?? `${r.source} · ${shortRes(r.resolution)}`;
-  const regional = r.badge === 'regional context' && srcText === undefined;
+  const src = srcText ?? `${r.source.replace(/\s+L2A$/, '')} · ${fmtDateShort(r.date)} · ${shortRes(r.resolution)}`;
   return `<div class="drow drow--compact" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
     <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}</div>
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
-    <div class="drow__src" title="${esc(t(regional ? 'regional_tip' : 'field_level_tip'))}">${esc(src)}${regional ? ' · ' + esc(t('regional')) : ''}</div>
+    <div class="drow__src" title="${esc(sourceFull(r))}">${esc(src)} ${badge(r.badge)}</div>
     ${sparkline(series, 52, 22)}
   </div>`;
 }

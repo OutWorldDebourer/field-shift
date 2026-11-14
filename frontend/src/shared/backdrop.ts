@@ -33,12 +33,13 @@ export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
   let proj = bboxProject(bbox, 1000, 1000);
   const wrap = document.createElement('div');
   wrap.className = 'backdrop';
-  wrap.innerHTML = `<div class="backdrop__plate"><div class="backdrop__ground"></div>
+  wrap.innerHTML = `<div class="backdrop__plate"><div class="backdrop__ground"></div><div class="backdrop__ground backdrop__sharp" aria-hidden="true"></div>
     <svg class="backdrop__marks" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><path class="backdrop__ring"/></svg>
     <div class="reticle backdrop__reticle"><i></i></div></div>`;
   host.prepend(wrap);
   const plate = wrap.firstElementChild as HTMLElement;
   const ground = plate.querySelector('.backdrop__ground') as HTMLElement;
+  const sharp = plate.querySelector('.backdrop__sharp') as HTMLElement;
   const ring = plate.querySelector('.backdrop__ring') as SVGPathElement;
   const ret = plate.querySelector('.backdrop__reticle') as HTMLElement;
 
@@ -49,6 +50,8 @@ export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
     const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
     const pad = o.ring.length >= 3 ? 14 : 22;
     const box = { x0: Math.min(...xs) - pad, y0: Math.min(...ys) - pad, x1: Math.max(...xs) + pad, y1: Math.max(...ys) + pad };
+    sharp.style.clipPath = o.ring.length >= 3 ? `polygon(${pts.map((p) => `${(p.x / 10).toFixed(3)}% ${(p.y / 10).toFixed(3)}%`).join(',')})` : 'none';
+    sharp.hidden = o.ring.length < 3;
     Object.assign(ret.style, { left: box.x0 / 10 + '%', top: box.y0 / 10 + '%', width: (box.x1 - box.x0) / 10 + '%', height: (box.y1 - box.y0) / 10 + '%' });
   }
   drawMarks();
@@ -68,6 +71,8 @@ export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
     }
     ground.innerHTML = html;
     ground.classList.add('is-tiles');
+    sharp.innerHTML = html;
+    sharp.classList.add('is-tiles');
     o.onCredit?.(t('eox_short'), null);
   };
 
@@ -82,6 +87,7 @@ export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
       void meta.then((m) => {
         if (m?.bbox?.length === 4) { bbox = m.bbox; proj = bboxProject(bbox, 1000, 1000); drawMarks(); layout(); }
         ground.replaceChildren(img);
+        sharp.replaceChildren(img.cloneNode());
         o.onCredit?.(m?.credit ? `${m.source ?? 'Sentinel-2 L2A'} · ${m.credit}` : t('snap_credit_fallback'), m?.date ?? null);
       });
     };

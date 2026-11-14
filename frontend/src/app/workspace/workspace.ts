@@ -12,7 +12,7 @@ import { mountChat } from './chat';
 import { dashboardHtml, mountDashboardMap } from './dashboard';
 import { wireExports } from './export';
 import { rotationHtml } from './rotation';
-import { sectionsColumn, sectionsRow, sheetHtml } from './sections';
+import { peekHtml, peekSection, sectionsColumn, sectionsRow, sheetHtml } from './sections';
 import './workspace.css';
 
 const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot'; icon: 'chat' | 'dashboard' | 'rotation' }[] = [
@@ -39,6 +39,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
         <div class="chat glass" id="chat"></div>
         <div class="ws__gap" aria-hidden="true"></div>
         <aside class="secs glass" id="secs" aria-label="${esc(t('ws_sections'))}"></aside>
+        <button type="button" class="peek glass" id="peek"></button>
       </section>
       <section class="view view--dashboard" id="view-dashboard" role="tabpanel" aria-labelledby="tab-dashboard" hidden></section>
       <section class="view view--rotation" id="view-rotation" role="tabpanel" aria-labelledby="tab-rotation" hidden></section>
@@ -86,7 +87,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     (chip as HTMLButtonElement).disabled = !!a.readOnly;
     const flags: string[] = [];
     if (a.offline) flags.push(`<span class="demo-flag" title="${esc(t('demo_data_long'))}">${esc(t('demo_data'))}</span>`);
-    else if (a.demo_mode) flags.push(`<span class="demo-flag demo-flag--soft" title="${esc(t('demo_mode_long'))}">${esc(t('demo_mode'))}</span>`);
+    else if (a.demo_mode) flags.push(`<span class="demo-flag demo-flag--soft" title="${esc(t('demo_mode_long'))}"><span class="df-long">${esc(t('demo_mode'))}</span><span class="df-short">Demo</span></span>`);
     if (a.readOnly) flags.push(`<span class="pill">${esc(t('ws_read_only'))}</span>`);
     $('#flags').innerHTML = flags.join('');
     $('#si-tag').hidden = !a.messages.some((m) => m.photos?.some((p) => p.url.startsWith('/img/')));
@@ -98,6 +99,10 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     const a = state.analysis!;
     $('#secs').innerHTML = sectionsColumn(a, state.open);
     $('#secbar').innerHTML = sectionsRow(a);
+    const p = peekSection(a);
+    const peek = $('#peek');
+    peek.dataset.sheet = p.key;
+    peek.innerHTML = peekHtml(a, p.key);
   }
   function renderView() {
     const a = state.analysis!;
@@ -176,7 +181,12 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     }
     if ('snapshotCredit' in ch) renderBar();
   });
-  onLang(() => { renderAll(); });
+  onLang((l) => {
+    // Scripted demo bubbles carry both languages: re-render them in the new one so history never mixes languages.
+    const a = state.analysis!;
+    if (a.offline || a.demo_mode) state.analysis = { ...a, messages: a.messages.map((m) => { const b = (m as { _bi?: { en: string; es: string } })._bi; return b ? { ...m, body: b[l] } : m; }) };
+    renderAll();
+  });
   addEventListener('resize', () => bd?.layout());
 
   renderAll();

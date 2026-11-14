@@ -34,7 +34,7 @@ export function ring(state: SectionState, size = 40, ic?: IconName): string {
   return `<span class="ring ring--${state}" style="width:${size}px;height:${size}px" aria-hidden="true">
     <svg viewBox="0 0 ${size} ${size}"><circle class="ring__bg" cx="${size / 2}" cy="${size / 2}" r="${r}"/>
     ${f > 0 ? `<circle class="ring__fg" cx="${size / 2}" cy="${size / 2}" r="${r}" stroke-dasharray="${(c * f).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 ${size / 2} ${size / 2})"/>` : ''}</svg>
-    ${inner}${state === 'gaps' ? '<i class="ring__dot"></i>' : ''}</span>`;
+    ${inner}${state === 'gaps' ? '<i class="ring__dot"></i>' : ''}${state === 'ready' ? `<i class="ring__check">${icon('check')}</i>` : ''}</span>`;
 }
 
 function stateLine(s: Section): string {
@@ -95,6 +95,18 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): stri
         <div class="sec__body" id="sec-${s.key}" ${isOpen ? '' : 'hidden'}>${isOpen ? sectionBody(a, s.key) : ''}</div>
       </li>`;
     }).join('')}</ul>`;
+}
+
+/** The section worth a glance on phone: one with gaps, else in progress, else the rotation. */
+export function peekSection(a: ClientAnalysis): Section {
+  const all = ORDER.filter((k) => k !== 'sheet').map((k) => getSection(a, k));
+  return all.find((s) => s.state === 'gaps') ?? all.find((s) => s.state === 'progress') ?? getSection(a, 'rotation');
+}
+
+export function peekHtml(a: ClientAnalysis, k: SectionKey): string {
+  const s = getSection(a, k);
+  const line = s.note ? pick(s.note) : s.content ? pick(s.content.summary) : t(STATE_KEY[s.state]);
+  return `${ring(s.state, 34, META[k].icon)}<span class="peek__t"><b>${esc(t(META[k].title))}</b> · ${esc(t(STATE_KEY[s.state]))}<small>${esc(line)}</small></span>${icon('chevron', 'peek__chev')}`;
 }
 
 /** Phone row of round buttons. */

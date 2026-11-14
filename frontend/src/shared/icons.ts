@@ -35,6 +35,7 @@ const P: Record<string, string> = {
   field: '<path d="M4 6l8-3 8 3v12l-8 3-8-3Z"/><path d="M4 12l8 3 8-3M12 3v18"/>',
   chat: '<path d="M4 5h16v11H9l-5 4Z"/>',
   dashboard: '<rect x="3.5" y="4" width="7" height="7" rx="1.5"/><rect x="13.5" y="4" width="7" height="4.5" rx="1.5"/><rect x="13.5" y="11.5" width="7" height="8.5" rx="1.5"/><rect x="3.5" y="14" width="7" height="6" rx="1.5"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   chevron: '<path d="m9 6 6 6-6 6"/>',
   down: '<path d="m6 9 6 6 6-6"/>',
 };

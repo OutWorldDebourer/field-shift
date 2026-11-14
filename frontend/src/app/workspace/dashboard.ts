@@ -8,7 +8,7 @@ import { ndviChart, seasonChart, timelineStrip } from '../../shared/charts';
 import { normalPeriod } from '../../shared/evidence';
 import { dataRow, sourceLine, valueText, badge, shortRes, resKm } from '../../shared/datarow';
 import { esc } from '../../shared/dom';
-import { fmt, fmtDate, pick, t } from '../../shared/i18n';
+import { fmt, fmtDateShort, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
 import { alertsFor } from './alerts';
@@ -31,7 +31,7 @@ export function tilesFor(ev: EvidencePackage, max = 6): Reading[] {
 
 export function layerLegend(ev: EvidencePackage | null, key: LayerKey): string {
   const r = ev?.readings.find((x) => x.id === LAYERS.find((l) => l.key === key)!.reading);
-  if (!r) return `<p class="dmap__note">${esc(t('db_no_evidence'))}</p>`;
+  if (!r) return `<p class="dmap__note">${esc(t(ev ? 'ly_na' : 'db_no_evidence'))}</p>`;
   const v = valueText(r);
   const note = r.badge === 'field-level' ? t('db_layer_field', { res: shortRes(r.resolution) }) : t('db_layer_cell', { res: shortRes(r.resolution) });
   return `<p class="dmap__val"><b>${esc(pick(r.label))}</b> <span class="${r.key ? 'amber' : ''}">${esc(v.text)}</span></p>
@@ -51,13 +51,18 @@ function currentTimeline(a: ClientAnalysis): string[] | null {
   return cur?.timeline?.length ? cur.timeline : null;
 }
 
+function currentPlan(a: ClientAnalysis) {
+  const rot = a.sections.find((s) => s.key === 'rotation');
+  return rot?.content?.strategies?.find((s) => s.current) ?? null;
+}
+
 export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; layer?: LayerKey } = {}): string {
   const ev = a.evidence;
   const layer = opts.layer ?? 'vigor';
   const map = `<section class="dash__map glass" aria-label="${esc(t('db_map_label'))}">
-      <div class="dmap" data-dmap></div>
+      <div class="dmap" data-dmap></div><div class="reticle dmap__ret" data-dret hidden><i></i></div>
       <div class="dmap__layers" role="radiogroup" aria-label="${esc(t('db_layers'))}">
-        ${LAYERS.map((l) => `<button type="button" role="radio" aria-checked="${l.key === layer}" data-layer="${l.key}"${opts.preview ? ' tabindex="-1"' : ''}>${esc(t(l.label))}</button>`).join('')}
+        ${LAYERS.map((l) => { const na = !!ev && !ev.readings.some((r) => r.id.startsWith(l.reading)); return `<button type="button" role="radio" aria-checked="${l.key === layer}" data-layer="${l.key}"${na ? ` aria-disabled="true" title="${esc(t('ly_na'))}"` : ''}${opts.preview ? ' tabindex="-1"' : ''}>${esc(t(l.label))}</button>`; }).join('')}
       </div>
       <div class="dmap__legend" data-legend aria-live="polite">${layerLegend(ev, layer)}</div>
     </section>`;
@@ -81,10 +86,21 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
     ${map}
     <div class="dash__side">
       <ul class="dash__tiles" aria-label="${esc(t('db_readings'))}">${tiles}</ul>
+      <div class="dash__row dash__row--3">
+        ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, true, !!opts.preview)}${currentPlan(a) ? `<p class="dash__plan">${esc(pick(currentPlan(a)!.name))}</p><p class="dash__plan-why">${esc(pick(currentPlan(a)!.why))}</p>` : ''}${opts.preview || a.readOnly ? '' : `<button type="button" class="btn btn--glass btn--sm" data-goto="rotation">${icon('rotation')}${esc(t('ws_open_rotation'))}</button>`}</section>` : ''}
+        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
+          ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${al.detail ? esc(al.detail) + ' · ' : ''}${esc(al.source)} · ${esc(fmtDateShort(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
+        </section>
+        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="dash__h">${esc(t('db_projection'))}</h3>
+          ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">+${fmt(proj.d_temp_c, 1)} °C</span> <span>${esc(proj.horizon)} · ${esc(proj.scenario)}</span></p>
+            ${proj.d_rain_pct != null ? `<p class="proj__r">${proj.d_rain_pct > 0 ? '+' : '−'}${Math.abs(proj.d_rain_pct)}% ${esc(t('db_rain'))}</p>` : ''}
+            <p class="dash__src mono">NEX-GDDP-CMIP6 · ${esc(proj.models.join(', '))} · ~25 km · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_projection_none'))}</p>`}
+        </section>`}
+      </div>
       <section class="glass dash__card dash__chart">
         <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}</h3>
           <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))}${normalPeriod(ev) ? ' ' + esc(normalPeriod(ev)!) : ''}</span></p></header>
-        ${seasonChart(ev.climate_monthly, { w: 680, h: opts.preview ? 190 : 230 })}
+        ${seasonChart(ev.climate_monthly, { w: 680, h: opts.preview ? 180 : 200 })}
         <p class="dash__src mono">NASA POWER · T2M · ${last ? esc(last) : ''} · ~50 km · ${esc(t('regional'))}</p>
       </section>
       ${opts.preview ? '' : `<div class="dash__row">
@@ -95,17 +111,6 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
             <span class="mono">${fmt(p.generations_now!, 1)} ${esc(t('db_now'))} · ${p.generations_normal != null ? fmt(p.generations_normal, 1) + ' ' + esc(t('db_norm')) : '—'}</span></li>`).join('')}</ul>
             <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · degree-days · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>`}
         </section></div>`}
-      <div class="dash__row dash__row--3">
-        ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, false, !!opts.preview)}</section>` : ''}
-        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
-          ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${esc(al.source)} · ${esc(fmtDate(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
-        </section>
-        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="dash__h">${esc(t('db_projection'))}</h3>
-          ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">+${fmt(proj.d_temp_c, 1)} °C</span> <span>${esc(proj.horizon)} · ${esc(proj.scenario)}</span></p>
-            ${proj.d_rain_pct != null ? `<p class="proj__r">${proj.d_rain_pct > 0 ? '+' : '−'}${Math.abs(proj.d_rain_pct)}% ${esc(t('db_rain'))}</p>` : ''}
-            <p class="dash__src mono">NEX-GDDP-CMIP6 · ${esc(proj.models.join(', '))} · ~25 km · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_projection_none'))}</p>`}
-        </section>`}
-      </div>
     </div>
   </div>`;
 }
@@ -139,12 +144,12 @@ export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): P
     root.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.layer === k)));
     const legend = root.querySelector<HTMLElement>('[data-legend]');
     if (legend) legend.innerHTML = layerLegend(ev, k);
-    const r = ev?.readings.find((x) => x.id === LAYERS.find((l) => l.key === k)!.reading);
-    if (!r) { map.fitBounds(fieldBounds); return; }
+    const r = ev?.readings.find((x) => x.id.startsWith(LAYERS.find((l) => l.key === k)!.reading));
+    if (!r) { if (outline instanceof L.Polygon) outline.setStyle(fieldStyle); map.fitBounds(fieldBounds); return; }
     if (r.badge === 'field-level') {
       const ndvi = k === 'vigor' && r.value != null ? Math.max(0, Math.min(1, r.value)) : null;
-      const fill = ndvi == null ? '#ffffff' : `hsl(${Math.round(30 + ndvi * 90)}, 55%, ${Math.round(42 + ndvi * 8)}%)`;
-      if (outline instanceof L.Polygon) outline.setStyle({ ...fieldStyle, fillColor: fill, fillOpacity: ndvi == null ? 0.18 : 0.45 });
+      const fill = ndvi == null ? '#ffffff' : `hsl(${Math.round(30 + ndvi * 90)}, 32%, ${Math.round(48 + ndvi * 8)}%)`;
+      if (outline instanceof L.Polygon) outline.setStyle({ ...fieldStyle, weight: 1.5, fillColor: fill, fillOpacity: 0.25 });
       map.fitBounds(fieldBounds);
     } else {
       if (outline instanceof L.Polygon) outline.setStyle(fieldStyle);
@@ -163,6 +168,16 @@ export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): P
     const n = (i + (ke.key === 'ArrowRight' || ke.key === 'ArrowDown' ? 1 : -1) + btns.length) % btns.length;
     btns[n].focus(); btns[n].click(); ke.preventDefault();
   });
-  requestAnimationFrame(() => { map.invalidateSize(); setLayer('vigor'); });
+  const ret = root.querySelector<HTMLElement>('[data-dret]');
+  const placeRet = () => {
+    if (!ret) return;
+    const b = ringLL.length >= 3 ? (outline as Leaflet.Polygon).getBounds() : L.latLng(f.center.lat, f.center.lon).toBounds(120);
+    const nw = map.latLngToContainerPoint(b.getNorthWest()), se = map.latLngToContainerPoint(b.getSouthEast());
+    const pad = 10, w = Math.max(30, se.x - nw.x + pad * 2), h = Math.max(26, se.y - nw.y + pad * 2);
+    ret.hidden = w > host.clientWidth * 0.9;
+    Object.assign(ret.style, { left: nw.x - pad + 'px', top: nw.y - pad + 'px', width: w + 'px', height: h + 'px' });
+  };
+  map.on('move zoom resize', placeRet);
+  requestAnimationFrame(() => { map.invalidateSize(); setLayer('vigor'); placeRet(); });
   return () => map.remove();
 }

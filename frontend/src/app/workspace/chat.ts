@@ -33,7 +33,8 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   const coarse = matchMedia('(pointer: coarse)').matches;
   host.innerHTML = `<header class="chat__head">
       <h2 class="sr-only">${esc(t('ws_chat_label'))}</h2>
-      <div class="crops">
+      <button type="button" class="crops__sum" aria-expanded="false" aria-controls="crops"></button>
+      <div class="crops" id="crops">
         <div class="crop" data-crop="now"><label for="crop-now" class="mono">${esc(t('ws_crop_now'))}</label>
           <input id="crop-now" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="crop-now-list" aria-autocomplete="list" aria-describedby="crop-hint" placeholder="${esc(t('ws_crop_ph'))}">
           <ul id="crop-now-list" class="crop__list" role="listbox" hidden></ul></div>
@@ -162,6 +163,10 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   function render(a: ClientAnalysis) {
     log.innerHTML = a.messages.length ? a.messages.map(messageHtml).join('') : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p></li>`;
     const now = $<HTMLInputElement>('#crop-now', host), before = $<HTMLInputElement>('#crop-before', host);
+    const sum = $('.crops__sum', host);
+    const both = !!(a.crop_current && a.crop_history[0]);
+    host.classList.toggle('has-crops', both);
+    if (both) sum.innerHTML = `<span>${esc(t('ws_crops_sum', { now: pick(a.crop_current!.names), before: pick(a.crop_history[0].names) }))}</span><u>${esc(t('ws_edit'))}</u>`;
     if (document.activeElement !== now) now.value = a.crop_current ? pick(a.crop_current.names) : '';
     if (document.activeElement !== before) before.value = a.crop_history[0] ? pick(a.crop_history[0].names) : '';
     const ro = !!a.readOnly;
@@ -169,6 +174,12 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     host.querySelectorAll<HTMLInputElement>('.crop input').forEach((i) => { i.readOnly = ro; });
     scrollEnd();
   }
+  $('.crops__sum', host).addEventListener('click', (e) => {
+    const b = e.currentTarget as HTMLElement;
+    const open = !host.classList.contains('crops-open');
+    host.classList.toggle('crops-open', open);
+    b.setAttribute('aria-expanded', String(open));
+  });
   const off = onLang(() => {
     text.placeholder = t('ws_input_ph');
     host.querySelectorAll<HTMLInputElement>('.crop input').forEach((i) => { i.placeholder = t('ws_crop_ph'); });
