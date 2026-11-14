@@ -21,6 +21,14 @@ The owner chose two styles of the installed **Lemo-Opuscar** skill (`lemo-opusca
 
 How they fuse in Field Shift (the owner approved this rendition in `design-directions/approved-orbit-shot1.webp` and `approved-index-hero.webp`): the page is a sunrise; the index opens in orbit before dawn and the scroll dives toward the valley as light rises; the app is frosted glass floating over the farmer's own field; type is an italic serif for titles (Source Serif 4 Italic), Source Sans 3 for text and a monospace (IBM Plex Mono) for instruments and sources; white means measured, sunrise amber (~#FFBE55) only for the one key number, cartographic blue only for the rotation plan. Full scene-by-scene descriptions: `design-directions/storyboard-lemo-prompts.md`, `index-prompts.md`, `app-prompts.md`. The hero's frosted-glass phone is the master component: its chat bubble, photo tiles and data row (icon, label, value, monospace source and date, sparkline) are reused everywhere.
 
+### Lemo-Opuscar toolkit (verified 2026-11-14)
+
+- Library: `C:/Users/OutWorldDevourer/lemo-opuscar` (`sh C:/Users/OutWorldDevourer/.claude/plugins/marketplaces/lemolab/plugin/skills/lemo-opuscar/scripts/setup.sh` prints `LIB=` and the tiers). Package tiers installed: core ✓ (Node `three`, `playwright-core`, Chromium headless shell, Python numpy/scipy/soundfile/soxr/pillow/fonttools), voice ✓ (Kokoro offline TTS with its English voice model, edge-tts, faster-whisper), music ✓ (numba). Library venv: `$LIB/.venv/bin/python` (Python 3.12).
+- Demo sources of both chosen styles added as reference: `$LIB/styles/satellite-briefing/demo/` (engine.js, film.js, tools for Landsat/STAC imagery) and `$LIB/styles/living-screencast/demo/` (film.js, main.js, ui.js, sound).
+- Headless browser launch tested: works, WebGL2 available. Use it (via the library's `playwright-core`) for the design audit screenshots at 1440 px and 390 px.
+- ffmpeg 9.0 and ffprobe on PATH; uv 0.12 available. faster-whisper downloads its model on first use (needs internet once).
+- DaVinci Resolve Studio is also installed and has an MCP, optional for the final film cut.
+
 ## Standing rules
 
 - **Language:** all code, UI text, docs and commits in English by default; every UI string also in Spanish behind an EN | ES switch. Talk to the owner in Spanish.
