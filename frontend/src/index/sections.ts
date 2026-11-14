@@ -73,6 +73,8 @@ const DATASETS: { id: string; name: string; what: StrKey; res: string; field: bo
   { id: 's2', name: 'Sentinel-2 / Landsat', what: 'ix_ds_s2', res: '10–30 m', field: true },
   { id: 'srtm', name: 'SRTM / NASADEM', what: 'ix_ds_srtm', res: '30 m', field: true },
   { id: 'grace', name: 'GRACE-FO', what: 'ix_ds_grace', res: '~300 km', field: false },
+  { id: 'geosfp', name: 'NASA GEOS-FP', what: 'ix_ds_geosfp', res: '~30 km', field: false },
+  { id: 'cmip6', name: 'NEX-GDDP-CMIP6', what: 'ix_ds_cmip6', res: '~25 km', field: false },
 ];
 
 /** The one amber reading on the ground: the temperature anomaly from the real Huaral package, if present. */
@@ -113,6 +115,7 @@ function get(): string {
       ${item('ix_get_soil_t', 'ix_get_soil_b', 'soil')}
       ${item('ix_get_pest_t', 'ix_get_pest_b', 'bug')}
       ${item('ix_get_nut_t', 'ix_get_nut_b', 'nutrition')}
+      ${item('ix_get_org_t', 'ix_get_org_b', 'ladybug')}
       ${item('ix_get_rot_t', 'ix_get_rot_b', 'rotation')}
       ${item('ix_get_sheet_t', 'ix_get_sheet_b', 'sheet')}
     </ul>
@@ -149,10 +152,12 @@ function cta(): string {
           <li>Landsat Collection 2 Level-2 · USGS/NASA · public domain</li>
           <li>NASADEM / SRTM · NASA LP DAAC · open</li>
           <li>GRACE/GRACE-FO JPL mascon CRI v4 · NASA PO.DAAC · open</li>
-          <li>NEX-GDDP-CMIP6 · NASA · open-licence models only</li>
+          <li>NASA GEOS-FP forecast (tavg1_2d_slv_Nx) · NASA GMAO via NCCS OPeNDAP · open</li>
+          <li>NEX-GDDP-CMIP6 · NASA · open-licence models only (CC BY-SA 4.0 / CC BY 4.0)</li>
           <li>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</li>
           <li>Place search · © OpenStreetMap contributors · ODbL · Nominatim</li>
-          <li>Map library · Leaflet · BSD-2-Clause</li>
+          <li>Hybrid map labels · OpenFreeMap vector tiles · © OpenMapTiles · © OpenStreetMap contributors (ODbL)</li>
+          <li>Map libraries · Leaflet · BSD-2-Clause · MapLibre GL JS · BSD-3-Clause</li>
           <li data-i18n="ix_foot_fonts">${esc(t('ix_foot_fonts'))}</li>
           <li data-i18n="ix_foot_ai">${esc(t('ix_foot_ai'))}</li>
         </ul>

@@ -60,7 +60,20 @@ const CROPS: Record<string, { en: string; es: string }> = {
   bean: { en: 'Beans', es: 'Frijol' }, gm: { en: 'Green manure', es: 'Abono verde' }, bare: { en: 'Bare soil', es: 'Suelo desnudo' },
   fallow: { en: 'Fallow', es: 'Descanso' }, potato: { en: 'Potato', es: 'Papa' }, oat_vetch: { en: 'Oat + vetch', es: 'Avena + vicia' },
 };
-export const cropName = (k: string): string => CROPS[k]?.[lang()] ?? k.replace(/_/g, ' ');
+/** Names of the field's own crops (from the analysis), so timelines that use keys or English names read in Spanish too. */
+const KNOWN = new Map<string, { en: string; es: string }>();
+export function learnCropNames(list: ({ key: string; names: { en: string; es: string } } | null | undefined)[]): void {
+  for (const c of list) {
+    if (!c?.names?.en || !c.names.es) continue;
+    const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+    const v = { en: cap(c.names.en), es: cap(c.names.es) };
+    KNOWN.set(c.key.toLowerCase(), v); KNOWN.set(c.names.en.toLowerCase(), v);
+  }
+}
+export const cropName = (k: string): string => {
+  const l = k.toLowerCase();
+  return (CROPS[k] ?? CROPS[l.replace(/ /g, '_')] ?? KNOWN.get(l) ?? KNOWN.get(l.replace(/ /g, '_')))?.[lang()] ?? k.replace(/_/g, ' ');
+};
 /** Short crop name for chips: text before a parenthesis ("Green manure (legume + …)" → "Green manure"). */
 export const cropShort = (k: string): string => cropName(k).replace(/\s*\(.*$/, '');
 

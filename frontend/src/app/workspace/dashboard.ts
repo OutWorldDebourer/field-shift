@@ -4,8 +4,7 @@
 import type * as Leaflet from 'leaflet';
 import type { ClientAnalysis } from '../../shared/api';
 import type { EvidencePackage, Reading } from '../../shared/contract';
-import { ndviChart, seasonChart, timelineStrip } from '../../shared/charts';
-import { normalPeriod } from '../../shared/evidence';
+import { learnCropNames, ndviChart, timelineStrip } from '../../shared/charts';
 import { dataRow, sourceLine, valueText, badge, shortRes, resKm, provTag } from '../../shared/datarow';
 import { shortLabel } from '../../shared/evidence';
 import { esc } from '../../shared/dom';
@@ -67,6 +66,7 @@ function currentPlan(a: ClientAnalysis) {
 
 export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; layer?: LayerKey } = {}): string {
   const ev = a.evidence;
+  learnCropNames([a.crop_current, ...(a.crop_history ?? [])]);
   const layer = opts.layer ?? 'vigor';
   const map = `<section class="dash__map glass" aria-label="${esc(t('db_map_label'))}">
       <div class="dmap" data-dmap></div><div class="reticle dmap__ret" data-dret hidden><i></i></div>
@@ -93,28 +93,23 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
   return `<div class="dash${opts.preview ? ' dash--preview' : ''}">
     ${map}
     <div class="dash__side">
-      ${opts.preview ? '' : `<div class="dash__tools">${glossHeaderBtn('')}</div>`}
+      <div class="dash__tools">${glossHeaderBtn('')}</div>
       <ul class="dash__tiles" aria-label="${esc(t('db_readings'))}">${tiles}</ul>
-      ${opts.preview ? `<section class="glass dash__card dash__chart">
-        <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}</h3>
-          <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))}${normalPeriod(ev) ? ' ' + esc(normalPeriod(ev)!) : ''}</span></p></header>
-        ${seasonChart(ev.climate_monthly, { w: narrow() ? 380 : 680, h: 180, provisional: !!ev.readings.find((r) => r.id.startsWith('temp'))?.provisional })}
-        <p class="dash__src mono">NASA POWER · ${esc(t('t2m'))} · ~50 km · ${esc(t('regional'))}</p>
-      </section>` : seasonCard(a)}
+      ${seasonCard(a, !!opts.preview)}
       <div class="dash__row dash__row--3">
         ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, true, !!opts.preview)}${currentPlan(a) ? `<p class="dash__plan">${esc(pick(currentPlan(a)!.name))}</p><p class="dash__plan-why">${esc(pick(currentPlan(a)!.why))}</p>` : ''}${opts.preview || a.readOnly ? '' : `<button type="button" class="btn btn--glass btn--sm" data-goto="rotation">${icon('rotation')}${esc(t('ws_open_rotation'))}</button>`}</section>` : ''}
         <section class="glass dash__card dash__alerts"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
           ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${al.detail ? esc(al.detail) + ' · ' : ''}${esc(al.source)} · ${esc(fmtDateShort(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
-          ${opts.preview || a.readOnly ? '' : `<div data-topics>${topicsHtml(topicsFor(ev, forecastNow(a), outlookNow(a)))}</div>`}
+          ${a.readOnly ? '' : `<div data-topics>${topicsHtml(topicsFor(ev, forecastNow(a), outlookNow(a)))}</div>`}
         </section>
-        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="serif dash__h3">${esc(t('db_projection'))}${glossBtn('nexgddp', t('db_projection'))}</h3><p class="proj__lbl mono">${esc(t('db_proj_label'))}</p>
+        ${`<section class="glass dash__card dash__proj"><h3 class="serif dash__h3">${esc(t('db_projection'))}${glossBtn('nexgddp', t('db_projection'))}</h3><p class="proj__lbl mono">${esc(t('db_proj_label'))}</p>
           ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">${proj.d_temp_c > 0 ? '+' : ''}${fmt(proj.d_temp_c, 2)} °C</span> <span>${esc(loc(proj.horizon))} · ${esc(proj.scenario)}</span></p>
             ${projRange(proj) ? `<p class="proj__r">${esc(projRange(proj)!)}</p>` : ''}${projBase(proj) ? `<p class="proj__r">${esc(t('db_proj_base', { p: loc(projBase(proj)!) }))}</p>` : ''}
             ${proj.d_rain_pct != null ? `<p class="proj__r">${proj.d_rain_pct > 0 ? '+' : '−'}${fmt(Math.abs(proj.d_rain_pct), 1)}% ${esc(t('db_rain'))}</p>` : ''}
             <details class="proj__models"><summary class="mono">NEX-GDDP-CMIP6 · ${esc(t('db_proj_models', { n: proj.models.length }))} · ~25 km</summary><p class="mono">${esc(proj.models.join(', '))}</p></details>` : `<p class="chart-empty">${esc(t('db_projection_none'))}</p>`}
         </section>`}
       </div>
-      ${opts.preview ? '' : `<div class="dash__row">
+      ${`<div class="dash__row">
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}${glossBtn('ndvi', t('db_ndvi_title'))}</h3>${ndviLine(ev)}${ndviChart(ev.ndvi_series, { w: narrow() ? 360 : 420, h: 150 })}
           <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}${glossBtn('pest_gen', t('db_pests'))}</h3>
@@ -129,10 +124,10 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
 const narrow = () => typeof innerWidth === 'number' && innerWidth < 700;
 
 /** The season card with the forecast controls; inner parts are repainted in place when a control changes. */
-function seasonCard(a: ClientAnalysis): string {
+function seasonCard(a: ClientAnalysis, preview = false): string {
   return `<section class="glass dash__card dash__chart" data-season-card>
     <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}${glossBtn('outlook', t('db_chart_title'))}</h3></header>
-    ${a.offline ? '' : `<div data-fcbox>${controlsHtml(a)}</div>`}
+    ${a.offline && !preview ? '' : `<div data-fcbox>${controlsHtml(a)}</div>`}
     ${seasonParts(a)}
   </section>`;
 }

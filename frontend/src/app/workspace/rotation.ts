@@ -3,7 +3,7 @@
 // get practice cards instead: inter-row cover, intercropping, residue, biological control — driven by the data.
 import type { ClientAnalysis } from '../../shared/api';
 import type { SectionContent } from '../../shared/contract';
-import { dots, timelineStrip } from '../../shared/charts';
+import { dots, learnCropNames, timelineStrip } from '../../shared/charts';
 import { derivedHeadline } from '../../shared/evidence';
 import { provTag } from '../../shared/datarow';
 import { esc } from '../../shared/dom';
@@ -39,6 +39,7 @@ function strategyCol(s: Strategy, startMonth: number, idx: number): string {
 }
 
 export function rotationHtml(a: ClientAnalysis): string {
+  learnCropNames([a.crop_current, ...(a.crop_history ?? [])]);
   const rot = getSection(a, 'rotation');
   const c = rot.content;
   const perennial = a.crop_current?.crop_type === 'perennial' || (!!c && !c.strategies?.length && c.items.length > 0);

@@ -1,8 +1,8 @@
 /* Dashboard tab (App 4), also rendered in the index preview. */
 .dash { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 6fr); gap: 16px; align-items: start; }
 .dash__map { position: sticky; top: 0; overflow: hidden; border-radius: var(--r-lg); height: calc(100vh - 180px); min-height: 460px; padding: 0; }
-.dash--preview .dash__map { position: relative; height: 100%; min-height: 470px; }
-.dash--preview { align-items: stretch; }
+.dash--preview .dash__map { position: sticky; top: 84px; height: min(680px, calc(100vh - 120px)); min-height: 470px; }
+.dash--preview { align-items: start; }
 .dmap { position: absolute; inset: 0; background: #22313a; }
 .dmap__ret { z-index: 450; }
 .dmap__layers button[aria-disabled='true'] { opacity: 0.55; text-decoration: line-through; text-decoration-thickness: 1px; }
@@ -45,7 +45,6 @@
 .dash__cal { display: grid; align-content: start; gap: 10px; }
 .dash__src { font-size: 0.8125rem; color: var(--ink); }
 .dmap__src { color: var(--ink) !important; font-size: 0.8125rem !important; }
-.dash--preview .dash__row--3 { grid-template-columns: 1.3fr 1fr; }
 .alerts { display: grid; gap: 10px; }
 .al { display: grid; grid-template-columns: 20px 1fr; gap: 10px; font-size: 0.9375rem; line-height: 1.35; }
 .al svg { width: 20px; height: 20px; margin-top: 1px; }

@@ -31,7 +31,7 @@ const cell = (a: ClientAnalysis) => `${a.field.center.lat.toFixed(3)},${a.field.
 export function forecastNow(a: ClientAnalysis): Forecast | null | undefined {
   const ev = a.evidence as EvidenceX | null;
   const emb = ev?.forecast;
-  if (emb?.days?.length && emb.days.length >= fc.days) return { ...emb, days: emb.days.slice(0, fc.days) };
+  if (emb?.days?.length && (emb.days.length >= fc.days || a.offline)) return { ...emb, days: emb.days.slice(0, fc.days) };
   const c = fcCache.get(`${cell(a)}:${fc.days}`) ?? fcCache.get(`${cell(a)}:10`);
   if (c) return { ...c, days: c.days.slice(0, fc.days) };
   return fcCache.has(`${cell(a)}:${fc.days}`) ? null : undefined;
@@ -40,7 +40,7 @@ export function outlookNow(a: ClientAnalysis): Outlook | null | undefined {
   if (!fc.months) return null;
   const ev = a.evidence as EvidenceX | null;
   const emb = ev?.outlook;
-  if (emb?.months?.length && emb.months.length >= fc.months) return { ...emb, months: emb.months.slice(0, fc.months) };
+  if (emb?.months?.length && (emb.months.length >= fc.months || a.offline)) return { ...emb, months: emb.months.slice(0, fc.months) };
   const c = olCache.get(`${cell(a)}:${fc.months}`) ?? olCache.get(`${cell(a)}:6`);
   if (c) return { ...c, months: c.months.slice(0, fc.months) };
   return olCache.has(`${cell(a)}:${fc.months}`) ? null : undefined;
