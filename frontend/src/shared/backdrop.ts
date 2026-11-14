@@ -29,8 +29,8 @@ const tile2lat = (y: number, z: number) => { const n = Math.PI - (2 * Math.PI * 
 
 export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
   const sizeM = o.sizeM ?? 1500;
-  const bbox = bboxAround(o.lat, o.lon, sizeM);
-  const proj = bboxProject(bbox, 1000, 1000);
+  let bbox = bboxAround(o.lat, o.lon, sizeM);
+  let proj = bboxProject(bbox, 1000, 1000);
   const wrap = document.createElement('div');
   wrap.className = 'backdrop';
   wrap.innerHTML = `<div class="backdrop__plate"><div class="backdrop__ground"></div>
@@ -42,13 +42,16 @@ export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
   const ring = plate.querySelector('.backdrop__ring') as SVGPathElement;
   const ret = plate.querySelector('.backdrop__reticle') as HTMLElement;
 
-  // Outline + reticle in plate-normalised coordinates.
-  const pts = o.ring.length ? o.ring.map(([lon, lat]) => proj(lon, lat)) : [proj(o.lon, o.lat)];
-  ring.setAttribute('d', o.ring.length >= 3 ? 'M' + pts.map((p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join('L') + 'Z' : '');
-  const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
-  const pad = o.ring.length >= 3 ? 14 : 22;
-  const box = { x0: Math.min(...xs) - pad, y0: Math.min(...ys) - pad, x1: Math.max(...xs) + pad, y1: Math.max(...ys) + pad };
-  Object.assign(ret.style, { left: box.x0 / 10 + '%', top: box.y0 / 10 + '%', width: (box.x1 - box.x0) / 10 + '%', height: (box.y1 - box.y0) / 10 + '%' });
+  // Outline + reticle in plate-normalised coordinates (re-drawn once the snapshot's own bbox is known).
+  function drawMarks() {
+    const pts = o.ring.length ? o.ring.map(([lon, lat]) => proj(lon, lat)) : [proj(o.lon, o.lat)];
+    ring.setAttribute('d', o.ring.length >= 3 ? 'M' + pts.map((p) => `${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join('L') + 'Z' : '');
+    const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
+    const pad = o.ring.length >= 3 ? 14 : 22;
+    const box = { x0: Math.min(...xs) - pad, y0: Math.min(...ys) - pad, x1: Math.max(...xs) + pad, y1: Math.max(...ys) + pad };
+    Object.assign(ret.style, { left: box.x0 / 10 + '%', top: box.y0 / 10 + '%', width: (box.x1 - box.x0) / 10 + '%', height: (box.y1 - box.y0) / 10 + '%' });
+  }
+  drawMarks();
   ret.hidden = o.reticle === false;
   const setOutline = (k: 'measured' | 'plan' | 'none') => { wrap.dataset.outline = k; };
   setOutline(o.outline ?? 'measured');
@@ -73,9 +76,14 @@ export function mountBackdrop(host: HTMLElement, o: BackdropOpts): Backdrop {
     const img = new Image();
     img.alt = '';
     img.decoding = 'async';
+    // Georeference with the snapshot's own bbox (snapshot.json): the PNG covers exactly that box.
+    const meta = snapshotMeta(o.lat, o.lon, sizeM);
     img.onload = () => {
-      ground.replaceChildren(img);
-      void snapshotMeta(o.lat, o.lon, sizeM).then((m) => o.onCredit?.(m?.credit ? `${m.source ?? 'Sentinel-2 L2A'} · ${m.credit}` : t('snap_credit_fallback'), m?.date ?? null));
+      void meta.then((m) => {
+        if (m?.bbox?.length === 4) { bbox = m.bbox; proj = bboxProject(bbox, 1000, 1000); drawMarks(); layout(); }
+        ground.replaceChildren(img);
+        o.onCredit?.(m?.credit ? `${m.source ?? 'Sentinel-2 L2A'} · ${m.credit}` : t('snap_credit_fallback'), m?.date ?? null);
+      });
     };
     img.onerror = fallbackTiles;
     img.src = snapshotUrl(o.lat, o.lon, sizeM);

@@ -72,7 +72,9 @@ export function fmt(n: number, digits = 1): string {
 
 /** Format an ISO date (or pass a period string through). */
 export function fmtDate(iso: string): string {
-  if (!/^\d{4}-\d{2}-\d{2}/.test(iso)) return iso;
+  const range = iso.match(/^(\d{4}-\d{2}-\d{2})\s*(?:to|→|–|-{1,2})\s*(\d{4}-\d{2}-\d{2})$/);
+  if (range) return `${fmtDate(range[1])} – ${fmtDate(range[2])}`;
+  if (!/^\d{4}-\d{2}-\d{2}(T.*)?$/.test(iso)) return iso;
   const d = new Date(iso.slice(0, 10) + 'T12:00:00Z');
   if (isNaN(d.getTime())) return iso;
   return d.toLocaleDateString(current === 'es' ? 'es-PE' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });

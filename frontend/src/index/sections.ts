@@ -1,8 +1,9 @@
 // Markup for the index: top bar, the six sections from design-directions/index-prompts.md, corner instruments.
 // Static text carries data-i18n keys so the EN | ES switch updates it in place.
-import { HUARAL_FIELD } from '../shared/demo/huaral';
+import { DEMO_EVIDENCE, HUARAL_FIELD } from '../shared/demo/huaral';
+import { findReading, normalPeriod, signed } from '../shared/evidence';
 import { esc } from '../shared/dom';
-import { fmt, t } from '../shared/i18n';
+import { fmt, fmtDate, t } from '../shared/i18n';
 import { icon, type IconName } from '../shared/icons';
 import { langSwitchHtml } from '../shared/langswitch';
 import { glassPhoneHtml } from '../shared/phone';
@@ -73,6 +74,15 @@ const DATASETS: { id: string; name: string; what: StrKey; res: string; field: bo
   { id: 'grace', name: 'GRACE-FO', what: 'ix_ds_grace', res: '~300 km', field: false },
 ];
 
+/** The one amber reading on the ground: the temperature anomaly from the real Huaral package, if present. */
+export function anomalyItem(): string {
+  const r = findReading(DEMO_EVIDENCE, 'temp_anomaly');
+  if (!r || r.value == null) return '';
+  const p = normalPeriod(DEMO_EVIDENCE) ?? '40-year';
+  const d = fmtDate(r.date);
+  return `<li class="ds ds--key" data-ds="key" id="ds-key"><span class="ds__key">${esc(t('ix_anomaly', { v: signed(r.value, '°C'), p }))}</span><span class="ds__res mono">${esc(t('ix_anomaly_src', { d }))}</span></li>`;
+}
+
 function data(): string {
   const labels = DATASETS.map((d, i) => `<li class="ds ds--${i}" data-ds="${d.id}">
       <span class="ds__name mono">${esc(d.name)}</span>
@@ -88,7 +98,7 @@ function data(): string {
       <svg class="data__leaders" id="data-leaders" aria-hidden="true"></svg>
       <div class="ground-label data__field mono" id="data-field"><b>${esc(t('field_ha', { ha: fmt(HUARAL_FIELD.area_ha, 1) }))}</b></div>
       <ul class="ds-list">${labels}
-        <li class="ds ds--key" data-ds="key"><span class="ds__key">${T('ix_anomaly')}</span><span class="ds__res mono">${T('ix_anomaly_src')}</span></li>
+        ${anomalyItem()}
       </ul>
     </div>
   </section>`;

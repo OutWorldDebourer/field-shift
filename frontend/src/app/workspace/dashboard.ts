@@ -4,7 +4,8 @@
 import type * as Leaflet from 'leaflet';
 import type { ClientAnalysis } from '../../shared/api';
 import type { EvidencePackage, Reading } from '../../shared/contract';
-import { calendarStrip, ndviChart, seasonChart } from '../../shared/charts';
+import { ndviChart, seasonChart, timelineStrip } from '../../shared/charts';
+import { normalPeriod } from '../../shared/evidence';
 import { dataRow, sourceLine, valueText, badge, shortRes, resKm } from '../../shared/datarow';
 import { esc } from '../../shared/dom';
 import { fmt, fmtDate, pick, t } from '../../shared/i18n';
@@ -47,7 +48,7 @@ function scaleNote(ev: EvidencePackage): string {
 function currentTimeline(a: ClientAnalysis): string[] | null {
   const rot = a.sections.find((s) => s.key === 'rotation');
   const cur = rot?.content?.strategies?.find((s) => s.current) ?? rot?.content?.strategies?.[0];
-  return cur?.timeline?.length === 12 ? cur.timeline : null;
+  return cur?.timeline?.length ? cur.timeline : null;
 }
 
 export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; layer?: LayerKey } = {}): string {
@@ -82,20 +83,20 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <ul class="dash__tiles" aria-label="${esc(t('db_readings'))}">${tiles}</ul>
       <section class="glass dash__card dash__chart">
         <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}</h3>
-          <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))} 1984–2026</span></p></header>
+          <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))}${normalPeriod(ev) ? ' ' + esc(normalPeriod(ev)!) : ''}</span></p></header>
         ${seasonChart(ev.climate_monthly, { w: 680, h: opts.preview ? 190 : 230 })}
         <p class="dash__src mono">NASA POWER · T2M · ${last ? esc(last) : ''} · ~50 km · ${esc(t('regional'))}</p>
       </section>
       ${opts.preview ? '' : `<div class="dash__row">
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}</h3>${ndviChart(ev.ndvi_series, { w: 420, h: 150 })}
-          <p class="dash__src mono">Sentinel-2 L2A · 10 m · ${esc(t('field_level'))}</p></section>
+          <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}</h3>
           ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(p.name)}</b> <i>${esc(p.scientific)}</i></span>
             <span class="mono">${fmt(p.generations_now!, 1)} ${esc(t('db_now'))} · ${p.generations_normal != null ? fmt(p.generations_normal, 1) + ' ' + esc(t('db_norm')) : '—'}</span></li>`).join('')}</ul>
             <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · degree-days · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>`}
         </section></div>`}
       <div class="dash__row dash__row--3">
-        ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t('db_calendar'))}</h3>${calendarStrip(tl, startMonth % 12, false, !!opts.preview)}</section>` : ''}
+        ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, false, !!opts.preview)}</section>` : ''}
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
           ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${esc(al.source)} · ${esc(fmtDate(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
         </section>

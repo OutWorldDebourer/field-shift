@@ -1,18 +1,24 @@
-// Alerts for the dashboard: the backend's `evidence.alerts` when present, otherwise derived from the readings.
+// Alerts for the dashboard: the backend's `evidence.alerts` when present, otherwise derived from the package's own
+// numbers (pest generations vs normal, water balance, temperature anomaly). Never a number that is not in the package.
 import type { Bi, EvidencePackage } from '../../shared/contract';
+import { findReading, signed } from '../../shared/evidence';
+import { fmt, t } from '../../shared/i18n';
 
 export type Alert = NonNullable<EvidencePackage['alerts']>[number];
+
+/** Text built in the current language (alerts re-render on every language switch). */
+const both = (fn: () => string): Bi => { const s = fn(); return { en: s, es: s }; };
 
 export function alertsFor(ev: EvidencePackage): Alert[] {
   if (ev.alerts?.length) return ev.alerts;
   const out: Alert[] = [];
-  const by = (id: string) => ev.readings.find((r) => r.id === id);
-  const push = (id: string, level: Alert['level'], text: Bi, r: { source: string; date: string }) => out.push({ id, level, text, source: r.source, date: r.date });
-  const pest = by('pest_gen');
-  if (pest?.value != null && pest.value > 0.5) push('pest', 'warning', { en: 'More pest generations than normal this season', es: 'Más generaciones de plagas que lo normal esta temporada' }, pest);
-  const wb = by('water_balance');
-  if (wb?.value != null && wb.value < -20) push('deficit', 'watch', { en: `Irrigation deficit: ${Math.round(-wb.value)} mm must come from irrigation`, es: `Déficit de riego: ${Math.round(-wb.value)} mm deben venir del riego` }, wb);
-  const temp = by('temp_anomaly');
-  if (temp?.value != null && temp.value > 0.8) push('heat', 'info', { en: 'Warmer than the 40-year normal', es: 'Más cálido que la normal de 40 años' }, temp);
-  return out;
+  const temp = findReading(ev, 'temp_anomaly');
+  for (const p of ev.pests) {
+    if (p.generations_now == null || p.generations_normal == null || p.generations_now <= p.generations_normal) continue;
+    out.push({ id: `pest-${p.name}`, level: 'warning', text: both(() => t('al_pest', { name: p.name, now: fmt(p.generations_now!, 1), norm: fmt(p.generations_normal!, 1) })), source: 'NASA POWER · degree-days', date: findReading(ev, 'pest_gen')?.date ?? temp?.date ?? '' });
+  }
+  const wb = findReading(ev, 'water_balance');
+  if (wb?.value != null && wb.value < -20) out.push({ id: 'deficit', level: 'watch', text: both(() => t('al_water', { v: signed(wb.value!, 'mm', 0) })), source: wb.source, date: wb.date });
+  if (temp?.value != null && temp.value > 1) out.push({ id: 'heat', level: 'info', text: both(() => t('al_heat', { v: signed(temp.value!, '°C') })), source: temp.source, date: temp.date });
+  return out.slice(0, 4);
 }

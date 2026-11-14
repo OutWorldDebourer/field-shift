@@ -28,12 +28,12 @@ export function seasonChart(rows: Climate, opts: { w?: number; h?: number; id?: 
     const m = +r.month.slice(5, 7) - 1;
     return i % (rows.length > 8 ? 2 : 1) === 0 || i === rows.length - 1 ? `<text x="${x(i)}" y="${H - 8}" text-anchor="middle">${esc(monthShort(m))}</text>` : '';
   }).join('');
-  const label = lastRow ? `${fmt(lastRow.t_mean! - lastRow.normal_mean, 1)}` : '';
+  const label = lastRow ? fmt(lastRow.t_mean!, 1) : '';
   return `<svg class="chart chart--season" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('db_chart_desc'))}">
     <g class="grid">${ticks.join('')}</g>
     <path class="band" d="${band}"/><path class="mean" d="${mean}"/>
     <path class="line" d="${line}"/>
-    ${last ? `<circle class="dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/><text class="last" x="${last[0] - 8}" y="${last[1] - 12}" text-anchor="end">${lastRow && lastRow.t_mean! >= lastRow.normal_mean ? '+' : ''}${esc(label)} °C</text>` : ''}
+    ${last ? `<circle class="dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/><text class="last" x="${last[0] - 8}" y="${last[1] - 12}" text-anchor="end">${esc(label)} °C</text>` : ''}
     <g class="axis">${months}</g>
   </svg>`;
 }
@@ -56,7 +56,7 @@ export function ndviChart(series: EvidencePackage['ndvi_series'], opts: { w?: nu
 }
 
 const CROPS: Record<string, { en: string; es: string }> = {
-  pea: { en: 'Peas', es: 'Arveja' }, lettuce: { en: 'Lettuce', es: 'Lechuga' }, maize: { en: 'Maize', es: 'Maíz' },
+  pea: { en: 'Pea', es: 'Arveja' }, lettuce: { en: 'Lettuce', es: 'Lechuga' }, maize: { en: 'Maize', es: 'Maíz' },
   bean: { en: 'Beans', es: 'Frijol' }, gm: { en: 'Green manure', es: 'Abono verde' }, bare: { en: 'Bare soil', es: 'Suelo desnudo' },
   fallow: { en: 'Fallow', es: 'Descanso' }, potato: { en: 'Potato', es: 'Papa' }, oat_vetch: { en: 'Oat + vetch', es: 'Avena + vicia' },
 };
@@ -78,6 +78,16 @@ export function calendarStrip(timeline: string[], startMonth: number, plan = fal
   }).join('');
   const months = timeline.map((_, i) => `<span>${esc(monthShort((startMonth + i) % 12).slice(0, compact ? 1 : 3))}</span>`).join('');
   return `<div class="cal${plan ? ' cal--plan' : ''}${compact ? ' cal--compact' : ''}"><ol class="cal__runs">${cells}</ol><div class="cal__months" aria-hidden="true">${months}</div></div>`;
+}
+
+/** Season-by-season sequence for timelines that are not 12 months: one chip per season, arrows between. */
+export function sequenceStrip(timeline: string[], plan = false): string {
+  return `<ol class="seq${plan ? ' seq--plan' : ''}">${timeline.map((c, i) => `<li class="seq__c${c === 'bare' || c === 'fallow' ? ' is-bare' : ''}" title="${esc(cropName(c))}">${i ? '<i aria-hidden="true">→</i>' : ''}<span>${esc(cropName(c))}</span></li>`).join('')}</ol>`;
+}
+
+/** 12-month strip when the timeline has 12 slots, otherwise the season sequence. */
+export function timelineStrip(timeline: string[], startMonth: number, plan = false, compact = false): string {
+  return timeline.length === 12 ? calendarStrip(timeline, startMonth, plan, compact) : sequenceStrip(timeline, plan);
 }
 
 export function dots(n: number, label: string): string {

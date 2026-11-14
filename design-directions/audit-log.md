@@ -9,3 +9,4 @@ Screenshots of every round: `design-directions/audit-screens/`.
 | Date | Surface | Round | Score | Pass | Main findings |
 |------|---------|-------|-------|------|---------------|
 | 2026-11-14 | Technical sheet | 1 | 5.7 | no | Phone table overflows and hides sources; advice text calls regional POWER signals 'field signal'; pest lists contradict; source column cluttered; citations unusable on paper |
+| 2026-11-14 | Technical sheet | 2 | 6.9 | no | Pest guidance contradicts the reference-pest table; repeated gaps/evidence; Spanish unit leaks; print tile/footer; mobile capture broken past 8192 px |

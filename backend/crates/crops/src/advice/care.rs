@@ -38,8 +38,8 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
         if warmer { "Monitoree las plagas cada semana: con el calor de esta campaña se desarrollan más rápido y las poblaciones crecen antes." } else { "Monitoree las plagas cada semana, sobre todo en épocas de calor: con más calor se desarrollan más rápido." },
         vec![refs::temperature_pest_development()], true));
     if let Some(g) = s.pest_generation_delta.filter(|g| *g != 0.0) {
-        items.push(item(format!("Estimated pest generations versus the 40-year baseline: {g:+.1} per season (NASA POWER degree-days, regional context)."),
-                        format!("Generaciones de plaga estimadas frente a la línea base de 40 años: {g:+.1} por campaña (grados-día NASA POWER, contexto regional)."), vec![], false));
+        items.push(item(format!("Estimated pest generations versus the 40-year baseline: {g:+.1} per season for the green peach aphid reference model (NASA POWER degree-days, regional context)."),
+                        format!("Generaciones de plaga estimadas frente a la línea base de 40 años: {g:+.1} por campaña según el modelo de referencia del pulgón verde (grados-día NASA POWER, contexto regional)."), vec![], false));
     }
     if c.crop_type == CropType::Annual {
         items.push(item("Rotate to a crop of another botanical family to break pest and disease cycles.",
@@ -51,7 +51,7 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
                     vec![refs::residue_incorporation()], true));
     for b in &c.traits.beneficials {
         items.push(item(format!("Biological control: {} ({}) against {}.", b.name.en, b.kind, b.controls.en),
-                        format!("Control biológico: {} ({}) contra {}.", b.name.es, b.kind, b.controls.es),
+                        format!("Control biológico: {} ({}) contra {}.", b.name.es, kind_es(&b.kind), b.controls.es),
                         vec![b.citation.clone()], true));
     }
     let computable: Vec<&str> = c.traits.pests.iter()
@@ -61,8 +61,8 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
         .filter(|p| p.lower_threshold.num().is_none() || p.degree_days_per_generation.num().is_none())
         .map(|p| p.name.en.clone()).collect();
     if !qualitative.is_empty() {
-        items.push(item(format!("This crop's knowledge record has no published degree-day threshold for: {}. Guidance for these pests is qualitative unless the reference-pest table covers them.", qualitative.join(", ")),
-                        format!("La ficha de este cultivo no tiene umbral de grados-día publicado para: {}. La guía para estas plagas es cualitativa salvo que la tabla de plagas de referencia las incluya.",
+        items.push(item(format!("No crop-specific degree-day threshold for: {}. Guidance for these pests is qualitative.", qualitative.join(", ")),
+                        format!("Sin umbral de grados-día específico para este cultivo: {}. La guía para estas plagas es cualitativa.",
                                 c.traits.pests.iter().filter(|p| p.lower_threshold.num().is_none() || p.degree_days_per_generation.num().is_none())
                                     .map(|p| p.name.es.as_str()).collect::<Vec<_>>().join(", ")),
                         vec![], false));
@@ -70,8 +70,8 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
     if !computable.is_empty() {
         let cits = c.traits.pests.iter().filter(|p| computable.contains(&p.name.en.as_str()))
             .filter_map(|p| p.degree_days_per_generation.citation().cloned()).collect();
-        items.push(item(format!("Published degree-day thresholds exist for: {} (cited). This version computes generations only for the reference pests in the table.", computable.join(", ")),
-                        format!("Existen umbrales de grados-día publicados para: {} (citados). Esta versión calcula generaciones solo para las plagas de referencia de la tabla.",
+        items.push(item(format!("Generations are computed from published degree-days for: {} (see the pest table).", computable.join(", ")),
+                        format!("Las generaciones se calculan con grados-día publicados para: {} (ver la tabla de plagas).",
                                 c.traits.pests.iter().filter(|p| computable.contains(&p.name.en.as_str())).map(|p| p.name.es.as_str()).collect::<Vec<_>>().join(", ")),
                         cits, false));
     }
@@ -103,4 +103,8 @@ pub fn nutrition(c: &CropRecord, previous: &[CropRecord]) -> Block {
     items.push(item("No soil analysis in the evidence package: fertilizer doses are an information gap.",
                     "No hay análisis de suelo en el paquete de evidencias: las dosis de fertilizante son un vacío de información.", vec![], false));
     Block { title: L10n::new("Nutrition", "Nutrición"), items }
+}
+
+fn kind_es(k: &str) -> &str {
+    match k { "insect" => "insecto", "fungus" => "hongo", "bacterium" => "bacteria", "mite" => "ácaro", "nematode" => "nematodo", "virus" => "virus", other => other }
 }

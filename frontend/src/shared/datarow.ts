@@ -20,13 +20,15 @@ export function sparkline(values: (number | null)[], w = 64, h = 22, cls = 'drow
 }
 
 /** Value text: numbers with sign where it is an anomaly, words when the value is a verdict only. */
-export function valueText(r: Reading): { text: string; isWord: boolean } {
+export function valueText(r: Reading, compact = false): { text: string; isWord: boolean } {
   if (r.value == null) return { text: pick(r.verdict), isWord: true };
-  const signed = /anomaly|balance|pest_gen|projection|grace/.test(r.id);
-  const digits = Math.abs(r.value) < 1 && r.unit === '' ? 2 : Math.abs(r.value) >= 10 ? 0 : 1;
+  const signed = /anomaly|balance|projection|grace/.test(r.id);
+  const ratio = r.unit === '' || /ndvi/i.test(r.unit);
+  const digits = Math.abs(r.value) < 1 && ratio ? 2 : Math.abs(r.value) >= 100 ? 0 : 1;
   const n = fmt(r.value, digits);
   const sign = signed && r.value > 0 ? '+' : '';
-  const unit = r.unit ? (r.unit === '%' || r.unit === '°' ? r.unit : ` ${r.unit}`) : '';
+  const u = compact ? r.unit.replace(/\s+vs\s.*$/, '').replace(/^NDVI$/i, '') : r.unit;
+  const unit = u ? (u === '%' || u === '°' ? u : ` ${u}`) : '';
   return { text: `${sign}${n.replace('-', '−')}${unit}`, isWord: false };
 }
 
@@ -69,14 +71,14 @@ export function dataRow(r: Reading): string {
 }
 
 /** Compact row as in the hero phone: icon, label, value, source · scale, sparkline. */
-export function dataRowCompact(r: Reading, srcText?: string): string {
-  const v = valueText(r);
+export function dataRowCompact(r: Reading, srcText?: string, label?: string): string {
+  const v = valueText(r, true);
   const series = r.series?.map((p) => p.v) ?? [];
   const src = srcText ?? `${r.source} · ${shortRes(r.resolution)}`;
   const regional = r.badge === 'regional context' && srcText === undefined;
   return `<div class="drow drow--compact" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
-    <div class="drow__label">${esc(pick(r.label))}</div>
+    <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}</div>
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
     <div class="drow__src" title="${esc(t(regional ? 'regional_tip' : 'field_level_tip'))}">${esc(src)}${regional ? ' · ' + esc(t('regional')) : ''}</div>
     ${sparkline(series, 52, 22)}

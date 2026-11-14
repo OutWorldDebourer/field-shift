@@ -10,7 +10,7 @@ import { applyI18n, fmt, onLang, t } from '../shared/i18n';
 import { wireLangSwitch } from '../shared/langswitch';
 import { glassPhoneHtml } from '../shared/phone';
 import { renderPreview } from './preview';
-import { page } from './sections';
+import { anomalyItem, page } from './sections';
 import { mountSky } from './sky';
 
 const root = $('#root');
@@ -93,6 +93,7 @@ onLang(() => {
   $('#lbl-valley').innerHTML = `<span>${esc(t('huaral'))}</span><br>11.47°S&nbsp;&nbsp;77.21°W`;
   $('#lbl-field').innerHTML = `<b>${esc(t('field_ha', { ha: fmt(HUARAL_FIELD.area_ha, 1) }))}</b><br><span>${esc(t('peas_now'))}</span><br><span>${esc(t('lettuce_before'))}</span>`;
   $('#lbl-how').textContent = t('ix_valley_label');
+  $('#ds-key')?.replaceWith(Object.assign(document.createElement('template'), { innerHTML: anomalyItem() }).content);
   $('#data-field').innerHTML = `<b>${esc(t('field_ha', { ha: fmt(HUARAL_FIELD.area_ha, 1) }))}</b>`;
   document.title = `Field Shift · ${t('ix_hero_title')}`;
   renderPreview($('#dash-preview'));

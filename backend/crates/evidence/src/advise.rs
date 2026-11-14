@@ -46,8 +46,9 @@ fn cites(v: &Value) -> Vec<Value> {
 /// A block item has one bilingual text: its first clause becomes the title, the rest the body.
 fn item_from(it: &Value) -> Value {
     let split = |s: &str| -> (String, String) {
-        match s.find([':', '.']) {
-            Some(i) if i < 70 && i + 1 < s.len() => (s[..i].trim().to_string(), s[i + 1..].trim().to_string()),
+        let cut = s.find(": ").filter(|i| { let head = s[..*i].trim_end(); !(head.ends_with(" for") || head.ends_with(" para") || head.ends_with(" en") || head.ends_with(" de")) });
+        match cut {
+            Some(i) if i < 70 => (s[..i].trim().to_string(), s[i + 2..].trim().to_string()),
             _ => (String::new(), s.to_string()),
         }
     };
@@ -87,14 +88,26 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
 
     // Pest care: generations from degree-days where a published threshold exists, then the cited care block
     let mut pests = block_content(&adv["pest_care"], json!({ "en": "", "es": "" }));
-    let gens: Vec<String> = ev["pests"].as_array().into_iter().flatten().filter_map(|p| {
-        let (n, m) = (p["generations_now"].as_f64()?, p["generations_normal"].as_f64()?);
-        Some(format!("{}: {:.1} vs {:.1}", p["name"].as_str()?, n, m))
-    }).collect();
-    pests["summary"] = json!({
-        "en": if gens.is_empty() { "Guidance is qualitative: no published degree-day threshold for this crop's pests.".to_string() } else { format!("Estimated generations this season vs the 40-year normal (NASA POWER degree-days): {}.", gens.join("; ")) },
-        "es": if gens.is_empty() { "Guía cualitativa: no hay umbrales publicados de grados-día para las plagas de este cultivo.".to_string() } else { format!("Generaciones estimadas esta campaña vs la normal de 40 años (grados-día NASA POWER): {}.", gens.join("; ")) },
-    });
+    let thresholds = adv["pest_thresholds"].as_array().cloned().unwrap_or_default();
+    let (lat, lon) = (st.field.center.lat, st.field.center.lon);
+    let crop_pests = crate::crop_pests::generations(state, lat, lon, &thresholds).await.unwrap_or_else(|e| { tracing::warn!("crop pests: {e}"); vec![] });
+    let line = |p: &Value, es: bool| -> Option<String> {
+        let name = p["name"][if es { "es" } else { "en" }].as_str()?;
+        Some(format!("{name}: {:.1} {} {:.1} ({}{:.1})", p["generations_now"].as_f64()?, if es { "vs" } else { "vs" }, p["generations_normal"].as_f64()?,
+            if p["difference"].as_f64()? >= 0.0 { "+" } else { "" }, p["difference"].as_f64()?))
+    };
+    let season = crop_pests.first().and_then(|p| p["season"].as_str()).unwrap_or("").to_string();
+    let en_l: Vec<String> = crop_pests.iter().filter_map(|p| line(p, false)).collect();
+    let es_l: Vec<String> = crop_pests.iter().filter_map(|p| line(p, true)).collect();
+    pests["summary"] = if en_l.is_empty() {
+        json!({ "en": "Guidance is qualitative: no published degree-day threshold for this crop's pests.", "es": "Guía cualitativa: no hay umbrales publicados de grados-día para las plagas de este cultivo." })
+    } else {
+        json!({
+            "en": format!("Estimated generations of this crop's pests this season vs the 40-year normal, from published thresholds and NASA POWER temperature (regional context; season window {season}, sowing date not given): {}.", en_l.join("; ")),
+            "es": format!("Generaciones estimadas de las plagas de este cultivo esta campaña vs la normal de 40 años, con umbrales publicados y temperatura NASA POWER (contexto regional; ventana de campaña {season}, sin fecha de siembra): {}.", es_l.join("; ")),
+        })
+    };
+    pests["crop_pests"] = json!(crop_pests);
     pests["thresholds"] = adv["pest_thresholds"].clone();
     store::set_section(&state.db, analysis_id, "pests", "ready", None, Some(&pests)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 

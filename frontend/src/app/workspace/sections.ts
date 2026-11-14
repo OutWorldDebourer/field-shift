@@ -8,6 +8,7 @@ import { pick, t } from '../../shared/i18n';
 import { icon, type IconName } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
 import { exportButtons } from './export';
+import { keyReadings, shortLabel } from '../../shared/evidence';
 
 export const ORDER: SectionKey[] = ['field', 'soil', 'pests', 'nutrition', 'rotation', 'sheet'];
 const META: Record<SectionKey, { title: StrKey; short: StrKey; icon: IconName }> = {
@@ -77,8 +78,8 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): stri
   const done = secs.filter((s) => s.state === 'ready' || s.state === 'gaps').length;
   const preview = (k: SectionKey) => {
     if (k !== 'field' || !a.evidence) return '';
-    const pickR = ['temp_anomaly', 'soil_moisture', 'ndvi'].map((id) => a.evidence!.readings.find((r) => r.id === id)).filter(Boolean);
-    return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r!)).join('')}</div>` : '';
+    const pickR = keyReadings(a.evidence);
+    return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r, undefined, shortLabel(r))).join('')}</div>` : '';
   };
   return `<header class="secs__head"><h2 class="serif">${esc(t('ws_sections'))}</h2>
       <span class="secs__count mono">${esc(t('ws_progress', { done, total: secs.length }))}</span></header>

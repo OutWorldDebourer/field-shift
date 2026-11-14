@@ -6,5 +6,8 @@ The Space Apps rules require stating where and how AI ("SI") tools were used. Th
 |------|------|----------|--------------------------|
 | 2026-11-14 | Claude (Anthropic), via Claude Code | Reading the official challenge page, guides and forum; researching NASA data access; drafting documentation in English and Spanish | `handbook/`, `research/`, `README.md` |
 | 2026-11-14 | Gemini text-to-speech (Google AI Studio), voice Algenib | Narration samples for the demo films (English and Spanish) | `assets/voice/` |
+| 2026-11-14 | OpenAI gpt-image-2 (via the impeccable skill's `generate-image.mjs`, one call) | Attempted plate of two pea-plant photo tiles for the index hero phone; the result was a flat grey frame and was discarded, nothing shipped | none (deleted) |
+| 2026-11-14 | Crops (ffmpeg) of the owner-approved AI design frames `design-directions/approved-orbit-shot1.webp` and `approved-index-hero.webp` | Illustrative orbit still under the index (shown only if the live globe does not render) and two example pea photos in the hero phone and demo chat; shown with the visible "SI-assisted visuals" tag; not satellite evidence | `frontend/public/img/orbit-still.jpg`, `pea-plant.jpg`, `pea-leaf.jpg` |
+| 2026-11-14 | Claude (Anthropic), via Claude Code | Frontend code (index, app, styles, EN/ES strings) | `frontend/src/index/`, `frontend/src/app/`, `frontend/src/shared/` |
 
 Not AI-generated: the project idea and the choice of how to solve the challenge belong to the team.

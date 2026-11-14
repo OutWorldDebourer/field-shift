@@ -1,6 +1,7 @@
 //! Analyst stage: gathers NASA and catalog data into one fixed evidence package per analysis, resolves crops,
 //! and fills the result sections from the cited advice engine. The consultant may only cite numbers from here.
 mod advise;
+mod crop_pests;
 mod from_imagery;
 mod from_power;
 pub mod reading;

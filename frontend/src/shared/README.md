@@ -9,6 +9,7 @@
 - `langswitch.ts` — EN | ES switch markup and wiring.
 - `api.ts` — typed client with timeouts and the offline demo fallback.
 - `datarow.ts` — the data row (icon, label, value, verdict, source · date, badge, sparkline).
+- `evidence.ts` — reads the package without assuming which readings exist (key rows, normal period, short labels, derived headline).
 - `charts.ts` — SVG charts and the 12-month strip.
 - `backdrop.ts` — field-from-above plate (backend Sentinel-2 snapshot, else EOX tiles) with outline and reticle.
 - `phone.ts` — the hero's glass phone.

@@ -1,12 +1,12 @@
 // The frosted-glass phone from the approved hero (master component), filled from the bundled demo data.
 import { DEMO_EVIDENCE, HUARAL_FIELD } from './demo/huaral';
-import { dataRowCompact } from './datarow';
+import { dataRowCompact, shortRes } from './datarow';
+import { keyReadings, normalPeriod, shortLabel } from './evidence';
 import { esc } from './dom';
 import { fmt, t } from './i18n';
 import { icon } from './icons';
 
 export function glassPhoneHtml(): string {
-  const r = (id: string) => DEMO_EVIDENCE.readings.find((x) => x.id === id)!;
   return `<figure class="phone glass" aria-label="${esc(t('ix_phone_label'))}">
     <div class="phone__status mono" aria-hidden="true"><span>09:24</span><i class="phone__cam"></i><span class="phone__sig"><b></b><b></b><b></b><b></b></span></div>
     <div class="phone__bar"><span class="serif phone__brand">Field Shift</span>${icon('menu', 'phone__menu')}</div>
@@ -17,9 +17,9 @@ export function glassPhoneHtml(): string {
       <div class="tile"><img src="/img/pea-leaf.jpg" alt="${esc(t('photo_leaf_alt'))}" width="154" height="146" decoding="async"></div>
     </div>
     <div class="phone__rows">
-      ${dataRowCompact(r('temp_anomaly'), 'NASA POWER · 1984–2026')}
-      ${dataRowCompact(r('soil_moisture'), 'SMAP · 9 km')}
-      ${dataRowCompact(r('ndvi'), 'Sentinel-2 · 10 m')}
+      ${keyReadings(DEMO_EVIDENCE).map((r) => dataRowCompact(r, r.id.startsWith('temp') && normalPeriod(DEMO_EVIDENCE)
+        ? `${r.source} · ${normalPeriod(DEMO_EVIDENCE)} ${t('db_norm')}`
+        : `${r.source.replace(/\s+L2A$/, '')} · ${shortRes(r.resolution)}`, shortLabel(r))).join('')}
     </div>
     <figcaption class="phone__foot mono">${esc(t('demo_data'))} · ${esc(t('huaral'))}</figcaption>
   </figure>`;

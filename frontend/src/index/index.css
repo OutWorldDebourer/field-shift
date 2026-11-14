@@ -92,6 +92,8 @@ body.is-day .hud { opacity: 0; }
 .phone__tiles .tile { aspect-ratio: 1.12; border-radius: 12px; }
 .phone__rows { border-top: 1px solid var(--rule); }
 .phone__rows .drow { border-color: rgba(255, 255, 255, 0.28); }
+.phone .drow__src { white-space: normal; overflow: visible; }
+.ds--key { max-width: 360px; }
 .phone__foot { margin-top: 8px; font-size: 0.6875rem; color: var(--ink-2); text-align: center; letter-spacing: 0.04em; }
 
 /* ---------- How it works ---------- */

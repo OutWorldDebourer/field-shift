@@ -25,15 +25,15 @@ p{margin:6px 0 10px}
 .run{display:flex;justify-content:space-between;gap:12px;font:13px "IBM Plex Mono",monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:18px}
 .run{flex-wrap:wrap}.run span{white-space:nowrap}
 .head{display:grid;grid-template-columns:1fr 132px;gap:24px;align-items:start}
-.tile{width:132px;height:132px;background:#16222c;border-radius:6px;display:block}
-.notice{margin:20px 0;border:1.5px solid var(--amber);border-radius:6px;background:var(--amber-bg);padding:12px 16px}
+.tile{width:132px;height:132px;border-radius:6px;display:block}
+.notice{margin:20px 0;border:1.5px solid var(--ink);border-radius:6px;background:var(--wash);padding:12px 16px}
 .notice b{display:block;font:500 13px "IBM Plex Mono",monospace;letter-spacing:.08em;color:var(--amber);margin-bottom:4px}
 .notice p{margin:0;font-weight:600}
 .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
 .meta div{background:var(--wash);padding:10px 12px;border-radius:6px}
 .meta b{display:block;font:400 12px "IBM Plex Mono",monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .readings{display:grid;gap:0;border-top:1px solid var(--ink)}
-.r{display:grid;grid-template-columns:24% 15% 31% 30%;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:start}
+.r{display:grid;grid-template-columns:minmax(0,24fr) minmax(0,15fr) minmax(0,31fr) minmax(0,30fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:start}
 .r .lab{font-weight:600}
 .r .val{font-weight:600;white-space:nowrap}
 .r .val.key{color:var(--amber)}
@@ -78,11 +78,12 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
 @media print{
  body{background:#fff;font-size:11pt}.page{box-shadow:none;margin:0;max-width:none;padding:0}.actions{display:none}
  h2{break-after:avoid}h3{break-after:avoid}.r,.strat>div,tr{break-inside:avoid}
- a::after{content:" (" attr(href) ")";font:8pt "IBM Plex Mono",monospace;color:#555;word-break:break-all}
- .printfoot{position:fixed;bottom:0;left:0;right:0;font:8pt "IBM Plex Mono",monospace;color:#555;text-align:center}
- @page{size:A4;margin:16mm 16mm 20mm}
+ .cite a::after{content:" " attr(href);font:8pt "IBM Plex Mono",monospace;color:#555;word-break:break-all}
+ .r .src,.cite,.lic,th{font-size:9.5pt}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ @page{size:A4;margin:16mm 16mm 20mm;@bottom-center{content:"Field Shift · pre-diagnosis, not a diagnosis · page " counter(page);font:8pt "IBM Plex Mono",monospace;color:#555}}
 }
-@media screen{.printfoot{display:none}}
+.printfoot{display:none}
 "#;
 
 fn cap(s: &str) -> String {
@@ -105,7 +106,7 @@ fn tile(ring: &[[f64; 2]]) -> String {
         let pts: Vec<String> = ring.iter().map(|[x, y]| format!("{:.1},{:.1}", 34.0 + (x - w) / k * 64.0, 98.0 - (y - s) / k * 64.0)).collect();
         format!("<polygon points=\"{}\" fill=\"rgba(255,255,255,.08)\" stroke=\"#fff\" stroke-width=\"1.4\" />", pts.join(" "))
     } else { "<circle cx=\"66\" cy=\"66\" r=\"4\" fill=\"#fff\" />".into() };
-    format!("<svg class=\"tile\" viewBox=\"0 0 132 132\" role=\"img\" aria-label=\"Field outline\">{poly}<g stroke=\"#fff\" stroke-width=\"1.6\" fill=\"none\">{brackets}</g></svg>")
+    format!("<svg class=\"tile\" viewBox=\"0 0 132 132\" role=\"img\" aria-label=\"Field outline\"><rect width=\"132\" height=\"132\" rx=\"6\" fill=\"#16222c\" />{poly}<g stroke=\"#fff\" stroke-width=\"1.6\" fill=\"none\">{brackets}</g></svg>")
 }
 
 pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
@@ -131,10 +132,10 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
     h.push_str(&format!("<div class=\"run\"><span>Field Shift · {}</span><span>{} {}</span></div>", t("technical sheet", "ficha técnica"), t("Generated", "Generado"), esc(&generated)));
     h.push_str(&format!("<div class=\"head\"><div><h1>{}</h1><div class=\"mono\" style=\"color:var(--muted);margin-top:6px\">{}</div></div>{}</div>",
         esc(&label), coord(st.field.center.lat, st.field.center.lon), tile(&st.field.ring)));
-    let demo = if st.demo_mode { t(" Parts of this analysis used the scripted demo mode.", " Partes de este análisis usaron el modo demo guionizado.") } else { String::new() };
+    let demo = if st.demo_mode { t(" Consultant replies in this analysis came from the scripted demo mode; all readings are live NASA data.", " Las respuestas del consultor en este análisis vinieron del modo demo guionizado; todas las lecturas son datos reales de la NASA.") } else { String::new() };
     h.push_str(&format!("<div class=\"notice\"><b>{}</b><p>{}{}</p></div>", t("PRE-DIAGNOSIS · NOT A DIAGNOSIS", "PREDIAGNÓSTICO · NO ES UN DIAGNÓSTICO"),
         t("Prepared for the farmer's agronomist or extension engineer, who makes the final decision. Regional satellite context is not a field measurement.",
-          "Preparado para el agrónomo o ingeniero extensionista del agricultor, quien toma la decisión final. El contexto satelital regional no es una medición del campo."), demo));
+          "Preparado para el agrónomo o ingeniero extensionista del agricultor, quien toma la decisión final. El contexto satelital regional no es una medición de la parcela."), demo));
     h.push_str(&format!("<div class=\"meta\"><div><b>{}</b>{}</div><div><b>{}</b>{}</div><div><b>{}</b>{}</div><div><b>{}</b>{}</div></div>",
         t("Area", "Área"), if st.field.area_ha > 0.0 { format!("{:.2} ha", st.field.area_ha) } else { t("point, no outline", "punto, sin contorno") },
         t("Crop now", "Cultivo actual"), crop,
@@ -158,15 +159,19 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
             let badge_txt = match (field, es) { (true, true) => "nivel de campo", (false, true) => "contexto regional", (true, false) => "field-level", (false, false) => "regional context" };
             let key = r["key"] == true;
             let v = r["value"].as_f64();
-            let val = match v { Some(x) if key => format!("{}{}", if x >= 0.0 { "+" } else { "" }, num(&r["value"])), _ => num(&r["value"]) };
-            let unit = r["unit"].as_str().unwrap_or("").replace("°C vs normal", "°C");
-            if let Some(l) = r["license"].as_str().filter(|l| !l.is_empty()) { licences.insert(format!("{}: {}", r["source"].as_str().unwrap_or(""), l)); }
+            let val = match v { Some(x) if key => format!("{x:+.1}"), _ => num(&r["value"]) };
+            let unit = unit_l(&r["unit"].as_str().unwrap_or("").replace("°C vs normal", "°C"), es);
+            if let Some(l) = r["license"].as_str().filter(|l| !l.is_empty()) { licences.insert(format!("{}: {}", r["source"].as_str().unwrap_or("").split(" + ").next().unwrap_or(""), l)); }
             h.push_str(&format!("<div class=\"r\"><span class=\"lab\">{}</span><span class=\"val{}\">{} {}</span><span class=\"pw\">{}</span><span class=\"src\">{} · <span style=\"white-space:nowrap\">{}</span> · {}<br><span class=\"badge{}\">{}</span></span></div>",
                 esc(&bi(&r["label"], lang)), if key { " key" } else { "" }, esc(&val), esc(&unit), esc(&cap(&bi(&r["verdict"], lang))),
-                esc(r["source"].as_str().unwrap_or("")), esc(r["date"].as_str().unwrap_or("")), esc(r["resolution"].as_str().unwrap_or("")),
+                esc(&src_l(r["source"].as_str().unwrap_or(""), es)), esc(r["date"].as_str().unwrap_or("")), esc(&res_l(r["resolution"].as_str().unwrap_or(""), es)),
                 if field { " field" } else { "" }, badge_txt));
         }
         h.push_str("</div>");
+        let bare: Vec<String> = ev["bare_soil"].as_array().into_iter().flatten().filter_map(|b| Some(format!("{} – {}", b["start"].as_str()?, b["end"].as_str()?))).collect();
+        if !bare.is_empty() {
+            h.push_str(&format!("<p class=\"cite\"><b>{}</b> {}</p>", t("Bare-soil periods on this field (NDVI below 0.2 on two clear images in a row; Sentinel-2 / Landsat, field-level):", "Periodos de suelo desnudo en este campo (NDVI menor a 0.2 en dos imágenes despejadas seguidas; Sentinel-2 / Landsat, nivel de campo):"), esc(&bare.join(" · "))));
+        }
         h.push_str(&format!("<div class=\"lic\">{} {}</div>", t("Licences:", "Licencias:"), licences.iter().map(|l| esc(l)).collect::<Vec<_>>().join(" · ")));
     }
     if let Some(pests) = ev["pests"].as_array().filter(|p| !p.is_empty()) {
@@ -195,19 +200,37 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
         h.push_str(&format!("<h2>{}</h2>", esc(&bi(&c["title"], lang))));
         let summary = bi(&c["summary"], lang);
         if !summary.is_empty() { h.push_str(&format!("<p>{}</p>", esc(&summary))); }
+        if let Some(cp) = c["crop_pests"].as_array().filter(|p| !p.is_empty()) {
+            h.push_str(&format!("<div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>",
+                t("This crop's pests (published thresholds)", "Plagas de este cultivo (umbrales publicados)"), t("This season", "Esta campaña"), t("40-year normal", "Normal de 40 años"), t("Threshold", "Umbral")));
+            for p in cp {
+                let cit = &p["citation"];
+                h.push_str(&format!("<tr><td>{} <i>{}</i><div class=\"cite\"><a href=\"{}\">{}</a></div></td><td class=\"n\">{}</td><td class=\"n\">{}</td><td class=\"n\">{} °C · {} °C·{}</td></tr>",
+                    esc(&bi(&p["name"], lang)), esc(p["scientific"].as_str().unwrap_or("")), esc(cit["url"].as_str().unwrap_or("")), esc(cit["title"].as_str().unwrap_or("")),
+                    num(&p["generations_now"]), num(&p["generations_normal"]), num(&p["lower_threshold_c"]), num(&p["degree_days"]), t("day", "día")));
+            }
+            h.push_str("</tbody></table></div>");
+        }
         if let Some(strats) = c["strategies"].as_array().filter(|s| !s.is_empty()) {
+            // Evidence shared by every strategy (the field's NASA signals) is printed once above the cards.
+            let ev_en = |x: &Value| -> Vec<String> { x["evidence_list"].as_array().into_iter().flatten().map(|e| bi(e, "en")).collect() };
+            let common: Vec<String> = ev_en(&strats[0]).into_iter().filter(|e| strats.iter().all(|x| ev_en(x).contains(e))).collect();
+            let common_l: Vec<String> = strats[0]["evidence_list"].as_array().into_iter().flatten().filter(|e| common.contains(&bi(e, "en"))).map(|e| cap(&bi(e, lang))).collect();
+            if !common_l.is_empty() {
+                h.push_str(&format!("<p class=\"cite\"><b>{}</b> {}</p>", t("This field's signals, used by all three:", "Señales de este campo, usadas por las tres:"), esc(&common_l.join(" · "))));
+            }
             h.push_str("<div class=\"strat\">");
             for x in strats {
                 let sc = &x["scores"];
-                let dots = |k: &str| { let n = (sc[k].as_u64().unwrap_or(0) as usize).min(5); format!("{}{}", "●".repeat(n), "○".repeat(5 - n)) };
-                let list = |k: &str| x[k].as_array().into_iter().flatten().map(|i| format!("<li>{}</li>", esc(&cap(&bi(i, lang))))).collect::<String>();
+                let dots = |k: &str| { let n = (sc[k].as_u64().unwrap_or(0) as usize).min(5); format!("<span role=\"img\" aria-label=\"{n} / 5\">{}{}</span>", "●".repeat(n), "○".repeat(5 - n)) };
+                let list = |k: &str| x[k].as_array().into_iter().flatten().filter(|i| k != "evidence_list" || !common.contains(&bi(i, "en"))).map(|i| format!("<li>{}</li>", esc(&cap(&bi(i, lang))))).collect::<String>();
                 let tl_key = if es { "timeline_es" } else { "timeline" };
                 h.push_str(&format!("<div class=\"{}\"><h3>{}</h3><div class=\"tl\">{}</div><div class=\"scores\"><span>{}</span><span>{}</span><span>{}</span><span>{}</span><span>{}</span><span>{}</span><span>{}</span><span>{}</span><span>{}</span><span>{}</span></div><p><b>{}</b> {}</p><b>{}</b><ul>{}</ul><b>{}</b><ul>{}</ul><b>{}</b><ul>{}</ul></div>",
                     if x["current"] == true { "cur" } else { "" }, esc(&bi(&x["name"], lang)),
                     esc(&x[tl_key].as_array().or(x["timeline"].as_array()).map(|a| a.iter().filter_map(Value::as_str).collect::<Vec<_>>().join(" → ")).unwrap_or_default()),
                     t("Soil", "Suelo"), dots("soil"), t("Water", "Agua"), dots("water"), t("Pest break", "Corte de plagas"), dots("pest_break"), t("Income", "Ingreso"), dots("income"), t("Low risk", "Bajo riesgo"), dots("risk"),
                     t("Why:", "Por qué:"), esc(&bi(&x["why"], lang)), t("Evidence", "Evidencia"), list("evidence_list"), t("Gaps", "Vacíos"), list("gaps_list"), t("Risks", "Riesgos"), list("risks_list")));
-                for g in x["gaps_list"].as_array().into_iter().flatten() { gaps.push(format!("{}: {}", bi(&x["name"], lang), bi(g, lang))); }
+                for g in x["gaps_list"].as_array().into_iter().flatten() { gaps.push(bi(g, lang)); }
             }
             h.push_str(&format!("</div><p class=\"cite\">{}</p>", t("Scores 1–5: more dots = better (for risk, more dots = lower risk).", "Puntajes 1–5: más puntos = mejor (en riesgo, más puntos = menor riesgo).")));
         }
@@ -254,9 +277,22 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
 
     h.push_str(&format!("<footer>{}<br>{}</footer>",
         t("Field Shift, team InnoHuando, NASA Space Apps Challenge 2026. Open source (Apache-2.0).", "Field Shift, equipo InnoHuando, NASA Space Apps Challenge 2026. Código abierto (Apache-2.0)."),
-        t("Advice text was assembled with AI assistance (Claude, Anthropic) from cited sources; every number comes from the listed datasets.",
-          "Los textos se armaron con ayuda de IA (Claude, Anthropic) a partir de fuentes citadas; cada número proviene de los conjuntos de datos listados.")));
-    h.push_str(&format!("<div class=\"printfoot\">Field Shift · {}</div>", t("Pre-diagnosis, not a diagnosis. Confirm with your agronomist.", "Prediagnóstico, no un diagnóstico. Confírmalo con tu agrónomo.")));
+        t("Every reading comes from the listed datasets; agronomic coefficients (Kc, thresholds, water needs) come from the cited literature. Advice text was assembled with AI assistance (Claude, Anthropic) from those sources.",
+          "Cada lectura proviene de los conjuntos de datos listados; los coeficientes agronómicos (Kc, umbrales, necesidades de agua) provienen de la literatura citada. Los textos se armaron con ayuda de IA (Claude, Anthropic) a partir de esas fuentes.")));
     h.push_str("</main></body></html>");
     h
+}
+
+fn unit_l(u: &str, es: bool) -> String {
+    if !es { return u.to_string(); }
+    match u { "days" => "días", "generations" => "generaciones", "°C·day" => "°C·día", other => other }.to_string()
+}
+
+fn res_l(r: &str, es: bool) -> String {
+    let short = if r.contains("about 50 km") || r.contains("0.5°") { "~50 km (0.5° × 0.625°)".to_string() } else { r.to_string() };
+    if es { short.replace("grid cell", "celda") } else { short }
+}
+
+fn src_l(s: &str, es: bool) -> String {
+    if es { s.replace("published threshold", "umbral publicado") } else { s.to_string() }
 }
