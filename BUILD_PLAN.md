@@ -16,6 +16,14 @@ The owner chose two styles of the installed **Lemo-Opuscar** skill (`lemo-opusca
 1. **Satellite Briefing:** https://lemomo-ai.github.io/lemo-opuscar/styles/satellite-briefing/
 2. **Mascot Screencast:** https://lemomo-ai.github.io/lemo-opuscar/styles/living-screencast/
 
+**Mandatory before any UI, globe or video work (owner's rule): consult all three sources of the two inspirations:**
+
+- **The skill:** invoke the installed `lemo-opuscar:lemo-opuscar` skill (Skill tool) and follow its workflow for anything filmed or rendered.
+- **The repository:** https://github.com/lemomo-ai/lemo-opuscar, folders `styles/satellite-briefing/` and `styles/living-screencast/` (STYLE.md, DEMO.md, `demo/` source). The local clone with both demos is `C:/Users/OutWorldDevourer/lemo-opuscar`.
+- **The two pages above**, opened in the browser pane.
+
+Record in the Decision log that they were consulted and what was taken from each.
+
 - **Satellite Briefing** — page: https://lemomo-ai.github.io/lemo-opuscar/styles/satellite-briefing/ · local guide: `C:/Users/OutWorldDevourer/.claude/plugins/marketplaces/lemolab/styles/satellite-briefing/STYLE.md` (+ `DEMO.md`, `demo/engine.js` MIT). Governs the globe, every map and the index: real licensed satellite imagery as the ground; two layers, two truths (imagery = what the satellite saw, white hairlines = what was measured); one continuous dive from orbit to the field; the lock-on reticle; one finding per screen in a single warm accent; instruments only in the corners (altitude, scale bar, imagery credit); true colour returns only where the story turns.
 - **Mascot Screencast** — page: https://lemomo-ai.github.io/lemo-opuscar/styles/living-screencast/ · local guide: `C:/Users/OutWorldDevourer/.claude/plugins/marketplaces/lemolab/styles/living-screencast/STYLE.md`. Governs how the app presents itself and the demo film: a real interface, crisp, in a window over a wallpaper; chapter pills and frosted caption pills; rack focus between panes; push-in with vignette on the one promise. The owner wants no mascot: the **cursor is the farmer** and the **lock-on reticle is the software's agent** (it snaps onto the field, the blurry photo, each NASA reading being checked).
 
