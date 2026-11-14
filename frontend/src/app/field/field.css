@@ -1,0 +1,70 @@
+/* Field selection (App 1): full-bleed satellite map, glass panel on the left (bottom on phone). */
+.fs { position: absolute; inset: 0; }
+.fs__map { position: absolute; inset: 0; background: #22313a; }
+.fs__map.is-picking, .fs__map.is-picking .leaflet-interactive { cursor: crosshair; }
+.fs__loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink-2); font-size: 0.875rem; }
+.fs__reticle { z-index: 450; }
+.fs__area-tag { z-index: 450; left: 0; top: 0; pointer-events: none; }
+.fs__area-tag b { font-size: 1.0625rem; }
+.fs .leaflet-container { font-family: var(--sans); background: #22313a; }
+.fs .leaflet-container .leaflet-control-attribution { font-size: 10.5px; background: rgba(10, 22, 34, 0.75); color: var(--ink-2); max-width: 60vw; }
+.fs .leaflet-control-attribution a { color: #fff; }
+.fs .leaflet-control-scale-line { background: rgba(10, 22, 34, 0.55); color: #fff; border-color: #fff; font-family: var(--mono); font-size: 11px; }
+.leaflet-bar a { width: 40px !important; height: 40px !important; line-height: 40px !important; background: rgba(10, 22, 34, 0.75) !important; color: #fff !important; border-color: rgba(255, 255, 255, 0.25) !important; }
+.leaflet-touch .leaflet-bar a { width: 44px !important; height: 44px !important; line-height: 44px !important; }
+.fs .leaflet-top.leaflet-right, .fs .leaflet-top.leaflet-left { top: 8px; }
+.fs .leaflet-bottom.leaflet-left { left: 460px; }
+
+.fs__panel { position: absolute; z-index: 600; left: var(--gutter); top: 20px; bottom: 20px; width: 420px; overflow: auto; padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 16px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)), rgba(12, 24, 36, 0.72); }
+.fs__title { font-size: 2.375rem; line-height: 1.05; }
+.fs__lede { color: var(--ink-2); font-size: 1rem; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px; border-radius: 14px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); }
+.seg button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: 10px; border: 0; background: transparent; font-size: 1rem; }
+.seg button svg { width: 20px; height: 20px; }
+.seg button[aria-checked='true'] { background: #fff; color: var(--night); font-weight: 600; }
+.fs__pane { display: grid; gap: 8px; }
+.fs__examples { display: grid; gap: 8px; }
+.ex { width: 100%; text-align: left; display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.06); }
+.ex[aria-pressed='true'] { border-color: #fff; background: rgba(255, 255, 255, 0.16); box-shadow: inset 3px 0 0 0 #fff; }
+.ex__name { font-size: 1.0625rem; font-weight: 600; }
+.ex__meta { font-size: 0.75rem; color: var(--ink-2); }
+.ex__soon { font-size: 0.75rem; color: var(--ink-3); padding: 2px 4px; }
+.fs__status { font-size: 0.9375rem; color: var(--ink-2); min-height: 1.4em; }
+.fs__label { display: block; font-size: 0.9375rem; font-weight: 600; margin-bottom: 6px; }
+.fs__qwrap { position: relative; }
+.fs__qwrap svg { position: absolute; left: 12px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%); color: var(--ink-2); }
+.fs__qwrap input { width: 100%; min-height: 48px; padding: 0 14px 0 42px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(5, 12, 20, 0.45); font-size: 1rem; }
+.fs__qwrap input:focus-visible { outline: 2px solid var(--amber); outline-offset: 1px; }
+.fs__results { margin-top: 6px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(8, 18, 28, 0.94); }
+.fs__results li { padding: 11px 14px; font-size: 0.9375rem; border-top: 1px solid var(--rule); cursor: pointer; min-height: 44px; }
+.fs__results li:first-child { border-top: 0; }
+.fs__results li[aria-selected='true'], .fs__results li:hover { background: rgba(255, 255, 255, 0.14); }
+.fs__osm { margin-top: 6px; font-size: 0.6875rem; color: var(--ink-2); }
+.fs__tools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fs__tools .tool--quiet { grid-column: 1 / -1; justify-self: start; min-height: 44px; border: 0; background: none; padding: 0 6px; text-decoration: underline; text-underline-offset: 4px; }
+.tool { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 12px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08); font-size: 0.9375rem; }
+.tool svg { width: 20px; height: 20px; }
+.tool[aria-pressed='true'] { background: #fff; color: var(--night); font-weight: 600; }
+.tool--quiet { border-color: rgba(255, 255, 255, 0.25); }
+.fs__finish { justify-self: start; }
+.fs__hint { font-size: 0.9375rem; color: var(--ink-2); min-height: 1.2em; }
+.fs__hint:empty { display: none; }
+.fs__readout { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 14px 0 0; border-top: 1px solid var(--rule); margin-top: auto; }
+.fs__k { font-size: 0.75rem; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.06em; }
+.fs__area { font-size: 2rem; font-weight: 600; color: var(--amber); }
+.fs__c { font-size: 0.8125rem; color: var(--ink-2); flex-basis: 100%; }
+.fs__none { color: var(--ink-2); font-size: 0.9375rem; }
+.fs__use { width: 100%; }
+.fs__error { display: grid; gap: 10px; padding: 14px; border-radius: 12px; background: rgba(255, 190, 85, 0.12); border: 1px solid rgba(255, 190, 85, 0.55); font-size: 0.9375rem; }
+.fs__err-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 760px) {
+  .fs .leaflet-bottom.leaflet-left { left: 0; }
+  .fs { position: relative; inset: auto; min-height: 100%; }
+  .fs__map { position: relative; height: 44vh; min-height: 280px; }
+  .fs__panel { position: relative; left: auto; top: 0; margin-top: 10px !important; bottom: auto; width: auto; margin: 0 10px; overflow: visible; padding: 22px 18px 20px; }
+  .fs__title { font-size: 2rem; }
+  .fs__use { position: sticky; bottom: 10px; z-index: 2; }
+  .fs .leaflet-control-attribution { max-width: 92vw; }
+}

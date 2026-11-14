@@ -1,0 +1,41 @@
+/* Chart, calendar and dot-score styles (dark glass by default). */
+.chart { width: 100%; height: auto; overflow: visible; font-family: var(--mono); font-size: 11px; }
+.chart .grid line { stroke: rgba(255, 255, 255, 0.14); stroke-width: 1; }
+.chart .grid text, .chart .axis text { fill: var(--ink-2); }
+.chart .band { fill: rgba(220, 236, 246, 0.24); }
+.chart .mean { fill: none; stroke: rgba(255, 255, 255, 0.55); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.chart .line { fill: none; stroke: var(--amber); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.chart .dot { fill: var(--amber); stroke: #10161c; stroke-width: 1.5; }
+.chart .last { fill: var(--amber); font-size: 12.5px; font-weight: 500; }
+.chart .line-w { fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; }
+.chart .dots circle { fill: #fff; stroke: rgba(10, 20, 30, 0.6); stroke-width: 1; }
+.chart-empty { font-size: 0.9375rem; color: var(--ink-2); padding: 18px 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+.legend i { display: inline-block; width: 18px; height: 3px; margin-right: 6px; vertical-align: middle; border-radius: 2px; }
+.legend .k-line { background: var(--amber); }
+.legend .k-band { height: 10px; background: rgba(220, 236, 246, 0.35); }
+.legend .k-mean { border-top: 1.5px dashed rgba(255, 255, 255, 0.7); height: 0; }
+
+/* 12-month calendar strip */
+.cal { display: grid; gap: 4px; }
+.cal__runs { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+.cal__run {
+  display: flex; align-items: center; min-height: 30px; padding: 0 8px; border-radius: 6px; overflow: hidden;
+  background: rgba(255, 255, 255, 0.82); color: #0f1d29; font-size: 0.8125rem; font-weight: 600; white-space: nowrap;
+}
+.cal__run span { overflow: hidden; text-overflow: ellipsis; }
+.cal__run.is-bare { background: transparent; color: var(--ink-2); border: 1px dashed rgba(255, 255, 255, 0.45); font-weight: 400; }
+.cal--lettuce { background: rgba(255, 255, 255, 0.6); }
+.cal--gm { background: rgba(255, 255, 255, 0.7); }
+.cal__months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-2); text-transform: uppercase; }
+.cal__months span { padding-left: 2px; }
+.cal--plan .cal__run { background: var(--plan); color: #fff; }
+.cal--plan .cal__run.cal--lettuce, .cal--plan .cal__run.cal--maize { background: #3f82dc; }
+.cal--plan .cal__run.cal--gm { background: repeating-linear-gradient(135deg, var(--plan) 0 6px, #3b7bd2 6px 12px); }
+.cal--plan .cal__run.is-bare { background: transparent; color: var(--plan-light); border-color: rgba(127, 178, 242, 0.7); }
+.cal--compact .cal__run { min-height: 24px; padding: 0 5px; font-size: 0.75rem; }
+
+/* 1–5 dot scores */
+.dots { display: inline-flex; gap: 4px; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--plan-light); }
+.dots i.on { background: var(--plan-light); }

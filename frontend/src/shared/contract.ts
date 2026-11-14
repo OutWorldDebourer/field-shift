@@ -45,6 +45,8 @@ export interface EvidencePackage {
   projection: { horizon: string; scenario: string; d_temp_c: number | null; d_rain_pct: number | null; models: string[] } | null;
   imagery: { snapshot_url: string; credit: string; date: string } | null;
   gaps: Gap[];
+  /** Optional (frontend addition): plain-words alerts derived from the readings; the UI derives them itself when absent. */
+  alerts?: { id: string; level: 'info' | 'watch' | 'warning'; text: Bi; source: string; date: string }[];
 }
 
 export interface CropRecord {
@@ -91,6 +93,8 @@ export interface AnalysisState {
   evidence: EvidencePackage | null;
   /** True when the consultant runs the labelled scripted demo instead of the live model. */
   demo_mode: boolean;
+  /** Optional (frontend addition): one-line pre-diagnosis headline and confidence for the rotation view. */
+  prediagnosis?: { headline: Bi; confidence: 'low' | 'medium' | 'high' } | null;
 }
 
 // Endpoints (method path → body → response):

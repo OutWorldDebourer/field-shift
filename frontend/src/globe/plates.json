@@ -1,0 +1,25 @@
+{
+  "world": { "file": "world-bmng.jpg", "lo": "world-bmng-lo.jpg", "credit": "bmng" },
+  "night": { "file": "world-night.jpg" },
+  "regional": {
+    "box": [-93, -24, -61, 8],
+    "night": "andes-night.jpg",
+    "clouds": "andes-clouds-viirs-20261006.jpg"
+  },
+  "plates": [
+    { "id": "andes", "file": "andes-bmng.jpg", "box": [-93, -24, -61, 8], "size": 2560, "kind": "relief", "credit": "bmng", "feather": 0.06, "fade": [0.2, 0.5] },
+    { "id": "coast", "file": "coast-bmng.jpg", "box": [-81.2061, -15.4729, -73.2061, -7.4729], "size": 2048, "kind": "relief", "credit": "bmng", "feather": 0.1, "fade": [0.25, 0.6] },
+    { "id": "region", "file": "region-s2-20261006.jpg", "box": [-78.1061, -12.3729, -76.3061, -10.5729], "size": 2048, "kind": "close", "credit": "s2-2026", "feather": 0.16, "fade": [0.5, 1.25] },
+    { "id": "valley", "file": "valley-s2-20261006.jpg", "box": [-77.4061, -11.6729, -77.0061, -11.2729], "size": 2048, "kind": "close", "credit": "s2-2026", "feather": 0.12, "fade": [0.5, 1.25] },
+    { "id": "field", "file": "field-s2-20261006.jpg", "box": [-77.2561, -11.5229, -77.1561, -11.4229], "size": 1152, "kind": "close", "credit": "s2-2026", "feather": 0.12, "fade": [0.5, 1.25] }
+  ],
+  "credits": {
+    "bmng": { "en": "NASA Blue Marble", "es": "NASA Blue Marble" },
+    "s2-2026": { "en": "Contains modified Copernicus Sentinel data 2026", "es": "Contiene datos Copernicus Sentinel modificados 2026" }
+  },
+  "stills": [
+    { "id": "orbit", "file": "still-orbit.jpg", "w": 1920, "h": 1200, "p": 0, "lat": -11.4729, "lon": -77.2061, "credit": "bmng" },
+    { "id": "orbit-portrait", "file": "still-orbit-portrait.jpg", "w": 900, "h": 1600, "p": 0, "lat": -11.4729, "lon": -77.2061, "credit": "bmng" },
+    { "id": "field", "file": "still-field.jpg", "w": 1600, "h": 1600, "p": 1, "lat": -11.4729, "lon": -77.2061, "credit": "s2-2026" }
+  ]
+}

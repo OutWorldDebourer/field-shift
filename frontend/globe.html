@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Field Shift · globe dev page</title>
+  <meta name="theme-color" content="#03060c">
+  <style>
+    @font-face { font-family: 'IBM Plex Mono'; font-weight: 400; font-display: swap; src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); }
+    @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; font-display: swap; src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); }
+    html, body { margin: 0; background: #03060c; color: #f4f7f8; }
+    body { font: 400 13px/1.4 'IBM Plex Mono', ui-monospace, Consolas, monospace; }
+    #globe { position: fixed; inset: 0; }
+    #scroll { height: 700vh; }
+    #dev { position: fixed; top: 14px; right: 16px; z-index: 2; display: flex; gap: 8px; align-items: center; text-shadow: 0 0 6px #03060c; }
+    #dev button { font: inherit; color: inherit; background: rgba(3, 6, 12, .45); border: 1px solid rgba(244, 247, 248, .45); border-radius: 3px; padding: 4px 9px; cursor: pointer; }
+    #dev button:focus-visible { outline: 2px solid #ffbe55; outline-offset: 2px; }
+    #dev output { min-width: 5.5ch; text-align: right; font-variant-numeric: tabular-nums; }
+    .bare #dev { display: none; }
+  </style>
+</head>
+<body>
+  <div id="globe"></div>
+  <div id="scroll"></div>
+  <div id="dev">
+    <output id="p">0.000</output>
+    <button id="lang" type="button">EN | ES</button>
+    <button id="lima" type="button">lockOn: Lima</button>
+    <button id="huaral" type="button">lockOn: field</button>
+  </div>
+  <script type="module">
+    // Dev page for the globe module. Scroll drives the dive. Query string:
+    //   ?p=0.5      pin the progress (scroll is ignored)      ?lang=es
+    //   ?overlay=0  imagery only                              ?instruments=0
+    //   ?still=1    force the still-frame fallback            ?creep=0   freeze the idle creep
+    //   ?pr=1       fixed device-pixel ratio                  ?bare=1    hide the dev buttons
+    import { createGlobe } from '/src/globe/index.ts';
+
+    const q = new URLSearchParams(location.search);
+    const FIELD = {
+      lat: -11.4729, lon: -77.2061, label: 'Huaral valley, Peru', labelEs: 'Valle de Huaral, Perú',
+      ring: [[-77.207403, -11.471998], [-77.206417, -11.471659], [-77.204745, -11.472721], [-77.205638, -11.473648], [-77.206692, -11.474191], [-77.207426, -11.473287]],
+    };
+    const LIMA = { lat: -12.0464, lon: -77.0428, label: 'Lima, Peru', labelEs: 'Lima, Perú' };
+    if (q.get('bare') === '1') document.body.classList.add('bare');
+    let lang = q.get('lang') === 'es' ? 'es' : 'en';
+    const out = document.getElementById('p');
+
+    const globe = createGlobe(document.getElementById('globe'), {
+      target: FIELD, lang,
+      overlay: q.get('overlay') !== '0', instruments: q.get('instruments') !== '0',
+      still: q.get('still') === '1', creep: q.get('creep') !== '0',
+      pixelRatio: q.has('pr') ? Number(q.get('pr')) : undefined,
+      onCamera: (c) => { window.__cam = c; },
+      onReady: () => { window.__ready = true; },
+    });
+    window.__globe = globe;
+
+    const pinned = q.has('p') ? Number(q.get('p')) : null;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const p = pinned ?? (max > 0 ? scrollY / max : 0);
+      globe.setProgress(p);
+      out.textContent = p.toFixed(3);
+    };
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', () => { globe.resize(); update(); });
+    update();
+
+    document.getElementById('lang').onclick = () => { lang = lang === 'en' ? 'es' : 'en'; globe.setLang(lang); };
+    document.getElementById('lima').onclick = () => globe.lockOn(LIMA);
+    document.getElementById('huaral').onclick = () => globe.lockOn(FIELD);
+  </script>
+</body>
+</html>
