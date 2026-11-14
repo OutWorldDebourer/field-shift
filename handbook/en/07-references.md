@@ -21,7 +21,8 @@ Every source used by the product, with its licence. Field Shift's own code is Ap
 | Copernicus Sentinel-2 L2A (Planetary Computer) | "Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer" | Copernicus Sentinel data legal notice (free, full, open) |
 | Landsat 8/9 Collection 2 L2 (USGS) | "Landsat courtesy of the U.S. Geological Survey" | Public domain |
 | Sentinel-2 cloudless 2016 by EOX IT Services GmbH (map base layer) | "Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)" | CC BY 4.0 (2016 edition only) |
-| OpenStreetMap Nominatim (place search) | "© OpenStreetMap contributors" | ODbL 1.0; usage policy respected (≤1 request/s, debounced) |
+| OpenStreetMap Nominatim (place search) | "© OpenStreetMap contributors" | ODbL 1.0; usage policy respected (search on Enter only, ≤1 request/s, cached) |
+| OpenStreetMap standard tiles ("Map" view of the field selection) | "© OpenStreetMap contributors (ODbL)" | ODbL 1.0 data; light interactive use per the OSM tile usage policy |
 
 ## Methods and thresholds
 

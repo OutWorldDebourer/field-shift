@@ -21,7 +21,8 @@ Todas las fuentes que usa el producto, con su licencia. El código propio de Fie
 | Copernicus Sentinel-2 L2A (Planetary Computer) | "Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer" | Aviso legal de datos Sentinel de Copernicus (libre, completo, abierto) |
 | Landsat 8/9 Colección 2 L2 (USGS) | "Landsat courtesy of the U.S. Geological Survey" | Dominio público |
 | Sentinel-2 cloudless 2016 de EOX IT Services GmbH (capa base del mapa) | "Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)" | CC BY 4.0 (solo la edición 2016) |
-| OpenStreetMap Nominatim (búsqueda de lugares) | "© OpenStreetMap contributors" | ODbL 1.0; se respeta la política de uso (≤1 solicitud/s) |
+| OpenStreetMap Nominatim (búsqueda de lugares) | "© OpenStreetMap contributors" | ODbL 1.0; se respeta la política de uso (búsqueda solo con Enter, ≤1 solicitud/s, con caché) |
+| Teselas estándar de OpenStreetMap (vista "Mapa" en la selección del campo) | "© OpenStreetMap contributors (ODbL)" | Datos ODbL 1.0; uso interactivo ligero según la política de teselas de OSM |
 
 ## Métodos y umbrales
 

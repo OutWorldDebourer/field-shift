@@ -2,7 +2,7 @@
 // request (Enter or the Search button), at most one request per second, results cached per query.
 import { lang } from '../../shared/i18n';
 
-export interface Place { name: string; lat: number; lon: number; bbox?: [number, number, number, number] }
+export interface Place { name: string; lat: number; lon: number; bbox?: [number, number, number, number]; kind?: string }
 
 let last = 0;
 let ctl: AbortController | null = null;
@@ -21,11 +21,13 @@ export async function searchPlaces(q: string): Promise<Place[]> {
   const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&addressdetails=0&accept-language=${lang()}&q=${encodeURIComponent(q)}`;
   const r = await fetch(url, { signal: ctl.signal, headers: { Accept: 'application/json' } });
   if (!r.ok) throw new Error(String(r.status));
-  const rows = (await r.json()) as { display_name: string; lat: string; lon: string; boundingbox?: string[] }[];
+  const rows = (await r.json()) as { display_name: string; lat: string; lon: string; boundingbox?: string[]; addresstype?: string; type?: string }[];
+  // Nominatim often returns the same name for a town, its district and its province: keep one per name + kind.
+  const seen = new Set<string>();
   const out = rows.map((x) => ({
-    name: x.display_name, lat: +x.lat, lon: +x.lon,
+    name: x.display_name, lat: +x.lat, lon: +x.lon, kind: x.addresstype || x.type,
     bbox: x.boundingbox ? [+x.boundingbox[2], +x.boundingbox[0], +x.boundingbox[3], +x.boundingbox[1]] : undefined,
-  })) as Place[];
+  }) as Place).filter((p) => { const k = p.name + '|' + p.kind; if (seen.has(k)) return false; seen.add(k); return true; });
   cache.set(key, out);
   return out;
 }

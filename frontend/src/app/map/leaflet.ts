@@ -33,6 +33,16 @@ export function eoxLayer(L: typeof Leaflet): Leaflet.TileLayer {
   return layer;
 }
 
+// Street map (towns, roads, rivers) from the OpenStreetMap standard tile server: no key, attribution required,
+// light interactive use per the OSM tile usage policy. Satellite imagery never comes from Google, Bing, Esri or
+// Mapbox (licence rule); CARTO's label tiles now require an API key, so they are not used.
+const OSM_ATTR = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors (ODbL)';
+
+/** A street map for finding the place before switching back to satellite to draw the field. */
+export function streetLayer(L: typeof Leaflet): Leaflet.TileLayer {
+  return L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, maxNativeZoom: 19, attribution: OSM_ATTR });
+}
+
 /** Adds the dated Sentinel-2 snapshot (backend) around a point; resolves with its credit or null. */
 export async function addSnapshot(L: typeof Leaflet, map: Leaflet.Map, lat: number, lon: number, sizeM = 1500): Promise<SnapshotMeta | null> {
   const meta = await snapshotMeta(lat, lon, sizeM);
@@ -41,7 +51,10 @@ export async function addSnapshot(L: typeof Leaflet, map: Leaflet.Map, lat: numb
   const overlay = L.imageOverlay(snapshotUrl(lat, lon, sizeM), [[b[1], b[0]], [b[3], b[2]]], { opacity: 1, attribution: `${meta.source ?? 'Sentinel-2 L2A'} ${meta.date ?? ''} · ${meta.credit ?? t('snap_credit_fallback')}` });
   overlay.addTo(map);
   // A thin hairline marks where the dated image ends and the 2016 base begins.
-  L.rectangle([[b[1], b[0]], [b[3], b[2]]], { color: '#fff', weight: 1, opacity: 0.75, fill: false, interactive: false }).addTo(map);
+  const edge = L.rectangle([[b[1], b[0]], [b[3], b[2]]], { color: '#fff', weight: 1, opacity: 0.75, fill: false, interactive: false }).addTo(map);
+  // At regional zoom the 5 km patch is only a dark square: show it from zoom 11 on.
+  const sync = () => { const on = map.getZoom() >= 11 && !map.getContainer().closest('.is-street'); overlay.setOpacity(on ? 1 : 0); edge.setStyle({ opacity: on ? 0.75 : 0 }); };
+  map.on('zoomend', sync); sync();
   (meta as SnapshotMeta & { bbox: typeof b }).bbox = b;
   return meta;
 }

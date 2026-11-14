@@ -84,7 +84,17 @@ export async function suggestCrops(q: string): Promise<CropSuggestion[]> {
     return DEMO_CROPS.filter((c) => [c.label.en, c.label.es, c.scientific, c.key].some((s) => s.toLowerCase().includes(n))).slice(0, 6);
   };
   if (!q.trim()) return [];
-  try { return await req<CropSuggestion[]>(`/api/crops/suggest?q=${encodeURIComponent(q)}`, { timeout: 3000 }); }
+  type Raw = { key: string; name?: { en?: string; es?: string }; label?: Bi; scientific_name?: string; scientific?: string };
+  try {
+    // The backend answers { suggestions: [...], accepts_any: true }; older shapes were a bare list.
+    const r = await req<Raw[] | { suggestions?: Raw[] }>(`/api/crops/suggest?q=${encodeURIComponent(q)}`, { timeout: 3000 });
+    const rows = Array.isArray(r) ? r : r.suggestions ?? [];
+    return rows.map((x) => ({
+      key: x.key,
+      label: x.label ?? { en: x.name?.en ?? x.key, es: x.name?.es ?? x.name?.en ?? x.key },
+      scientific: x.scientific ?? x.scientific_name ?? '',
+    }));
+  }
   catch { return local(); }
 }
 
