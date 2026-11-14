@@ -1,12 +1,17 @@
-// Glass chat with the consultant: bubbles, photo tiles (reticle on tagged photos), status line, composer with up to
-// 10 photos (drag and drop on desktop, camera on phone, ≤1600 px JPEG), and crop inputs with suggestions.
-import { sendMessage, suggestCrops, type ClientAnalysis, type CropSuggestion } from '../../shared/api';
-import type { ChatMessage } from '../../shared/contract';
+// Glass chat with the consultant: progress rail of the six topics, bubbles, photo tiles (reticle on tagged photos),
+// status line, composer with up to 10 full-resolution photos (drag and drop, camera on phone), voice dictation
+// (transcribes into the box, never sends), crop inputs with suggestions, and the closing "enough information" card.
+import { getAnalysis, sendMessage, suggestCrops, type ClientAnalysis, type CropSuggestion } from '../../shared/api';
+import type { ChatMessage, SectionKey } from '../../shared/contract';
 import { $, esc, toast } from '../../shared/dom';
 import { lang, onLang, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { debounce } from '../field/search';
-import { downscale, MAX_PHOTOS } from './photos';
+import { chimeOn, setChime, unlockAudio } from './chime';
+import { micButtonHtml, mountDictation, voiceLineHtml } from './dictation';
+import { preparePhoto, MAX_PHOTOS, sizeText } from './photos';
+import { stepsOf } from './progress';
+import { doneCardHtml, railHtml } from './rail';
 
 const TAGS: Record<string, { en: string; es: string }> = { blurry: { en: 'blurry', es: 'borrosa' } };
 
@@ -35,7 +40,7 @@ export function messageHtml(m: ChatMessage): string {
   return `<li class="msg msg--me"><div class="msg__col"><span class="sr-only">${esc(t('ws_you'))}:</span>${m.body ? `<div class="bubble bubble--me">${para(m.body)}</div>` : ''}${photos}</div></li>`;
 }
 
-export interface Chat { render(a: ClientAnalysis): void; destroy(): void }
+export interface Chat { render(a: ClientAnalysis, just?: SectionKey[]): void; prefill(s: string): void; destroy(): void }
 
 export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, onUpdate: (patch: Partial<ClientAnalysis>) => void): Chat {
   const coarse = matchMedia('(pointer: coarse)').matches;
@@ -52,6 +57,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
         <p id="crop-hint" class="sr-only">${esc(t('ws_crop_hint'))}</p>
       </div>
     </header>
+    <nav class="rail" aria-label="${esc(t('rail_label'))}"></nav>
     <ol class="chat__log" aria-live="polite" aria-label="${esc(t('ws_chat_label'))}"></ol>
     <p class="chat__pending status-line" hidden><i class="tick"></i><span></span></p>
     <form class="composer" novalidate>
@@ -61,8 +67,10 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
           <input type="file" accept="image/*" ${coarse ? 'capture="environment"' : ''} multiple class="sr-only"></label>
         <label class="sr-only" for="composer-text">${esc(t('ws_input_ph'))}</label>
         <textarea id="composer-text" rows="1" placeholder="${esc(t('ws_input_ph'))}" enterkeyhint="send"></textarea>
+        ${micButtonHtml()}
         <button type="submit" class="composer__send" aria-label="${esc(t('ws_send'))}">${icon('send')}</button>
       </div>
+      ${voiceLineHtml()}
     </form>
     <div class="chat__drop" hidden><p class="serif">${esc(t('ws_drop'))}</p></div>`;
 
@@ -75,7 +83,8 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
 
   const renderPreviews = () => {
     previews.hidden = !files.length;
-    previews.innerHTML = files.map((f, i) => `<li><img src="${f.url}" alt="${esc(t('ws_photo_n', { n: i + 1 }))}"><button type="button" class="composer__rm" data-rm="${i}" aria-label="${esc(t('ws_remove_photo', { n: i + 1 }))}">${icon('close')}</button></li>`).join('');
+    const loc = lang() === 'es' ? 'es-PE' : 'en-US';
+    previews.innerHTML = files.map((f, i) => `<li><img src="${f.url}" alt="${esc(t('ws_photo_size', { n: i + 1, s: sizeText(f.blob.size, loc) }))}"><span class="composer__size mono" aria-hidden="true">${esc(sizeText(f.blob.size, loc))}</span><button type="button" class="composer__rm" data-rm="${i}" aria-label="${esc(t('ws_remove_photo', { n: i + 1 }))}">${icon('close')}</button></li>`).join('');
   };
   previews.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLElement>('[data-rm]');
@@ -90,7 +99,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     if (imgs.length > room) toast(t('ws_max_photos'));
     showPending(t('ws_status_preparing'));
     for (const f of imgs.slice(0, Math.max(0, room))) {
-      const blob = await downscale(f).catch(() => f);
+      const blob = await preparePhoto(f).catch(() => f);
       files.push({ blob, url: URL.createObjectURL(blob) });
     }
     hidePending();
@@ -105,7 +114,9 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   host.addEventListener('dragleave', () => { depth = Math.max(0, depth - 1); if (!depth) drop.hidden = true; });
   host.addEventListener('drop', (e) => { e.preventDefault(); depth = 0; drop.hidden = true; if (e.dataTransfer?.files.length) void addFiles(e.dataTransfer.files); });
 
-  text.addEventListener('input', () => { text.style.height = 'auto'; text.style.height = Math.min(160, text.scrollHeight) + 'px'; });
+  const grow = () => { text.style.height = 'auto'; text.style.height = Math.min(160, text.scrollHeight) + 'px'; };
+  text.addEventListener('input', grow);
+  const dict = mountDictation(form, text, grow);
   text.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !coarse) { e.preventDefault(); form.requestSubmit(); } });
 
   function showPending(msg: string) { pending.hidden = false; pending.querySelector('span')!.textContent = msg; }
@@ -116,6 +127,8 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     if (!a || sending || a.readOnly) return;
     if (!body.trim() && !blobs.length) return;
     sending = true;
+    unlockAudio();
+    dict.stop();
     form.classList.add('is-busy');
     const optimistic: ChatMessage = { id: -1, role: 'user', body, created_at: new Date().toISOString(), photos: files.map((f) => ({ url: f.url })) };
     log.insertAdjacentHTML('beforeend', messageHtml(optimistic));
@@ -123,7 +136,17 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     showPending(t(blobs.length ? 'ws_status_reading' : 'ws_status_checking'));
     try {
       const r = await sendMessage(a, body, blobs, lang());
-      onUpdate({ messages: r.messages, sections: r.sections, ...(r.demo_mode != null ? { demo_mode: r.demo_mode } : {}) });
+      // Older turn responses carry no steps: read them from the analysis so the rail moves in the same update.
+      if (!Array.isArray(r.steps) && !a.offline) {
+        const fresh = await getAnalysis(a.id, lang()).catch(() => null);
+        if (fresh && Array.isArray(fresh.steps)) { r.steps = fresh.steps; r.next_step = fresh.next_step ?? null; }
+      }
+      onUpdate({
+        messages: r.messages, sections: r.sections,
+        ...(r.demo_mode != null ? { demo_mode: r.demo_mode } : {}),
+        ...(Array.isArray(r.steps) ? { steps: r.steps } : {}),
+        ...(r.next_step !== undefined ? { next_step: r.next_step } : {}),
+      });
       text.value = ''; text.style.height = 'auto';
       files = []; renderPreviews();
     } catch {
@@ -168,8 +191,24 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
 
   function scrollEnd() { requestAnimationFrame(() => { log.scrollTop = log.scrollHeight; }); }
 
-  function render(a: ClientAnalysis) {
-    log.innerHTML = a.messages.length ? a.messages.map(messageHtml).join('') : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p></li>`;
+  const rail = $('.rail', host);
+  rail.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-chime]');
+    if (!b) return;
+    const on = !chimeOn();
+    setChime(on);
+    if (on) unlockAudio();
+    const a = getA(); if (a) rail.innerHTML = railHtml(stepsOf(a));
+    rail.querySelector<HTMLElement>('[data-chime]')?.focus();
+  });
+
+  function render(a: ClientAnalysis, just: SectionKey[] = []) {
+    const steps = stepsOf(a);
+    rail.innerHTML = railHtml(steps, just);
+    rail.hidden = !!a.readOnly;
+    // The consultant's greeting arrives with the analysis: the empty state only shows when there is no message at all.
+    const shown = a.messages.filter((m) => m.role !== 'status' || m.body);
+    log.innerHTML = shown.length ? shown.map(messageHtml).join('') + doneCardHtml(a, steps) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p></li>`;
     const now = $<HTMLInputElement>('#crop-now', host), before = $<HTMLInputElement>('#crop-before', host);
     const sum = $('.crops__sum', host);
     const both = !!(a.crop_current && a.crop_history[0]);
@@ -195,7 +234,15 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     host.querySelector('[for=crop-before]')!.textContent = t('ws_crop_before');
     $('.composer__send', host).setAttribute('aria-label', t('ws_send'));
     $('.chat__drop p', host).textContent = t('ws_drop');
+    rail.setAttribute('aria-label', t('rail_label'));
+    dict.relabel();
+    renderPreviews();
     const a = getA(); if (a) render(a);
   });
-  return { render, destroy: off };
+  function prefill(s: string) {
+    text.value = s;
+    grow();
+    requestAnimationFrame(() => { text.focus(); text.setSelectionRange(s.length, s.length); });
+  }
+  return { render, prefill, destroy: () => { off(); dict.stop(); } };
 }

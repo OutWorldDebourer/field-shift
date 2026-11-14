@@ -1,0 +1,102 @@
+/* Iteration 2: progress rail, topic-done confirmation, closing card, dictation, photo sizes, layout fixes. */
+
+/* ---------- Layout: the section column never collapses (explicit placement, min 340 px) ---------- */
+.view--chat { grid-template-columns: minmax(400px, 620px) minmax(0, 1fr) minmax(340px, 410px); }
+.view--chat > .chat { grid-column: 1; grid-row: 1; min-width: 0; }
+.view--chat > .ws__gap { grid-column: 2; grid-row: 1; }
+.view--chat > .secs { grid-column: 3; grid-row: 1; min-width: 340px; }
+@media (max-width: 1240px) {
+  .view--chat { grid-template-columns: minmax(0, 1fr) minmax(340px, 380px); gap: 14px; }
+  .view--chat > .secs { grid-column: 2; }
+}
+@media (max-width: 899px) {
+  .view--chat { grid-template-columns: minmax(0, 1fr); }
+  .view--chat > .peek { grid-column: 1; grid-row: 2; }
+}
+
+/* ---------- Progress rail ---------- */
+.rail { padding: 8px 14px 8px; border-bottom: 1px solid var(--rule); display: grid; gap: 4px; }
+.rail__row { display: flex; align-items: center; gap: 8px; }
+.rail__chips { display: flex; gap: 4px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.rail__chips li { flex: 1 1 auto; min-width: 0; }
+.rail { container: rail / inline-size; }
+@container rail (max-width: 540px) { .rail__chip.is-done .rail__t, .rail__chip.is-pending .rail__t { display: none; } .rail__chips li:has(.is-active) { flex-grow: 3; } }
+.rail__chip { width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 0 6px;
+  border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.16); background: transparent; color: var(--ink-3); font-size: 0.8125rem; white-space: nowrap; cursor: pointer;
+  transition: background-color 0.4s var(--ease), color 0.4s, border-color 0.4s; }
+.rail__chip:hover { border-color: rgba(255, 255, 255, 0.5); color: var(--ink); }
+.rail__t { overflow: hidden; text-overflow: ellipsis; }
+.rail__mark { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; }
+.rail__mark svg { width: 15px; height: 15px; }
+.rail__chip.is-done { color: var(--ink); border-color: rgba(255, 255, 255, 0.3); }
+.rail__chip.is-done .rail__mark { background: #fff; color: var(--night); }
+.rail__chip.is-done .rail__mark svg { width: 12px; height: 12px; stroke-width: 3; }
+.rail__chip.is-active { background: #fff; color: var(--night); border-color: #fff; font-weight: 600; }
+.rail__chip.is-pending { opacity: 0.72; }
+.rail__snd { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; border: 0; background: none; color: var(--ink-2); }
+.rail__snd:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+.rail__snd svg { width: 20px; height: 20px; }
+.rail__next { font-size: 0.9375rem; line-height: 1.35; color: var(--ink-2); padding: 0 2px; }
+.rail__next b { color: var(--ink); font-weight: 600; }
+.rail__all { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); }
+.rail__all svg { width: 16px; height: 16px; }
+
+/* Topic-done confirmation: check pops on the chip and the section card, then the highlight moves on */
+@keyframes fs-pop { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes fs-glow { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55); } 100% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); } }
+@keyframes fs-arrive { 0%, 55% { background: transparent; color: var(--ink-3); border-color: rgba(255, 255, 255, 0.16); } 100% { background: #fff; color: var(--night); border-color: #fff; } }
+.rail__chip.is-just { animation: fs-glow 0.9s var(--ease) 1; }
+.rail__chip.is-just .rail__mark { animation: fs-pop 0.6s var(--ease) 1; }
+.rail__chip.is-arriving { animation: fs-arrive 1.1s var(--ease) 1; }
+.sec.is-just { animation: fs-glow 1s var(--ease) 1; }
+.sec.is-just .ring__check, .secbtn.is-just .ring__check { animation: fs-pop 0.6s var(--ease) 0.1s 1 both; }
+.sec.is-step-active { border-color: rgba(255, 255, 255, 0.6); }
+.sec.is-step-pending { opacity: 0.8; }
+.secbtn.is-active .ring { box-shadow: 0 0 0 2px #fff; border-radius: 50%; }
+.sec__summary--step { display: flex; gap: 8px; align-items: flex-start; font-weight: 600; }
+.sec__summary--step svg { flex: none; width: 18px; height: 18px; margin-top: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .rail__chip.is-just, .rail__chip.is-just .rail__mark, .rail__chip.is-arriving, .sec.is-just, .sec.is-just .ring__check, .secbtn.is-just .ring__check { animation: none; }
+}
+
+/* Closing card */
+.chat__done { display: block; }
+.done { padding: 18px 18px 16px; border-radius: 18px; display: grid; gap: 10px; border-color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.1) !important; }
+.done__mark { width: 34px; height: 34px; border-radius: 50%; background: #fff; color: var(--night); display: grid; place-items: center; }
+.done__mark svg { width: 20px; height: 20px; stroke-width: 2.6; }
+.done h3 { font-size: 1.5rem; line-height: 1.15; }
+.done p { font-size: 1rem; color: var(--ink-2); }
+.done__a { display: flex; flex-wrap: wrap; gap: 8px; }
+.done__a .btn { white-space: normal; text-align: left; }
+
+/* ---------- Composer: mic + voice line + photo sizes ---------- */
+.composer__row { grid-template-columns: 48px minmax(0, 1fr) 48px 48px; }
+.composer__mic { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.08); color: var(--ink); }
+.composer__mic:hover { background: rgba(255, 255, 255, 0.18); }
+.composer__mic svg { width: 22px; height: 22px; }
+.composer__mic.is-rec { background: #fff; color: var(--night); border-color: #fff; animation: fs-glow 1.4s var(--ease) infinite; }
+.composer__mic.is-wait { opacity: 0.6; }
+.composer.is-dictating textarea { border-color: #fff; }
+.voice { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 30px; }
+.voice__status { font-size: 0.875rem; color: var(--ink); min-width: 0; font-variant-numeric: tabular-nums; }
+.voice__eng { display: inline-flex; align-items: center; gap: 2px; flex: none; margin-left: auto; }
+.voice__lbl { font-size: 0.75rem; color: var(--ink-2); margin-right: 4px; }
+.voice__eng button { position: relative; min-height: 30px; padding: 0 10px; border-radius: 8px; border: 0; background: none; color: var(--ink-2); font-size: 0.8125rem; }
+.voice__eng button::after { content: ''; position: absolute; inset: -7px 0; }
+.voice__eng button[aria-checked='true'] { background: rgba(255, 255, 255, 0.16); color: #fff; font-weight: 600; }
+.voice__eng button[aria-disabled='true'] { opacity: 0.45; text-decoration: line-through; }
+.composer__previews li { width: 72px; height: 72px; }
+.composer textarea::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.composer__size { position: absolute; left: 0; right: 0; bottom: 0; padding: 1px 4px; font-size: 0.6875rem; text-align: center; background: rgba(5, 12, 20, 0.78); color: #fff; }
+@media (max-width: 899px) {
+  .composer__row { grid-template-columns: 44px minmax(0, 1fr) 44px 44px; gap: 6px; }
+  .composer__cam, .composer__mic, .composer__send { width: 44px; height: 44px; }
+  .rail { padding: 0 4px 0 12px; grid-template-columns: minmax(0, 1fr) 44px; align-items: center; gap: 0 4px; }
+  .rail__row { display: contents; }
+  .rail__chips { display: none; }
+  .rail__snd { grid-column: 2; grid-row: 1; }
+  .rail__next { grid-column: 1; grid-row: 1; font-size: 0.9375rem; padding: 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+/* Footer: Spanish gloss next to the verbatim Copernicus sentence */
+.cr-gloss { opacity: 0.9; }

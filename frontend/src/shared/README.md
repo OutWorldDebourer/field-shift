@@ -17,3 +17,7 @@
 - `icons.ts` — line icon set.
 - `dom.ts` — escaping, element helpers, toast.
 - `demo/` — bundled Huaral demo dataset.
+- `glossary.ts` — bundled bilingual glossary (fallback for GET /api/glossary, same keys) and reading id → term.
+- `glosspanel.ts`, `glosspanel.css` — ⓘ "What does it mean?" buttons and the glossary side panel (enabled per page).
+- `pests.ts` — pest names in the UI language (`name_bi` from the backend, else a local map).
+- `localize.ts` — Spanish for English fragments inside backend units and source lines ("vs normal", "generations", …).

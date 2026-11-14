@@ -53,7 +53,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     </div>
     <button type="button" class="fs__full pill" id="fs-full" aria-pressed="false">${icon('layers')}<span>${esc(t('fs_full'))}</span></button>
     <div class="fs__credit"><span class="mono" id="fs-img"></span><button type="button" class="fs__info" id="fs-info" aria-expanded="false" aria-controls="fs-lic" aria-label="${esc(t('fs_licences'))}">${icon('info')}</button>
-      <div class="fs__lic glass" id="fs-lic" hidden><p>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</p><p>Hybrid and Map views (roads, rivers, towns): © OpenStreetMap contributors · ODbL · vector tiles by OpenFreeMap</p><p>Sentinel-2 L2A · Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer</p><p>Place search: Nominatim · © OpenStreetMap contributors · ODbL</p><p>Leaflet · BSD-2-Clause</p></div></div>
+      <div class="fs__lic glass" id="fs-lic" hidden><p data-i18n="lic_eox">${esc(t('lic_eox'))}</p><p data-i18n="lic_osm">${esc(t('lic_osm'))}</p><p data-i18n="lic_s2">${esc(t('lic_s2'))}</p><p data-i18n="lic_search">${esc(t('lic_search'))}</p><p>Leaflet · BSD-2-Clause</p></div></div>
     <aside class="fs__panel glass" aria-labelledby="fs-t">
       <h1 id="fs-t" class="serif fs__title" data-i18n="fs_title">${esc(t('fs_title'))}</h1>
       <p class="fs__lede" data-i18n="fs_lede">${esc(t('fs_lede'))}</p>
@@ -379,7 +379,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       const km = (mpp * H) / (2 * Math.tan(Math.PI / 6)) / 1000;
       $('#fs-alt', host).textContent = t('alt', { km: km >= 10 ? Math.round(km) : km.toFixed(1) });
       const hyb = host.querySelector('[data-base=hyb][aria-checked=true]') ? ' · © OpenStreetMap' : '';
-      $('#fs-img', host).textContent = host.classList.contains('is-street') ? '© OpenStreetMap contributors' : (coveredDate() ? `Sentinel-2 L2A ${coveredDate()} · EOX 2016 base` : t('eox_short')) + hyb;
+      $('#fs-img', host).textContent = host.classList.contains('is-street') ? t('osm_contrib') : (coveredDate() ? t('fs_img_s2', { d: coveredDate()! }) : t('eox_short')) + hyb;
     };
     map.on('move zoom resize', () => { placeReticle(); instr(); });
     instr();

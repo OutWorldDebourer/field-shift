@@ -23,6 +23,8 @@ pub struct TurnOutput {
     pub messages: Vec<ChatMessage>,
     pub sections: Vec<Section>,
     pub demo_mode: bool,
+    pub steps: Vec<analyses::steps::Step>,
+    pub next_step: Option<String>,
 }
 
 const MAX_TOOL_ROUNDS: usize = 8;
@@ -66,7 +68,7 @@ pub async fn run_turn(state: &AppState, id: &str, input: TurnInput) -> ApiResult
     store::add_message(&state.db, id, "assistant", &reply, &[]).await?;
     store::set_demo_mode(&state.db, id, demo_mode).await?;
     let after = store::load(&state.db, id).await?;
-    Ok(TurnOutput { messages: after.messages.into_iter().filter(|m| m.id >= user_msg).collect(), sections: after.sections, demo_mode })
+    Ok(TurnOutput { messages: after.messages.into_iter().filter(|m| m.id >= user_msg).collect(), sections: after.sections, demo_mode, steps: after.steps, next_step: after.next_step })
 }
 
 async fn live(state: &AppState, id: &str, st: &AnalysisState, input: &TurnInput, saved: &[photos::StoredPhoto], key: &str)

@@ -2,8 +2,9 @@
 // Vector tiles from OpenFreeMap (no key, no account; data © OpenStreetMap contributors, ODbL), rendered with
 // MapLibre GL inside Leaflet. Loaded lazily, only when the hybrid view is first shown.
 import type * as Leaflet from 'leaflet';
+import { t } from '../../shared/i18n';
 
-const ATTR = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a>';
+const ATTR = () => `© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> ${t('osm_by')} · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a>`;
 
 type Lang = 'en' | 'es';
 
@@ -67,7 +68,7 @@ export async function createHybrid(lang: Lang, pane: string): Promise<Hybrid> {
     import('maplibre-gl/dist/maplibre-gl.css'),
   ]);
   ml.setWorkerUrl(worker.default);
-  const gl = maplibreGL({ style: style(lang) as never, pane, interactive: false, attribution: ATTR } as never) as unknown as Leaflet.Layer & { getMaplibreMap(): { setStyle(s: unknown): void } };
+  const gl = maplibreGL({ style: style(lang) as never, pane, interactive: false, attribution: ATTR() } as never) as unknown as Leaflet.Layer & { getMaplibreMap(): { setStyle(s: unknown): void } };
   return {
     layer: gl,
     setLang(l: Lang) { try { gl.getMaplibreMap().setStyle(style(l)); } catch { /* not on the map yet */ } },

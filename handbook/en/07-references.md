@@ -10,6 +10,7 @@ Every source used by the product, with its licence. Field Shift's own code is Ap
 | SMAP L4 Global 3-hourly 9 km Soil Moisture (SPL4SMGP) v8 | Reichle et al., NSIDC DAAC (dataset DOI shown with each reading) | NASA Earth science data, no restrictions |
 | GPM IMERG Late Precipitation L3 1 day 0.1° v07 (GPM_3IMERGDL) | Huffman et al., GES DISC, DOI 10.5067/GPM/IMERGDL/DAY/07 | NASA Earth science data, no restrictions |
 | GRACE/GRACE-FO JPL Mascon CRI RL06.3 v4 | Watkins et al. 2015; Wiese et al. 2016; PO.DAAC | NASA Earth science data, no restrictions |
+| NASA GEOS-FP forecast (GMAO), tavg1_2d_slv_Nx and tavg1_2d_flx_Nx | NASA Global Modeling and Assimilation Office, via NCCS OPeNDAP | NASA data, no restrictions; cite NASA GMAO |
 | NASADEM | NASA JPL, via Microsoft Planetary Computer | Public domain |
 | NEX-GDDP-CMIP6 | Thrasher et al. 2022, Scientific Data; NASA NCCS | CC BY-SA 4.0 as stated in each v2.0 model file (the stricter of NASA's two statements; the v1 tech note says CC0). 13 models, one per institution; dataset DOI 10.7917/OFSG3345, paper DOI 10.1038/s41597-022-01393-4. Derived numbers are shared alike |
 | Blue Marble Next Generation, VIIRS Black Marble, VIIRS corrected reflectance | NASA GIBS / ESDIS ("We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's ESDIS") | Public domain, credit NASA |

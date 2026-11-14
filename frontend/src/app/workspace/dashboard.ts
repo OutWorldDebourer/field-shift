@@ -12,7 +12,12 @@ import { esc } from '../../shared/dom';
 import { fmt, fmtDateShort, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
+import { glossBtn, glossHeaderBtn } from '../../shared/glosspanel';
+import { pestTitle } from '../../shared/pests';
+import { loc } from '../../shared/localize';
 import { alertsFor } from './alerts';
+import { chartHtml, controlsHtml, forecastNow, legendHtml, loadForecast, outlookNow, sourcesHtml, tableHtml, wireForecast } from './forecast';
+import { topicsFor, topicsHtml } from './topics';
 import './dashboard.css';
 
 export type LayerKey = 'vigor' | 'soil' | 'temp' | 'slope';
@@ -79,9 +84,8 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <p class="status-line" data-build-status hidden><i class="tick"></i>${esc(t('db_building'))}</p>
     </section></div></div>`;
   }
-  const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r).replace(/<div class="drow__label">[^<]*<\/div>/, `<div class="drow__label" title="${esc(pick(r.label))}">${esc(shortLabel(r) ?? pick(r.label))}</div>`)}</li>`).join('');
+  const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r, shortLabel(r) ?? pick(r.label))}</li>`).join('');
   const alerts = alertsFor(ev);
-  const last = ev.climate_monthly.length ? ev.climate_monthly[ev.climate_monthly.length - 1].month : null;
   const tl = currentTimeline(a);
   const startMonth = new Date(ev.generated_at).getUTCMonth() + 1;
   const proj = ev.projection;
@@ -89,38 +93,77 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
   return `<div class="dash${opts.preview ? ' dash--preview' : ''}">
     ${map}
     <div class="dash__side">
+      ${opts.preview ? '' : `<div class="dash__tools">${glossHeaderBtn('')}</div>`}
       <ul class="dash__tiles" aria-label="${esc(t('db_readings'))}">${tiles}</ul>
-      <section class="glass dash__card dash__chart">
+      ${opts.preview ? `<section class="glass dash__card dash__chart">
         <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}</h3>
           <p class="legend"><span><i class="k-line"></i>${esc(t('db_this_year'))}</span><span><i class="k-band"></i>${esc(t('db_normal'))}${normalPeriod(ev) ? ' ' + esc(normalPeriod(ev)!) : ''}</span></p></header>
-        ${seasonChart(ev.climate_monthly, { w: narrow() ? 380 : 680, h: narrow() ? 220 : opts.preview ? 180 : 200, provisional: !!ev.readings.find((r) => r.id.startsWith('temp'))?.provisional })}
-        <p class="dash__src mono">NASA POWER · T2M · ${last ? esc(last) : ''} · ~50 km · ${esc(t('regional'))}</p>
-      </section>
+        ${seasonChart(ev.climate_monthly, { w: narrow() ? 380 : 680, h: 180, provisional: !!ev.readings.find((r) => r.id.startsWith('temp'))?.provisional })}
+        <p class="dash__src mono">NASA POWER · ${esc(t('t2m'))} · ~50 km · ${esc(t('regional'))}</p>
+      </section>` : seasonCard(a)}
       <div class="dash__row dash__row--3">
         ${tl ? `<section class="glass dash__card dash__cal"><h3 class="dash__h">${esc(t(tl.length === 12 ? 'db_calendar' : 'db_sequence'))}</h3>${timelineStrip(tl, startMonth % 12, true, !!opts.preview)}${currentPlan(a) ? `<p class="dash__plan">${esc(pick(currentPlan(a)!.name))}</p><p class="dash__plan-why">${esc(pick(currentPlan(a)!.why))}</p>` : ''}${opts.preview || a.readOnly ? '' : `<button type="button" class="btn btn--glass btn--sm" data-goto="rotation">${icon('rotation')}${esc(t('ws_open_rotation'))}</button>`}</section>` : ''}
-        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
+        <section class="glass dash__card dash__alerts"><h3 class="dash__h">${esc(t('db_alerts'))}</h3>
           ${alerts.length ? `<ul class="alerts">${alerts.map((al) => `<li class="al al--${al.level}">${icon(al.level === 'info' ? 'info' : 'alert')}<span>${esc(pick(al.text))}<small class="mono">${al.detail ? esc(al.detail) + ' · ' : ''}${esc(al.source)} · ${esc(fmtDateShort(al.date))}</small></span></li>`).join('')}</ul>` : `<p class="chart-empty">${esc(t('db_no_alerts'))}</p>`}
+          ${opts.preview || a.readOnly ? '' : `<div data-topics>${topicsHtml(topicsFor(ev, forecastNow(a), outlookNow(a)))}</div>`}
         </section>
-        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="serif dash__h3">${esc(t('db_projection'))}</h3><p class="proj__lbl mono">${esc(t('db_proj_label'))}</p>
-          ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">${proj.d_temp_c > 0 ? '+' : ''}${fmt(proj.d_temp_c, 2)} °C</span> <span>${esc(proj.horizon)} · ${esc(proj.scenario)}</span></p>
-            ${projRange(proj) ? `<p class="proj__r">${esc(projRange(proj)!)}</p>` : ''}${projBase(proj) ? `<p class="proj__r">${esc(t('db_proj_base', { p: projBase(proj)! }))}</p>` : ''}
+        ${opts.preview ? '' : `<section class="glass dash__card dash__proj"><h3 class="serif dash__h3">${esc(t('db_projection'))}${glossBtn('nexgddp', t('db_projection'))}</h3><p class="proj__lbl mono">${esc(t('db_proj_label'))}</p>
+          ${proj && proj.d_temp_c != null ? `<p class="proj"><span class="proj__v">${proj.d_temp_c > 0 ? '+' : ''}${fmt(proj.d_temp_c, 2)} °C</span> <span>${esc(loc(proj.horizon))} · ${esc(proj.scenario)}</span></p>
+            ${projRange(proj) ? `<p class="proj__r">${esc(projRange(proj)!)}</p>` : ''}${projBase(proj) ? `<p class="proj__r">${esc(t('db_proj_base', { p: loc(projBase(proj)!) }))}</p>` : ''}
             ${proj.d_rain_pct != null ? `<p class="proj__r">${proj.d_rain_pct > 0 ? '+' : '−'}${fmt(Math.abs(proj.d_rain_pct), 1)}% ${esc(t('db_rain'))}</p>` : ''}
             <details class="proj__models"><summary class="mono">NEX-GDDP-CMIP6 · ${esc(t('db_proj_models', { n: proj.models.length }))} · ~25 km</summary><p class="mono">${esc(proj.models.join(', '))}</p></details>` : `<p class="chart-empty">${esc(t('db_projection_none'))}</p>`}
         </section>`}
       </div>
       ${opts.preview ? '' : `<div class="dash__row">
-        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}</h3>${ndviLine(ev)}${ndviChart(ev.ndvi_series, { w: narrow() ? 360 : 420, h: 150 })}
+        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}${glossBtn('ndvi', t('db_ndvi_title'))}</h3>${ndviLine(ev)}${ndviChart(ev.ndvi_series, { w: narrow() ? 360 : 420, h: 150 })}
           <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
-        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}</h3>
-          ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(p.name)}</b> <i>${esc(p.scientific)}</i></span>
+        <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}${glossBtn('pest_gen', t('db_pests'))}</h3>
+          ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(pestTitle(p))}</b> <i>${esc(p.scientific)}</i></span>
             <span class="mono">${fmt(p.generations_now!, 1)} ${esc(t('db_now'))} · ${p.generations_normal != null ? fmt(p.generations_normal, 1) + ' ' + esc(t('db_norm')) : '—'}</span></li>`).join('')}</ul>
-            <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · degree-days · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>`}
+            <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · ${esc(t('degree_days'))} · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>`}
         </section></div>`}
     </div>
   </div>`;
 }
 
 const narrow = () => typeof innerWidth === 'number' && innerWidth < 700;
+
+/** The season card with the forecast controls; inner parts are repainted in place when a control changes. */
+function seasonCard(a: ClientAnalysis): string {
+  return `<section class="glass dash__card dash__chart" data-season-card>
+    <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}${glossBtn('outlook', t('db_chart_title'))}</h3></header>
+    ${a.offline ? '' : `<div data-fcbox>${controlsHtml(a)}</div>`}
+    ${seasonParts(a)}
+  </section>`;
+}
+function seasonParts(a: ClientAnalysis): string {
+  return `<div data-season-parts><p class="legend legend--plus">${legendHtml(a, forecastNow(a), outlookNow(a))}</p>
+    <div class="dash__chartwrap">${chartHtml(a, narrow() ? 380 : 680, narrow() ? 230 : 220)}</div>
+    ${sourcesHtml(a)}${tableHtml(a)}</div>`;
+}
+
+/** Forecast controls, data loading and the recommended topics for the live dashboard. */
+export function mountDashboardForecast(root: HTMLElement, getA: () => ClientAnalysis): void {
+  const card = root.querySelector<HTMLElement>('[data-season-card]');
+  if (!card) return;
+  const paint = () => {
+    const a = getA();
+    if (!a.evidence || !root.isConnected) return;
+    const parts = card.querySelector('[data-season-parts]');
+    if (parts) parts.outerHTML = seasonParts(a);
+    const box = card.querySelector('[data-fcbox]');
+    const focused = document.activeElement && box?.contains(document.activeElement) ? (document.activeElement as HTMLElement).dataset : null;
+    if (box) box.innerHTML = controlsHtml(a);
+    if (focused) {
+      const sel = focused.fcdays ? `[data-fcdays="${focused.fcdays}"]` : 'fcmonths' in focused ? '[data-fcmonths]' : 'fcproj' in focused ? '[data-fcproj]' : '';
+      if (sel) box?.querySelector<HTMLElement>(sel)?.focus();
+    }
+    const tp = root.querySelector('[data-topics]');
+    if (tp) tp.innerHTML = topicsHtml(topicsFor(a.evidence, forecastNow(a), outlookNow(a)));
+  };
+  wireForecast(card, getA, paint);
+  void loadForecast(getA()).then(paint);
+}
 function ndviLine(ev: EvidencePackage): string {
   const r = ev.readings.find((x) => x.id === 'ndvi');
   return r ? `<p class="dash__line">${esc(pick(r.verdict))} · ${esc(valueText(r).text)} · ${esc(fmtDateShort(r.date))}</p>` : '';
@@ -197,7 +240,10 @@ export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): P
     Object.assign(ret.style, { left: host.offsetLeft + nw.x - pad + 'px', top: host.offsetTop + nw.y - pad + 'px', width: w + 'px', height: h + 'px' });
   };
   map.on('move zoom resize', placeRet);
-  new ResizeObserver(() => { map.invalidateSize(); placeRet(); }).observe(host);
-  requestAnimationFrame(() => { map.invalidateSize(); setLayer('vigor'); placeRet(); });
-  return () => map.remove();
+  // Stop observing before the map is removed; a resize after removal would touch a map without panes.
+  let alive = true;
+  const ro = new ResizeObserver(() => { if (!alive || !host.isConnected) return; map.invalidateSize(); placeRet(); });
+  ro.observe(host);
+  requestAnimationFrame(() => { if (!alive) return; map.invalidateSize(); setLayer('vigor'); placeRet(); });
+  return () => { alive = false; ro.disconnect(); map.remove(); };
 }

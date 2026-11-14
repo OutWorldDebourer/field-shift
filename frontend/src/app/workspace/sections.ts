@@ -1,7 +1,8 @@
-// The section column (Your field, Soil, Pest care, Nutrition, Rotation, Technical sheet) with progress rings and
-// states empty / in progress / ready / with gaps / locked; on phone a row of round buttons opening a bottom sheet.
+// The section column (Your field, Soil, Pest care, Nutrition, Rotation, Technical sheet) with progress rings.
+// States follow the guided steps when the backend sends them (pending / current topic / done, plus "with gaps"),
+// else the section states; a done card shows the step summary. On phone, round buttons open a bottom sheet.
 import type { ClientAnalysis } from '../../shared/api';
-import type { Bi, Section, SectionKey, SectionState } from '../../shared/contract';
+import type { Bi, Section, SectionKey, SectionState, Step } from '../../shared/contract';
 import { dataRow, dataRowCompact } from '../../shared/datarow';
 import { esc } from '../../shared/dom';
 import { pick, t } from '../../shared/i18n';
@@ -9,24 +10,14 @@ import { icon, type IconName } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
 import { exportButtons } from './export';
 import { keyReadings, shortLabel } from '../../shared/evidence';
+import { displayState, getSection, ORDER, SHORT, stepsOf, TITLE } from './progress';
+import { SEC_ICON } from './rail';
 
-export const ORDER: SectionKey[] = ['field', 'soil', 'pests', 'nutrition', 'rotation', 'sheet'];
-const META: Record<SectionKey, { title: StrKey; short: StrKey; icon: IconName }> = {
-  field: { title: 'sec_field', short: 'sec_field_short', icon: 'field' },
-  soil: { title: 'sec_soil', short: 'sec_soil', icon: 'soil' },
-  pests: { title: 'sec_pests', short: 'sec_pests_short', icon: 'bug' },
-  nutrition: { title: 'sec_nutrition', short: 'sec_nutrition', icon: 'nutrition' },
-  rotation: { title: 'sec_rotation', short: 'sec_rotation', icon: 'rotation' },
-  sheet: { title: 'sec_sheet', short: 'sec_sheet_short', icon: 'sheet' },
-};
+export { getSection, ORDER };
 const FRACTION: Record<SectionState, number> = { empty: 0, progress: 0.5, gaps: 1, ready: 1, locked: 0 };
 const STATE_KEY: Record<SectionState, StrKey> = { empty: 'st_empty', progress: 'st_progress', ready: 'st_ready', gaps: 'st_gaps', locked: 'st_locked' };
 
-export const sectionTitle = (k: SectionKey) => t(META[k].title);
-
-export function getSection(a: ClientAnalysis, k: SectionKey): Section {
-  return a.sections.find((s) => s.key === k) ?? { key: k, state: k === 'sheet' ? 'locked' : 'empty' };
-}
+export const sectionTitle = (k: SectionKey) => t(TITLE[k]);
 
 export function ring(state: SectionState, size = 40, ic?: IconName): string {
   const r = size / 2 - 3, c = 2 * Math.PI * r, f = FRACTION[state];
@@ -37,8 +28,26 @@ export function ring(state: SectionState, size = 40, ic?: IconName): string {
     ${inner}${state === 'gaps' ? '<i class="ring__dot"></i>' : ''}${state === 'ready' ? `<i class="ring__check">${icon('check')}</i>` : ''}</span>`;
 }
 
-function stateLine(s: Section): string {
-  return `<span class="sec__state">${esc(t(STATE_KEY[s.state]))}</span>${s.note ? `<span class="sec__note${s.state === 'gaps' ? ' is-warn' : ''}">${esc(pick(s.note))}</span>` : ''}`;
+/** State label and note: with steps, "Current topic · I need …" / "Coming up" / step summary when done. */
+function stateText(s: Section, st: SectionState, step?: Step, guided = false): { label: string; note: string; warn: boolean } {
+  if (guided && step) {
+    if (step.state === 'active') return { label: t('st_active'), note: step.needs.length ? t('rail_needs', { x: step.needs.map((n) => pick(n)).join(', ') }) : '', warn: false };
+    if (step.state === 'pending') return { label: s.key === 'sheet' ? t('st_locked') : t('st_pending'), note: '', warn: false };
+    return { label: t(STATE_KEY[st]), note: step.summary ? pick(step.summary) : s.note ? pick(s.note) : '', warn: st === 'gaps' };
+  }
+  return { label: t(STATE_KEY[st]), note: s.note ? pick(s.note) : '', warn: st === 'gaps' };
+}
+
+function stateLine(x: { label: string; note: string; warn: boolean }): string {
+  return `<span class="sec__state">${esc(x.label)}</span>${x.note ? `<span class="sec__note${x.warn ? ' is-warn' : ''}">${esc(x.note)}</span>` : ''}`;
+}
+
+const guided = (a: ClientAnalysis) => Array.isArray(a.steps) && a.steps.length > 0;
+
+function view(a: ClientAnalysis, k: SectionKey, steps: Step[]) {
+  const s = getSection(a, k);
+  const d = displayState(a, k, steps);
+  return { s, st: d.state, step: d.step, text: stateText(s, d.state, d.step, guided(a)) };
 }
 
 type Extra = { declared_gaps?: Bi[] };
@@ -47,22 +56,25 @@ type ItemX = { ai_observation?: boolean };
 /** Body of a section (expanded card or bottom sheet). */
 export function sectionBody(a: ClientAnalysis, k: SectionKey): string {
   const s = getSection(a, k);
+  const step = stepsOf(a).find((x) => x.key === k);
+  const stepSummary = guided(a) && step?.state === 'done' && step.summary && pick(step.summary) !== pick(s.content?.summary) ? `<p class="sec__summary sec__summary--step">${icon('check')}${esc(pick(step.summary))}</p>` : '';
   if (k === 'field') {
     const rows = a.evidence?.readings ?? [];
-    return `${s.content ? `<p class="sec__summary">${esc(pick(s.content.summary))}</p>` : ''}
-      ${rows.length ? `<div class="sec__rows">${rows.map(dataRow).join('')}</div>` : `<p class="sec__empty">${esc(t('db_no_evidence'))}</p>`}
+    return `${stepSummary}${s.content ? `<p class="sec__summary">${esc(pick(s.content.summary))}</p>` : ''}
+      ${rows.length ? `<div class="sec__rows">${rows.map((r) => dataRow(r)).join('')}</div>` : `<p class="sec__empty">${esc(t('db_no_evidence'))}</p>`}
       ${gapsList(a.evidence?.gaps.map((g) => g.text) ?? [])}
       <button type="button" class="btn btn--glass btn--sm" data-goto="dashboard">${icon('dashboard')}${esc(t('ws_open_dash'))}</button>`;
   }
   if (k === 'sheet') {
-    return `<p class="sec__summary">${esc(t('ws_sheet_body'))}</p>${s.state === 'locked' ? `<p class="sec__empty">${esc(t('st_locked'))}</p>` : exportButtons(a)}`;
+    const locked = view(a, 'sheet', stepsOf(a)).st === 'locked';
+    return `<p class="sec__summary">${esc(t('ws_sheet_body'))}</p>${locked ? `<p class="sec__empty">${esc(t('st_locked'))}</p>` : exportButtons(a)}`;
   }
   const c = s.content;
-  if (!c) return `<p class="sec__empty">${esc(s.note ? pick(s.note) : t('ws_no_content'))}</p>`;
+  if (!c) return `${stepSummary}<p class="sec__empty">${esc(s.note ? pick(s.note) : t('ws_no_content'))}</p>`;
   const items = c.items.map((it) => `<li class="sec__item${(it as ItemX).ai_observation ? ' is-ai' : ''}">
       <h4>${esc(pick(it.title))}${(it as ItemX).ai_observation ? `<span class="ai-tag mono">${esc(t('ai_obs'))}</span>` : ''}</h4><p>${esc(pick(it.body))}</p>
       ${it.citations?.length ? `<p class="sec__cites mono">${it.citations.map((ci) => `<a href="${esc(ci.url)}" target="_blank" rel="noopener">${esc(ci.title)}</a>`).join(' · ')}</p>` : ''}</li>`).join('');
-  return `<p class="sec__summary">${esc(pick(c.summary))}</p>${items ? `<ul class="sec__items">${items}</ul>` : ''}
+  return `${stepSummary}<p class="sec__summary">${esc(pick(c.summary))}</p>${items ? `<ul class="sec__items">${items}</ul>` : ''}
     ${gapsList((c as unknown as Extra).declared_gaps ?? [])}
     ${k === 'rotation' ? `<button type="button" class="btn btn--glass btn--sm" data-goto="rotation">${icon('rotation')}${esc(t('ws_open_rotation'))}</button>` : ''}`;
 }
@@ -72,23 +84,26 @@ function gapsList(g: Bi[]): string {
   return `<div class="sec__gaps"><h4 class="mono">${esc(t('ws_gaps_title'))}</h4><ul>${g.map((x) => `<li>${icon('info')}${esc(pick(x))}</li>`).join('')}</ul></div>`;
 }
 
-/** Desktop column. */
-export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): string {
-  const secs = ORDER.map((k) => getSection(a, k));
-  const done = secs.filter((s) => s.state === 'ready' || s.state === 'gaps').length;
+/** Desktop column. `just` = keys whose step just turned done (short check animation). */
+export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null, just: SectionKey[] = []): string {
+  const steps = stepsOf(a);
+  const views = ORDER.map((k) => view(a, k, steps));
+  const done = views.filter((v) => v.st === 'ready' || v.st === 'gaps').length;
+  const gaps = views.filter((v) => v.st === 'gaps').length;
   const preview = (k: SectionKey) => {
     if (k !== 'field' || !a.evidence) return '';
     const pickR = keyReadings(a.evidence);
     return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r, undefined, shortLabel(r), true)).join('')}</div>` : '';
   };
   return `<header class="secs__head"><h2 class="serif">${esc(t('ws_sections'))}</h2>
-      <span class="secs__count mono">${esc(secs.some((s) => s.state === 'gaps') ? t('ws_progress_g', { done: done - secs.filter((s) => s.state === 'gaps').length, total: secs.length, g: secs.filter((s) => s.state === 'gaps').length }) : t('ws_progress', { done, total: secs.length }))}</span></header>
-    <ul class="secs__list" data-secs-list>${secs.map((s) => {
+      <span class="secs__count mono">${esc(gaps ? t('ws_progress_g', { done: done - gaps, total: views.length, g: gaps }) : t('ws_progress', { done, total: views.length }))}</span></header>
+    <ul class="secs__list" data-secs-list>${views.map(({ s, st, step, text }) => {
       const isOpen = open === s.key;
-      return `<li class="sec sec--${s.state}${isOpen ? ' is-open' : ''}">
-        <button type="button" class="sec__head" aria-expanded="${isOpen}" aria-controls="sec-${s.key}" data-sec="${s.key}">
-          ${ring(s.state, 40, META[s.key].icon)}
-          <span class="sec__titles"><span class="sec__title">${esc(t(META[s.key].title))}${s.key === 'field' ? ` <span class="sec__sub mono">· ${esc(t('sec_field_sub'))}</span>` : ''}</span>${stateLine(s)}</span>
+      const stepCls = step ? ` is-step-${step.state}` : '';
+      return `<li class="sec sec--${st}${stepCls}${isOpen ? ' is-open' : ''}${just.includes(s.key) ? ' is-just' : ''}" data-seckey="${s.key}">
+        <button type="button" class="sec__head" aria-expanded="${isOpen}" aria-controls="sec-${s.key}" data-sec="${s.key}"${step?.state === 'active' ? ' aria-current="step"' : ''}>
+          ${ring(st, 40, SEC_ICON[s.key])}
+          <span class="sec__titles"><span class="sec__title">${esc(t(TITLE[s.key]))}${s.key === 'field' ? ` <span class="sec__sub mono">· ${esc(t('sec_field_sub'))}</span>` : ''}</span>${stateLine(text)}</span>
           ${icon('down', 'sec__chev')}
         </button>
         ${!isOpen ? preview(s.key) : ''}
@@ -97,30 +112,33 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | null): stri
     }).join('')}</ul><p class="secs__more" data-more aria-hidden="true">${icon('down')}${esc(t('ws_more_below'))}</p>`;
 }
 
-/** The section worth a glance on phone: one with gaps, else in progress, else the rotation. */
+/** The section worth a glance on phone: the current topic, else one with gaps, else in progress, else the rotation. */
 export function peekSection(a: ClientAnalysis): Section {
+  const steps = stepsOf(a);
+  if (guided(a)) { const act = steps.find((s) => s.state === 'active'); if (act) return getSection(a, act.key); }
   const all = ORDER.filter((k) => k !== 'sheet').map((k) => getSection(a, k));
   return all.find((s) => s.state === 'gaps') ?? all.find((s) => s.state === 'progress') ?? getSection(a, 'rotation');
 }
 
 export function peekHtml(a: ClientAnalysis, k: SectionKey): string {
-  const s = getSection(a, k);
-  const line = s.note ? pick(s.note) : s.content ? pick(s.content.summary) : t(STATE_KEY[s.state]);
-  return `${ring(s.state, 34, META[k].icon)}<span class="peek__t"><b>${esc(t(META[k].title))} · ${esc(t(STATE_KEY[s.state]))}</b><small>${esc(line)}</small></span>${icon('chevron', 'peek__chev')}`;
+  const { s, st, text } = view(a, k, stepsOf(a));
+  const line = text.note || (s.content ? pick(s.content.summary) : text.label);
+  return `${ring(st, 34, SEC_ICON[k])}<span class="peek__t"><b>${esc(t(TITLE[k]))} · ${esc(text.label)}</b><small>${esc(line)}</small></span>${icon('chevron', 'peek__chev')}`;
 }
 
 /** Phone row of round buttons. */
-export function sectionsRow(a: ClientAnalysis): string {
+export function sectionsRow(a: ClientAnalysis, just: SectionKey[] = []): string {
+  const steps = stepsOf(a);
   return ORDER.map((k) => {
-    const s = getSection(a, k);
-    return `<li><button type="button" class="secbtn" data-sheet="${k}" aria-label="${esc(t(META[k].title))}: ${esc(t(STATE_KEY[s.state]))}${s.note ? ' · ' + esc(pick(s.note)) : ''}">
-      ${ring(s.state, 48, META[k].icon)}<span>${esc(t(META[k].short))}</span></button></li>`;
+    const { st, step, text } = view(a, k, steps);
+    return `<li><button type="button" class="secbtn${just.includes(k) ? ' is-just' : ''}${step?.state === 'active' && guided(a) ? ' is-active' : ''}" data-sheet="${k}" aria-label="${esc(t(TITLE[k]))}: ${esc(text.label)}${text.note ? ' · ' + esc(text.note) : ''}">
+      ${ring(st, 48, SEC_ICON[k])}<span>${esc(t(SHORT[k]))}</span></button></li>`;
   }).join('');
 }
 
 export function sheetHtml(a: ClientAnalysis, k: SectionKey): string {
-  const s = getSection(a, k);
-  return `<header class="sheet__head">${ring(s.state, 40, META[k].icon)}<div><h2 class="serif" id="sheet-t">${esc(t(META[k].title))}</h2><p>${stateLine(s)}</p></div>
+  const { st, text } = view(a, k, stepsOf(a));
+  return `<header class="sheet__head">${ring(st, 40, SEC_ICON[k])}<div><h2 class="serif" id="sheet-t">${esc(t(TITLE[k]))}</h2><p>${stateLine(text)}</p></div>
     <button type="button" class="icon-btn sheet__close" data-close aria-label="${esc(t('close'))}">${icon('close')}</button></header>
     <div class="sheet__body">${sectionBody(a, k)}</div>`;
 }

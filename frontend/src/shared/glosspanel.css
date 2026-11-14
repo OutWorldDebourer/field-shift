@@ -1,0 +1,27 @@
+/* Glossary: ⓘ buttons (22 px mark, 44 px target) and the side panel. */
+.gl-i { position: relative; display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 6px; padding: 0; vertical-align: -4px;
+  border: 0; border-radius: 50%; background: none; color: var(--ink-2); cursor: pointer; }
+.gl-i::after { content: ''; position: absolute; inset: -11px; }
+.gl-i svg { width: 18px; height: 18px; }
+.gl-i:hover, .gl-i:focus-visible { color: #fff; background: rgba(255, 255, 255, 0.14); }
+.gl-head { gap: 8px; }
+
+.gl-scrim { position: fixed; inset: 0; z-index: 60; background: rgba(3, 8, 14, 0.45); }
+.gl { position: fixed; z-index: 61; top: 12px; right: 12px; bottom: 12px; width: min(440px, calc(100vw - 24px)); display: flex; flex-direction: column;
+  border-radius: 22px; overflow: hidden; transform: translateX(calc(100% + 24px)); transition: transform 0.3s var(--ease);
+  background: var(--glass-fill), rgba(12, 24, 36, 0.94) !important; }
+.gl.is-open { transform: none; }
+.gl__head { display: grid; grid-template-columns: 1fr 44px; gap: 12px; align-items: start; padding: 18px 18px 12px; border-bottom: 1px solid var(--rule); }
+.gl__head h2 { font-size: 1.75rem; line-height: 1.1; }
+.gl__head p { font-size: 0.9375rem; color: var(--ink-2); margin-top: 4px; }
+.gl__list { margin: 0; padding: 8px 18px 24px; overflow-y: auto; display: grid; gap: 4px; overscroll-behavior: contain; }
+.gl__term { padding: 12px 12px; border-radius: 14px; border: 1px solid transparent; scroll-margin: 12px; }
+.gl__term.is-on { border-color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.08); }
+.gl__term dt { font-weight: 600; font-size: 1.0625rem; }
+.gl__term dd { margin: 4px 0 0; font-size: 1rem; line-height: 1.45; color: var(--ink-2); }
+.gl__scale { display: block; margin-top: 6px; color: var(--ink); }
+.gl__scale b { font-weight: 500; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; }
+@media (max-width: 899px) {
+  .gl { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 82vh; border-radius: 24px 24px 0 0; transform: translateY(100%); }
+}
+@media (prefers-reduced-motion: reduce) { .gl { transition: none; } }

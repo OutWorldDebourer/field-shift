@@ -2,18 +2,24 @@
 // chat + section column, dashboard and rotation views, pre-diagnosis notice always visible, phone bottom sheet.
 import { buildEvidence } from '../../shared/api';
 import { mountBackdrop, type Backdrop } from '../../shared/backdrop';
-import type { SectionKey } from '../../shared/contract';
+import type { SectionKey, Step } from '../../shared/contract';
 import { $, $$, esc, toast } from '../../shared/dom';
 import { applyI18n, fmt, onLang, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { langSwitchHtml, wireLangSwitch } from '../../shared/langswitch';
 import { set, state, subscribe, syncUrl, type View } from '../state';
 import { mountChat } from './chat';
-import { dashboardHtml, mountDashboardMap } from './dashboard';
+import { dashboardHtml, mountDashboardForecast, mountDashboardMap } from './dashboard';
 import { wireExports } from './export';
 import { rotationHtml } from './rotation';
 import { peekHtml, peekSection, sectionsColumn, sectionsRow, sheetHtml } from './sections';
+import { enableGlossary } from '../../shared/glosspanel';
+import { chime } from './chime';
+import { newlyDone, stepsOf } from './progress';
+import { flipLine } from './rail';
+import { copernicusGloss } from './credit';
 import './workspace.css';
+import './guided.css';
 
 const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot'; icon: 'chat' | 'dashboard' | 'rotation' }[] = [
   { v: 'chat', label: 'ap_tab_chat', icon: 'chat' }, { v: 'dashboard', label: 'ap_tab_dash', icon: 'dashboard' }, { v: 'rotation', label: 'ap_tab_rot', icon: 'rotation' },
@@ -50,9 +56,11 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     </footer>
     <div class="sheet-scrim" id="scrim" hidden></div>
     <section class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden></section>
+    <p class="sr-only" id="flip-live" aria-live="polite"></p>
   </div>`;
   applyI18n(host);
   wireLangSwitch(host);
+  enableGlossary(host);
 
   const a0 = state.analysis!;
   const ws = $('.ws', host);
@@ -61,6 +69,8 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   let dashCleanup: (() => void) | null = null;
   let shortCredit = '';
   let sheetReturn: HTMLElement | null = null;
+  let prevSteps: Step[] = stepsOf(a0);
+  let just: SectionKey[] = [];
 
   // backdrop: the field from above, darkened so white text stays readable
   const focus = () => {
@@ -83,8 +93,9 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     const a = state.analysis!;
     const area = a.field.area_ha > 0 ? ` · ${fmt(a.field.area_ha, 1)} ha` : '';
     const chip = $('#chip');
-    chip.innerHTML = `${icon('pin')}<span class="bar__label">${esc(a.example_site ? t('huaral') : a.field.label || t('fs_my_field'))}${area}</span>${a.readOnly ? '' : `<span class="bar__change">${esc(t('ap_change_field'))}</span>`}`;
-    chip.setAttribute('aria-label', `${a.field.label}${area}. ${t('ap_change_field')}`);
+    const name = a.example_site ? t('huaral') : a.field.label || t('fs_my_field');
+    chip.innerHTML = `${icon('pin')}<span class="bar__label">${esc(name)}${area}</span>${a.readOnly ? '' : `<span class="bar__change">${esc(t('ap_change_field'))}</span>`}`;
+    chip.setAttribute('aria-label', `${name}${area}. ${t('ap_change_field')}`);
     (chip as HTMLButtonElement).disabled = !!a.readOnly;
     const flags: string[] = [];
     if (a.offline) flags.push(`<span class="demo-flag" title="${esc(t('demo_data_long'))}">${esc(t('demo_data'))}</span>`);
@@ -94,14 +105,15 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     $('#si-tag').hidden = !a.messages.some((m) => m.photos?.some((p) => p.url.startsWith('/img/')));
     $$<HTMLButtonElement>('[data-tab]', host).forEach((b) => { const on = b.dataset.tab === state.view; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
     const credit = state.snapshotCredit;
-    $('#ws-credit').innerHTML = `<span class="cr-long">${esc(credit)}</span><span class="cr-short">${esc(shortCredit || credit)}</span>`;
+    const gloss = copernicusGloss(credit);
+    $('#ws-credit').innerHTML = `<span class="cr-long">${esc(credit)}${gloss ? `<span class="cr-gloss" lang="es"> ${esc(gloss)}</span>` : ''}</span><span class="cr-short">${esc(shortCredit || credit)}${gloss ? `<span class="cr-gloss" lang="es"> ${esc(copernicusGloss(shortCredit || credit))}</span>` : ''}</span>`;
     $('#ws-notice').dataset.short = t('foot_short');
   }
   function renderSections() {
     const a = state.analysis!;
-    $('#secs').innerHTML = sectionsColumn(a, state.open);
+    $('#secs').innerHTML = sectionsColumn(a, state.open, just);
     requestAnimationFrame(moreCue);
-    $('#secbar').innerHTML = sectionsRow(a);
+    $('#secbar').innerHTML = sectionsRow(a, just);
     const p = peekSection(a);
     const peek = $('#peek');
     peek.dataset.sheet = p.key;
@@ -116,6 +128,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     dashCleanup?.(); dashCleanup = null;
     if (state.view === 'dashboard') {
       $('#view-dashboard').innerHTML = dashboardHtml(a);
+      mountDashboardForecast($('#view-dashboard'), () => state.analysis!);
       void mountDashboardMap($('#view-dashboard'), a).then((c) => { dashCleanup = c; });
     } else if (state.view === 'rotation') {
       $('#view-rotation').innerHTML = rotationHtml(a);
@@ -158,6 +171,10 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     const go = el.closest<HTMLElement>('[data-goto]');
     if (go) { if (!$('#sheet').hidden) closeSheet(); set({ view: go.dataset.goto as View }); return; }
     if (el.closest('#chip')) { onChangeField(); return; }
+    const topic = el.closest<HTMLElement>('[data-topic]');
+    if (topic) { set({ view: 'chat' }); chat.prefill(topic.dataset.topic ?? ''); return; }
+    const rs = el.closest<HTMLElement>('[data-railsec]');
+    if (rs) { const k = rs.dataset.railsec as SectionKey; if (isPhone()) openSheet(k, rs); else { set({ open: k }); requestAnimationFrame(() => $(`#secs [data-seckey="${k}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })); } return; }
     const be = el.closest<HTMLButtonElement>('[data-build-evidence]');
     if (be) { void build(be); }
   });
@@ -183,7 +200,12 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     if ('view' in ch) { renderBar(); renderView(); syncUrl(); if (ch.view === 'chat') requestAnimationFrame(() => bd?.layout()); }
     if ('open' in ch) renderSections();
     if ('analysis' in ch) {
-      renderBar(); renderSections(); chat.render(state.analysis!);
+      const steps = stepsOf(state.analysis!);
+      just = newlyDone(prevSteps, steps);
+      prevSteps = steps;
+      if (just.length) { chime(); $('#flip-live').textContent = just.map((k) => flipLine(steps, k)).join(' '); }
+      renderBar(); renderSections(); chat.render(state.analysis!, just);
+      just = [];
       if (state.view !== 'chat') renderView();
       const k = $('#sheet').dataset.key as SectionKey | undefined;
       if (k && !$('#sheet').hidden) $('#sheet').innerHTML = sheetHtml(state.analysis!, k);

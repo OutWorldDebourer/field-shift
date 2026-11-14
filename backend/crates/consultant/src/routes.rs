@@ -13,7 +13,7 @@ pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/{id}/message", post(message))
         .route("/transcribe", post(transcribe_route))
-        .layer(DefaultBodyLimit::max(60 * 1024 * 1024))
+        .layer(DefaultBodyLimit::max(130 * 1024 * 1024))
 }
 
 async fn message(

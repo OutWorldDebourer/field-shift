@@ -4,6 +4,9 @@ import type { Reading } from './contract';
 import { esc } from './dom';
 import { icon, readingIcon } from './icons';
 import { fmt, fmtDate, fmtDateShort, pick, t } from './i18n';
+import { glossBtn } from './glosspanel';
+import { termFor } from './glossary';
+import { loc } from './localize';
 
 /** Sparkline path for a series, drawn in a w×h box. */
 export function sparkline(values: (number | null)[], w = 64, h = 22, cls = 'drow__spark'): string {
@@ -26,7 +29,7 @@ export function valueText(r: Reading, compact = false): { text: string; isWord: 
   const digits = Math.abs(r.value) < 1 ? 2 : Math.abs(r.value) >= 100 ? 0 : 1;
   const n = fmt(r.value, digits);
   const sign = signed && r.value > 0 ? '+' : '';
-  const u = compact ? r.unit.replace(/\s+vs\s.*$/, '').replace(/^NDVI$/i, '') : r.unit;
+  const u = loc(compact ? r.unit.replace(/\s+vs\s.*$/, '').replace(/^NDVI$/i, '') : r.unit);
   const unit = u ? (u === '%' || u === '°' ? u : ` ${u}`) : '';
   return { text: `${sign}${n.replace('-', '−')}${unit}`, isWord: false };
 }
@@ -59,13 +62,13 @@ export function badge(b: Reading['badge']): string {
 }
 
 export function sourceLine(r: Reading): string {
-  return `${esc(r.source)} · ${esc(fmtDate(r.date))} · ${esc(r.resolution)}`;
+  return `${esc(loc(r.source))} · ${esc(fmtDate(r.date))} · ${esc(loc(r.resolution))}`;
 }
 
 /** Short source line for tiles and compact rows; the full line goes in a tooltip. */
 export function sourceShort(r: Reading): string {
   const b = basePeriod(r);
-  return `${esc(r.source)} · <span class="nw">${esc(fmtDateShort(r.date))}</span>${b ? ` · <span class="nw">vs ${b[1]}–${b[2]}</span>` : ''} · <span class="nw">${esc(shortRes(r.resolution))}</span>`;
+  return `${esc(loc(r.source))} · <span class="nw">${esc(fmtDateShort(r.date))}</span>${b ? ` · <span class="nw">vs ${b[1]}–${b[2]}</span>` : ''} · <span class="nw">${esc(shortRes(r.resolution))}</span>`;
 }
 
 const sourceFull = (r: Reading) => `${r.source} · ${r.dataset} · ${fmtDate(r.date)} · ${r.resolution} · ${r.license}${r.method ? ' · ' + r.method : ''}`;
@@ -78,12 +81,12 @@ export function cleanVerdict(r: Reading): string {
 }
 
 /** Full data row with verdict, source, date, resolution, badge and sparkline. */
-export function dataRow(r: Reading): string {
+export function dataRow(r: Reading, label?: string): string {
   const v = valueText(r);
   const series = r.series?.map((p) => p.v) ?? [];
   return `<div class="drow" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
-    <div class="drow__label">${esc(pick(r.label))}</div>
+    <div class="drow__label"${label ? ` title="${esc(pick(r.label))}"` : ''}>${esc(label ?? pick(r.label))}${glossBtn(termFor(r.id), pick(r.label))}</div>
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}${provTag(r)}</div>
     <div class="drow__verdict">${v.isWord ? '' : esc(cleanVerdict(r))}</div>
     ${sparkline(series)}
@@ -98,7 +101,7 @@ export function dataRowCompact(r: Reading, srcText?: string, label?: string, ver
   const src = srcText ?? '';
   return `<div class="drow drow--compact" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
-    <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}</div>
+    <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}${glossBtn(termFor(r.id), pick(r.label))}</div>
     <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}${provTag(r)}</div>
     ${verdict ? `<div class="drow__verdict drow__verdict--c">${esc(v.isWord ? '' : cleanVerdict(r))}</div>` : ''}
     <div class="drow__src" title="${esc(sourceFull(r))}">${srcText ? esc(src) : sourceShort(r)} ${badge(r.badge)}</div>

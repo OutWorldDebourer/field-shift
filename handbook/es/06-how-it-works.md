@@ -43,3 +43,13 @@ Abre http://localhost:5173 (inicio) y http://localhost:5173/app.html (app). El b
 | Proyección | `GET /climate/projection` |
 | Cultivos | `GET /crops/suggest`, `/crops/resolve`, `POST /crops/advice` |
 | Exportar | `GET /export/{id}/sheet`, `/export/{id}/series.csv`, `POST /export/{id}/share` |
+
+## Iteración 2 (14-11-2026)
+
+- **Temas guiados.** El consultor recorre cinco temas en orden (tu campo, suelo, manejo de plagas, nutrición, rotación); cada sección pasa a "lista" solo cuando su tema se completa, el chat muestra el siguiente tema y lo que falta, y una confirmación breve marca cada tema completado. Al terminar, el consultor lo dice y remite a la ficha técnica.
+- **Saludo.** El primer mensaje dice dónde está el campo (latitud, longitud, área) y aclara que los datos describen la parcela, no a la persona.
+- **Pronóstico, perspectiva y proyección (solo NASA).** Próximos 1–10 días con NASA GEOS-FP (pronóstico); los próximos 1–6 meses como estimación con las normales de NASA POWER en dos escenarios (vuelve a lo normal / sigue así de cálido); 2031–2050 con NEX-GDDP-CMIP6 (proyección). El panel permite cambiar cada horizonte.
+- **Dictado por voz.** Un micrófono llena el cuadro de mensaje sin enviarlo; motores: Gemini (por defecto, `POST /api/consultant/transcribe`) o el reconocimiento de voz del navegador.
+- **Fotos en resolución completa.** Se guardan hasta 12 MB; el modelo recibe además los cuatro cuartos de cada foto grande en resolución nativa para que los insectos pequeños se vean.
+- **Ficha técnica.** Enlace para volver al análisis, fotos del agricultor, imagen satelital, pronóstico y perspectiva, anexo de glosario y un paquete ZIP con los originales.
+

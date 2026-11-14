@@ -52,7 +52,8 @@ pub fn build(d: &PowerDaily, months: u32) -> anyhow::Result<Outlook> {
 
     let mn = normals::monthly_normals(&all);
     let mut out_months = vec![];
-    let mut m = start;
+    // Months after the current one (the current month already appears in the past-12-months chart).
+    let mut m = add_months(start, 1);
     while m <= to {
         if let Some(n) = mn.iter().find(|x| x.month == m.month()).and_then(|x| x.tmean_c.clone()) {
             out_months.push(OutlookMonth { month: format!("{}-{:02}", m.year(), m.month()), normal_mean: r1(n.mean), normal_lo: r1(n.p10), normal_hi: r1(n.p90), persist_mean: r1(n.mean + anomaly) });

@@ -1,6 +1,6 @@
 // Typed client for the Rust backend (/api, see contract.ts) with timeouts and an offline fallback to the
 // bundled Huaral demo dataset. Anything served from the bundle is flagged `offline` so the UI can say "Demo data".
-import type { AnalysisState, Bi, ChatMessage, EvidencePackage, FieldGeom, Lang, Section } from './contract';
+import type { AnalysisState, Bi, ChatMessage, EvidencePackage, FieldGeom, Forecast, GlossaryTerm, Lang, Outlook, Section, SectionKey, Step } from './contract';
 import { DEMO_CROPS, DEMO_EXAMPLES, DEMO_EVIDENCE, DEMO_ID, demoAnalysis, demoReply } from './demo/huaral';
 
 export type ClientAnalysis = AnalysisState & { offline?: boolean; readOnly?: boolean; shareToken?: string };
@@ -60,7 +60,14 @@ export async function buildEvidence(a: ClientAnalysis): Promise<EvidencePackage>
   return req<EvidencePackage>(`/api/analyses/${encodeURIComponent(a.id)}/evidence`, { method: 'POST', timeout: 120000 });
 }
 
-export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[], lang: Lang): Promise<{ messages: ChatMessage[]; sections: Section[]; demo_mode?: boolean }> {
+export type TurnResult = { messages: ChatMessage[]; sections: Section[]; demo_mode?: boolean; steps?: Step[]; next_step?: SectionKey | null };
+
+const EXT: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic', 'image/heif': 'heif', 'image/gif': 'gif' };
+
+/** `?demo=1` in the page URL asks the backend for the scripted consultant (test turns that cost no API credit). */
+const forceDemo = (): boolean => { try { return new URLSearchParams(location.search).get('demo') === '1'; } catch { return false; } };
+
+export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[], lang: Lang): Promise<TurnResult> {
   if (a.offline) {
     await new Promise((r) => setTimeout(r, 1400));
     const now = new Date().toISOString();
@@ -74,9 +81,49 @@ export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[
   const fd = new FormData();
   fd.append('text', text);
   fd.append('lang', lang);
-  photos.forEach((b, i) => fd.append('photos', b, `photo-${i + 1}.jpg`));
-  return req(`/api/consultant/${encodeURIComponent(a.id)}/message`, { method: 'POST', body: fd, timeout: 120000 });
+  if (forceDemo()) fd.append('demo', '1');
+  photos.forEach((b, i) => fd.append('photos', b, `photo-${i + 1}.${EXT[b.type] ?? 'jpg'}`));
+  return req(`/api/consultant/${encodeURIComponent(a.id)}/message`, { method: 'POST', body: fd, timeout: 180000 });
 }
+
+// ---------------------------------------------------------------- iteration 2
+
+/** NASA GEOS-FP forecast for the field's cell; null when the backend or the network does not answer. */
+export async function getForecast(lat: number, lon: number, days: number): Promise<Forecast | null> {
+  try {
+    const f = await req<Forecast>(`/api/forecast?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}&days=${days}`, { timeout: 30000 });
+    return f && Array.isArray(f.days) ? f : null;
+  } catch { return null; }
+}
+
+/** Season outlook from POWER normals + current anomaly (two scenarios); null when unavailable. */
+export async function getOutlook(lat: number, lon: number, months: number): Promise<Outlook | null> {
+  try {
+    const o = await req<Outlook>(`/api/power/outlook?lat=${lat.toFixed(5)}&lon=${lon.toFixed(5)}&months=${months}`, { timeout: 30000 });
+    return o && Array.isArray(o.months) ? o : null;
+  } catch { return null; }
+}
+
+export async function getGlossary(): Promise<GlossaryTerm[] | null> {
+  try {
+    const g = await req<GlossaryTerm[] | { terms?: GlossaryTerm[] }>('/api/glossary', { timeout: 6000 });
+    const list = Array.isArray(g) ? g : g.terms ?? [];
+    return list.length ? list : null;
+  } catch { return null; }
+}
+
+/** Speech to text through the backend (Gemini). Throws on any failure so the caller can fall back. */
+export async function transcribe(audio: Blob, lang: Lang): Promise<string> {
+  const fd = new FormData();
+  const ext = audio.type.includes('ogg') ? 'ogg' : audio.type.includes('mp4') ? 'm4a' : audio.type.includes('wav') ? 'wav' : 'webm';
+  fd.append('audio', audio, `dictation.${ext}`);
+  fd.append('lang', lang);
+  const r = await req<{ text?: string }>('/api/consultant/transcribe', { method: 'POST', body: fd, timeout: 60000 });
+  if (typeof r.text !== 'string') throw new ApiError(502, 'no text');
+  return r.text;
+}
+
+export const packageUrl = (id: string) => `/api/export/${encodeURIComponent(id)}/package.zip`;
 
 export async function suggestCrops(q: string): Promise<CropSuggestion[]> {
   const local = () => {
