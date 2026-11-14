@@ -1,0 +1,315 @@
+{
+  "key": "common_bean",
+  "names": {
+    "en": [
+      "common bean",
+      "bean",
+      "dry bean",
+      "green bean",
+      "snap bean",
+      "string bean",
+      "kidney bean",
+      "french bean"
+    ],
+    "es": [
+      "frijol",
+      "fríjol",
+      "frejol",
+      "fréjol",
+      "frijolito",
+      "frejolito",
+      "vainita",
+      "vainitas",
+      "poroto",
+      "judía",
+      "habichuela",
+      "canario",
+      "frijol canario",
+      "caballero",
+      "panamito",
+      "frijol de palo verde"
+    ]
+  },
+  "scientific_name": "Phaseolus vulgaris L.",
+  "family": "Fabaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.4,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Beans, dry and pulses; for green beans (vainita) Kc ini 0.5"
+      },
+      "mid": {
+        "value": 1.15,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Beans, dry and pulses; for green beans (vainita) Kc mid 1.05"
+      },
+      "end": {
+        "value": 0.35,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Beans, dry and pulses; for green beans (vainita) Kc end 0.90"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 300,
+        "max": 500
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management: Training Manual No. 3 - Irrigation Water Needs, Table 14 (Indicative values of crop water needs and sensitivity to drought)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e07.htm"
+      },
+      "note": "Bean"
+    },
+    "temperature": {
+      "base": {
+        "gap": "No cited base temperature for development found; Ecocrop absolute minimum is 7 °C"
+      },
+      "optimum": {
+        "value": {
+          "min": 16,
+          "max": 25
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Phaseolus vulgaris",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1668"
+        },
+        "note": "Ecocrop optimal temperature requirement range"
+      },
+      "max": {
+        "value": 32,
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Phaseolus vulgaris",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1668"
+        },
+        "note": "Ecocrop absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": true,
+        "unit": "",
+        "citation": {
+          "title": "Nitrogen Fixation by Legumes, Guide A-129",
+          "author": "Flynn, R., Idowu, J. / New Mexico State University",
+          "year": 2015,
+          "url": "https://pubs.nmsu.edu/_a/A129/index.html"
+        },
+        "note": "Common beans are legumes but described as poor fixers"
+      },
+      "typical_range": {
+        "value": "less than 56.0",
+        "unit": "kg N/ha",
+        "citation": {
+          "title": "Nitrogen Fixation by Legumes, Guide A-129",
+          "author": "Flynn, R., Idowu, J. / New Mexico State University",
+          "year": 2015,
+          "url": "https://pubs.nmsu.edu/_a/A129/index.html"
+        },
+        "note": "'Common beans are poor fixers (less than 50 lb N per acre)'; converted from less than 50 lb N/acre as published"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Pea leafminer (serpentine leafminer)",
+          "es": "Mosca minadora"
+        },
+        "scientific_name": "Liriomyza huidobrensis",
+        "citation": {
+          "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
+          "author": "Revista Colombiana de Entomología (SOCOLEN)",
+          "year": 1998,
+          "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+        },
+        "lower_threshold": {
+          "value": 6.1,
+          "unit": "°C",
+          "citation": {
+            "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
+            "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
+            "year": 2017,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/"
+          },
+          "note": "Total immature stages (egg to adult), constant-temperature life tables on faba bean"
+        },
+        "degree_days_per_generation": {
+          "value": 307.5,
+          "unit": "°C·day",
+          "citation": {
+            "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
+            "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
+            "year": 2017,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/"
+          },
+          "note": "Egg to adult (total immature stages)"
+        }
+      },
+      {
+        "name": {
+          "en": "Lygus bug",
+          "es": "Chinche Lygus"
+        },
+        "scientific_name": "Lygus hesperus",
+        "citation": {
+          "title": "Lygus Bug / Dry Beans: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/agriculture/dry-beans/lygus-bug/"
+        },
+        "lower_threshold": {
+          "value": 12.2,
+          "unit": "°C",
+          "citation": {
+            "title": "Lygus Bug phenology model (Pickel, Welch & Walsh 1990)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/lygus-bug/"
+          },
+          "note": "Model on strawberries (Pickel et al. 1990)"
+        },
+        "degree_days_per_generation": {
+          "value": 346.1,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Lygus Bug phenology model (Pickel, Welch & Walsh 1990)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/lygus-bug/"
+          },
+          "note": "Egg to adult, host strawberries"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Leafminer parasitoid wasp",
+          "es": "Avispita parasitoide de minadora"
+        },
+        "scientific_name": "Diglyphus websteri",
+        "kind": "insect",
+        "controls": {
+          "en": "Larvae of the leafminer Liriomyza huidobrensis on bean",
+          "es": "Larvas de la mosca minadora Liriomyza huidobrensis en frijol"
+        },
+        "citation": {
+          "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
+          "author": "Revista Colombiana de Entomología (SOCOLEN)",
+          "year": 1998,
+          "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+        }
+      },
+      {
+        "name": {
+          "en": "Leafminer parasitoid wasp",
+          "es": "Avispita parasitoide de minadora"
+        },
+        "scientific_name": "Halticoptera arduine",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer Liriomyza huidobrensis on bean",
+          "es": "Mosca minadora Liriomyza huidobrensis en frijol"
+        },
+        "citation": {
+          "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
+          "author": "Revista Colombiana de Entomología (SOCOLEN)",
+          "year": 1998,
+          "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+        }
+      },
+      {
+        "name": {
+          "en": "Leafminer parasitoid wasp",
+          "es": "Avispita parasitoide de minadora"
+        },
+        "scientific_name": "Chrysocharis flacilla",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer Liriomyza huidobrensis on bean",
+          "es": "Mosca minadora Liriomyza huidobrensis en frijol"
+        },
+        "citation": {
+          "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
+          "author": "Revista Colombiana de Entomología (SOCOLEN)",
+          "year": 1998,
+          "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Damping-off and root rot (SENASA lists bean among treated crops)",
+          "es": "Chupadera y pudrición de raíces (SENASA incluye frijol entre los cultivos atendidos)"
+        },
+        "citation": {
+          "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+          "author": "SENASA, via Agraria.pe",
+          "year": 2022,
+          "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
+        }
+      },
+      {
+        "name": {
+          "en": "Beauveria",
+          "es": "Beauveria"
+        },
+        "scientific_name": "Beauveria bassiana",
+        "kind": "fungus",
+        "controls": {
+          "en": "Whitefly and other sucking pests (SENASA general use in Peru)",
+          "es": "Mosca blanca y otras plagas chupadoras (uso general de SENASA en Perú)"
+        },
+        "citation": {
+          "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+          "author": "SENASA, via Agraria.pe",
+          "year": 2022,
+          "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Legume, but a poor N fixer (under 50 lb N/acre), so its N credit to the next crop is small. Rotate with non-host crops (e.g. cereals) to let soil-borne pathogens die out.",
+      "es": "Leguminosa pero de baja fijación (menos de 50 lb N/acre), por lo que el aporte de N al cultivo siguiente es pequeño. Rotar con cultivos no hospederos (p. ej. cereales) para que mueran los patógenos del suelo.",
+      "citation": {
+        "title": "Crop Rotation on Organic Farms: Crop Rotation Effects on Soil Fertility and Plant Nutrition",
+        "author": "Rangarajan, A., in Mohler, C.L., Johnson, S.E. (eds.) / SARE",
+        "year": 2009,
+        "url": "https://www.sare.org/publications/crop-rotation-on-organic-farms/physical-and-biological-processes-in-crop-production/crop-rotation-effects-on-soil-fertility-and-plant-nutrition/"
+      }
+    }
+  }
+}

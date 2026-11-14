@@ -561,6 +561,7 @@ dependencies = [
  "axum",
  "chrono",
  "common",
+ "crops",
  "imagery",
  "power",
  "reqwest",

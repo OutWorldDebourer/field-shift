@@ -1,0 +1,312 @@
+{
+  "key": "quinoa",
+  "names": {
+    "en": [
+      "quinoa",
+      "quinua"
+    ],
+    "es": [
+      "quinua",
+      "quinoa",
+      "quinuita",
+      "kinua",
+      "kiuna",
+      "quinhua",
+      "jiura",
+      "suba"
+    ]
+  },
+  "scientific_name": "Chenopodium quinoa Willd.",
+  "family": "Amaranthaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.5,
+        "unit": "-",
+        "citation": {
+          "title": "Evapotranspiration analysis and irrigation requirements of quinoa (Chenopodium quinoa) in the Bolivian highlands (Agric. Water Manage. 60:119-134)",
+          "author": "Garcia, M., Raes, D., Jacobsen, S.-E.",
+          "year": 2003,
+          "url": "https://lirias.kuleuven.be/1740326"
+        },
+        "note": "Lysimeter study, Bolivian Altiplano (about 0.5); not in FAO-56 Table 12"
+      },
+      "mid": {
+        "value": 1.0,
+        "unit": "-",
+        "citation": {
+          "title": "Evapotranspiration analysis and irrigation requirements of quinoa (Chenopodium quinoa) in the Bolivian highlands (Agric. Water Manage. 60:119-134)",
+          "author": "Garcia, M., Raes, D., Jacobsen, S.-E.",
+          "year": 2003,
+          "url": "https://lirias.kuleuven.be/1740326"
+        },
+        "note": "Lysimeter study, Bolivian Altiplano"
+      },
+      "end": {
+        "value": 0.7,
+        "unit": "-",
+        "citation": {
+          "title": "Evapotranspiration analysis and irrigation requirements of quinoa (Chenopodium quinoa) in the Bolivian highlands (Agric. Water Manage. 60:119-134)",
+          "author": "Garcia, M., Raes, D., Jacobsen, S.-E.",
+          "year": 2003,
+          "url": "https://lirias.kuleuven.be/1740326"
+        },
+        "note": "Lysimeter study, Bolivian Altiplano"
+      }
+    },
+    "seasonal_water_need": {
+      "gap": "Not in FAO Table 14; no cited seasonal value for coastal Peru found"
+    },
+    "temperature": {
+      "base": {
+        "value": 1,
+        "unit": "°C",
+        "citation": {
+          "title": "Using a crop model for quinoa: response of Andean cultivars to temperature (Eur. J. Agron. 25(4):299-308)",
+          "author": "Bois, J.F. et al. / IRD",
+          "year": 2006,
+          "url": "https://www.documentation.ird.fr/hor/fdi:010037682"
+        },
+        "note": "About 1 °C for leaf appearance and time to flowering (Andean cultivars)"
+      },
+      "optimum": {
+        "value": {
+          "min": 14,
+          "max": 18
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Chenopodium quinoa",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2509"
+        },
+        "note": "Ecocrop optimal temperature requirement range"
+      },
+      "max": {
+        "value": 35,
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Chenopodium quinoa",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2509"
+        },
+        "note": "Ecocrop absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Ecocrop crop view: Chenopodium quinoa",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/cropView?id=2509"
+        },
+        "note": "Family Chenopodiaceae (now Amaranthaceae) (Ecocrop taxonomy); not a legume"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Quinoa moth",
+          "es": "Polilla de la quinua (kcona kcona)"
+        },
+        "scientific_name": "Eurysacca melanocampta",
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Pea leafminer (serpentine leafminer)",
+          "es": "Mosca minadora"
+        },
+        "scientific_name": "Liriomyza huidobrensis",
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        },
+        "lower_threshold": {
+          "value": 6.1,
+          "unit": "°C",
+          "citation": {
+            "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
+            "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
+            "year": 2017,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/"
+          },
+          "note": "Total immature stages (egg to adult), constant-temperature life tables on faba bean"
+        },
+        "degree_days_per_generation": {
+          "value": 307.5,
+          "unit": "°C·day",
+          "citation": {
+            "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
+            "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
+            "year": 2017,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/"
+          },
+          "note": "Egg to adult (total immature stages)"
+        }
+      },
+      {
+        "name": {
+          "en": "Potato aphid",
+          "es": "Pulgón de la papa"
+        },
+        "scientific_name": "Macrosiphum euphorbiae",
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Western flower thrips",
+          "es": "Trips"
+        },
+        "scientific_name": "Frankliniella occidentalis",
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Aphid parasitoid wasps",
+          "es": "Avispitas parasitoides de pulgones"
+        },
+        "scientific_name": "Aphidiinae",
+        "kind": "insect",
+        "controls": {
+          "en": "Aphids on quinoa",
+          "es": "Pulgones en quinua"
+        },
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        }
+      },
+      {
+        "name": {
+          "en": "Predatory bug",
+          "es": "Chinche depredadora"
+        },
+        "scientific_name": "Metacanthus tenellus",
+        "kind": "insect",
+        "controls": {
+          "en": "Small soft-bodied pests on quinoa (generalist predator)",
+          "es": "Plagas pequeñas de cuerpo blando en quinua (depredador generalista)"
+        },
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        }
+      },
+      {
+        "name": {
+          "en": "Damsel bug",
+          "es": "Chinche nábida"
+        },
+        "scientific_name": "Nabis capsiformis",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator of eggs and small larvae on quinoa",
+          "es": "Depredador generalista de huevos y larvas pequeñas en quinua"
+        },
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        }
+      },
+      {
+        "name": {
+          "en": "Green lacewing larvae",
+          "es": "Larvas de crisopa"
+        },
+        "scientific_name": "Chrysopidae",
+        "kind": "insect",
+        "controls": {
+          "en": "Aphids and small larvae on quinoa",
+          "es": "Pulgones y larvas pequeñas en quinua"
+        },
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        }
+      },
+      {
+        "name": {
+          "en": "Hoverfly larvae",
+          "es": "Larvas de sírfido"
+        },
+        "scientific_name": "Allograpta sp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Aphids on quinoa",
+          "es": "Pulgones en quinua"
+        },
+        "citation": {
+          "title": "Field Evaluation of Cypermethrin, Imidacloprid, Teflubenzuron and Emamectin Benzoate against Pests of Quinoa (Chenopodium quinoa Willd.) and Their Side Effects on Non-Target Species. Plants 10(9):1788",
+          "author": "Cruces, L., de la Peña, E., De Clercq, P.",
+          "year": 2021,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8466945"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Non-legume; benefits from following a legume (e.g. pea, bean or alfalfa), which provides N to the subsequent crop. Rotate to non-host crops to let soil-borne pathogens die out.",
+      "es": "No es leguminosa; se beneficia de sembrarse tras una leguminosa (arveja, frijol o alfalfa), que aporta N al cultivo siguiente. Rotar con no hospederos para que mueran los patógenos del suelo.",
+      "citation": {
+        "title": "Crop Rotation on Organic Farms: Crop Rotation Effects on Soil Fertility and Plant Nutrition",
+        "author": "Rangarajan, A., in Mohler, C.L., Johnson, S.E. (eds.) / SARE",
+        "year": 2009,
+        "url": "https://www.sare.org/publications/crop-rotation-on-organic-farms/physical-and-biological-processes-in-crop-production/crop-rotation-effects-on-soil-fertility-and-plant-nutrition/"
+      }
+    }
+  }
+}

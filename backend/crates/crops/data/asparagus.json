@@ -1,0 +1,252 @@
+{
+  "key": "asparagus",
+  "names": {
+    "en": [
+      "asparagus",
+      "green asparagus",
+      "white asparagus",
+      "asparagus spears"
+    ],
+    "es": [
+      "espárrago",
+      "espárragos",
+      "esparrago",
+      "esparragos",
+      "esparraguito",
+      "espárrago verde",
+      "espárrago blanco",
+      "turión",
+      "turiones"
+    ]
+  },
+  "scientific_name": "Asparagus officinalis L.",
+  "family": "Asparagaceae",
+  "crop_type": "perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.5,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Asparagus; footnote: Kc usually remains at Kc ini during spear harvest due to sparse ground cover"
+      },
+      "mid": {
+        "value": 0.95,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Asparagus; applies after spear harvest ends"
+      },
+      "end": {
+        "value": 0.3,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Asparagus"
+      }
+    },
+    "seasonal_water_need": {
+      "gap": "Not listed in FAO Training Manual 3 tables; no cited seasonal value for irrigated coastal Peru found"
+    },
+    "temperature": {
+      "base": {
+        "value": 4.4,
+        "unit": "°C",
+        "citation": {
+          "title": "MRCC - Growing Degree Day Description (base temperatures by crop)",
+          "author": "Midwestern Regional Climate Center (Purdue University / NOAA NCEI)",
+          "year": null,
+          "url": "https://mrcc.purdue.edu/resources/growing-degree-day-description"
+        },
+        "note": "GDD base temperature as listed by MRCC (°F only on source); converted from 40 °F as published"
+      },
+      "optimum": {
+        "value": {
+          "min": 18,
+          "max": 25
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Manual de Producción Integrada de las Principales Especies Hortícolas de Argentina, Cap. 8: Cultivo de espárrago",
+          "author": "Castagnino, A.M., Rosini, M.B., Díaz, K.E.",
+          "year": null,
+          "url": "https://repositorio.uca.edu.ar/bitstream/123456789/19950/1/cultivo-esparrago.pdf"
+        },
+        "note": "Optimum temperature range for the crop; spear growth starts at ~12 °C soil temperature, optimum 24 °C"
+      },
+      "max": {
+        "gap": "No cited maximum growth temperature found"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Manual de Producción Integrada de las Principales Especies Hortícolas de Argentina, Cap. 8: Cultivo de espárrago",
+          "author": "Castagnino, A.M., Rosini, M.B., Díaz, K.E.",
+          "year": null,
+          "url": "https://repositorio.uca.edu.ar/bitstream/123456789/19950/1/cultivo-esparrago.pdf"
+        },
+        "note": "Family Asparagaceae, not Fabaceae"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Shoot midge",
+          "es": "Mosquilla de los brotes"
+        },
+        "scientific_name": "Prodiplosis longifila",
+        "citation": {
+          "title": "Trampas de luz con panel pegante para la captura de adultos de Prodiplosis longifila Gagné en el cultivo de espárrago (Ecología Aplicada 14(2): 139-145)",
+          "author": "Camborda Z., F., Castillo V., J., Rodríguez Q., S. / UNALM",
+          "year": 2015,
+          "url": "https://www.redalyc.org/pdf/341/34143179006.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Black cutworm",
+          "es": "Gusano de tierra"
+        },
+        "scientific_name": "Agrotis ipsilon",
+        "citation": {
+          "title": "Manual de Producción Integrada de las Principales Especies Hortícolas de Argentina, Cap. 8: Cultivo de espárrago",
+          "author": "Castagnino, A.M., Rosini, M.B., Díaz, K.E.",
+          "year": null,
+          "url": "https://repositorio.uca.edu.ar/bitstream/123456789/19950/1/cultivo-esparrago.pdf"
+        },
+        "lower_threshold": {
+          "value": 10.4,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Black cutworm (Model 2, Luckmann et al. 1976)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/black-cutworm/"
+          },
+          "note": "Upper threshold 30.0 °C; lab study on pinto bean diet (Luckmann et al. 1976)"
+        },
+        "degree_days_per_generation": {
+          "value": 643.0,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Black cutworm (Model 2, Luckmann et al. 1976)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/black-cutworm/"
+          },
+          "note": "Egg to adult"
+        }
+      },
+      {
+        "name": {
+          "en": "Asparagus aphid",
+          "es": "Pulgón del espárrago"
+        },
+        "scientific_name": "Brachycorynella asparagi",
+        "citation": {
+          "title": "Manual de Producción Integrada de las Principales Especies Hortícolas de Argentina, Cap. 8: Cultivo de espárrago",
+          "author": "Castagnino, A.M., Rosini, M.B., Díaz, K.E.",
+          "year": null,
+          "url": "https://repositorio.uca.edu.ar/bitstream/123456789/19950/1/cultivo-esparrago.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla asoralis",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator used against several asparagus pests",
+          "es": "Depredador generalista usado contra diversas plagas del espárrago"
+        },
+        "citation": {
+          "title": "Memoria Anual 2016, Subdirección de Control Biológico",
+          "author": "SENASA, Dirección de Sanidad Vegetal",
+          "year": 2016,
+          "url": "https://repositorio.senasa.gob.pe/bitstreams/294c749d-a012-4828-924c-e888585c3592/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichogramma (egg parasitoid wasp)",
+          "es": "Trichogramma (avispita parasitoide de huevos)"
+        },
+        "scientific_name": "Trichogramma pretiosum",
+        "kind": "insect",
+        "controls": {
+          "en": "Lepidopteran eggs (moths and caterpillars)",
+          "es": "Huevos de lepidópteros (polillas y gusanos)"
+        },
+        "citation": {
+          "title": "Memoria Anual 2016, Subdirección de Control Biológico",
+          "author": "SENASA, Dirección de Sanidad Vegetal",
+          "year": 2016,
+          "url": "https://repositorio.senasa.gob.pe/bitstreams/294c749d-a012-4828-924c-e888585c3592/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Soil-borne fungi such as Fusarium and root rots",
+          "es": "Hongos del suelo como Fusarium y pudrición de raíces"
+        },
+        "citation": {
+          "title": "Perú combate plagas con uso de controladores biológicos en más de 209 mil hectáreas de cultivos en los últimos 3 años",
+          "author": "Agraria.pe, reporting SENASA",
+          "year": 2025,
+          "url": "https://agraria.pe/noticias/peru-combate-plagas-con-uso-de-controladores-biologicos-en-m-39249"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Asparagus should not follow potato, since leftover tubers favour pathogens harmful to asparagus; after a plantation ends, rotate and do not replant asparagus in the same field for at least five years (Fusarium, allelopathy, soil fatigue).",
+      "es": "El espárrago no debe seguir a la papa, pues los tubérculos remanentes favorecen patógenos dañinos; al terminar una plantación, rotar y no repetir espárrago en el mismo lote por al menos cinco años (Fusarium, alelopatía, cansancio del suelo).",
+      "citation": {
+        "title": "Manual de Producción Integrada de las Principales Especies Hortícolas de Argentina, Cap. 8: Cultivo de espárrago",
+        "author": "Castagnino, A.M., Rosini, M.B., Díaz, K.E.",
+        "year": null,
+        "url": "https://repositorio.uca.edu.ar/bitstream/123456789/19950/1/cultivo-esparrago.pdf"
+      }
+    }
+  }
+}

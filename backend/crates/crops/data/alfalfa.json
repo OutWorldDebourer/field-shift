@@ -1,0 +1,331 @@
+{
+  "key": "alfalfa",
+  "names": {
+    "en": [
+      "alfalfa",
+      "lucerne",
+      "purple medick"
+    ],
+    "es": [
+      "alfalfa",
+      "alfalfita",
+      "alfalfar",
+      "mielga",
+      "lucerna"
+    ]
+  },
+  "scientific_name": "Medicago sativa L.",
+  "family": "Fabaceae",
+  "crop_type": "semi-perennial",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.4,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Alfalfa hay, averaged cutting effects"
+      },
+      "mid": {
+        "value": 0.95,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Alfalfa hay, averaged cutting effects (overall average); individual cutting periods: 1.20"
+      },
+      "end": {
+        "value": 0.9,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Alfalfa hay, averaged cutting effects; individual cutting periods: 1.15"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 800,
+        "max": 1600
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management: Training Manual No. 3 - Irrigation Water Needs, Table 14 (Indicative values of crop water needs and sensitivity to drought)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e07.htm"
+      },
+      "note": "Alfalfa"
+    },
+    "temperature": {
+      "base": {
+        "value": {
+          "min": 3.5,
+          "max": 10.0
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Alfalfa Harvest phenology model (Sharratt, Sheaffer & Baker 1989, Field Crops Research 21:95-102)",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/PHENOLOGY/mp-alfalfa_harvest.html"
+        },
+        "note": "Seasonal: spring 3.5 °C, early summer 7.5 °C, late summer 10.0 °C (Sharratt et al. 1989)"
+      },
+      "optimum": {
+        "value": {
+          "min": 21,
+          "max": 27
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Medicago sativa",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1428"
+        },
+        "note": "Ecocrop optimal temperature requirement range"
+      },
+      "max": {
+        "value": 45,
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Medicago sativa",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1428"
+        },
+        "note": "Ecocrop absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": true,
+        "unit": "",
+        "citation": {
+          "title": "Nitrogen Fixation by Legumes, Guide A-129",
+          "author": "Flynn, R., Idowu, J. / New Mexico State University",
+          "year": 2015,
+          "url": "https://pubs.nmsu.edu/_a/A129/index.html"
+        }
+      },
+      "typical_range": {
+        "value": {
+          "min": 280.2,
+          "max": 560.4
+        },
+        "unit": "kg N/ha",
+        "citation": {
+          "title": "Nitrogen Fixation by Legumes, Guide A-129",
+          "author": "Flynn, R., Idowu, J. / New Mexico State University",
+          "year": 2015,
+          "url": "https://pubs.nmsu.edu/_a/A129/index.html"
+        },
+        "note": "Alfalfa, sweet clover, true clovers and vetches 'may fix 250-500 lb of nitrogen per acre'; converted from 250–500 lb N/acre as published"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Pea aphid",
+          "es": "Pulgón verde"
+        },
+        "scientific_name": "Acyrthosiphon pisum",
+        "citation": {
+          "title": "Pea Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/pea-aphid/"
+        },
+        "lower_threshold": {
+          "value": 5.5,
+          "unit": "°C",
+          "citation": {
+            "title": "Pea Aphid phenology models",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/"
+          },
+          "note": "Model 1 (Campbell & Mackauer 1975), alfalfa; upper threshold 28.0 °C"
+        },
+        "degree_days_per_generation": {
+          "value": 109.5,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Pea Aphid phenology models",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/"
+          },
+          "note": "Nymph to adult, apterous form on alfalfa (alate form 118.9)"
+        }
+      },
+      {
+        "name": {
+          "en": "Spotted alfalfa aphid",
+          "es": "Pulgón manchado de la alfalfa"
+        },
+        "scientific_name": "Therioaphis maculata",
+        "citation": {
+          "title": "Spotted Alfalfa Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/spotted-alfalfa-aphid/"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Beet armyworm",
+          "es": "Gusano ejército"
+        },
+        "scientific_name": "Spodoptera exigua",
+        "citation": {
+          "title": "Beet Armyworm / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/beet-armyworm/"
+        },
+        "lower_threshold": {
+          "value": 12.2,
+          "unit": "°C",
+          "citation": {
+            "title": "Beet Armyworm phenology model (Hogg & Gutierrez 1980)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/beet-armyworm/"
+          },
+          "note": "Hogg & Gutierrez 1980, host cotton"
+        },
+        "degree_days_per_generation": {
+          "value": 490.0,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Beet Armyworm phenology model (Hogg & Gutierrez 1980)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/beet-armyworm/"
+          },
+          "note": "Egg to adult, host cotton"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Convergent lady beetle",
+          "es": "Mariquita convergente"
+        },
+        "scientific_name": "Hippodamia convergens",
+        "kind": "insect",
+        "controls": {
+          "en": "Aphids (pea aphid, spotted alfalfa aphid)",
+          "es": "Pulgones (pulgón verde, pulgón manchado)"
+        },
+        "citation": {
+          "title": "Pea Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/pea-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Aphid parasitoid wasp",
+          "es": "Avispita parasitoide de pulgones"
+        },
+        "scientific_name": "Aphidius ervi",
+        "kind": "insect",
+        "controls": {
+          "en": "Pea aphid",
+          "es": "Pulgón verde"
+        },
+        "citation": {
+          "title": "Pea Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/pea-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Aphid parasitoid wasp",
+          "es": "Avispita parasitoide de pulgones"
+        },
+        "scientific_name": "Trioxys complanatus",
+        "kind": "insect",
+        "controls": {
+          "en": "Spotted alfalfa aphid",
+          "es": "Pulgón manchado de la alfalfa"
+        },
+        "citation": {
+          "title": "Spotted Alfalfa Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/spotted-alfalfa-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Aphids and other soft-bodied pests (SENASA lists alfalfa among treated crops)",
+          "es": "Pulgones y otras plagas de cuerpo blando (SENASA incluye alfalfa entre los cultivos atendidos)"
+        },
+        "citation": {
+          "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+          "author": "SENASA, via Agraria.pe",
+          "year": 2022,
+          "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
+        }
+      },
+      {
+        "name": {
+          "en": "Armyworm parasitoid wasp",
+          "es": "Avispita parasitoide de gusanos"
+        },
+        "scientific_name": "Hyposoter exiguae",
+        "kind": "insect",
+        "controls": {
+          "en": "Beet armyworm larvae",
+          "es": "Larvas del gusano ejército"
+        },
+        "citation": {
+          "title": "Beet Armyworm / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/beet-armyworm/"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Multi-year legume stand that fixes large amounts of N; when the stand is renewed, the following crop (e.g. maize or cotton) benefits from the legume N. Rotate to non-host crops to break disease cycles.",
+      "es": "Leguminosa plurianual que fija grandes cantidades de N; al renovar el alfalfar, el cultivo siguiente (p. ej. maíz o algodón) aprovecha ese N. Rotar con no hospederos para cortar ciclos de enfermedades.",
+      "citation": {
+        "title": "Crop Rotation on Organic Farms: Crop Rotation Effects on Soil Fertility and Plant Nutrition",
+        "author": "Rangarajan, A., in Mohler, C.L., Johnson, S.E. (eds.) / SARE",
+        "year": 2009,
+        "url": "https://www.sare.org/publications/crop-rotation-on-organic-farms/physical-and-biological-processes-in-crop-production/crop-rotation-effects-on-soil-fertility-and-plant-nutrition/"
+      }
+    }
+  }
+}

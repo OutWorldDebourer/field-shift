@@ -1,0 +1,292 @@
+{
+  "key": "tomato",
+  "names": {
+    "en": [
+      "tomato",
+      "tomatoes",
+      "cherry tomato",
+      "plum tomato"
+    ],
+    "es": [
+      "tomate",
+      "tomates",
+      "tomatito",
+      "tomatitos",
+      "jitomate",
+      "tomate cherry",
+      "tomate italiano",
+      "tomate perita",
+      "tomate de mesa"
+    ]
+  },
+  "scientific_name": "Solanum lycopersicum L.",
+  "family": "Solanaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.6,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: b. Solanum Family (Tomato row has no individual Kc ini)"
+      },
+      "mid": {
+        "value": 1.15,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Tomato; footnote: may be increased to 1.20 for staked tomatoes reaching 1.5-2 m"
+      },
+      "end": {
+        "value": {
+          "min": 0.7,
+          "max": 0.9
+        },
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Tomato"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 400,
+        "max": 800
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management Training Manual No. 3: Irrigation Water Needs, Chapter 2 Crop water needs (Table 5)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e02.htm"
+      },
+      "note": "Total growing period 135-180 days (Table 4)"
+    },
+    "temperature": {
+      "base": {
+        "value": 10.0,
+        "unit": "°C",
+        "citation": {
+          "title": "MRCC - Growing Degree Day Description (base temperatures by crop)",
+          "author": "Midwestern Regional Climate Center (Purdue University / NOAA NCEI)",
+          "year": null,
+          "url": "https://mrcc.purdue.edu/resources/growing-degree-day-description"
+        },
+        "note": "GDD base temperature as listed by MRCC (°F only on source); converted from 50 °F as published"
+      },
+      "optimum": {
+        "value": {
+          "min": 18,
+          "max": 25
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "FAO Land & Water, Crop information: Tomato",
+          "author": "FAO",
+          "year": null,
+          "url": "https://www.fao.org/land-water/databases-and-software/crop-information/tomato"
+        },
+        "note": "Optimum mean daily temperature for growth; night temperatures 10-20 °C"
+      },
+      "max": {
+        "value": 26.7,
+        "unit": "°C",
+        "citation": {
+          "title": "Temperature Management in High Tunnels (Table 3, cardinal temperatures for growth, from Knott's Handbook for Vegetable Growers)",
+          "author": "Black, B., Drost, D. / Utah State University Extension",
+          "year": 2010,
+          "url": "https://sare.org/wp-content/uploads/Temperature-Management-in-High-Tunnels.pdf"
+        },
+        "note": "Cardinal maximum for growth (Sweet Pepper, Tomato group); converted from 80 °F as published"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Crop Rotation in the Vegetable Garden",
+          "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+          "year": 2025,
+          "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+        },
+        "note": "Nightshade family (Solanaceae), not Fabaceae"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Tomato leafminer moth",
+          "es": "Polilla del tomate"
+        },
+        "scientific_name": "Tuta absoluta (Phthorimaea absoluta)",
+        "citation": {
+          "title": "Tuta absoluta (Lepidoptera: Gelechiidae): thermal requirements and effect of temperature on development, survival, reproduction and longevity (European Journal of Entomology)",
+          "author": "Krechemer, F.S., Foerster, L.A.",
+          "year": 2015,
+          "url": "https://doaj.org/article/ba1355acc957464b935a6d214c837371"
+        },
+        "lower_threshold": {
+          "value": 8.0,
+          "unit": "°C",
+          "citation": {
+            "title": "Tuta absoluta (Lepidoptera: Gelechiidae): thermal requirements and effect of temperature on development, survival, reproduction and longevity (European Journal of Entomology)",
+            "author": "Krechemer, F.S., Foerster, L.A.",
+            "year": 2015,
+            "url": "https://doaj.org/article/ba1355acc957464b935a6d214c837371"
+          },
+          "note": "Linear regression estimate on tomato"
+        },
+        "degree_days_per_generation": {
+          "value": 416.7,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Tuta absoluta (Lepidoptera: Gelechiidae): thermal requirements and effect of temperature on development, survival, reproduction and longevity (European Journal of Entomology)",
+            "author": "Krechemer, F.S., Foerster, L.A.",
+            "year": 2015,
+            "url": "https://doaj.org/article/ba1355acc957464b935a6d214c837371"
+          },
+          "note": "Egg to adult"
+        }
+      },
+      {
+        "name": {
+          "en": "Shoot midge",
+          "es": "Mosquilla de los brotes"
+        },
+        "scientific_name": "Prodiplosis longifila",
+        "citation": {
+          "title": "Trampas de luz con panel pegante para la captura de adultos de Prodiplosis longifila (Diptera: Cecidomyiidae) en tomate (REBIOL 34(2): 53-59)",
+          "author": "Musto Lazarte, J.J., Martos Tupes, A. / UNICA, UNALM",
+          "year": 2014,
+          "url": "https://revistas.unitru.edu.pe/index.php/facccbiol/article/download/769/693"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Serpentine leafminer fly",
+          "es": "Mosca minadora"
+        },
+        "scientific_name": "Liriomyza huidobrensis",
+        "citation": {
+          "title": "Pest distribution and risk atlas for Africa, 4.3.1 Serpentine leafminer fly, Liriomyza huidobrensis",
+          "author": "Mujica, N., Carhuapoma, P., Kroschel, J. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://ilcym.cipotato.org/wp-content/uploads/2016/11/4.3.1-1.pdf"
+        },
+        "lower_threshold": {
+          "gap": "Only stage-specific thresholds published: egg 6.4 °C, larva 3.4 °C, pupa 4.8 °C (Mujica, Carhuapoma & Kroschel 2016, CIP); no single egg-to-adult value"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found; CIP reports ~12 generations/year at La Molina (lowland coast)"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Trichogramma (egg parasitoid wasp)",
+          "es": "Trichogramma (avispita parasitoide de huevos)"
+        },
+        "scientific_name": "Trichogramma pretiosum",
+        "kind": "insect",
+        "controls": {
+          "en": "Lepidopteran eggs (moths and caterpillars)",
+          "es": "Huevos de lepidópteros (polillas y gusanos)"
+        },
+        "citation": {
+          "title": "Memoria Anual 2016, Subdirección de Control Biológico",
+          "author": "SENASA, Dirección de Sanidad Vegetal",
+          "year": 2016,
+          "url": "https://repositorio.senasa.gob.pe/bitstreams/294c749d-a012-4828-924c-e888585c3592/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla carnea",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator of soft-bodied pests (produced by SENASA-partner labs for tomato and other crops)",
+          "es": "Depredador generalista de plagas de cuerpo blando (producido por laboratorios en convenio con SENASA para tomate y otros cultivos)"
+        },
+        "citation": {
+          "title": "Memoria Anual 2016, Subdirección de Control Biológico",
+          "author": "SENASA, Dirección de Sanidad Vegetal",
+          "year": 2016,
+          "url": "https://repositorio.senasa.gob.pe/bitstreams/294c749d-a012-4828-924c-e888585c3592/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Halticoptera arduine (parasitoid wasp)",
+          "es": "Halticoptera arduine (avispita parasitoide)"
+        },
+        "scientific_name": "Halticoptera arduine",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+          "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+        },
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Soil-borne fungi such as Fusarium, damping-off and root rots",
+          "es": "Hongos del suelo como Fusarium, chupadera y pudrición de raíces"
+        },
+        "citation": {
+          "title": "Perú combate plagas con uso de controladores biológicos en más de 209 mil hectáreas de cultivos en los últimos 3 años",
+          "author": "Agraria.pe, reporting SENASA",
+          "year": 2025,
+          "url": "https://agraria.pe/noticias/peru-combate-plagas-con-uso-de-controladores-biologicos-en-m-39249"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Tomato is in the nightshade family (Solanaceae) with potato, pepper and eggplant; avoid following any of them in the same spot for 3 to 4 years (5+ if possible).",
+      "es": "El tomate pertenece a la familia Solanaceae junto con papa, pimiento y berenjena; evitar sembrarlo después de cualquiera de ellas en el mismo lugar durante 3 a 4 años (5 o más si es posible).",
+      "citation": {
+        "title": "Crop Rotation in the Vegetable Garden",
+        "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+        "year": 2025,
+        "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+      }
+    }
+  }
+}

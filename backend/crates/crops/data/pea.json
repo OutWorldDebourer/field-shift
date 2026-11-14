@@ -1,0 +1,366 @@
+{
+  "key": "pea",
+  "names": {
+    "en": [
+      "pea",
+      "garden pea",
+      "green pea",
+      "field pea",
+      "snow pea",
+      "sugar pea",
+      "english pea"
+    ],
+    "es": [
+      "arveja",
+      "arverja",
+      "alverja",
+      "alberja",
+      "arvejita",
+      "arverjita",
+      "alverjita",
+      "arveja verde",
+      "arveja china",
+      "guisante",
+      "chícharo"
+    ]
+  },
+  "scientific_name": "Pisum sativum L.",
+  "family": "Fabaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.5,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Peas, fresh"
+      },
+      "mid": {
+        "value": 1.15,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Peas, fresh"
+      },
+      "end": {
+        "value": 1.1,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Peas, fresh (harvested green); dry/seed peas: 0.30"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 350,
+        "max": 500
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management: Training Manual No. 3 - Irrigation Water Needs, Table 14 (Indicative values of crop water needs and sensitivity to drought)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e07.htm"
+      },
+      "note": "Pea"
+    },
+    "temperature": {
+      "base": {
+        "value": 5,
+        "unit": "°C",
+        "citation": {
+          "title": "Understanding Growing Degree Days (quoting 'Growing Season Characteristics and Requirements in the Corn Belt')",
+          "author": "Woodmansee, J.E. / Purdue University Extension",
+          "year": 2025,
+          "url": "https://www.extension.purdue.edu/news/county/whitley/2025/08/understanding-growing-degree-days.html"
+        },
+        "note": "40°F (5°C) base commonly used for canning peas"
+      },
+      "optimum": {
+        "value": {
+          "min": 10,
+          "max": 24
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Pisum sativum",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1721"
+        },
+        "note": "Ecocrop optimal temperature requirement range"
+      },
+      "max": {
+        "value": 30,
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Pisum sativum",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1721"
+        },
+        "note": "Ecocrop absolute maximum; killing temperature in early growth 0 °C"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": true,
+        "unit": "",
+        "citation": {
+          "title": "Ecocrop crop view: Pisum sativum",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/cropView?id=1721"
+        },
+        "note": "Family Fabaceae"
+      },
+      "typical_range": {
+        "value": {
+          "min": 53,
+          "max": 75
+        },
+        "unit": "kg N/ha",
+        "citation": {
+          "title": "Crop performance, biological N fixation and pre-crop effect of pea ideotypes in an organic farming system (Nutrient Cycling in Agroecosystems)",
+          "author": "Neugschwandtner, R.W. et al.",
+          "year": 2019,
+          "url": "https://link.springer.com/content/pdf/10.1007/s10705-019-10021-4.pdf"
+        },
+        "note": "N-difference method, organic system in Austria; 42-50% of plant N from atmosphere. Values vary widely with site and method"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Pea leafminer (serpentine leafminer)",
+          "es": "Mosca minadora"
+        },
+        "scientific_name": "Liriomyza huidobrensis",
+        "citation": {
+          "title": "Serpentine leafminer fly, Liriomyza huidobrensis. Pest Distribution and Risk Atlas for Africa, pp. 114-125",
+          "author": "Mujica, N., Carhuapoma, P., Kroschel, J. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://ilcym.cipotato.org/wp-content/uploads/2016/11/4.3.1-1.pdf"
+        },
+        "lower_threshold": {
+          "value": 6.1,
+          "unit": "°C",
+          "citation": {
+            "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
+            "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
+            "year": 2017,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/"
+          },
+          "note": "Total immature stages (egg to adult), constant-temperature life tables on faba bean"
+        },
+        "degree_days_per_generation": {
+          "value": 307.5,
+          "unit": "°C·day",
+          "citation": {
+            "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
+            "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
+            "year": 2017,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/"
+          },
+          "note": "Egg to adult (total immature stages)"
+        }
+      },
+      {
+        "name": {
+          "en": "Pea aphid",
+          "es": "Pulgón verde de la arveja"
+        },
+        "scientific_name": "Acyrthosiphon pisum",
+        "citation": {
+          "title": "Pea Aphid phenology models",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/"
+        },
+        "lower_threshold": {
+          "value": 2.4,
+          "unit": "°C",
+          "citation": {
+            "title": "Pea Aphid phenology models",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/"
+          },
+          "note": "Model 2 (Siddiqui et al. 1973), host peas; upper threshold 28.0 °C"
+        },
+        "degree_days_per_generation": {
+          "value": 150.4,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Pea Aphid phenology models",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/"
+          },
+          "note": "Nymph to adult, host peas (Model 2)"
+        }
+      },
+      {
+        "name": {
+          "en": "Whitefly",
+          "es": "Mosca blanca"
+        },
+        "scientific_name": "Bemisia sp.",
+        "citation": {
+          "title": "Integración de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la región Huánuco, Perú. Enfoque UTE 13(3):58-68",
+          "author": "Valverde Rodríguez, A., Eugenio Ruiz, R., David, E.N.E., Campos Albornoz, M.E.",
+          "year": 2022,
+          "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
+        },
+        "lower_threshold": {
+          "value": 10,
+          "unit": "°C",
+          "citation": {
+            "title": "Sweetpotato Whitefly phenology model (Zalom, Natwick & Toscano 1985)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/sweetpotato-whitefly/"
+          },
+          "note": "Bemisia tabaci model on cotton (Zalom et al. 1985); species in pea study given only as Bemisia sp."
+        },
+        "degree_days_per_generation": {
+          "gap": "UC IPM page value for egg-to-adult is garbled in °C; not used"
+        }
+      },
+      {
+        "name": {
+          "en": "Cutworm",
+          "es": "Gusano de tierra"
+        },
+        "scientific_name": "Agrotis sp.",
+        "citation": {
+          "title": "Integración de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la región Huánuco, Perú. Enfoque UTE 13(3):58-68",
+          "author": "Valverde Rodríguez, A., Eugenio Ruiz, R., David, E.N.E., Campos Albornoz, M.E.",
+          "year": 2022,
+          "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Leafminer parasitoid wasp",
+          "es": "Avispita parasitoide de minadora"
+        },
+        "scientific_name": "Diglyphus websteri",
+        "kind": "insect",
+        "controls": {
+          "en": "Larvae of the leafminer Liriomyza huidobrensis (recorded on bean in Lima)",
+          "es": "Larvas de la mosca minadora Liriomyza huidobrensis (registrado en frijol en Lima)"
+        },
+        "citation": {
+          "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
+          "author": "Revista Colombiana de Entomología (SOCOLEN)",
+          "year": 1998,
+          "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+        }
+      },
+      {
+        "name": {
+          "en": "Bt",
+          "es": "Bt"
+        },
+        "scientific_name": "Bacillus thuringiensis",
+        "kind": "bacterium",
+        "controls": {
+          "en": "Lepidopteran larvae; used as entomopathogen in pea IPM trial in Huánuco",
+          "es": "Larvas de lepidópteros; usado como entomopatógeno en ensayo MIP de arveja en Huánuco"
+        },
+        "citation": {
+          "title": "Integración de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la región Huánuco, Perú. Enfoque UTE 13(3):58-68",
+          "author": "Valverde Rodríguez, A., Eugenio Ruiz, R., David, E.N.E., Campos Albornoz, M.E.",
+          "year": 2022,
+          "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
+        }
+      },
+      {
+        "name": {
+          "en": "Convergent lady beetle",
+          "es": "Mariquita convergente"
+        },
+        "scientific_name": "Hippodamia convergens",
+        "kind": "insect",
+        "controls": {
+          "en": "Pea aphid (Acyrthosiphon pisum)",
+          "es": "Pulgón verde (Acyrthosiphon pisum)"
+        },
+        "citation": {
+          "title": "Pea Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/pea-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Aphid parasitoid wasp",
+          "es": "Avispita parasitoide de pulgones"
+        },
+        "scientific_name": "Aphidius ervi",
+        "kind": "insect",
+        "controls": {
+          "en": "Pea aphid (Acyrthosiphon pisum)",
+          "es": "Pulgón verde (Acyrthosiphon pisum)"
+        },
+        "citation": {
+          "title": "Pea Aphid / Alfalfa: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": 2017,
+          "url": "https://ipm.ucanr.edu/agriculture/alfalfa/pea-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma spp.",
+        "kind": "fungus",
+        "controls": {
+          "en": "Damping-off and root rot (SENASA general biocontrol use in Peru)",
+          "es": "Chupadera y pudrición de raíces (uso general de SENASA en Perú)"
+        },
+        "citation": {
+          "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+          "author": "SENASA, via Agraria.pe",
+          "year": 2022,
+          "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Legume: when used strategically in a rotation it provides N to the following crop (e.g. maize or vegetables). For soil-borne diseases, rotate to non-host crops until the pathogen dies out.",
+      "es": "Leguminosa: bien ubicada en la rotación aporta N al cultivo siguiente (p. ej. maíz u hortalizas). Contra enfermedades del suelo, rotar con cultivos no hospederos hasta que el patógeno desaparezca.",
+      "citation": {
+        "title": "Crop Rotation on Organic Farms: Crop Rotation Effects on Soil Fertility and Plant Nutrition",
+        "author": "Rangarajan, A., in Mohler, C.L., Johnson, S.E. (eds.) / SARE",
+        "year": 2009,
+        "url": "https://www.sare.org/publications/crop-rotation-on-organic-farms/physical-and-biological-processes-in-crop-production/crop-rotation-effects-on-soil-fertility-and-plant-nutrition/"
+      }
+    }
+  }
+}

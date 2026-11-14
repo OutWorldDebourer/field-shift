@@ -1,0 +1,349 @@
+{
+  "key": "cotton",
+  "names": {
+    "en": [
+      "cotton",
+      "tanguis cotton",
+      "pima cotton",
+      "upland cotton",
+      "long-staple cotton"
+    ],
+    "es": [
+      "algodón",
+      "algodon",
+      "algodonero",
+      "algodón tangüis",
+      "tangüis",
+      "algodón pima",
+      "pima",
+      "algodón del cerro",
+      "algodón áspero"
+    ]
+  },
+  "scientific_name": "Gossypium barbadense L. (Tangüis, Pima); Gossypium hirsutum L. (Del Cerro, upland)",
+  "family": "Malvaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.35,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: Fibre crops"
+      },
+      "mid": {
+        "value": {
+          "min": 1.15,
+          "max": 1.2
+        },
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Cotton"
+      },
+      "end": {
+        "value": {
+          "min": 0.5,
+          "max": 0.7
+        },
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Cotton (0.70-0.50)"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 700,
+        "max": 1300
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management: Training Manual No. 3 - Irrigation Water Needs, Table 14 (Indicative values of crop water needs and sensitivity to drought)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e07.htm"
+      },
+      "note": "Cotton"
+    },
+    "temperature": {
+      "base": {
+        "value": 15.6,
+        "unit": "°C",
+        "citation": {
+          "title": "Texas Cotton Production: Emphasizing Integrated Pest Management, Chapter 2",
+          "author": "Texas A&M AgriLife Extension",
+          "year": null,
+          "url": "https://cotton.tamu.edu/wp-content/uploads/sites/27/legacy-files/General%20Production/texascottonproduction/pdf/chapter2.pdf"
+        },
+        "note": "60°F base for DD60 heat units"
+      },
+      "optimum": {
+        "value": {
+          "min": 22,
+          "max": 32
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Gossypium barbadense",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1158"
+        },
+        "note": "Ecocrop optimal range for G. barbadense (G. hirsutum: 22-36)"
+      },
+      "max": {
+        "value": 38,
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Gossypium barbadense",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=1158"
+        },
+        "note": "Ecocrop absolute maximum for G. barbadense (G. hirsutum: 42)"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Ecocrop crop view: Gossypium barbadense",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/cropView?id=1158"
+        },
+        "note": "Family Malvaceae (Ecocrop taxonomy); not a legume"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Tobacco budworm",
+          "es": "Perforador de bellotas (Heliothis)"
+        },
+        "scientific_name": "Chloridea (Heliothis) virescens",
+        "citation": {
+          "title": "Plagas y enemigos naturales en el algodonero Tangüis en La Molina. Ecología Aplicada 23(1)",
+          "author": "Cruz et al. / Universidad Nacional Agraria La Molina",
+          "year": 2024,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2024_v23_n1_a02_535_Cruz_et_al_Plagas_y_enemigos.htm"
+        },
+        "lower_threshold": {
+          "value": 12.6,
+          "unit": "°C",
+          "citation": {
+            "title": "Tobacco Budworm phenology models (Model 2: Hartstack et al. 1976)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/tobacco-budworm/"
+          },
+          "note": "Model 2 (Hartstack et al. 1976); upper threshold 33.3 °C"
+        },
+        "degree_days_per_generation": {
+          "value": 422.3,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Tobacco Budworm phenology models (Model 2: Hartstack et al. 1976)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/tobacco-budworm/"
+          },
+          "note": "Egg to adult (Model 2)"
+        }
+      },
+      {
+        "name": {
+          "en": "Pink bollworm",
+          "es": "Gusano rosado"
+        },
+        "scientific_name": "Pectinophora gossypiella",
+        "citation": {
+          "title": "Plagas y enemigos naturales en el algodonero Tangüis en La Molina. Ecología Aplicada 23(1)",
+          "author": "Cruz et al. / Universidad Nacional Agraria La Molina",
+          "year": 2024,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2024_v23_n1_a02_535_Cruz_et_al_Plagas_y_enemigos.htm"
+        },
+        "lower_threshold": {
+          "value": 13.9,
+          "unit": "°C",
+          "citation": {
+            "title": "Pink Bollworm phenology models (Model 1: Beasley & Adams 1996)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pink-bollworm/"
+          },
+          "note": "Model 1 (Beasley & Adams 1996), cotton field study; upper threshold 32.8 °C"
+        },
+        "degree_days_per_generation": {
+          "value": 492,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Pink Bollworm phenology models (Model 1: Beasley & Adams 1996)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pink-bollworm/"
+          },
+          "note": "Generation time, adult to adult"
+        }
+      },
+      {
+        "name": {
+          "en": "Peruvian cotton boll weevil",
+          "es": "Picudo peruano"
+        },
+        "scientific_name": "Anthonomus vestitus",
+        "citation": {
+          "title": "Plagas y enemigos naturales en el algodonero Tangüis en La Molina. Ecología Aplicada 23(1)",
+          "author": "Cruz et al. / Universidad Nacional Agraria La Molina",
+          "year": 2024,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2024_v23_n1_a02_535_Cruz_et_al_Plagas_y_enemigos.htm"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Cotton aphid",
+          "es": "Pulgón del algodonero"
+        },
+        "scientific_name": "Aphis gossypii",
+        "citation": {
+          "title": "Plagas y enemigos naturales en el algodonero Tangüis en La Molina. Ecología Aplicada 23(1)",
+          "author": "Cruz et al. / Universidad Nacional Agraria La Molina",
+          "year": 2024,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2024_v23_n1_a02_535_Cruz_et_al_Plagas_y_enemigos.htm"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Aphid parasitoid wasp",
+          "es": "Avispita parasitoide de pulgones"
+        },
+        "scientific_name": "Lysiphlebus testaceipes",
+        "kind": "insect",
+        "controls": {
+          "en": "Cotton aphid (Aphis gossypii)",
+          "es": "Pulgón del algodonero (Aphis gossypii)"
+        },
+        "citation": {
+          "title": "Plagas y enemigos naturales en el algodonero Tangüis en La Molina. Ecología Aplicada 23(1)",
+          "author": "Cruz et al. / Universidad Nacional Agraria La Molina",
+          "year": 2024,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2024_v23_n1_a02_535_Cruz_et_al_Plagas_y_enemigos.htm"
+        }
+      },
+      {
+        "name": {
+          "en": "Convergent lady beetle",
+          "es": "Mariquita convergente"
+        },
+        "scientific_name": "Hippodamia convergens",
+        "kind": "insect",
+        "controls": {
+          "en": "Cotton aphid",
+          "es": "Pulgón del algodonero"
+        },
+        "citation": {
+          "title": "Cotton Aphid / Cotton: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/agriculture/cotton/cotton-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Hoverfly larvae",
+          "es": "Larvas de sírfido"
+        },
+        "scientific_name": "Syrphidae",
+        "kind": "insect",
+        "controls": {
+          "en": "Cotton aphid",
+          "es": "Pulgón del algodonero"
+        },
+        "citation": {
+          "title": "Cotton Aphid / Cotton: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/agriculture/cotton/cotton-aphid/"
+        }
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla carnea / C. externa",
+        "kind": "insect",
+        "controls": {
+          "en": "Listed by INIA Vista Florida biocontrol lab alongside Aphis gossypii, Heliothis virescens and Bemisia tabaci",
+          "es": "Listado por el laboratorio de biocontroladores INIA Vista Florida junto a Aphis gossypii, Heliothis virescens y Bemisia tabaci"
+        },
+        "citation": {
+          "title": "Laboratorio de Biocontroladores (EEA Vista Florida, Lambayeque), Año N° 15",
+          "author": "INIA Perú",
+          "year": 2014,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/237/1/HD-15-2014-Biocontroladores.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichogramma egg parasitoids",
+          "es": "Trichogramma"
+        },
+        "scientific_name": "Trichogramma spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Moth eggs; listed by INIA Vista Florida biocontrol lab alongside Heliothis virescens and H. zea",
+          "es": "Huevos de polillas; listado por el laboratorio INIA Vista Florida junto a Heliothis virescens y H. zea"
+        },
+        "citation": {
+          "title": "Laboratorio de Biocontroladores (EEA Vista Florida, Lambayeque), Año N° 15",
+          "author": "INIA Perú",
+          "year": 2014,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/237/1/HD-15-2014-Biocontroladores.pdf"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Non-legume (Malvaceae); benefits from following a legume such as alfalfa, which provides N to the subsequent crop. Rotate to non-host crops to break the cycles of soil-borne pathogens.",
+      "es": "No es leguminosa (Malvaceae); se beneficia de sembrarse tras una leguminosa como la alfalfa, que aporta N al cultivo siguiente. Rotar con no hospederos para cortar el ciclo de patógenos del suelo.",
+      "citation": {
+        "title": "Crop Rotation on Organic Farms: Crop Rotation Effects on Soil Fertility and Plant Nutrition",
+        "author": "Rangarajan, A., in Mohler, C.L., Johnson, S.E. (eds.) / SARE",
+        "year": 2009,
+        "url": "https://www.sare.org/publications/crop-rotation-on-organic-farms/physical-and-biological-processes-in-crop-production/crop-rotation-effects-on-soil-fertility-and-plant-nutrition/"
+      }
+    }
+  }
+}

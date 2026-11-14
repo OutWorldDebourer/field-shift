@@ -1,0 +1,290 @@
+{
+  "key": "sweet_potato",
+  "names": {
+    "en": [
+      "sweet potato",
+      "sweetpotato",
+      "sweet potatoes",
+      "kumara"
+    ],
+    "es": [
+      "camote",
+      "camotes",
+      "camotito",
+      "batata",
+      "boniato",
+      "camote amarillo",
+      "camote morado",
+      "camote blanco",
+      "camote huambachero"
+    ]
+  },
+  "scientific_name": "Ipomoea batatas (L.) Lam.",
+  "family": "Convolvulaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.5,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: d. Roots and Tubers (Sweet Potato row has no individual Kc ini)"
+      },
+      "mid": {
+        "value": 1.15,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Sweet Potato"
+      },
+      "end": {
+        "value": 0.65,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Sweet Potato"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 500.0,
+        "max": 800.0
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+        "author": "INIA, Estación Experimental Donoso - Huaral",
+        "year": 2001,
+        "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+      },
+      "note": "Gravity (furrow) irrigation, Peruvian central coast (INIA Donoso-Huaral); drip irrigation uses 1300-2900 m³/ha/season depending on soil retentivity; converted from 5000–8000 m³/ha/season as published"
+    },
+    "temperature": {
+      "base": {
+        "value": 15.6,
+        "unit": "°C",
+        "citation": {
+          "title": "MRCC - Growing Degree Day Description (base temperatures by crop)",
+          "author": "Midwestern Regional Climate Center (Purdue University / NOAA NCEI)",
+          "year": null,
+          "url": "https://mrcc.purdue.edu/resources/growing-degree-day-description"
+        },
+        "note": "GDD base temperature as listed by MRCC (°F only on source); converted from 60 °F as published"
+      },
+      "optimum": {
+        "value": {
+          "min": 20,
+          "max": 25
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Sweetpotato Critical Temperature Thresholds",
+          "author": "Deuter, P., Carey, D. / Queensland DPI (DCAP)",
+          "year": null,
+          "url": "https://data.longpaddock.qld.gov.au/static/dcap/DCAP3/DCAP3__15%20Sweet%20Potato%20CTT%20Final.pdf"
+        },
+        "note": "Optimum growing temperature (Ramirez 1992, cited); grown between 15 and 33 °C"
+      },
+      "max": {
+        "value": 38,
+        "unit": "°C",
+        "citation": {
+          "title": "Sweetpotato Critical Temperature Thresholds",
+          "author": "Deuter, P., Carey, D. / Queensland DPI (DCAP)",
+          "year": null,
+          "url": "https://data.longpaddock.qld.gov.au/static/dcap/DCAP3/DCAP3__15%20Sweet%20Potato%20CTT%20Final.pdf"
+        },
+        "note": "Temperatures above 38 °C limit sweetpotato growth; above 30 °C reduce storage root formation"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Crop Rotation in the Vegetable Garden",
+          "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+          "year": 2025,
+          "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+        },
+        "note": "Morning glory family (Convolvulaceae), not Fabaceae"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Sweet potato weevil",
+          "es": "Gorgojo del camote"
+        },
+        "scientific_name": "Euscepes postfasciatus",
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Sweetpotato whitefly",
+          "es": "Mosca blanca"
+        },
+        "scientific_name": "Bemisia tabaci",
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        },
+        "lower_threshold": {
+          "value": 10,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Sweetpotato whitefly (Zalom et al. 1985)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/sweetpotato-whitefly/"
+          },
+          "note": "Upper threshold 32.2 °C; host cotton, Imperial Valley CA"
+        },
+        "degree_days_per_generation": {
+          "value": 316.1,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Sweetpotato whitefly (Zalom et al. 1985)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/sweetpotato-whitefly/"
+          },
+          "note": "Egg to adult; source gives 569 °F·day (its °C figure is garbled on the page); converted from 569 °F·day as published"
+        }
+      },
+      {
+        "name": {
+          "en": "Southern armyworm",
+          "es": "Gusano ejército"
+        },
+        "scientific_name": "Spodoptera eridania",
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "White grubs",
+          "es": "Gusano chacarero"
+        },
+        "scientific_name": "Ligyrus maimon, Anomala undulata, Golofa spp., Cyclocephala sp.",
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Beauveria bassiana",
+          "es": "Beauveria bassiana"
+        },
+        "scientific_name": "Beauveria bassiana",
+        "kind": "fungus",
+        "controls": {
+          "en": "White grubs (gusano chacarero)",
+          "es": "Gusano chacarero (larvas de escarabajos)"
+        },
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Paecilomyces fumosoroseus",
+          "es": "Paecilomyces fumosoroseus"
+        },
+        "scientific_name": "Paecilomyces fumosoroseus",
+        "kind": "fungus",
+        "controls": {
+          "en": "Whitefly (Bemisia tabaci)",
+          "es": "Mosca blanca (Bemisia tabaci)"
+        },
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Bacillus thuringiensis",
+          "es": "Bacillus thuringiensis"
+        },
+        "scientific_name": "Bacillus thuringiensis",
+        "kind": "bacterium",
+        "controls": {
+          "en": "Armyworm larvae (Spodoptera)",
+          "es": "Larvas de gusano ejército (Spodoptera)"
+        },
+        "citation": {
+          "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+          "author": "INIA, Estación Experimental Donoso - Huaral",
+          "year": 2001,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "INIA recommends crop rotation, healthy planting material, high hilling and early harvest to manage the sweet potato weevil (Euscepes postfasciatus).",
+      "es": "El INIA recomienda rotación de cultivos, semilla sana, aporques altos y cosecha temprana para manejar el gorgojo del camote (Euscepes postfasciatus).",
+      "citation": {
+        "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+        "author": "INIA, Estación Experimental Donoso - Huaral",
+        "year": 2001,
+        "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+      }
+    }
+  }
+}

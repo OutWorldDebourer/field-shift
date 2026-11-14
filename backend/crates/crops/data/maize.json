@@ -1,0 +1,313 @@
+{
+  "key": "maize",
+  "names": {
+    "en": [
+      "maize",
+      "corn",
+      "field corn",
+      "sweet corn",
+      "yellow maize",
+      "purple corn"
+    ],
+    "es": [
+      "maíz",
+      "maiz",
+      "choclo",
+      "choclito",
+      "maíz amarillo duro",
+      "maíz amarillo",
+      "maíz blanco",
+      "maíz morado",
+      "maíz chala",
+      "chala",
+      "mazorca",
+      "marlo"
+    ]
+  },
+  "scientific_name": "Zea mays L.",
+  "family": "Poaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.3,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: Cereals"
+      },
+      "mid": {
+        "value": 1.2,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Maize, field (grain); sweet maize (choclo) 1.15"
+      },
+      "end": {
+        "value": {
+          "min": 0.35,
+          "max": 0.6
+        },
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Maize, field (grain): 0.60 at harvest with high grain moisture, 0.35 after complete field drying; sweet maize (choclo) 1.05"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 500,
+        "max": 800
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management: Training Manual No. 3 - Irrigation Water Needs, Table 14 (Indicative values of crop water needs and sensitivity to drought)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e07.htm"
+      },
+      "note": "Maize"
+    },
+    "temperature": {
+      "base": {
+        "value": 10,
+        "unit": "°C",
+        "citation": {
+          "title": "Understanding Growing Degree Days (quoting 'Growing Season Characteristics and Requirements in the Corn Belt')",
+          "author": "Woodmansee, J.E. / Purdue University Extension",
+          "year": 2025,
+          "url": "https://www.extension.purdue.edu/news/county/whitley/2025/08/understanding-growing-degree-days.html"
+        },
+        "note": "50°F (10°C) base used for field corn and sweet corn"
+      },
+      "optimum": {
+        "value": {
+          "min": 18,
+          "max": 33
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Zea mays",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2175"
+        },
+        "note": "Ecocrop optimal temperature requirement range"
+      },
+      "max": {
+        "value": 47,
+        "unit": "°C",
+        "citation": {
+          "title": "Ecocrop data sheet: Zea mays",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=2175"
+        },
+        "note": "Ecocrop absolute maximum"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Ecocrop crop view: Zea mays",
+          "author": "FAO Ecocrop",
+          "year": null,
+          "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/cropView?id=2175"
+        },
+        "note": "Family Gramineae (Poaceae) (Ecocrop taxonomy); not a legume"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Fall armyworm",
+          "es": "Gusano cogollero"
+        },
+        "scientific_name": "Spodoptera frugiperda",
+        "citation": {
+          "title": "Manejo ecológico para el control de Spodoptera frugiperda en el cultivo de maíz amarillo duro en las regiones de Lambayeque y La Libertad",
+          "author": "INIA Perú",
+          "year": null,
+          "url": "https://pgc-snia.inia.gob.pe:8443/jspui/bitstream/inia/1148/1/Manejo%20ecol%c3%b3gico%20para%20el%20control%20de%20Spodoptera%20frugiperda%20en%20el%20cultivo%20de%20ma%c3%adz%20amarillo%20duro%20en%20las%20regiones%20de%20Lambayeque%20y%20La%20Libertad.pdf"
+        },
+        "lower_threshold": {
+          "value": 12.57,
+          "unit": "°C",
+          "citation": {
+            "title": "The Effect of Temperature on the Development of Spodoptera frugiperda (Lepidoptera: Noctuidae). Insects 11(4):228",
+            "author": "Du Plessis, H., Schlemmer, M.-L., Van den Berg, J.",
+            "year": 2020,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7240686"
+          },
+          "note": "Egg-to-adult threshold, larvae reared on maize at constant temperatures"
+        },
+        "degree_days_per_generation": {
+          "value": 391.61,
+          "unit": "°C·day",
+          "citation": {
+            "title": "The Effect of Temperature on the Development of Spodoptera frugiperda (Lepidoptera: Noctuidae). Insects 11(4):228",
+            "author": "Du Plessis, H., Schlemmer, M.-L., Van den Berg, J.",
+            "year": 2020,
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7240686"
+          },
+          "note": "Egg to adult"
+        }
+      },
+      {
+        "name": {
+          "en": "Corn earworm",
+          "es": "Gusano mazorquero"
+        },
+        "scientific_name": "Helicoverpa zea",
+        "citation": {
+          "title": "Control de gusanos de la mazorca del maíz",
+          "author": "Tejada / INIA Perú",
+          "year": 2000,
+          "url": "https://pgc-snia.inia.gob.pe:8443/jspui/bitstream/inia/988/1/Tejada-Control_gusanos_mazorca_ma%c3%adz.pdf"
+        },
+        "lower_threshold": {
+          "value": 12.6,
+          "unit": "°C",
+          "citation": {
+            "title": "Corn Earworm, Cotton Bollworm, Tomato Fruitworm phenology models (Hartstack et al. 1976)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/phenology/ma-h_zea.html"
+          },
+          "note": "Model 1 (Hartstack et al. 1976); upper threshold 33.3 °C"
+        },
+        "degree_days_per_generation": {
+          "value": 422.3,
+          "unit": "°C·day",
+          "citation": {
+            "title": "Corn Earworm, Cotton Bollworm, Tomato Fruitworm phenology models (Hartstack et al. 1976)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/phenology/ma-h_zea.html"
+          },
+          "note": "Egg to adult (Model 1)"
+        }
+      },
+      {
+        "name": {
+          "en": "Sugarcane borer",
+          "es": "Barreno del tallo (cañero)"
+        },
+        "scientific_name": "Diatraea saccharalis",
+        "citation": {
+          "title": "Laboratorio de Biocontroladores (EEA Vista Florida, Lambayeque), Año N° 15",
+          "author": "INIA Perú",
+          "year": 2014,
+          "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/237/1/HD-15-2014-Biocontroladores.pdf"
+        },
+        "lower_threshold": {
+          "gap": "No published lower developmental threshold found"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Trichogramma egg parasitoids",
+          "es": "Trichogramma"
+        },
+        "scientific_name": "Trichogramma spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Eggs of corn earworm and other moths (mazorquero, cañero)",
+          "es": "Huevos del mazorquero, cañero y otras polillas"
+        },
+        "citation": {
+          "title": "Corn Earworm / Corn: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/agriculture/corn/corn-earworm/"
+        }
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Eggs and small larvae of moths, aphids (SENASA lists maize among treated crops)",
+          "es": "Huevos y larvas pequeñas de polillas, pulgones (SENASA incluye maíz entre los cultivos atendidos)"
+        },
+        "citation": {
+          "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+          "author": "SENASA, via Agraria.pe",
+          "year": 2022,
+          "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
+        }
+      },
+      {
+        "name": {
+          "en": "Beauveria",
+          "es": "Beauveria"
+        },
+        "scientific_name": "Beauveria bassiana",
+        "kind": "fungus",
+        "controls": {
+          "en": "Insect pests including whitefly (SENASA general use)",
+          "es": "Plagas insectiles incluida mosca blanca (uso general de SENASA)"
+        },
+        "citation": {
+          "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+          "author": "SENASA, via Agraria.pe",
+          "year": 2022,
+          "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
+        }
+      },
+      {
+        "name": {
+          "en": "Entomopathogenic nematodes",
+          "es": "Nematodos entomopatógenos"
+        },
+        "scientific_name": "Steinernema / Heterorhabditis spp.",
+        "kind": "nematode",
+        "controls": {
+          "en": "Fall armyworm larvae (evaluated by INIA in Lambayeque)",
+          "es": "Larvas del cogollero (evaluado por INIA en Lambayeque)"
+        },
+        "citation": {
+          "title": "Entomopathogenic nematodes against Spodoptera frugiperda larvae, Vista Florida, Lambayeque (Scientia Agropecuaria)",
+          "author": "INIA Perú / Scientia Agropecuaria (UNT)",
+          "year": 2019,
+          "url": "https://revistas.unitru.edu.pe/index.php/scientiaagrop/article/download/2661/2757"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Cereal (Poaceae); benefits strongly from following a legume such as alfalfa, pea or bean, which provides N to the subsequent crop. Avoid continuous maize; rotate to non-host crops to break pest and disease cycles.",
+      "es": "Cereal (Poaceae); se beneficia de sembrarse tras una leguminosa (alfalfa, arveja o frijol), que aporta N al cultivo siguiente. Evitar maíz tras maíz; rotar con no hospederos para cortar ciclos de plagas y enfermedades.",
+      "citation": {
+        "title": "Crop Rotation on Organic Farms: Crop Rotation Effects on Soil Fertility and Plant Nutrition",
+        "author": "Rangarajan, A., in Mohler, C.L., Johnson, S.E. (eds.) / SARE",
+        "year": 2009,
+        "url": "https://www.sare.org/publications/crop-rotation-on-organic-farms/physical-and-biological-processes-in-crop-production/crop-rotation-effects-on-soil-fertility-and-plant-nutrition/"
+      }
+    }
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "key": "onion",
+  "names": {
+    "en": [
+      "onion",
+      "onions",
+      "bulb onion",
+      "dry onion",
+      "red onion",
+      "yellow onion",
+      "white onion"
+    ],
+    "es": [
+      "cebolla",
+      "cebollas",
+      "cebollita",
+      "cebollitas",
+      "cebolla roja",
+      "cebolla morada",
+      "cebolla amarilla",
+      "cebolla blanca",
+      "cebolla de cabeza",
+      "cebolla arequipeña"
+    ]
+  },
+  "scientific_name": "Allium cepa L.",
+  "family": "Amaryllidaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.7,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: a. Small Vegetables (Onions, dry row has no individual Kc ini)"
+      },
+      "mid": {
+        "value": 1.05,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Onions, dry"
+      },
+      "end": {
+        "value": 0.75,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Onions, dry"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 350,
+        "max": 550
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management Training Manual No. 3: Irrigation Water Needs, Chapter 2 Crop water needs (Table 5)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e02.htm"
+      },
+      "note": "Dry onion growing period 150-210 days (Table 4); FAO crop page gives the same 350-550 mm for optimum yield"
+    },
+    "temperature": {
+      "base": {
+        "value": 1.7,
+        "unit": "°C",
+        "citation": {
+          "title": "MRCC - Growing Degree Day Description (base temperatures by crop)",
+          "author": "Midwestern Regional Climate Center (Purdue University / NOAA NCEI)",
+          "year": null,
+          "url": "https://mrcc.purdue.edu/resources/growing-degree-day-description"
+        },
+        "note": "GDD base temperature as listed by MRCC (°F only on source); converted from 35 °F as published"
+      },
+      "optimum": {
+        "value": {
+          "min": 15,
+          "max": 20
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "FAO Land & Water, Crop information: Onion",
+          "author": "FAO",
+          "year": null,
+          "url": "https://www.fao.org/land-water/databases-and-software/crop-information/onion/fr"
+        },
+        "note": "Optimum mean daily temperature; optimum soil temperature for germination 15-25 °C"
+      },
+      "max": {
+        "value": 29.4,
+        "unit": "°C",
+        "citation": {
+          "title": "Temperature Management in High Tunnels (Table 3, cardinal temperatures for growth, from Knott's Handbook for Vegetable Growers)",
+          "author": "Black, B., Drost, D. / Utah State University Extension",
+          "year": 2010,
+          "url": "https://sare.org/wp-content/uploads/Temperature-Management-in-High-Tunnels.pdf"
+        },
+        "note": "Cardinal maximum for growth (Chive, Garlic, Leek, Onion group); converted from 85 °F as published"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Crop Rotation in the Vegetable Garden",
+          "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+          "year": 2025,
+          "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+        },
+        "note": "Onion family (Amaryllidaceae), not Fabaceae"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Onion thrips",
+          "es": "Trips de la cebolla"
+        },
+        "scientific_name": "Thrips tabaci",
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        },
+        "lower_threshold": {
+          "value": 11.5,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Onion thrips (Edelson & Magaro 1988)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/onion-thrips/"
+          },
+          "note": "Green onions, Weslaco TX lab study (Edelson & Magaro 1988)"
+        },
+        "degree_days_per_generation": {
+          "value": 179.6,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Onion thrips (Edelson & Magaro 1988)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/onion-thrips/"
+          },
+          "note": "Generation time (egg 78.0 + larva to adult 100.2)"
+        }
+      },
+      {
+        "name": {
+          "en": "Seedcorn maggot",
+          "es": "Mosca de la semilla"
+        },
+        "scientific_name": "Delia platura",
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        },
+        "lower_threshold": {
+          "value": 3.9,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Seedcorn maggot (Model 1, Funderburk et al. 1984)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/seedcorn-maggot/"
+          },
+          "note": "Upper threshold 29.0 °C; Ames, Iowa field study"
+        },
+        "degree_days_per_generation": {
+          "value": 495.5,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Seedcorn maggot (Model 1, Funderburk et al. 1984)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/seedcorn-maggot/"
+          },
+          "note": "Generation time adult to adult, air temperatures"
+        }
+      },
+      {
+        "name": {
+          "en": "Armyworms",
+          "es": "Gusano de la hoja"
+        },
+        "scientific_name": "Spodoptera spp.",
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        },
+        "lower_threshold": {
+          "gap": "Species not specified in source; no single threshold applies"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      },
+      {
+        "name": {
+          "en": "Cutworms",
+          "es": "Gusanos de tierra"
+        },
+        "scientific_name": "Agrotis spp., Feltia experta",
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        },
+        "lower_threshold": {
+          "gap": "Species not specified in source; no single threshold applies"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Minute pirate bug",
+          "es": "Chinche pirata"
+        },
+        "scientific_name": "Orius insidiosus",
+        "kind": "insect",
+        "controls": {
+          "en": "Onion thrips (Thrips tabaci)",
+          "es": "Trips de la cebolla (Thrips tabaci)"
+        },
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Trichoderma",
+          "es": "Trichoderma"
+        },
+        "scientific_name": "Trichoderma viride",
+        "kind": "fungus",
+        "controls": {
+          "en": "Basal rot (Fusarium oxysporum)",
+          "es": "Pudrición basal (Fusarium oxysporum)"
+        },
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Bacillus subtilis",
+          "es": "Bacillus subtilis"
+        },
+        "scientific_name": "Bacillus subtilis",
+        "kind": "bacterium",
+        "controls": {
+          "en": "Downy mildew (Peronospora destructor)",
+          "es": "Mildiu (Peronospora destructor)"
+        },
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        }
+      },
+      {
+        "name": {
+          "en": "Purpureocillium lilacinum",
+          "es": "Purpureocillium lilacinum"
+        },
+        "scientific_name": "Purpureocillium lilacinum",
+        "kind": "fungus",
+        "controls": {
+          "en": "Stem and bulb nematode (Ditylenchus dipsaci)",
+          "es": "Nematodo del tallo y bulbo (Ditylenchus dipsaci)"
+        },
+        "citation": {
+          "title": "Propuesta de adaptación a la influencia del cambio climático en el incremento de plagas de cebolla (Allium cepa L.) en la provincia de Arequipa durante el periodo 2008-2023 (tesis)",
+          "author": "Herrera Rivera, A.A., Mayhuire del Carpio, J.A. / Universidad Católica de Santa María",
+          "year": 2025,
+          "url": "https://repositorio.ucsm.edu.pe/bitstreams/090551d9-3854-41f0-99ba-9009db1d2d84/download"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Onion is in the onion family (Amaryllidaceae) with garlic, leek, chives and shallot; avoid following any of them in the same spot for 3 to 4 years (5+ if possible).",
+      "es": "La cebolla pertenece a la familia Amaryllidaceae junto con ajo, poro, cebollino y chalota; evitar sembrarla después de cualquiera de ellas en el mismo lugar durante 3 a 4 años (5 o más si es posible).",
+      "citation": {
+        "title": "Crop Rotation in the Vegetable Garden",
+        "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+        "year": 2025,
+        "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+      }
+    }
+  }
+}

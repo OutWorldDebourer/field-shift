@@ -8,4 +8,4 @@ Analyst stage: one fixed, cited evidence package per analysis (the consultant ma
 | `src/reading.rs` | Reading shape of the frontend contract and plain-words verdicts |
 | `src/from_power.rs` | POWER summary → temperature, rain, ET0, water balance, heat days, GDD, aphid generations; monthly chart rows; pest table |
 | `src/from_imagery.rs` | NDVI (Sentinel-2/Landsat) and NASADEM slope → field-level readings; NDVI series |
-| `src/advise.rs` | Crop records and advice into sections |
+| `src/advise.rs` | Any crop → crop records (crops crate); cited advice → Soil, Pest care, Nutrition, Rotation / perennial system sections |

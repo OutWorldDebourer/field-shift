@@ -1,0 +1,327 @@
+{
+  "key": "potato",
+  "names": {
+    "en": [
+      "potato",
+      "potatoes",
+      "irish potato",
+      "white potato"
+    ],
+    "es": [
+      "papa",
+      "papas",
+      "papita",
+      "papitas",
+      "patata",
+      "papa blanca",
+      "papa amarilla",
+      "papa huayro",
+      "papa canchán",
+      "papa única"
+    ]
+  },
+  "scientific_name": "Solanum tuberosum L.",
+  "family": "Solanaceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.5,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: d. Roots and Tubers (Potato row has no individual Kc ini)"
+      },
+      "mid": {
+        "value": 1.15,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Potato"
+      },
+      "end": {
+        "value": 0.75,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Potato; footnote: about 0.40 for long season potatoes with vine kill"
+      }
+    },
+    "seasonal_water_need": {
+      "value": {
+        "min": 500,
+        "max": 700
+      },
+      "unit": "mm/season",
+      "citation": {
+        "title": "Irrigation Water Management Training Manual No. 3: Irrigation Water Needs, Chapter 2 Crop water needs (Table 5)",
+        "author": "Brouwer, C., Heibloem, M. / FAO",
+        "year": 1986,
+        "url": "https://www.fao.org/4/s2022e/s2022e02.htm"
+      },
+      "note": "Total growing period 105-145 days (Table 4); FAO crop page gives 500-700 mm for a 120-150 day crop"
+    },
+    "temperature": {
+      "base": {
+        "value": {
+          "min": 4.4,
+          "max": 7.2
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "MRCC - Growing Degree Day Description (base temperatures by crop)",
+          "author": "Midwestern Regional Climate Center (Purdue University / NOAA NCEI)",
+          "year": null,
+          "url": "https://mrcc.purdue.edu/resources/growing-degree-day-description"
+        },
+        "note": "MRCC lists two alternative base values for potato: 40, 45 °F; converted from 40–45 °F as published"
+      },
+      "optimum": {
+        "value": {
+          "min": 18,
+          "max": 20
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "FAO Land & Water, Crop information: Potato",
+          "author": "FAO",
+          "year": null,
+          "url": "https://www.fao.org/land-water/databases-and-software/crop-information/potato/fr"
+        },
+        "note": "Optimum mean daily temperature; optimum soil temperature for tuber growth 15-18 °C"
+      },
+      "max": {
+        "value": 30,
+        "unit": "°C",
+        "citation": {
+          "title": "FAO Land & Water, Crop information: Potato",
+          "author": "FAO",
+          "year": null,
+          "url": "https://www.fao.org/land-water/databases-and-software/crop-information/potato/fr"
+        },
+        "note": "Tuber growth sharply inhibited below 10 °C and above 30 °C"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Crop Rotation in the Vegetable Garden",
+          "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+          "year": 2025,
+          "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+        },
+        "note": "Nightshade family (Solanaceae), not Fabaceae"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Serpentine leafminer fly",
+          "es": "Mosca minadora"
+        },
+        "scientific_name": "Liriomyza huidobrensis",
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        },
+        "lower_threshold": {
+          "gap": "Only stage-specific thresholds published: egg 6.4 °C, larva 3.4 °C, pupa 4.8 °C (Mujica, Carhuapoma & Kroschel 2016, CIP); no single egg-to-adult value"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found; CIP reports ~12 generations/year at La Molina (lowland coast)"
+        }
+      },
+      {
+        "name": {
+          "en": "Potato tuber moth",
+          "es": "Polilla de la papa"
+        },
+        "scientific_name": "Phthorimaea operculella",
+        "citation": {
+          "title": "Pest distribution and risk atlas for Africa, 4.1.1 Potato tuber moth, Phthorimaea operculella",
+          "author": "Kroschel, J., Sporleder, M., Carhuapoma, P. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://cipotato.org/riskatlasforafrica/wp-content/uploads/sites/4/2016/11/4.1.1.pdf"
+        },
+        "lower_threshold": {
+          "value": 14.6,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Potato tuberworm (Model 1, Cardona & Oatman 1975)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/potato-tuberworm/"
+          },
+          "note": "Model 1, Riverside CA lab study on potato (Cardona & Oatman 1975)"
+        },
+        "degree_days_per_generation": {
+          "value": 275.8,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Potato tuberworm (Model 1, Cardona & Oatman 1975)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/potato-tuberworm/"
+          },
+          "note": "Egg to adult (generation time); egg to egg 311.9 °C·day"
+        }
+      },
+      {
+        "name": {
+          "en": "Green peach aphid",
+          "es": "Pulgón verde del duraznero"
+        },
+        "scientific_name": "Myzus persicae",
+        "citation": {
+          "title": "UC IPM Phenology model database: Green peach aphid (Model 1, Whalon & Smilowitz 1979)",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/"
+        },
+        "lower_threshold": {
+          "value": 4.0,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Green peach aphid (Model 1, Whalon & Smilowitz 1979)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/"
+          },
+          "note": "Upper threshold 30.0 °C; double sine, horizontal cutoff"
+        },
+        "degree_days_per_generation": {
+          "value": 129.8,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Green peach aphid (Model 1, Whalon & Smilowitz 1979)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/"
+          },
+          "note": "Generation time nymph to nymph; host potato (Whalon & Smilowitz 1979)"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Halticoptera arduine (parasitoid wasp)",
+          "es": "Halticoptera arduine (avispita parasitoide)"
+        },
+        "scientific_name": "Halticoptera arduine",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+          "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+        },
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Diglyphus websteri (parasitoid wasp)",
+          "es": "Diglyphus websteri (avispita parasitoide)"
+        },
+        "scientific_name": "Diglyphus websteri",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+          "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+        },
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Copidosoma koehleri (parasitoid wasp)",
+          "es": "Copidosoma koehleri (avispita parasitoide)"
+        },
+        "scientific_name": "Copidosoma koehleri",
+        "kind": "insect",
+        "controls": {
+          "en": "Potato tuber moth (Phthorimaea operculella)",
+          "es": "Polilla de la papa (Phthorimaea operculella)"
+        },
+        "citation": {
+          "title": "Pest distribution and risk atlas for Africa, 4.1.1 Potato tuber moth, Phthorimaea operculella",
+          "author": "Kroschel, J., Sporleder, M., Carhuapoma, P. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://cipotato.org/riskatlasforafrica/wp-content/uploads/sites/4/2016/11/4.1.1.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Bacillus thuringiensis subsp. kurstaki",
+          "es": "Bacillus thuringiensis subsp. kurstaki"
+        },
+        "scientific_name": "Bacillus thuringiensis subsp. kurstaki",
+        "kind": "bacterium",
+        "controls": {
+          "en": "Potato tuber moth larvae in stored tubers (Btk-talcum formulation used in Peru)",
+          "es": "Larvas de polilla de la papa en tubérculos almacenados (formulación Btk-talco usada en Perú)"
+        },
+        "citation": {
+          "title": "Pest distribution and risk atlas for Africa, 4.1.1 Potato tuber moth, Phthorimaea operculella",
+          "author": "Kroschel, J., Sporleder, M., Carhuapoma, P. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://cipotato.org/riskatlasforafrica/wp-content/uploads/sites/4/2016/11/4.1.1.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Phthorimaea operculella granulovirus (PhopGV)",
+          "es": "Granulovirus de la polilla de la papa (PhopGV)"
+        },
+        "scientific_name": "Phthorimaea operculella granulovirus",
+        "kind": "virus",
+        "controls": {
+          "en": "Potato tuber moth in stored potatoes",
+          "es": "Polilla de la papa en papa almacenada"
+        },
+        "citation": {
+          "title": "Pest distribution and risk atlas for Africa, 4.1.1 Potato tuber moth, Phthorimaea operculella",
+          "author": "Kroschel, J., Sporleder, M., Carhuapoma, P. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://cipotato.org/riskatlasforafrica/wp-content/uploads/sites/4/2016/11/4.1.1.pdf"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Potato is in the nightshade family (Solanaceae) with tomato, pepper and eggplant; avoid following any of them in the same spot for 3 to 4 years (5+ if possible).",
+      "es": "La papa pertenece a la familia Solanaceae junto con tomate, pimiento y berenjena; evitar sembrarla después de cualquiera de ellas en el mismo lugar durante 3 a 4 años (5 o más si es posible).",
+      "citation": {
+        "title": "Crop Rotation in the Vegetable Garden",
+        "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+        "year": 2025,
+        "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+      }
+    }
+  }
+}

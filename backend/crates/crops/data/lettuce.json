@@ -1,0 +1,298 @@
+{
+  "key": "lettuce",
+  "names": {
+    "en": [
+      "lettuce",
+      "garden lettuce",
+      "head lettuce",
+      "iceberg lettuce",
+      "romaine lettuce",
+      "leaf lettuce",
+      "butterhead lettuce"
+    ],
+    "es": [
+      "lechuga",
+      "lechuguita",
+      "lechugas",
+      "lechuga americana",
+      "lechuga de cabeza",
+      "lechuga romana",
+      "lechuga crespa",
+      "lechuga de hoja",
+      "lechuga seda",
+      "lechuga mantecosa"
+    ]
+  },
+  "scientific_name": "Lactuca sativa L.",
+  "family": "Asteraceae",
+  "crop_type": "annual",
+  "traits": {
+    "kc": {
+      "initial": {
+        "value": 0.7,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "group value: a. Small Vegetables (Lettuce row has no individual Kc ini)"
+      },
+      "mid": {
+        "value": 1.0,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Lettuce"
+      },
+      "end": {
+        "value": 0.95,
+        "unit": "-",
+        "citation": {
+          "title": "FAO Irrigation and Drainage Paper 56, Chapter 6, Table 12",
+          "author": "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. / FAO",
+          "year": 1998,
+          "url": "https://www.fao.org/4/x0490e/x0490e0b.htm"
+        },
+        "note": "Lettuce"
+      }
+    },
+    "seasonal_water_need": {
+      "gap": "FAO Training Manual 3 lists a lettuce growing period (75-140 days) but no seasonal water need; no other cited value found"
+    },
+    "temperature": {
+      "base": {
+        "value": 4.4,
+        "unit": "°C",
+        "citation": {
+          "title": "MRCC - Growing Degree Day Description (base temperatures by crop)",
+          "author": "Midwestern Regional Climate Center (Purdue University / NOAA NCEI)",
+          "year": null,
+          "url": "https://mrcc.purdue.edu/resources/growing-degree-day-description"
+        },
+        "note": "GDD base temperature as listed by MRCC (°F only on source); converted from 40 °F as published"
+      },
+      "optimum": {
+        "value": {
+          "min": 15.6,
+          "max": 18.3
+        },
+        "unit": "°C",
+        "citation": {
+          "title": "Temperature Management in High Tunnels (Table 3, cardinal temperatures for growth, from Knott's Handbook for Vegetable Growers)",
+          "author": "Black, B., Drost, D. / Utah State University Extension",
+          "year": 2010,
+          "url": "https://sare.org/wp-content/uploads/Temperature-Management-in-High-Tunnels.pdf"
+        },
+        "note": "Cardinal optimum for growth (Endive, Lettuce, Mustard, Parsley, Pea, Potato group); converted from 60–65 °F as published"
+      },
+      "max": {
+        "value": 23.9,
+        "unit": "°C",
+        "citation": {
+          "title": "Temperature Management in High Tunnels (Table 3, cardinal temperatures for growth, from Knott's Handbook for Vegetable Growers)",
+          "author": "Black, B., Drost, D. / Utah State University Extension",
+          "year": 2010,
+          "url": "https://sare.org/wp-content/uploads/Temperature-Management-in-High-Tunnels.pdf"
+        },
+        "note": "Cardinal maximum for growth; converted from 75 °F as published"
+      }
+    },
+    "n_fixation": {
+      "legume": {
+        "value": false,
+        "unit": "",
+        "citation": {
+          "title": "Crop Rotation in the Vegetable Garden",
+          "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+          "year": 2025,
+          "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+        },
+        "note": "Lettuce/sunflower family (Asteraceae), not Fabaceae"
+      },
+      "typical_range": {
+        "gap": "Not a legume; no symbiotic N fixation"
+      }
+    },
+    "pests": [
+      {
+        "name": {
+          "en": "Serpentine leafminer fly",
+          "es": "Mosca minadora"
+        },
+        "scientific_name": "Liriomyza huidobrensis",
+        "citation": {
+          "title": "Pest distribution and risk atlas for Africa, 4.3.1 Serpentine leafminer fly, Liriomyza huidobrensis",
+          "author": "Mujica, N., Carhuapoma, P., Kroschel, J. / International Potato Center (CIP)",
+          "year": 2016,
+          "url": "https://ilcym.cipotato.org/wp-content/uploads/2016/11/4.3.1-1.pdf"
+        },
+        "lower_threshold": {
+          "gap": "Only stage-specific thresholds published: egg 6.4 °C, larva 3.4 °C, pupa 4.8 °C (Mujica, Carhuapoma & Kroschel 2016, CIP); no single egg-to-adult value"
+        },
+        "degree_days_per_generation": {
+          "gap": "No published degree-day requirement found; CIP reports ~12 generations/year at La Molina (lowland coast)"
+        }
+      },
+      {
+        "name": {
+          "en": "Green peach aphid",
+          "es": "Pulgón verde del duraznero"
+        },
+        "scientific_name": "Myzus persicae",
+        "citation": {
+          "title": "Lettuce: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/agriculture/lettuce/"
+        },
+        "lower_threshold": {
+          "value": 4.0,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Green peach aphid (Model 1, Whalon & Smilowitz 1979)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/"
+          },
+          "note": "Upper threshold 30.0 °C; double sine, horizontal cutoff"
+        },
+        "degree_days_per_generation": {
+          "value": 129.8,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Green peach aphid (Model 1, Whalon & Smilowitz 1979)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/"
+          },
+          "note": "Generation time nymph to nymph; host potato (Whalon & Smilowitz 1979)"
+        }
+      },
+      {
+        "name": {
+          "en": "Cabbage looper",
+          "es": "Gusano medidor"
+        },
+        "scientific_name": "Trichoplusia ni",
+        "citation": {
+          "title": "Lettuce: Pest Management Guidelines",
+          "author": "UC Statewide IPM Program",
+          "year": null,
+          "url": "https://ipm.ucanr.edu/agriculture/lettuce/"
+        },
+        "lower_threshold": {
+          "value": 10.0,
+          "unit": "°C",
+          "citation": {
+            "title": "UC IPM Phenology model database: Cabbage looper (Model 1, Toba et al. 1973)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/cabbage-looper/"
+          },
+          "note": "Upper threshold 32.2 °C"
+        },
+        "degree_days_per_generation": {
+          "value": 439.7,
+          "unit": "°C·day",
+          "citation": {
+            "title": "UC IPM Phenology model database: Cabbage looper (Model 1, Toba et al. 1973)",
+            "author": "UC Statewide IPM Program",
+            "year": null,
+            "url": "https://ipm.ucanr.edu/weather/phenology-models-description/cabbage-looper/"
+          },
+          "note": "Egg to adult; artificial diet (Toba et al. 1973)"
+        }
+      }
+    ],
+    "beneficials": [
+      {
+        "name": {
+          "en": "Halticoptera arduine (parasitoid wasp)",
+          "es": "Halticoptera arduine (avispita parasitoide)"
+        },
+        "scientific_name": "Halticoptera arduine",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+          "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+        },
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Diglyphus websteri (parasitoid wasp)",
+          "es": "Diglyphus websteri (avispita parasitoide)"
+        },
+        "scientific_name": "Diglyphus websteri",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+          "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+        },
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Chrysocharis (parasitoid wasp)",
+          "es": "Chrysocharis (avispita parasitoide)"
+        },
+        "scientific_name": "Chrysocharis spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+          "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+        },
+        "citation": {
+          "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Única' en La Molina (Ecología Aplicada 24(2))",
+          "author": "Saravia, C., Sánchez, G., Vergara, C., Cruz, L. / UNALM",
+          "year": 2025,
+          "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+        }
+      },
+      {
+        "name": {
+          "en": "Green lacewing",
+          "es": "Crisopa"
+        },
+        "scientific_name": "Chrysoperla spp.",
+        "kind": "insect",
+        "controls": {
+          "en": "Generalist predator; SENASA lists it among agents used against pests including aphids",
+          "es": "Depredador generalista; SENASA lo cita entre los agentes usados contra plagas como pulgones"
+        },
+        "citation": {
+          "title": "Perú combate plagas con uso de controladores biológicos en más de 209 mil hectáreas de cultivos en los últimos 3 años",
+          "author": "Agraria.pe, reporting SENASA",
+          "year": 2025,
+          "url": "https://agraria.pe/noticias/peru-combate-plagas-con-uso-de-controladores-biologicos-en-m-39249"
+        }
+      }
+    ],
+    "rotation_notes": {
+      "en": "Lettuce belongs to the lettuce/sunflower family (Asteraceae); avoid planting it after endive, lettuce or other Asteraceae in the same spot for 3 to 4 years (5+ if possible).",
+      "es": "La lechuga pertenece a la familia Asteraceae; evitar sembrarla después de endivia, lechuga u otras Asteraceae en el mismo lugar durante 3 a 4 años (5 o más si es posible).",
+      "citation": {
+        "title": "Crop Rotation in the Vegetable Garden",
+        "author": "Steil, A. / Iowa State University Extension, Yard and Garden",
+        "year": 2025,
+        "url": "https://yardandgarden.extension.iastate.edu/how-to/crop-rotation-vegetable-garden"
+      }
+    }
+  }
+}
