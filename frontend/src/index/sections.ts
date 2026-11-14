@@ -53,16 +53,36 @@ function hero(): string {
 }
 
 function how(): string {
-  const step = (n: string, tk: StrKey, bk: StrKey, ic: IconName) => `<li class="step glass">
+  const step = (n: string, tk: StrKey, bk: StrKey, ck: StrKey, ic: IconName) => `<li class="step glass">
     <span class="step__n mono">${n}</span>${icon(ic, 'step__ico')}
-    <h3 class="serif step__t">${T(tk)}</h3><p class="step__b">${T(bk)}</p></li>`;
+    <h3 class="serif step__t">${T(tk)}</h3><p class="step__b">${T(bk)}</p><p class="step__c mono">${T(ck)}</p></li>`;
+  const stat = (v: string, unit: StrKey | null, k: StrKey) => `<li class="stat"><b class="stat__v serif">${esc(v)}${unit ? ` <small>${T(unit)}</small>` : ''}</b><span class="stat__k">${T(k)}</span></li>`;
   return `<section class="how" id="how" aria-labelledby="how-t">
-    <h2 id="how-t" class="serif sec-title">${T('ix_how_title')}</h2>
+    <div class="how__top">
+      <div class="how__head">
+        <p class="how__eyebrow mono">${T('ix_how_eyebrow')}</p>
+        <h2 id="how-t" class="serif sec-title">${T('ix_how_title')}</h2>
+        <p class="sec-lede how__lede">${T('ix_how_lede')}</p>
+      </div>
+      <figure class="how__hook glass">
+        <p class="how__hook-v serif"><small>${T('ix_how_hook_up')}</small> 40%</p>
+        <figcaption><span class="how__hook-t">${T('ix_how_hook')}</span>
+          <a class="how__hook-s mono" href="https://openknowledge.fao.org/handle/20.500.14283/cb4769en" target="_blank" rel="noopener">${T('ix_how_hook_src')}</a></figcaption>
+      </figure>
+    </div>
     <ol class="steps">
-      ${step('01', 'ix_how_1_t', 'ix_how_1_b', 'camera')}
-      ${step('02', 'ix_how_2_t', 'ix_how_2_b', 'orbit')}
-      ${step('03', 'ix_how_3_t', 'ix_how_3_b', 'sheet')}
+      ${step('01', 'ix_how_1_t', 'ix_how_1_b', 'ix_how_1_c', 'camera')}
+      ${step('02', 'ix_how_2_t', 'ix_how_2_b', 'ix_how_2_c', 'orbit')}
+      ${step('03', 'ix_how_3_t', 'ix_how_3_b', 'ix_how_3_c', 'sheet')}
     </ol>
+    <ul class="how__stats glass" aria-label="Field Shift">
+      ${stat('8', null, 'ix_st_ds')}
+      ${stat('40', 'ix_st_years', 'ix_st_normal')}
+      ${stat('10 m', null, 'ix_st_res')}
+      ${stat('10', 'ix_st_days', 'ix_st_fc')}
+      ${stat('13', null, 'ix_st_models')}
+      ${stat('0', null, 'ix_st_cite')}
+    </ul>
   </section>`;
 }
 

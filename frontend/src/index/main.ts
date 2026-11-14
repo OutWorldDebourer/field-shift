@@ -92,7 +92,7 @@ function onScroll() {
   if (y + H > data && y < get) drawDataLeaders();
   // Corner instruments step aside while a title, card or button reaches the bottom band.
   let busy = false;
-  for (const el of document.querySelectorAll<HTMLElement>('.sec-title, .sec-lede, .step, .ds, .get__strip, .get__note, .preview, .dash__open, .cta__title, .ctas, .foot, .hero__text, .phone')) {
+  for (const el of document.querySelectorAll<HTMLElement>('.sec-title, .sec-lede, .step, .how__hook, .how__stats, .ds, .get__strip, .get__note, .preview, .dash__open, .cta__title, .ctas, .foot, .hero__text, .phone')) {
     const r = el.getBoundingClientRect();
     if (r.bottom > H - 110 && r.top < H && r.width) { busy = true; break; }
   }
