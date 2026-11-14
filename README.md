@@ -14,6 +14,7 @@ English is the default language everywhere; Spanish is an opt-in switch.
 | `PRODUCT.md` | Product truth for the design skill (users, purpose, constraints). |
 | `.impeccable/` | Design skill working files (decision payload, comps, config). |
 | `Entrevista/` | Agronomist interview (Ing. Cenia), source for the result sections. |
+| `BUILD_PLAN.md` | Milestones, rules and decision log for the build (autonomous runs read this first). |
 | `AI_USE.md` | Log of AI assistance, required by the submission rules. |
 | `env.txt` | Local secrets. Git-ignored. Never print or commit. |
 
