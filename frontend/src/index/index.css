@@ -304,3 +304,11 @@ section.dash { min-height: auto; padding-top: 60px; }
   .hud { align-items: flex-end; }
   .hud__br .instr, body.is-ground .hud__br .instr { white-space: normal; overflow: visible; text-overflow: clip; max-width: 62vw; line-height: 1.35; }
 }
+
+/* Scroll reveal: letters type in, figures count (index/reveal.ts). Untouched under reduced motion. */
+.tw-w { display: inline-block; white-space: nowrap; }
+.tw-c { opacity: 0; }
+.tw.is-on .tw-c { animation: tw-in 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; animation-delay: calc(var(--tw-delay, 0ms) + var(--i) * var(--tw-step, 20ms)); }
+@keyframes tw-in { from { opacity: 0; filter: blur(3px); transform: translateY(0.18em); } to { opacity: 1; filter: none; transform: none; } }
+.tw-c { display: inline-block; }
+.stat__v, .how__hook-v { font-variant-numeric: tabular-nums; }

@@ -10,6 +10,7 @@ import { applyI18n, fmt, onLang, t } from '../shared/i18n';
 import { wireLangSwitch } from '../shared/langswitch';
 import { glassPhoneHtml } from '../shared/phone';
 import { renderPreview } from './preview';
+import { mountReveal } from './reveal';
 import { anomalyItem, page } from './sections';
 import { mountSky } from './sky';
 
@@ -118,3 +119,4 @@ document.fonts?.ready.then(() => { drawDataLeaders(); onScroll(); });
 onScroll();
 drawDataLeaders();
 applyI18n(root);
+mountReveal(root);
