@@ -1,12 +1,13 @@
 // Captures design-audit screenshots (desktop 1440x900 and mobile 390x844) of one URL with headless Chromium.
 // Uses playwright-core from the Lemo-Opuscar library (no project dependency).
 // Full-page captures taller than Chromium's ~8000 px limit are saved as slices: <prefix>-<device>-p1.jpg, -p2.jpg, ...
-// Usage: node tools/screens.mjs <url> <out-prefix> [waitMs] [fullPage:0|1] [scrollY]
+// Usage: node tools/screens.mjs <url> <out-prefix> [waitMs] [fullPage:0|1] [scrollY] [scrollSelector]
+// With a scrollSelector, the page is captured as viewport slices while scrolling that inner element: -s1.jpg, -s2.jpg, ...
 import { createRequire } from 'node:module';
 const require = createRequire('C:/Users/OutWorldDevourer/lemo-opuscar/package.json');
 const { chromium } = require('playwright-core');
 
-const [url, prefix, waitMs = '2500', full = '0', scrollY = '0'] = process.argv.slice(2);
+const [url, prefix, waitMs = '2500', full = '0', scrollY = '0', scrollSel = ''] = process.argv.slice(2);
 if (!url || !prefix) { console.error('usage: node tools/screens.mjs <url> <out-prefix> [waitMs] [fullPage] [scrollY]'); process.exit(2); }
 const SLICE = 7600;
 
@@ -21,7 +22,17 @@ for (const [name, vp, mobile] of [['desktop', { width: 1440, height: 900 }, fals
   if (Number(scrollY)) await page.evaluate((y) => window.scrollTo(0, y), Number(scrollY));
   await page.waitForTimeout(Number(waitMs));
   const outs = [];
-  if (full === '1') {
+  if (scrollSel) {
+    const n = await page.evaluate((sel) => { const e = document.querySelector(sel); return e ? Math.ceil(e.scrollHeight / Math.max(1, e.clientHeight * 0.85)) : 0; }, scrollSel);
+    if (!n) errors.push(`no element ${scrollSel}`);
+    for (let i = 0; i < Math.min(n, 8); i++) {
+      await page.evaluate(([sel, k]) => { const e = document.querySelector(sel); e.scrollTop = k * e.clientHeight * 0.85; }, [scrollSel, i]);
+      await page.waitForTimeout(700);
+      const out = `${prefix}-${name}-s${i + 1}.jpg`;
+      await page.screenshot({ path: out, type: 'jpeg', quality: 82 });
+      outs.push(out);
+    }
+  } else if (full === '1') {
     const h = await page.evaluate(() => document.documentElement.scrollHeight);
     const w = await page.evaluate(() => document.documentElement.scrollWidth);
     if (w > vp.width + 1) errors.push(`horizontal overflow: page is ${w}px wide`);

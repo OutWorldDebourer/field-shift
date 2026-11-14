@@ -50,6 +50,23 @@ pub async fn reply(state: &AppState, st: &AnalysisState, input: &TurnInput) -> a
             "What are you growing now, and what grew here before? For example: \"peas now, lettuce before\".",
             "¿Qué cultivas ahora y qué hubo antes en este campo? Por ejemplo: \"arverja ahora, lechuga antes\".")));
     }
+    // Once the summary has been given, move the conversation forward instead of repeating it.
+    let summarised = st.messages.iter().any(|m| m.role == "assistant" && (m.body.contains("NASA data says") || m.body.contains("dicen los datos de la NASA")));
+    if summarised {
+        let photos = if input.photos.is_empty() { String::new() } else {
+            t("The scripted demo does not look at photos; the live consultant checks each one and asks for a closer shot when needed.
+
+",
+              "El demo guionizado no revisa fotos; el consultor en vivo revisa cada una y pide una toma más cercana si hace falta.
+
+")
+        };
+        return Ok(format!("{label}
+
+{photos}{}", t(
+            "Your pre-diagnosis is in the panels on the right: Soil, Pest care, Nutrition and Rotation, each with its sources. Two questions would sharpen it: where does your water come from, and what fertilizer or manure did you use last? \"I don't know\" is fine; I will note it as a gap.",
+            "Tu prediagnóstico está en los paneles de la derecha: Suelo, Plagas, Nutrición y Rotación, cada uno con sus fuentes. Dos preguntas lo afinarían: ¿de dónde viene tu agua y qué abono o estiércol usaste por última vez? \"No sé\" está bien; lo anoto como vacío.")));
+    }
     let ev = evidence::build(state, &st.id).await?;
     evidence::advise(state, &st.id).await?;
     let mut lines = vec![];
