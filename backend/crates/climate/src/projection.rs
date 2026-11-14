@@ -62,6 +62,8 @@ pub struct ProjectionFile {
     pub acknowledgement: String,
     pub access: String,
     pub generated: String,
+    #[serde(default)]
+    pub caveats: Vec<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

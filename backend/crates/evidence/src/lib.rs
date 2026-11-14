@@ -73,7 +73,7 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
             "d_rain_pct": sc["pr_change_pct"]["median"],
             "models": f["models"].as_array().map(|m| m.iter().map(|x| x["model"].clone()).collect::<Vec<_>>()).unwrap_or_default(),
             "baseline_period": f["baseline_period"], "dataset": f["dataset"], "doi": f["doi"], "resolution": f["resolution"],
-            "badge": "regional context", "label": p["label"],
+            "badge": "regional context", "label": p["label"], "license": "CC BY-SA 4.0 (NEX-GDDP-CMIP6 v2.0 model files)",
         }))
     });
     if projection.is_none() {

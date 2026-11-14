@@ -1,0 +1,504 @@
+{
+ "site": {
+  "id": "huaral",
+  "name": "Huaral valley, Peru",
+  "lat": -11.47,
+  "lon": -77.21
+ },
+ "cell_center": {
+  "lat": -11.375,
+  "lon": -77.125
+ },
+ "dataset": "NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP-CMIP6)",
+ "dataset_version": "2.0 (NCCS THREDDS files *_v2.0.nc)",
+ "doi": "10.7917/OFSG3345",
+ "paper_doi": "10.1038/s41597-022-01393-4",
+ "resolution": "0.25 degree (~25 km), daily, BCSD downscaled",
+ "badge": "regional context",
+ "label": "projection, not a forecast",
+ "baseline_period": "1995-2014 (historical experiment)",
+ "future_period": "2031-2050 (centred on ~2040)",
+ "variables": {
+  "tas": "annual mean near-surface air temperature, deg C",
+  "pr": "annual total precipitation, mm/year"
+ },
+ "ensemble": {
+  "baseline": {
+   "tas_c": {
+    "median": 20.3,
+    "min": 20.02,
+    "max": 20.71,
+    "n": 13
+   },
+   "pr_mm_year": {
+    "median": 222.6,
+    "min": 173.7,
+    "max": 244.5,
+    "n": 13
+   }
+  },
+  "ssp245": {
+   "tas_change_c": {
+    "median": 0.89,
+    "min": 0.42,
+    "max": 1.46,
+    "n": 13
+   },
+   "pr_change_mm_year": {
+    "median": 36.0,
+    "min": -40.3,
+    "max": 72.7,
+    "n": 13
+   },
+   "pr_change_pct": {
+    "median": 16.1,
+    "min": -23.2,
+    "max": 34.8,
+    "n": 13
+   }
+  },
+  "ssp585": {
+   "tas_change_c": {
+    "median": 1.04,
+    "min": 0.62,
+    "max": 1.69,
+    "n": 13
+   },
+   "pr_change_mm_year": {
+    "median": 44.4,
+    "min": -48.7,
+    "max": 84.7,
+    "n": 13
+   },
+   "pr_change_pct": {
+    "median": 19.9,
+    "min": -21.9,
+    "max": 39.9,
+    "n": 13
+   }
+  }
+ },
+ "models": [
+  {
+   "model": "ACCESS-CM2",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.21,
+    "pr_mm_year": 223.5,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 1.34,
+     "pr_change_mm_year": 56.9,
+     "pr_change_pct": 25.5,
+     "tas_c": 21.56,
+     "pr_mm_year": 280.4
+    },
+    "ssp585": {
+     "tas_change_c": 1.6,
+     "pr_change_mm_year": 72.8,
+     "pr_change_pct": 32.6,
+     "tas_c": 21.81,
+     "pr_mm_year": 296.3
+    }
+   }
+  },
+  {
+   "model": "CanESM5",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.35,
+    "pr_mm_year": 244.5,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 1.17,
+     "pr_change_mm_year": 72.7,
+     "pr_change_pct": 29.7,
+     "tas_c": 21.51,
+     "pr_mm_year": 317.2
+    },
+    "ssp585": {
+     "tas_change_c": 1.63,
+     "pr_change_mm_year": 77.6,
+     "pr_change_pct": 31.8,
+     "tas_c": 21.97,
+     "pr_mm_year": 322.2
+    }
+   }
+  },
+  {
+   "model": "CMCC-ESM2",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.29,
+    "pr_mm_year": 208.2,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.89,
+     "pr_change_mm_year": 72.5,
+     "pr_change_pct": 34.8,
+     "tas_c": 21.18,
+     "pr_mm_year": 280.7
+    },
+    "ssp585": {
+     "tas_change_c": 1.04,
+     "pr_change_mm_year": 82.3,
+     "pr_change_pct": 39.5,
+     "tas_c": 21.33,
+     "pr_mm_year": 290.5
+    }
+   }
+  },
+  {
+   "model": "EC-Earth3",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.71,
+    "pr_mm_year": 219.9,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.74,
+     "pr_change_mm_year": 40.8,
+     "pr_change_pct": 18.6,
+     "tas_c": 21.45,
+     "pr_mm_year": 260.7
+    },
+    "ssp585": {
+     "tas_change_c": 0.99,
+     "pr_change_mm_year": 54.3,
+     "pr_change_pct": 24.7,
+     "tas_c": 21.71,
+     "pr_mm_year": 274.2
+    }
+   }
+  },
+  {
+   "model": "GFDL-ESM4",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.39,
+    "pr_mm_year": 224.9,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.78,
+     "pr_change_mm_year": -3.1,
+     "pr_change_pct": -1.4,
+     "tas_c": 21.16,
+     "pr_mm_year": 221.8
+    },
+    "ssp585": {
+     "tas_change_c": 1.0,
+     "pr_change_mm_year": 18.5,
+     "pr_change_pct": 8.2,
+     "tas_c": 21.39,
+     "pr_mm_year": 243.4
+    }
+   }
+  },
+  {
+   "model": "GISS-E2-1-G",
+   "variant": "r1i1p1f2",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC0 1.0",
+   "baseline": {
+    "tas_c": 20.02,
+    "pr_mm_year": 219.4,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 1.46,
+     "pr_change_mm_year": 7.5,
+     "pr_change_pct": 3.4,
+     "tas_c": 21.48,
+     "pr_mm_year": 226.9
+    },
+    "ssp585": {
+     "tas_change_c": 1.69,
+     "pr_change_mm_year": 17.2,
+     "pr_change_pct": 7.8,
+     "tas_c": 21.71,
+     "pr_mm_year": 236.6
+    }
+   }
+  },
+  {
+   "model": "INM-CM5-0",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.41,
+    "pr_mm_year": 207.1,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.42,
+     "pr_change_mm_year": 42.8,
+     "pr_change_pct": 20.7,
+     "tas_c": 20.83,
+     "pr_mm_year": 249.9
+    },
+    "ssp585": {
+     "tas_change_c": 0.62,
+     "pr_change_mm_year": 44.4,
+     "pr_change_pct": 21.4,
+     "tas_c": 21.03,
+     "pr_mm_year": 251.4
+    }
+   }
+  },
+  {
+   "model": "IPSL-CM6A-LR",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.3,
+    "pr_mm_year": 173.7,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 1.05,
+     "pr_change_mm_year": -40.3,
+     "pr_change_pct": -23.2,
+     "tas_c": 21.35,
+     "pr_mm_year": 133.4
+    },
+    "ssp585": {
+     "tas_change_c": 0.97,
+     "pr_change_mm_year": -32.7,
+     "pr_change_pct": -18.8,
+     "tas_c": 21.27,
+     "pr_mm_year": 141.0
+    }
+   }
+  },
+  {
+   "model": "MIROC6",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.08,
+    "pr_mm_year": 212.3,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.88,
+     "pr_change_mm_year": 22.2,
+     "pr_change_pct": 10.4,
+     "tas_c": 20.96,
+     "pr_mm_year": 234.5
+    },
+    "ssp585": {
+     "tas_change_c": 0.78,
+     "pr_change_mm_year": 84.7,
+     "pr_change_pct": 39.9,
+     "tas_c": 20.86,
+     "pr_mm_year": 297.0
+    }
+   }
+  },
+  {
+   "model": "MPI-ESM1-2-HR",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.45,
+    "pr_mm_year": 224.3,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.54,
+     "pr_change_mm_year": 36.0,
+     "pr_change_pct": 16.1,
+     "tas_c": 20.99,
+     "pr_mm_year": 260.3
+    },
+    "ssp585": {
+     "tas_change_c": 0.96,
+     "pr_change_mm_year": 23.5,
+     "pr_change_pct": 10.5,
+     "tas_c": 21.41,
+     "pr_mm_year": 247.8
+    }
+   }
+  },
+  {
+   "model": "MRI-ESM2-0",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.25,
+    "pr_mm_year": 226.0,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 0.87,
+     "pr_change_mm_year": -20.9,
+     "pr_change_pct": -9.3,
+     "tas_c": 21.12,
+     "pr_mm_year": 205.1
+    },
+    "ssp585": {
+     "tas_change_c": 1.4,
+     "pr_change_mm_year": 43.2,
+     "pr_change_pct": 19.1,
+     "tas_c": 21.64,
+     "pr_mm_year": 269.2
+    }
+   }
+  },
+  {
+   "model": "NorESM2-MM",
+   "variant": "r1i1p1f1",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.04,
+    "pr_mm_year": 222.6,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 1.17,
+     "pr_change_mm_year": -9.9,
+     "pr_change_pct": -4.5,
+     "tas_c": 21.21,
+     "pr_mm_year": 212.6
+    },
+    "ssp585": {
+     "tas_change_c": 1.66,
+     "pr_change_mm_year": -48.7,
+     "pr_change_pct": -21.9,
+     "tas_c": 21.7,
+     "pr_mm_year": 173.9
+    }
+   }
+  },
+  {
+   "model": "UKESM1-0-LL",
+   "variant": "r1i1p1f2",
+   "file_license": "CC-BY-SA 4.0",
+   "file_version": "2.0",
+   "upstream_cmip6_license": "CC BY 4.0",
+   "baseline": {
+    "tas_c": 20.42,
+    "pr_mm_year": 225.9,
+    "years": [
+     20,
+     20
+    ]
+   },
+   "scenarios": {
+    "ssp245": {
+     "tas_change_c": 1.38,
+     "pr_change_mm_year": 61.3,
+     "pr_change_pct": 27.1,
+     "tas_c": 21.8,
+     "pr_mm_year": 287.2
+    },
+    "ssp585": {
+     "tas_change_c": 1.65,
+     "pr_change_mm_year": 44.9,
+     "pr_change_pct": 19.9,
+     "tas_c": 22.06,
+     "pr_mm_year": 270.8
+    }
+   }
+  }
+ ],
+ "license": {
+  "nasa_statement": "NCCS NEX-GDDP-CMIP6 tech note: as of Sept 2022 all outputs under a blanket CC0 license",
+  "nasa_statement_url": "https://www.nccs.nasa.gov/wp-content/uploads/2024/03/NEX-GDDP-CMIP6-Tech_Note_4.pdf",
+  "file_attribute": "v2.0 files carry cmip6_license = 'CC-BY-SA 4.0'; the v2 tech note defers to this attribute",
+  "file_attribute_url": "https://www.nccs.nasa.gov/wp-content/uploads/2025/06/NEX-GDDP-CMIP6-v2-Tech_Note.pdf",
+  "upstream_url": "https://wcrp-cmip.github.io/CMIP6_CVs/docs/CMIP6_source_id_licenses.html",
+  "applied": "CC BY-SA 4.0 (strictest stated; attribution and share-alike for these derived numbers)"
+ },
+ "citation": "Thrasher, B., Wang, W., Michaelis, A., Nemani, R. (2021). NEX-GDDP-CMIP6. NASA Center for Climate Simulation. https://doi.org/10.7917/OFSG3345",
+ "acknowledgement": "Climate scenarios used were from the NEX-GDDP-CMIP6 dataset, prepared by the Climate Analytics Group and NASA Ames Research Center using the NASA Earth Exchange and distributed by the NASA Center for Climate Simulation (NCCS).",
+ "access": "NCCS THREDDS NetcdfSubset point requests, https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/",
+ "generated": "2026-11-14",
+ "generator": "tools/nex_gddp_point.py",
+ "caveats": [
+  "The 0.25 degree cell (centre -11.375, -77.125) spans the irrigated valley floor and drier foothills; the baseline annual rain of ~220 mm/year is the downscaled model climate of the cell, far above the few tens of mm/year typical of the coastal valley floor. Read rain as a relative change with a wide, two-sided range, not as an absolute amount.",
+  "Temperature change is the more robust signal: all 13 models warm in both scenarios.",
+  "13 of the 35 NEX-GDDP-CMIP6 models were used (one per institution family) to keep downloads bounded; every model's license was read from its own file."
+ ]
+}

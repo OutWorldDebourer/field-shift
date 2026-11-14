@@ -49,7 +49,7 @@ const MSG: { role: ChatMessage['role']; body: Bi; photos?: { url: string; tag?: 
 ];
 
 export function demoMessages(lang: Lang): ChatMessage[] {
-  return MSG.map((m, i) => ({ id: i + 1, role: m.role, body: m.body[lang], photos: m.photos, created_at: '2026-11-13T14:0' + i + ':00Z' }));
+  return MSG.map((m, i) => ({ id: i + 1, role: m.role, body: m.body[lang], _bi: m.body, photos: m.photos, created_at: '2026-11-13T14:0' + i + ':00Z' }) as ChatMessage);
 }
 
 export function demoAnalysis(lang: Lang): AnalysisState {

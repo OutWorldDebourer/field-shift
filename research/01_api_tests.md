@@ -42,3 +42,7 @@ Notes:
 ## Cross-check of the 2026 warm anomaly (2026-11-14, during the build)
 
 NASA POWER shows the Huaral field running +4 to +5 °C above its 1985–2024 normal from May 2026 on (Oct 2026: 22.5 °C vs normal 17.7 °C). The newest POWER days come from near-real-time streams (GEOS-IT, FLASHFlux), so we checked an independent reanalysis: ERA5 via the Open-Meteo archive API (research only, not shipped) gives monthly means at the same point of 22.46 °C (Oct 2026) and 22.70 °C (Nov 1–5), against 16.13 °C in Oct 2025. Both sources agree on Oct–Nov; for Jun–Sep 2026 POWER runs about 1.5–2 °C warmer than ERA5. Conclusion: the warm 2026 is real (a strong coastal warm event); the app labels the latest weeks as provisional.
+
+## Correction (2026-11-14, during the build)
+
+The SMAP L4 cell above (row 974, col 1102, centre -11.55, -77.07) is wrong for -11.47, -77.21: checked against the real `cell_lat`/`cell_lon` arrays, the point falls in row 973, col 1100 (centre -11.4783, -77.2562). The backend (`backend/crates/earthdata/src/grid.rs`) uses the corrected EASE-Grid 2.0 formula, covered by unit tests.

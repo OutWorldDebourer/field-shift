@@ -11,7 +11,7 @@ Todas las fuentes que usa el producto, con su licencia. El código propio de Fie
 | GPM IMERG Late L3 diario 0,1° v07 (GPM_3IMERGDL) | Huffman et al., GES DISC, DOI 10.5067/GPM/IMERGDL/DAY/07 | Sin restricciones |
 | GRACE/GRACE-FO mascon JPL CRI RL06.3 v4 | Watkins et al. 2015; Wiese et al. 2016; PO.DAAC | Sin restricciones |
 | NASADEM | NASA JPL, vía Microsoft Planetary Computer | Dominio público |
-| NEX-GDDP-CMIP6 | Thrasher et al. 2022, Scientific Data; NASA NCCS | Licencias por modelo; solo se usan modelos con licencia abierta (ver `backend/data/README.md`) |
+| NEX-GDDP-CMIP6 | Thrasher et al. 2022, Scientific Data; NASA NCCS | CC BY-SA 4.0 según cada archivo de modelo v2.0 (la más estricta de las dos declaraciones de la NASA; la nota técnica v1 dice CC0). 13 modelos, uno por institución; DOI del conjunto 10.7917/OFSG3345, DOI del artículo 10.1038/s41597-022-01393-4. Los números derivados se comparten igual |
 | Blue Marble Next Generation, VIIRS Black Marble, reflectancia corregida VIIRS | NASA GIBS / ESDIS | Dominio público, crédito NASA |
 
 ## Otras imágenes satelitales (abiertas, con atribución)
