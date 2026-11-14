@@ -15,3 +15,4 @@ research/api-samples/gibs_caps.xml
 tools/.venv/
 *.tmp
 research/cache/
+frontend/dist/

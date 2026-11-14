@@ -26,3 +26,4 @@ crops = { path = "../crops" }
 analyses = { path = "../analyses" }
 consultant = { path = "../consultant" }
 export = { path = "../export" }
+evidence = { path = "../evidence" }

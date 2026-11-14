@@ -1,7 +1,12 @@
-//! consultant service (stub, filled in by its milestone).
-use axum::Router;
-use common::AppState;
+//! The consultant: Claude (Anthropic Messages API, vision + tool use) behind a provider switch, with a clearly
+//! labelled scripted demo mode as fallback, and a per-visitor rate limit so the public demo cannot drain the credit.
+mod anthropic;
+mod demo;
+mod prompt;
+mod ratelimit;
+mod routes;
+mod tools;
+mod turn;
 
-pub fn routes() -> Router<AppState> {
-    Router::new()
-}
+pub use routes::routes;
+pub use turn::{run_turn, NewPhoto, TurnInput};

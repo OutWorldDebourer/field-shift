@@ -1,0 +1,23 @@
+{
+  "name": "field-shift-frontend",
+  "version": "1.0.0",
+  "description": "Field Shift web app (index with globe + app)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/leaflet": "^1.9.22",
+    "@types/three": "^0.180.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.8"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "three": "^0.180.0"
+  },
+  "private": true,
+  "license": "Apache-2.0"
+}

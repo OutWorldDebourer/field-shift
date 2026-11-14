@@ -1,7 +1,9 @@
-//! analyses service (stub, filled in by its milestone).
-use axum::Router;
-use common::AppState;
+//! Analyses storage: an analysis = one field + crops + conversation + photos + result sections + evidence reports.
+pub mod examples;
+pub mod model;
+pub mod photos;
+mod routes;
+pub mod store;
 
-pub fn routes() -> Router<AppState> {
-    Router::new()
-}
+pub use model::*;
+pub use routes::routes;
