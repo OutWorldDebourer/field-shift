@@ -27,7 +27,7 @@ p{margin:6px 0 10px}
 .head{display:grid;grid-template-columns:1fr 132px;gap:24px;align-items:start}
 .tile{width:132px;height:132px;border-radius:6px;display:block}
 .notice{margin:20px 0;border:1.5px solid var(--ink);border-radius:6px;background:var(--wash);padding:12px 16px}
-.notice b{display:block;font:500 13px "IBM Plex Mono",monospace;letter-spacing:.08em;color:var(--amber);margin-bottom:4px}
+.notice b{display:block;font:500 13px "IBM Plex Mono",monospace;letter-spacing:.08em;color:var(--ink);margin-bottom:4px}
 .notice p{margin:0;font-weight:600}
 .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
 .meta div{background:var(--wash);padding:10px 12px;border-radius:6px}
@@ -35,12 +35,12 @@ p{margin:6px 0 10px}
 .readings{display:grid;gap:0;border-top:1px solid var(--ink)}
 .r{display:grid;grid-template-columns:minmax(0,24fr) minmax(0,15fr) minmax(0,31fr) minmax(0,30fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);align-items:start}
 .r .lab{font-weight:600}
-.r .val{font-weight:600;white-space:nowrap}
+.r .val{font-weight:600}
 .r .val.key{color:var(--amber)}
 .r .src{font:13px/1.45 "IBM Plex Mono",monospace;color:var(--muted)}
 .rh{font:400 12px "IBM Plex Mono",monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:0;padding-bottom:6px}
 .badge{display:inline-block;font:12px "IBM Plex Mono",monospace;padding:1px 7px;border-radius:9px;border:1px solid #9aa7b1;white-space:nowrap;margin-top:4px;color:var(--muted)}
-.badge.field{border-color:var(--field);color:var(--field)}
+.badge.field{border-color:var(--ink);background:var(--ink);color:#fff}
 .lic{font:13px/1.5 "IBM Plex Mono",monospace;color:var(--muted);margin-top:10px}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th{font:400 12px "IBM Plex Mono",monospace;text-align:left;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--ink);padding:6px}
@@ -83,7 +83,6 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
  @page{size:A4;margin:16mm 16mm 20mm;@bottom-center{content:"Field Shift · pre-diagnosis, not a diagnosis · page " counter(page);font:8pt "IBM Plex Mono",monospace;color:#555}}
 }
-.printfoot{display:none}
 "#;
 
 fn cap(s: &str) -> String {
@@ -106,7 +105,7 @@ fn tile(ring: &[[f64; 2]]) -> String {
         let pts: Vec<String> = ring.iter().map(|[x, y]| format!("{:.1},{:.1}", 34.0 + (x - w) / k * 64.0, 98.0 - (y - s) / k * 64.0)).collect();
         format!("<polygon points=\"{}\" fill=\"rgba(255,255,255,.08)\" stroke=\"#fff\" stroke-width=\"1.4\" />", pts.join(" "))
     } else { "<circle cx=\"66\" cy=\"66\" r=\"4\" fill=\"#fff\" />".into() };
-    format!("<svg class=\"tile\" viewBox=\"0 0 132 132\" role=\"img\" aria-label=\"Field outline\"><rect width=\"132\" height=\"132\" rx=\"6\" fill=\"#16222c\" />{poly}<g stroke=\"#fff\" stroke-width=\"1.6\" fill=\"none\">{brackets}</g></svg>")
+    format!("<svg class=\"tile\" viewBox=\"0 0 132 132\" role=\"img\" aria-label=\"Field outline · contorno del campo\"><rect width=\"132\" height=\"132\" rx=\"6\" fill=\"#16222c\" />{poly}<g stroke=\"#fff\" stroke-width=\"1.6\" fill=\"none\">{brackets}</g></svg>")
 }
 
 pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
@@ -160,10 +159,10 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
             let key = r["key"] == true;
             let v = r["value"].as_f64();
             let val = match v { Some(x) if key => format!("{x:+.1}"), _ => num(&r["value"]) };
-            let unit = unit_l(&r["unit"].as_str().unwrap_or("").replace("°C vs normal", "°C"), es);
+            let unit = unit_l(&r["unit"].as_str().unwrap_or("").replace("°C vs normal", if es { "°C vs normal" } else { "°C vs normal" }), es);
             if let Some(l) = r["license"].as_str().filter(|l| !l.is_empty()) { licences.insert(format!("{}: {}", r["source"].as_str().unwrap_or("").split(" + ").next().unwrap_or(""), l)); }
             h.push_str(&format!("<div class=\"r\"><span class=\"lab\">{}</span><span class=\"val{}\">{} {}</span><span class=\"pw\">{}</span><span class=\"src\">{} · <span style=\"white-space:nowrap\">{}</span> · {}<br><span class=\"badge{}\">{}</span></span></div>",
-                esc(&bi(&r["label"], lang)), if key { " key" } else { "" }, esc(&val), esc(&unit), esc(&cap(&bi(&r["verdict"], lang))),
+                esc(&bi(&r["label"], lang)), if key { " key" } else { "" }, esc(&val).replace(' ', "&nbsp;"), esc(&unit).replace(' ', "&nbsp;"), esc(&cap(&bi(&r["verdict"], lang))),
                 esc(&src_l(r["source"].as_str().unwrap_or(""), es)), esc(r["date"].as_str().unwrap_or("")), esc(&res_l(r["resolution"].as_str().unwrap_or(""), es)),
                 if field { " field" } else { "" }, badge_txt));
         }
@@ -176,7 +175,7 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
     }
     if let Some(pests) = ev["pests"].as_array().filter(|p| !p.is_empty()) {
         h.push_str(&format!("<h3>{}</h3><div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>",
-            t("Reference pests: generations from degree-days (NASA POWER temperature, regional)", "Plagas de referencia: generaciones por grados-día (temperatura NASA POWER, regional)"),
+            t("Reference pests (general published models, not specific to this crop): generations from degree-days, NASA POWER temperature, regional", "Plagas de referencia (modelos publicados generales, no específicos de este cultivo): generaciones por grados-día, temperatura NASA POWER, regional"),
             t("Pest", "Plaga"), t("This season", "Esta campaña"), t("40-year normal", "Normal de 40 años")));
         for p in pests {
             h.push_str(&format!("<tr><td>{} <i>{}</i><div class=\"cite\">{}</div></td><td class=\"n\">{}</td><td class=\"n\">{}</td></tr>",

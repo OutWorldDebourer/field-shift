@@ -22,6 +22,13 @@ fn base(m: &Value, id: &str, label: crate::reading::Bi, value: Option<f64>, unit
 }
 
 /// Readings from the POWER summary. `monthly` feeds the sparkline of the temperature reading.
+fn monthly_series(monthly: Option<&Value>, key: &str) -> Vec<Value> {
+    monthly.and_then(|x| x["months"].as_array()).into_iter().flatten().filter_map(|mo| {
+        let m = mo["metrics"].as_array()?.iter().find(|k| k["key"] == key)?;
+        Some(json!({ "t": mo["month"], "v": m["value"] }))
+    }).collect()
+}
+
 pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Reading> {
     let mut out = vec![];
     if let Some(m) = metric(s, "last_30_days", "tmean_c") {
@@ -51,7 +58,9 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
             Some(_) => bi("close to normal", "cerca de lo normal"),
             None => bi("no data", "sin datos"),
         };
-        out.push(base(m, "rain_30d", bi("Rain, last 30 days", "Lluvia, últimos 30 días"), v.map(|x| round(x, 1)), "mm", verdict));
+        let mut r = base(m, "rain_30d", bi("Rain, last 30 days", "Lluvia, últimos 30 días"), v.map(|x| round(x, 1)), "mm", verdict);
+        r.series = monthly_series(monthly, "rain_mm");
+        out.push(r);
     }
     if let Some(m) = metric(s, "last_30_days", "et0_mm") {
         let v = m["value"].as_f64();
@@ -62,8 +71,10 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
     }
     if let Some(m) = metric(s, "last_30_days", "water_balance_mm") {
         let v = m["value"].as_f64();
-        out.push(base(m, "water_balance", bi("Water balance (rain − ET₀), last 30 days", "Balance hídrico (lluvia − ET₀), últimos 30 días"), v.map(|x| round(x, 0)), "mm",
-            bi("irrigation must cover this deficit (irrigation not modelled)", "el riego debe cubrir este déficit (riego no modelado)")));
+        let mut r = base(m, "water_balance", bi("Water balance (rain − ET₀), last 30 days", "Balance hídrico (lluvia − ET₀), últimos 30 días"), v.map(|x| round(x, 0)), "mm",
+            bi("dry: irrigation must cover this deficit (irrigation not modelled)", "seco: el riego debe cubrir este déficit (riego no modelado)"));
+        r.series = monthly_series(monthly, "water_balance_mm");
+        out.push(r);
     }
     if let Some(m) = metric(s, "season_to_date", "heat_days") {
         let v = m["value"].as_f64();
@@ -79,7 +90,7 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
     }
     if let Some(p) = s["pests"].as_array().and_then(|ps| ps.iter().find(|p| p["pest"]["key"].as_str().map(|k| k == "myzus_persicae").unwrap_or(false))) {
         let g = p["generations"].as_f64();
-        let d = p["difference"].as_f64().unwrap_or(0.0);
+        let d = match (p["generations"].as_f64(), p["normal_generations"]["mean"].as_f64()) { (Some(a), Some(b)) => round(a, 1) - round(b, 1), _ => p["difference"].as_f64().unwrap_or(0.0) };
         let meta = &p["meta"];
         out.push(Reading {
             id: "pest_gen".into(),
@@ -107,7 +118,7 @@ pub fn pests(s: &Value) -> Vec<Value> {
             "name": p["pest"]["common_name"], "scientific": p["pest"]["scientific_name"],
             "generations_now": p["generations"].as_f64().map(|x| round(x, 1)),
             "generations_normal": p["normal_generations"]["mean"].as_f64().map(|x| round(x, 1)),
-            "difference": p["difference"].as_f64().map(|x| round(x, 1)),
+            "difference": p["generations"].as_f64().zip(p["normal_generations"]["mean"].as_f64()).map(|(a, b)| round(round(a, 1) - round(b, 1), 1)),
             "citation": format!("{} ({}). {}. {}. {}", c["authors"].as_str().unwrap_or(""), c["year"], c["title"].as_str().unwrap_or(""), c["published_in"].as_str().unwrap_or(""), c["url"].as_str().unwrap_or("")),
         })
     }).collect()

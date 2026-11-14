@@ -55,7 +55,9 @@ fn parse_ring(wkt: &str) -> Vec<[f64; 2]> {
     pts
 }
 
-pub async fn load(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
+pub async fn load(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> { load_raw(db, id).await.map(with_prediagnosis) }
+
+async fn load_raw(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
     let a = sqlx::query("SELECT lang, location_mode, example_site, crop_current_record, crop_history, demo_mode FROM analyses WHERE id = ?")
         .bind(id).fetch_optional(db).await?.ok_or(ApiError::NotFound)?;
     let history: Option<Value> = a.try_get("crop_history")?;
@@ -68,10 +70,17 @@ pub async fn load(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
         crop_current: a.try_get("crop_current_record")?,
         crop_history: history.and_then(|v| v.as_array().cloned()).unwrap_or_default(),
         messages: messages(db, id).await?,
+        prediagnosis: None,
         sections: sections(db, id).await?,
         evidence: latest_evidence(db, id).await?,
         demo_mode: a.try_get::<i8, _>("demo_mode")? != 0,
     })
+}
+
+/// Fills `prediagnosis` from the rotation section content.
+pub fn with_prediagnosis(mut st: AnalysisState) -> AnalysisState {
+    st.prediagnosis = st.sections.iter().find(|s| s.key == "rotation").and_then(|s| s.content.as_ref()).and_then(|c| c.get("prediagnosis").cloned()).filter(|v| !v.is_null());
+    st
 }
 
 pub async fn messages(db: &MySqlPool, id: &str) -> ApiResult<Vec<ChatMessage>> {

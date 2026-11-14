@@ -63,8 +63,12 @@ fn join(list: &Value, lang: &str) -> String {
 
 fn bi_join(list: &Value) -> Value { json!({ "en": join(list, "en"), "es": join(list, "es") }) }
 
-fn block_content(b: &Value, summary: Value) -> Value {
-    json!({ "title": b["title"], "summary": summary, "items": b["items"].as_array().into_iter().flatten().map(item_from).collect::<Vec<_>>() })
+/// Summary = the key actions (item titles), so a one-line view says what to do, not only the disclaimer.
+fn block_content(b: &Value, _note: Value) -> Value {
+    let items: Vec<Value> = b["items"].as_array().into_iter().flatten().map(item_from).collect();
+    let key = |l: &str| items.iter().filter_map(|i| { let t = i["title"][l].as_str().unwrap_or(""); (!t.is_empty() && t.len() < 70).then(|| t.to_string()) })
+        .take(3).collect::<Vec<_>>().join(" · ");
+    json!({ "title": b["title"], "summary": { "en": key("en"), "es": key("es") }, "items": items })
 }
 
 /// Runs the advice engine on crops + evidence signals and writes the soil, pests, nutrition and rotation sections.
@@ -143,7 +147,16 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
         _ => (json!({ "en": "Rotation: three strategies", "es": "Rotación: tres estrategias" }),
             json!({ "en": "Your current plan and two alternatives, scored 1–5 (5 = best; for risk, 5 = lowest).", "es": "Tu plan actual y dos alternativas, puntuadas de 1 a 5 (5 = mejor; en riesgo, 5 = menor)." })),
     };
-    let rotation = json!({ "title": title, "summary": summary, "mode": mode, "strategies": strategies, "items": items, "gaps": adv["gaps"] });
+    // Recommended strategy: the best total score among the alternatives (ties: first); it names its strongest criterion.
+    let mut strategies = strategies;
+    let total = |s: &Value| ["soil", "water", "pest_break", "income", "risk"].iter().map(|k| s["scores"][k].as_u64().unwrap_or(0)).sum::<u64>();
+    if let Some((bi_, _)) = strategies.iter().enumerate().filter(|(_, s)| s["current"] != true).max_by_key(|(i, s)| (total(s), std::cmp::Reverse(*i))) {
+        let sc = &strategies[bi_]["scores"];
+        let (k, _) = [("soil", "improve soil", "mejorar el suelo"), ("water", "save water", "ahorrar agua"), ("pest_break", "break pest cycles", "cortar el ciclo de plagas"), ("income", "income", "ingreso"), ("risk", "lower risk", "menor riesgo")]
+            .iter().map(|(k, en, es)| ((*k, *en, *es), sc[*k].as_u64().unwrap_or(0))).max_by_key(|(_, v)| *v).unwrap();
+        strategies[bi_]["best_for"] = json!({ "en": format!("Best fit: {}", k.1), "es": format!("Mejor opción: {}", k.2) });
+    }
+    let rotation = json!({ "title": title, "summary": summary, "mode": mode, "strategies": strategies, "items": items, "gaps": adv["gaps"], "prediagnosis": prediagnosis(&ev) });
     let rot_state = if adv["gaps"].as_array().map(|g| g.is_empty()).unwrap_or(true) { "ready" } else { "gaps" };
     let note = (rot_state == "gaps").then(|| SBi::new("some information gaps", "algunos vacíos de información"));
     store::set_section(&state.db, analysis_id, "rotation", rot_state, note.as_ref(), Some(&rotation)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
@@ -160,4 +173,25 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
         "gaps": adv["gaps"],
         "sections_written": ["soil", "pests", "nutrition", "rotation"],
     }))
+}
+
+/// One-line pre-diagnosis from the package's own signals (never from photos), with a confidence that reflects scale:
+/// "medium" when field-level vigor and regional climate agree, "low" when only regional data exist.
+fn prediagnosis(ev: &Value) -> Value {
+    let r = |id: &str| ev["readings"].as_array().and_then(|a| a.iter().find(|x| x["id"] == id)).and_then(|x| x["value"].as_f64());
+    let mut en = vec![]; let mut es = vec![];
+    if r("temp_anomaly").is_some_and(|a| a >= 2.0) { en.push("a much warmer season than normal"); es.push("una campaña mucho más cálida que lo normal"); }
+    if r("water_balance").is_some_and(|w| w < -50.0) { en.push("a large irrigation deficit"); es.push("un gran déficit de riego"); }
+    if r("pest_gen").is_some() && ev["pests"].as_array().map(|p| p.iter().any(|x| x["difference"].as_f64().unwrap_or(0.0) >= 1.0)).unwrap_or(false) {
+        en.push("pest pressure above normal"); es.push("presión de plagas mayor a lo normal");
+    }
+    let field = r("ndvi").is_some();
+    let join = |v: &Vec<&str>, and: &str| match v.len() { 0 => String::new(), 1 => v[0].to_string(), _ => format!("{} {and} {}", v[..v.len() - 1].join(", "), v[v.len() - 1]) };
+    let (h_en, h_es) = if en.is_empty() {
+        ("No strong warning signal in the NASA data for this field".to_string(), "Sin señales fuertes de alerta en los datos NASA para este campo".to_string())
+    } else {
+        (format!("Likely {}", join(&en, "and")), format!("Probablemente {}", join(&es, "y")))
+    };
+    json!({ "headline": { "en": h_en, "es": h_es }, "confidence": if field && en.len() >= 2 { "medium" } else { "low" },
+            "basis": { "en": "From NASA readings only; photos and a field visit by your agronomist decide.", "es": "Solo a partir de lecturas NASA; las fotos y la visita de tu agrónomo deciden." } })
 }

@@ -2,6 +2,7 @@
 //! and fills the result sections from the cited advice engine. The consultant may only cite numbers from here.
 mod advise;
 mod crop_pests;
+mod from_earthdata;
 mod from_imagery;
 mod from_power;
 pub mod reading;
@@ -34,12 +35,14 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
     let opts = power::Options::default();
     let size_m = from_imagery::snapshot_size_m(&field);
 
-    let (summary, monthly, ndvi, terrain, snap) = tokio::join!(
+    let (summary, monthly, ndvi, terrain, snap, smap, imerg) = tokio::join!(
         power::summary(state, lat, lon, &opts),
         power::monthly(state, lat, lon, &opts),
         imagery::ndvi_series(state, &field, 24),
         imagery::terrain(state, &field),
         imagery::snapshot(state, lat, lon, size_m, 1024),
+        earthdata::smap(state, lat, lon, 14),
+        earthdata::imerg(state, lat, lon, 30),
     );
     let mut gaps = vec![];
     let summary = to_value(summary, "power", &mut gaps, "NASA POWER climate data could not be read right now.", "No se pudieron leer los datos climáticos de NASA POWER.");
@@ -51,9 +54,31 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
         Err(e) => { tracing::warn!("evidence: snapshot failed: {e}"); None }
     };
 
+    let smap = to_value(smap, "smap", &mut gaps, "SMAP soil moisture could not be read right now.", "No se pudo leer la humedad del suelo SMAP.");
+    let imerg = to_value(imerg, "imerg", &mut gaps, "IMERG satellite rain could not be read right now.", "No se pudo leer la lluvia satelital IMERG.");
+    let grace = to_value(earthdata::grace(state, lat, lon), "grace", &mut gaps, "GRACE water storage unavailable here.", "Almacenamiento de agua GRACE no disponible aquí.");
+    let proj = climate::projection(state, lat, lon).ok().and_then(|p| serde_json::to_value(p).ok());
     let mut readings = vec![];
     if let Some(s) = &summary { readings.extend(from_power::readings(s, monthly.as_ref(), from_power::provisional(s))); }
     readings.extend(from_imagery::readings(ndvi.as_ref(), terrain.as_ref()));
+    readings.extend(smap.as_ref().and_then(from_earthdata::smap));
+    readings.extend(imerg.as_ref().and_then(from_earthdata::imerg));
+    readings.extend(grace.as_ref().and_then(from_earthdata::grace));
+    let projection = proj.as_ref().filter(|p| p["available"] == true).and_then(|p| {
+        let f = &p["projection"];
+        let (key, sc) = f["ensemble"].as_object()?.iter().find(|(k, _)| k.as_str() != "baseline")?;
+        Some(json!({
+            "horizon": f["future_period"], "scenario": key.to_uppercase(),
+            "d_temp_c": sc["tas_change_c"]["median"], "d_temp_range": [sc["tas_change_c"]["min"], sc["tas_change_c"]["max"]],
+            "d_rain_pct": sc["pr_change_pct"]["median"],
+            "models": f["models"].as_array().map(|m| m.iter().map(|x| x["model"].clone()).collect::<Vec<_>>()).unwrap_or_default(),
+            "baseline_period": f["baseline_period"], "dataset": f["dataset"], "doi": f["doi"], "resolution": f["resolution"],
+            "badge": "regional context", "label": p["label"],
+        }))
+    });
+    if projection.is_none() {
+        gaps.push(gap("projection", "Climate projection (NEX-GDDP-CMIP6) not available for this point yet.", "Proyección climática (NEX-GDDP-CMIP6) aún no disponible para este punto."));
+    }
     if field.ring.len() < 3 {
         gaps.push(gap("outline", "No field outline drawn: satellite values use a ~110 m square around the point.", "Sin contorno del campo: los valores satelitales usan un cuadrado de ~110 m alrededor del punto."));
     }
@@ -72,7 +97,7 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
         "bare_soil": ndvi.as_ref().map(|n| n["bare_soil"].clone()).unwrap_or(json!([])),
         "cycles": ndvi.as_ref().map(|n| n["cycles"].clone()).unwrap_or(json!([])),
         "pests": summary.as_ref().map(from_power::pests).unwrap_or_default(),
-        "projection": Value::Null,
+        "projection": projection,
         "imagery": imagery_v,
         "gaps": gaps,
         "power_notes": summary.as_ref().map(|s| s["notes"].clone()).unwrap_or(Value::Null),

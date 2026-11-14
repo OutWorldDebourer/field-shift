@@ -68,6 +68,8 @@ pub struct AnalysisState {
     pub sections: Vec<Section>,
     pub evidence: Option<Value>,
     pub demo_mode: bool,
+    /// Headline + confidence from the rotation section (built by the evidence stage), if any.
+    pub prediagnosis: Option<Value>,
 }
 
 #[derive(Clone, Debug, Deserialize)]

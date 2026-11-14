@@ -19,3 +19,5 @@ analyses = { path = "../analyses" }
 power = { path = "../power" }
 imagery = { path = "../imagery" }
 crops = { path = "../crops" }
+earthdata = { path = "../earthdata" }
+climate = { path = "../climate" }
