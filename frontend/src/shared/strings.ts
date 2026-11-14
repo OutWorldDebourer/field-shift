@@ -414,6 +414,11 @@ const S = {
   gl_lede: { en: 'Plain words for the terms and datasets on this page.', es: 'Palabras simples para los términos y datos de esta página.' },
   gl_scale: { en: 'Scale', es: 'Escala' },
   ex_zip: { en: 'Download package (ZIP)', es: 'Descargar paquete (ZIP)' },
+  dl_menu: { en: 'Download', es: 'Descargar' },
+  dl_sheet_sub: { en: 'For your agronomist: readings, sources, advice. Print or save as PDF.', es: 'Para tu agrónomo: lecturas, fuentes, consejos. Imprímela o guárdala en PDF.' },
+  dl_csv_sub: { en: 'Every reading and series, with source and date.', es: 'Todas las lecturas y series, con fuente y fecha.' },
+  dl_zip_sub: { en: 'Sheet + data + your original photos + satellite image.', es: 'Ficha + datos + tus fotos originales + imagen satelital.' },
+  dl_share_sub: { en: 'A read-only link, copied to the clipboard.', es: 'Un enlace de solo lectura, copiado al portapapeles.' },
   ex_zip_na: { en: 'The download package is not available yet. Try the CSV.', es: 'El paquete de descarga aún no está disponible. Prueba el CSV.' },
 
   // ---------- iteration 3: documents, load information, organic ----------

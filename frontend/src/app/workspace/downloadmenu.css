@@ -1,0 +1,22 @@
+/* Download menu in the top bar */
+.dlm { position: relative; flex: none; z-index: 3000; }
+.dlm__btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; font-weight: 600; }
+.dlm__btn .ico { width: 18px; height: 18px; }
+.dlm__list { position: absolute; right: 0; top: calc(100% + 8px); z-index: 3000; width: min(320px, calc(100vw - 24px)); padding: 6px;
+  display: grid; gap: 2px; background: rgb(10, 20, 30); }
+.dlm__list[hidden] { display: none; }
+.dlm__item { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px;
+  background: transparent; border: 0; color: inherit; font: inherit; cursor: pointer; min-height: 48px; }
+.dlm__item:hover, .dlm__item:focus-visible { background: rgba(255, 255, 255, 0.1); outline: none; }
+.dlm__item:focus-visible { box-shadow: inset 0 0 0 2px #fff; }
+.dlm__item .ico { width: 20px; height: 20px; flex: none; margin-top: 2px; }
+.dlm__item b { display: block; font-weight: 600; }
+.dlm__item small { display: block; font-size: 0.8125rem; opacity: 0.82; line-height: 1.35; margin-top: 2px; }
+@media (max-width: 760px) {
+  .dlm__btn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .dlm__btn { padding: 0 10px; min-width: 44px; min-height: 44px; justify-content: center; }
+  /* The button sits near the left on phones: open the menu as a full-width panel under the bar. */
+  .dlm__list { position: fixed; left: 12px; right: 12px; top: 72px; width: auto; }
+}
+/* The header must stack above the section row so the open menu covers it */
+.ws > .bar { position: relative; z-index: 3000; }

@@ -12,6 +12,7 @@ import { set, state, subscribe, syncUrl, type View } from '../state';
 import { mountChat } from './chat';
 import { dashboardHtml, mountDashboardForecast, mountDashboardMap } from './dashboard';
 import { wireExports } from './export';
+import { downloadMenuHtml, wireDownloadMenu } from './downloadmenu';
 import { rotationHtml } from './rotation';
 import { peekHtml, peekSection, sectionsColumn, sectionsRow, sheetHtml } from './sections';
 import { enableGlossary } from '../../shared/glosspanel';
@@ -40,6 +41,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       <nav class="tabs" role="tablist" aria-label="${esc(t('ap_views'))}" data-i18n-attr="aria-label:ap_views">
         ${TABS.map((x) => `<button type="button" role="tab" id="tab-${x.v}" aria-controls="view-${x.v}" data-tab="${x.v}">${icon(x.icon)}<span data-i18n="${x.label}">${esc(t(x.label))}</span></button>`).join('')}
       </nav>
+      ${downloadMenuHtml()}
       <span class="bar__flags" id="flags"></span>
       ${langSwitchHtml()}
     </header>
@@ -92,6 +94,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
 
   const chat = mountChat($('#chat'), () => state.analysis, (patch) => { set({ analysis: { ...state.analysis!, ...patch } }); });
   wireExports(ws, () => state.analysis);
+  wireDownloadMenu(ws, () => state.analysis);
   const intake = mountIntake(ws, () => state.analysis!, (next) => {
     const cur = state.analysis!;
     set({ analysis: { ...cur, ...next, offline: cur.offline, readOnly: cur.readOnly, shareToken: cur.shareToken, evidence: next.evidence ?? cur.evidence } });
