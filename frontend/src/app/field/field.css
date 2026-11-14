@@ -140,7 +140,7 @@
 }
 
 /* Map view switch (satellite with place names | street map), top right under the zoom buttons */
-.fs__base { position: absolute; top: 76px; right: 62px; z-index: 1001; padding: 3px; background: rgba(8, 16, 26, 0.86); }
+.fs__base { position: absolute; top: 76px; right: 62px; z-index: 1001; padding: 3px; grid-template-columns: repeat(3, auto); background: rgba(8, 16, 26, 0.86); }
 .fs__base button { min-height: 36px; padding: 0 12px; font-size: 0.875rem; }
 .fs__results li b { font-weight: 600; }
 .fs__results .fs__kind { font-size: 0.75rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.04em; margin-left: 6px; }

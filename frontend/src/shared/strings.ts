@@ -207,6 +207,7 @@ const S = {
   fs_street_down: { en: 'The street map is not responding; back to satellite.', es: 'El mapa de calles no responde; volvemos al satélite.' },
   fs_base_sat: { en: 'Satellite', es: 'Satélite' },
   fs_base_map: { en: 'Map', es: 'Mapa' },
+  fs_base_hyb: { en: 'Hybrid', es: 'Híbrido' },
   fs_place_here: { en: 'Here: zoom in and draw your field', es: 'Aquí: acércate y dibuja tu campo' },
   kind_city: { en: 'city', es: 'ciudad' },
   kind_town: { en: 'town', es: 'pueblo' },

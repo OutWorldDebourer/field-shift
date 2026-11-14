@@ -8,6 +8,7 @@ import { ringAreaHa, ringCenter, fmtCoord } from '../../shared/geo';
 import { applyI18n, fmt, fmtDate, lang, onLang, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { addSnapshot, eoxLayer, loadLeaflet, streetLayer } from '../map/leaflet';
+import { createHybrid, type Hybrid } from '../map/hybrid';
 import { searchPlaces, type Place } from './search';
 import './field.css';
 
@@ -37,6 +38,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   let L: typeof Leaflet | null = null;
   let layer: Leaflet.LayerGroup | null = null;
   let stopResize: (() => void) | null = null;
+  const langHooks: (() => void)[] = [];
 
   host.innerHTML = `<div class="fs">
     <div class="fs__map" id="fs-map" role="region" aria-label="${esc(t('fs_map_label'))}" data-i18n-attr="aria-label:fs_map_label"><p class="fs__loading mono">${esc(t('fs_map_loading'))}</p></div>
@@ -45,12 +47,13 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     <div class="fs__alt instr" id="fs-alt" aria-hidden="true"></div>
     <p class="fs__tiles pill" id="fs-tiles" role="status" hidden>${esc(t('fs_map_loading_tiles'))}</p>
     <div class="fs__base seg" role="radiogroup" aria-label="${esc(t('fs_base'))}" data-i18n-attr="aria-label:fs_base">
-      <button type="button" role="radio" data-base="sat" aria-checked="true"><span data-i18n="fs_base_sat">${esc(t('fs_base_sat'))}</span></button>
+      <button type="button" role="radio" data-base="sat" aria-checked="false"><span data-i18n="fs_base_sat">${esc(t('fs_base_sat'))}</span></button>
+      <button type="button" role="radio" data-base="hyb" aria-checked="true"><span data-i18n="fs_base_hyb">${esc(t('fs_base_hyb'))}</span></button>
       <button type="button" role="radio" data-base="map" aria-checked="false"><span data-i18n="fs_base_map">${esc(t('fs_base_map'))}</span></button>
     </div>
     <button type="button" class="fs__full pill" id="fs-full" aria-pressed="false">${icon('layers')}<span>${esc(t('fs_full'))}</span></button>
     <div class="fs__credit"><span class="mono" id="fs-img"></span><button type="button" class="fs__info" id="fs-info" aria-expanded="false" aria-controls="fs-lic" aria-label="${esc(t('fs_licences'))}">${icon('info')}</button>
-      <div class="fs__lic glass" id="fs-lic" hidden><p>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</p><p>Map view (towns, roads): © OpenStreetMap contributors · ODbL</p><p>Sentinel-2 L2A · Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer</p><p>Place search: Nominatim · © OpenStreetMap contributors · ODbL</p><p>Leaflet · BSD-2-Clause</p></div></div>
+      <div class="fs__lic glass" id="fs-lic" hidden><p>Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016) · CC BY 4.0</p><p>Hybrid and Map views (roads, rivers, towns): © OpenStreetMap contributors · ODbL · vector tiles by OpenFreeMap</p><p>Sentinel-2 L2A · Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer</p><p>Place search: Nominatim · © OpenStreetMap contributors · ODbL</p><p>Leaflet · BSD-2-Clause</p></div></div>
     <aside class="fs__panel glass" aria-labelledby="fs-t">
       <h1 id="fs-t" class="serif fs__title" data-i18n="fs_title">${esc(t('fs_title'))}</h1>
       <p class="fs__lede" data-i18n="fs_lede">${esc(t('fs_lede'))}</p>
@@ -301,7 +304,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   });
   finishBtn.addEventListener('click', finishDraw);
   useBtn.addEventListener('click', use);
-  const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`; $('#fs-tiles', host).textContent = t('fs_map_loading_tiles'); });
+  const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`; $('#fs-tiles', host).textContent = t('fs_map_loading_tiles'); langHooks.forEach((f) => f()); });
 
   renderMode(); renderTools(); renderReadout();
 
@@ -320,7 +323,20 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     el.innerHTML = '';
     map = L.map(el, { zoomControl: false, attributionControl: false, worldCopyJump: true, maxZoom: 16, zoomSnap: 0.5 }).setView([-11.47, -77.21], 13);
     L.control.zoom({ position: 'topright' }).addTo(map);
+    // Panes: satellite tiles (200) < dated snapshot (250) < hybrid vectors (300) < field outline (overlay, 400).
+    map.createPane('snapshot').style.zIndex = '250';
+    const hybPane = map.createPane('hybrid'); hybPane.style.zIndex = '300'; hybPane.style.pointerEvents = 'none';
     const sat = eoxLayer(L).addTo(map), street = streetLayer(L);
+    let hybrid: Hybrid | null = null;
+    const showHybrid = async (on: boolean) => {
+      if (!map) return;
+      if (!on) { if (hybrid && map.hasLayer(hybrid.layer)) map.removeLayer(hybrid.layer); return; }
+      try {
+        hybrid ??= await createHybrid(lang(), 'hybrid');
+        if (map && host.querySelector('[data-base=hyb][aria-checked=true]') && !map.hasLayer(hybrid.layer)) hybrid.layer.addTo(map);
+      } catch { toast(t('fs_street_down')); }
+    };
+    langHooks.push(() => hybrid?.setLang(lang()));
     // Keep Leaflet's size in step with its container (pane or window resizes without a window resize event).
     const ro = new ResizeObserver(() => { map?.invalidateSize({ pan: false }); placeReticle(); });
     ro.observe(el);
@@ -339,12 +355,13 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     });
     host.querySelectorAll<HTMLButtonElement>('[data-base]').forEach((b) => b.addEventListener('click', () => {
       if (!map) return;
-      const toMap = b.dataset.base === 'map';
+      const base = b.dataset.base, toMap = base === 'map';
+      host.querySelectorAll<HTMLButtonElement>('[data-base]').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
       host.classList.toggle('is-street', toMap);
       if (toMap) { map.removeLayer(sat); street.addTo(map); street.bringToBack(); }
-      else { map.removeLayer(street); sat.addTo(map); sat.bringToBack(); }
-      $('#fs-img', host).textContent = toMap ? '© OpenStreetMap contributors' : (coveredDate() ? `Sentinel-2 L2A ${coveredDate()} · EOX 2016 base` : t('eox_short'));
-      host.querySelectorAll<HTMLButtonElement>('[data-base]').forEach((x) => x.setAttribute('aria-checked', String(x === b)));
+      else { map.removeLayer(street); if (!map.hasLayer(sat)) sat.addTo(map); sat.bringToBack(); }
+      void showHybrid(base === 'hyb');
+      instr();
       map.fire('zoomend');
     }));
     L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
@@ -361,10 +378,12 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       const mpp = (156543.03 * Math.cos((c.lat * Math.PI) / 180)) / 2 ** z;
       const km = (mpp * H) / (2 * Math.tan(Math.PI / 6)) / 1000;
       $('#fs-alt', host).textContent = t('alt', { km: km >= 10 ? Math.round(km) : km.toFixed(1) });
-      $('#fs-img', host).textContent = host.classList.contains('is-street') ? '© OpenStreetMap contributors' : coveredDate() ? `Sentinel-2 L2A ${coveredDate()} · EOX 2016 base` : t('eox_short');
+      const hyb = host.querySelector('[data-base=hyb][aria-checked=true]') ? ' · © OpenStreetMap' : '';
+      $('#fs-img', host).textContent = host.classList.contains('is-street') ? '© OpenStreetMap contributors' : (coveredDate() ? `Sentinel-2 L2A ${coveredDate()} · EOX 2016 base` : t('eox_short')) + hyb;
     };
     map.on('move zoom resize', () => { placeReticle(); instr(); });
     instr();
+    void showHybrid(true);
     const ex = await examples();
     exampleList = ex.list;
     renderExamples();

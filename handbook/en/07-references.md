@@ -22,6 +22,7 @@ Every source used by the product, with its licence. Field Shift's own code is Ap
 | Landsat 8/9 Collection 2 L2 (USGS) | "Landsat courtesy of the U.S. Geological Survey" | Public domain |
 | Sentinel-2 cloudless 2016 by EOX IT Services GmbH (map base layer) | "Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)" | CC BY 4.0 (2016 edition only) |
 | OpenStreetMap Nominatim (place search) | "© OpenStreetMap contributors" | ODbL 1.0; usage policy respected (search on Enter only, ≤1 request/s, cached) |
+| OpenStreetMap vector tiles via OpenFreeMap ("Hybrid" view: roads, rivers and town names over the satellite image) | "© OpenStreetMap contributors · OpenFreeMap" | ODbL 1.0 data; OpenFreeMap is free with no key or account; rendered with MapLibre GL JS (BSD-3-Clause) |
 | OpenStreetMap standard tiles ("Map" view of the field selection) | "© OpenStreetMap contributors (ODbL)" | ODbL 1.0 data; light interactive use per the OSM tile usage policy |
 
 ## Methods and thresholds

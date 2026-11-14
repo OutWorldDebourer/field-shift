@@ -22,6 +22,7 @@ Todas las fuentes que usa el producto, con su licencia. El código propio de Fie
 | Landsat 8/9 Colección 2 L2 (USGS) | "Landsat courtesy of the U.S. Geological Survey" | Dominio público |
 | Sentinel-2 cloudless 2016 de EOX IT Services GmbH (capa base del mapa) | "Sentinel-2 cloudless 2016 by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)" | CC BY 4.0 (solo la edición 2016) |
 | OpenStreetMap Nominatim (búsqueda de lugares) | "© OpenStreetMap contributors" | ODbL 1.0; se respeta la política de uso (búsqueda solo con Enter, ≤1 solicitud/s, con caché) |
+| Teselas vectoriales de OpenStreetMap vía OpenFreeMap (vista "Híbrido": caminos, ríos y nombres de pueblos sobre el satélite) | "© OpenStreetMap contributors · OpenFreeMap" | Datos ODbL 1.0; OpenFreeMap es gratuito, sin clave ni cuenta; dibujado con MapLibre GL JS (BSD-3-Clause) |
 | Teselas estándar de OpenStreetMap (vista "Mapa" en la selección del campo) | "© OpenStreetMap contributors (ODbL)" | Datos ODbL 1.0; uso interactivo ligero según la política de teselas de OSM |
 
 ## Métodos y umbrales
