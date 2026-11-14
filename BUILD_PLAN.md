@@ -69,8 +69,12 @@ How they fuse in Field Shift (the owner approved this rendition in `design-direc
 
 ## Needs the owner (fill in as you go)
 
-- Own crop photos (arverjita) for the example site, in `assets/photos/`.
-- Morning: claim the free domain, create the Google Compute Engine e2-micro VM, then deploy; FortiGuard classification; make the repo public before submission; record the 30-second demo.
+- Own crop photos (arverjita) for the example site, in `assets/photos/`; they replace the illustrative AI-crop photos `frontend/public/img/pea-*.jpg` (today shown with the "SI-assisted visuals" tag).
+- Morning: claim the free domain, create the Google Compute Engine e2-micro VM, then deploy (one binary `fieldshift` + `frontend/dist` + MariaDB); FortiGuard classification; make the repo public before submission.
+- Review the demo films in `film/` (English is the one to submit; Spanish is for you) and upload the English one where the submission form asks.
+- Surfaces that did not reach 8.5 in the design audit gate (see `design-directions/audit-log.md`): technical sheet (8.0 after 3 rounds) and any app surface still below 8.5 after round 3. Decide whether to accept them for submission.
+- The OpenAI image call made by the design skill once (billed to your OpenAI key, result discarded) — see `AI_USE.md`.
+- Optional: a U.S. example site (then SSURGO/CDL) — not built.
 
 ## Decision log
 
@@ -82,3 +86,16 @@ How they fuse in Field Shift (the owner approved this rendition in `design-direc
 | 2026-11-14 | Design audit gate: fresh Opus auditor, pass at 8.5/10, max 3 rounds per surface | Owner's rule |
 | 2026-11-14 | Anthropic key validated (models list + one test message) | Consultant runs on the real API from the start |
 | 2026-11-14 | Narration: Gemini TTS voice Algenib (gemini-3.8-flash-tts); two films, English (submitted) and Spanish | Owner's choice; key validated, EN and ES samples checked with Whisper |
+| 2026-11-14 | Consulted all three sources of both inspirations: the `lemo-opuscar` skill (workflow: treatment first, real material, self-check), the repository styles `satellite-briefing` and `living-screencast` (STYLE.md, DEMO.md, demo engine.js/overlay.js), and both GitHub pages in the browser pane | Owner's rule. Taken from Satellite Briefing: real licensed imagery as the ground, white hairlines = measured, one amber reading, corner instruments, the lock-on reticle, the continuous dive, engine techniques (MIT, credited). Taken from Mascot Screencast: real UI in a window, chapter/caption pills, rack focus and push-in for the film; cursor = farmer, reticle = software (no mascot) |
+| 2026-11-14 | Backend = Cargo workspace, one crate per business area (power, imagery, earthdata, climate, crops, evidence, consultant, analyses, export) + `api` binary that also serves `frontend/dist` | Modular rule; one binary serves the whole product (fits the e2-micro VM plan) |
+| 2026-11-14 | Huaral example = a real ~5.1 ha plot traced on Sentinel-2 L2A 2026-11-13 (centre 11.4729 S, 77.2061 W), not the research point (village edge) | Honest field-level readings; the hero's "2.1 ha" was an illustration |
+| 2026-11-14 | Kept the +5.0 °C 30-day anomaly from NASA POWER, labelled provisional; ERA5 (Open-Meteo archive, research only) independently shows the same warm Oct–Nov 2026 | Real data, cross-checked; never replaced by the mock-up's +1.2 °C |
+| 2026-11-14 | Pest generations computed for the crop's own pests (published thresholds) and three reference pests (Myzus persicae, Bemisia tabaci, Spodoptera frugiperda), single-sine degree-days on POWER temperature | Plan: generations only where a published threshold exists |
+| 2026-11-14 | NEX-GDDP-CMIP6: 13 models (one per institution), SSP2-4.5 and SSP5-8.5, 2031–2050 vs 1995–2014, precomputed for Huaral via NCCS THREDDS point subsets; licence applied: CC BY-SA 4.0 (stated in each v2.0 file; stricter than the v1 tech note's CC0) | Plan step 5: confirm licences on NASA's own pages first |
+| 2026-11-14 | GRACE and the projection exist only for example sites (within 50 km); other points show a declared gap | No cloud OPeNDAP for the GRACE mascon file; extracting every land cell is out of scope |
+| 2026-11-14 | Technical sheet = printable HTML (Save as PDF in the browser, A4 print CSS with notice on every page) instead of server-side PDF | No PDF engine on the target VM; same content, fully cited |
+| 2026-11-14 | Scripted demo mode: used when the API key is missing, the API fails, or a visitor passes 30 live turns/hour (400/day global); labelled in every reply and on the sheet; never reads photos | Plan step 9 fallback and credit protection |
+| 2026-11-14 | Map base layer for drawing = EOX Sentinel-2 cloudless 2016 (CC BY 4.0) + the dated Sentinel-2 snapshot of the field; place search = OSM Nominatim with ODbL credit | Licence-clean; Google/Esri/Bing not allowed |
+| 2026-11-14 | Preview server start was declined by the environment, so audits and the film use the built app served by the Rust backend on 127.0.0.1:8787 | Same product, no extra server |
+| 2026-11-14 | Design audits: technical sheet 5.7 → 6.9 → 8.0 (3 rounds, did not reach 8.5); index 6.35 → 7.35; field selection 5.9 → 7.25; workspace 7.45 → 7.4; dashboard + rotation 6.75 → 6.7 (round 2 provisional). Scores in `design-directions/audit-log.md` | Owner's gate; round 3 results recorded there |
+| 2026-11-14 | Narration: EN take read the inline tone tags aloud ("Calm. Slow."); regenerated without tags; script says "these weeks" (the +5 °C is a 30-day anomaly, not the season) | Accuracy; Whisper confirms "Field Shift" in both takes |
