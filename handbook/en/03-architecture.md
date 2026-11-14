@@ -42,7 +42,8 @@ Decided with the team owner on 2026-11-14. Data access behind each source was te
 
 Locations and crop photos are personal data. Analyses are deleted after a retention period, except the example sites, and the app says so.
 
-## Open items
+## Status (2026-11-14, end of day one)
 
-- Confirm the license of each NEX-GDDP-CMIP6 model used.
-- Extract the GRACE series once per example site (netCDF reader in the backend or a one-off tool).
+- Built: Rust backend (one crate per service, single binary that also serves the app), MariaDB schema, evidence package, crop knowledge, Claude consultant with demo fallback, technical sheet, CSV and share links, the index with the live globe and the app. See `06-how-it-works.md`.
+- NEX-GDDP-CMIP6 licences confirmed (CC BY-SA 4.0 per v2.0 file); GRACE and the projection are precomputed for the Huaral example site (`backend/data/`).
+- Not yet: deployment to the e2-micro VM and the domain (owner's step).

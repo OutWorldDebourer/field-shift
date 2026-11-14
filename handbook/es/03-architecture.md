@@ -42,7 +42,8 @@ Decidida con el dueño del equipo el 2026-11-14. El acceso a cada fuente de dato
 
 Las ubicaciones y las fotos de cultivos son datos personales. Los análisis se borran tras un periodo de retención, salvo los sitios de ejemplo, y la app lo informa.
 
-## Pendientes
+## Estado (14-11-2026, fin del primer día)
 
-- Confirmar la licencia de cada modelo NEX-GDDP-CMIP6 que se use.
-- Extraer una vez la serie de GRACE por sitio de ejemplo (lector de netCDF en el backend o una herramienta puntual).
+- Construido: backend en Rust (un crate por servicio, un binario que también sirve la app), esquema MariaDB, paquete de evidencia, conocimiento de cultivos, consultor Claude con modo demo de respaldo, ficha técnica, CSV y enlaces para compartir, el inicio con el globo en vivo y la app. Ver `06-how-it-works.md`.
+- Licencias de NEX-GDDP-CMIP6 confirmadas (CC BY-SA 4.0 según cada archivo v2.0); GRACE y la proyección están precalculados para el sitio de ejemplo de Huaral (`backend/data/`).
+- Falta: despliegue en la VM e2-micro y el dominio (paso del dueño).
