@@ -1,0 +1,20 @@
+/* NASA data loading bar (shared/loadbar.ts) */
+.lb { display: grid; gap: 7px; width: 100%; }
+.lb__top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; margin: 0; font-size: 0.875rem; }
+.lb__l { color: var(--ink); font-weight: 600; }
+.lb__src { font-size: 0.75rem; color: var(--ink-2); letter-spacing: 0.02em; min-height: 1em; }
+.lb__track { position: relative; display: block; height: 4px; border-radius: 999px; overflow: hidden; background: rgba(255, 255, 255, 0.16); }
+.lb__fill { position: absolute; inset: 0; transform-origin: left center; transform: scaleX(0); border-radius: inherit;
+  background: linear-gradient(90deg, #7ec88c, #6fb6e8); transition: transform 0.25s linear; }
+/* A light sweep says "still working" even when the fill moves slowly near the end. */
+.lb__fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-100%); animation: lb-sweep 1.4s ease-in-out infinite; }
+@keyframes lb-sweep { to { transform: translateX(100%); } }
+.lb.is-done .lb__fill { transition-duration: 0.3s; }
+.lb.is-done .lb__fill::after, .lb.is-failed .lb__fill::after { animation: none; }
+.lb.is-failed .lb__fill { background: var(--amber, #f2b544); }
+/* Thin variant: a 3 px line under the workspace top bar while NASA data loads, whatever tab is open. */
+.lb--thin { position: absolute; left: 0; right: 0; bottom: -1px; gap: 0; pointer-events: none; }
+.lb--thin .lb__top { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.lb--thin .lb__track { height: 3px; border-radius: 0; background: transparent; }
+@media (prefers-reduced-motion: reduce) { .lb__fill::after { animation: none; } .lb__fill { transition: none; } }

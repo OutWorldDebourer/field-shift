@@ -4,6 +4,7 @@
 import { getForecast, getOutlook, type ClientAnalysis } from '../../shared/api';
 import type { EvidencePackage, Forecast, Outlook } from '../../shared/contract';
 import { esc } from '../../shared/dom';
+import { loadbarHtml, startLoadbar, type Loadbar } from '../../shared/loadbar';
 import { fmt, t } from '../../shared/i18n';
 import { normalPeriod } from '../../shared/evidence';
 import { d2, seasonPlusChart, type Proj } from './forecast-chart';
@@ -54,6 +55,21 @@ export async function loadForecast(a: ClientAnalysis): Promise<void> {
   if (forecastNow(a) === undefined) { const k = `${cell(a)}:${fc.days}`; jobs.push(getForecast(lat, lon, fc.days).then((r) => fcCache.set(k, r))); }
   if (outlookNow(a) === undefined) { const k = `${cell(a)}:${fc.months}`; jobs.push(getOutlook(lat, lon, fc.months).then((r) => olCache.set(k, r))); }
   await Promise.all(jobs);
+}
+
+/** Fetch what the current choices need with a loading bar in the card's [data-fcload] slot, then repaint. */
+export async function withForecastLoad(root: HTMLElement, a: ClientAnalysis, rerender: () => void): Promise<void> {
+  const slot = root.querySelector<HTMLElement>('[data-fcload]');
+  const needF = !a.offline && forecastNow(a) === undefined, needO = !a.offline && fc.months > 0 && outlookNow(a) === undefined;
+  let bar: Loadbar | null = null;
+  if (slot && (needF || needO)) {
+    slot.hidden = false;
+    slot.innerHTML = loadbarHtml(t(needF ? 'lb_forecast' : 'lb_outlook'));
+    bar = startLoadbar(slot.firstElementChild as HTMLElement, needF ? 30000 : 5000, [...(needF ? ['NASA GEOS-FP · NCCS'] : []), ...(needO ? ['NASA POWER'] : [])]);
+  }
+  try { await loadForecast(a); bar?.done(); } catch { bar?.fail(); }
+  if (slot && bar) setTimeout(() => { if (slot.isConnected) { slot.hidden = true; slot.innerHTML = ''; } }, 500);
+  rerender();
 }
 
 // ---------- markup ----------
@@ -125,7 +141,7 @@ export function tableHtml(a: ClientAnalysis): string {
 
 /** Wire the control bar; `rerender` repaints the chart area after a change (and again when data arrives). */
 export function wireForecast(root: HTMLElement, a: () => ClientAnalysis, rerender: () => void): void {
-  const after = () => { save(); rerender(); void loadForecast(a()).then(rerender); };
+  const after = () => { save(); rerender(); void withForecastLoad(root, a(), rerender); };
   root.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-fcdays]');
     if (!b) return;

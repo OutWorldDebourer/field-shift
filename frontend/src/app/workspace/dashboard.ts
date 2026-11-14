@@ -7,6 +7,7 @@ import type { EvidencePackage, Reading } from '../../shared/contract';
 import { learnCropNames, ndviChart, timelineStrip } from '../../shared/charts';
 import { dataRow, sourceLine, valueText, badge, shortRes, resKm, provTag } from '../../shared/datarow';
 import { shortLabel } from '../../shared/evidence';
+import { loadbarHtml } from '../../shared/loadbar';
 import { esc } from '../../shared/dom';
 import { fmt, fmtDateShort, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
@@ -15,7 +16,7 @@ import { glossBtn, glossHeaderBtn } from '../../shared/glosspanel';
 import { pestTitle } from '../../shared/pests';
 import { loc } from '../../shared/localize';
 import { alertsFor } from './alerts';
-import { chartHtml, controlsHtml, forecastNow, legendHtml, loadForecast, outlookNow, sourcesHtml, tableHtml, wireForecast } from './forecast';
+import { chartHtml, controlsHtml, forecastNow, legendHtml, outlookNow, sourcesHtml, tableHtml, wireForecast, withForecastLoad } from './forecast';
 import { topicsFor, topicsHtml } from './topics';
 import './dashboard.css';
 
@@ -81,7 +82,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <h3 class="serif">${esc(t('db_no_evidence'))}</h3>
       ${gaps.length ? `<h4 class="dash__h">${esc(t('ws_gaps_title'))}</h4><ul class="gaps">${gaps.map((g) => `<li>${icon('info')}${esc(pick(g.text))}</li>`).join('')}</ul>` : ''}
       ${opts.preview || a.readOnly ? '' : `<button type="button" class="btn btn--solid btn--sm" data-build-evidence>${icon('orbit')}${esc(t('db_build_evidence'))}</button>`}
-      <p class="status-line" data-build-status hidden><i class="tick"></i>${esc(t('db_building'))}</p>
+      <div class="dash__load" data-build-status hidden>${loadbarHtml(t('db_building'))}</div>
     </section></div></div>`;
   }
   const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r, shortLabel(r) ?? pick(r.label))}</li>`).join('');
@@ -127,7 +128,7 @@ const narrow = () => typeof innerWidth === 'number' && innerWidth < 700;
 function seasonCard(a: ClientAnalysis, preview = false): string {
   return `<section class="glass dash__card dash__chart" data-season-card>
     <header class="dash__ch"><h3 class="serif">${esc(t('db_chart_title'))}${glossBtn('outlook', t('db_chart_title'))}</h3></header>
-    ${a.offline && !preview ? '' : `<div data-fcbox>${controlsHtml(a)}</div>`}
+    ${a.offline && !preview ? '' : `<div data-fcbox>${controlsHtml(a)}</div><div class="fc__load" data-fcload hidden></div>`}
     ${seasonParts(a)}
   </section>`;
 }
@@ -157,7 +158,7 @@ export function mountDashboardForecast(root: HTMLElement, getA: () => ClientAnal
     if (tp) tp.innerHTML = topicsHtml(topicsFor(a.evidence, forecastNow(a), outlookNow(a)));
   };
   wireForecast(card, getA, paint);
-  void loadForecast(getA()).then(paint);
+  void withForecastLoad(card, getA(), paint);
 }
 function ndviLine(ev: EvidencePackage): string {
   const r = ev.readings.find((x) => x.id === 'ndvi');

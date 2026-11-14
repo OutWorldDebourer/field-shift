@@ -5,6 +5,7 @@
 import { getAnalysis, sendMessage, startConsultant, suggestCrops, type ClientAnalysis, type CropSuggestion } from '../../shared/api';
 import type { ChatMessage, SectionKey } from '../../shared/contract';
 import { $, esc, toast } from '../../shared/dom';
+import { loadbarHtml, NASA_SOURCES, startLoadbar, type Loadbar } from '../../shared/loadbar';
 import { lang, onLang, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { debounce } from '../field/search';
@@ -67,7 +68,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     </header>
     <nav class="rail" aria-label="${esc(t('rail_label'))}"></nav>
     <ol class="chat__log" aria-live="polite" aria-label="${esc(t('ws_chat_label'))}"></ol>
-    <p class="chat__pending status-line" hidden><i class="tick"></i><span></span></p>
+    <div class="chat__pending" hidden aria-live="polite"></div>
     <form class="composer" novalidate>
       <ul class="composer__previews" hidden></ul>
       <div class="composer__row">
@@ -107,7 +108,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     const fit = ok.filter((f) => { if (isPdfFile(f) && f.size > MAX_PDF_BYTES) { toast(t('ws_pdf_big', { name: f.name }), 5000); return false; } return true; });
     const room = MAX_PHOTOS - files.length;
     if (fit.length > room) toast(t('ws_max_photos'));
-    showPending(t('ws_status_preparing'));
+    showPending(t('ws_status_preparing'), 4000, []);
     for (const f of fit.slice(0, Math.max(0, room))) {
       if (isPdfFile(f)) { const pdf = asPdf(f); files.push({ blob: pdf, url: URL.createObjectURL(pdf), kind: 'pdf', name: f.name }); continue; }
       const blob = await preparePhoto(f).catch(() => f);
@@ -130,8 +131,18 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   const dict = mountDictation(form, text, grow);
   text.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey && !coarse) { e.preventDefault(); form.requestSubmit(); } });
 
-  function showPending(msg: string) { pending.hidden = false; pending.querySelector('span')!.textContent = msg; }
-  function hidePending() { pending.hidden = true; }
+  // Loading bar while the consultant reads NASA data (and photos or documents); expected time per kind of turn.
+  let bar: Loadbar | null = null, hideT = 0;
+  function showPending(msg: string, expectMs = 40000, sources: string[] = NASA_SOURCES) {
+    clearTimeout(hideT); bar?.done();
+    pending.hidden = false;
+    pending.innerHTML = loadbarHtml(msg);
+    bar = startLoadbar(pending.firstElementChild as HTMLElement, expectMs, sources);
+  }
+  function hidePending() {
+    bar?.done(); bar = null;
+    hideT = window.setTimeout(() => { pending.hidden = true; pending.innerHTML = ''; }, 450);
+  }
 
   async function send(body: string, blobs: Blob[]) {
     const a = getA();
@@ -144,7 +155,8 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     const optimistic: ChatMessage = { id: -1, role: 'user', body, created_at: new Date().toISOString(), photos: files.map((f) => (f.kind === 'pdf' ? { url: f.url, kind: 'pdf', name: f.name, bytes: f.blob.size } as Attachment : { url: f.url })) as ChatMessage['photos'] };
     log.insertAdjacentHTML('beforeend', messageHtml(optimistic));
     scrollEnd();
-    showPending(t(files.some((f) => f.kind === 'pdf') ? 'ws_status_reading_doc' : blobs.length ? 'ws_status_reading' : 'ws_status_checking'));
+    const docs = files.some((f) => f.kind === 'pdf');
+    showPending(t(docs ? 'ws_status_reading_doc' : blobs.length ? 'ws_status_reading' : 'ws_status_checking'), docs || blobs.length ? 60000 : 35000, docs ? ['PDF', ...NASA_SOURCES] : blobs.length ? [t('lb_photos'), ...NASA_SOURCES] : NASA_SOURCES);
     try {
       const r = await sendMessage(a, body, blobs, lang());
       // Older turn responses carry no steps: read them from the analysis so the rail moves in the same update.
@@ -219,7 +231,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     if (opening || a.offline || a.readOnly || a.messages.some((m) => m.role === 'assistant')) return;
     opening = true; sending = true;
     form.classList.add('is-busy');
-    showPending(t('ws_status_opening'));
+    showPending(t('ws_status_opening'), 9000, ['OpenStreetMap', 'NASA POWER']);
     try {
       const r = await startConsultant(a, lang());
       onUpdate({ messages: r.messages, sections: r.sections, ...(r.demo_mode != null ? { demo_mode: r.demo_mode } : {}), ...(Array.isArray(r.steps) ? { steps: r.steps } : {}), ...(r.next_step !== undefined ? { next_step: r.next_step } : {}) });

@@ -2,6 +2,7 @@
 // EN | ES), chat + section column, dashboard, rotation and organic views, pre-diagnosis notice always visible, phone
 // bottom sheet, and the "Load information" side sheet (auto-opened once for example sites).
 import { buildEvidence } from '../../shared/api';
+import { loadbarHtml, NASA_SOURCES, startLoadbar, type Loadbar } from '../../shared/loadbar';
 import { mountBackdrop, type Backdrop } from '../../shared/backdrop';
 import type { SectionKey, Step } from '../../shared/contract';
 import { $, $$, esc, toast } from '../../shared/dom';
@@ -43,6 +44,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       </nav>
       ${downloadMenuHtml()}
       <span class="bar__flags" id="flags"></span>
+      <div class="bar__load" id="bar-load" hidden></div>
       ${langSwitchHtml()}
     </header>
     <ul class="secbar" id="secbar" aria-label="${esc(t('ws_sections'))}" data-i18n-attr="aria-label:ws_sections"></ul>
@@ -141,6 +143,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     if (state.view === 'dashboard') {
       $('#view-dashboard').innerHTML = dashboardHtml(a);
       mountDashboardForecast($('#view-dashboard'), () => state.analysis!);
+      syncBuild();
       void mountDashboardMap($('#view-dashboard'), a).then((c) => { dashCleanup = c; });
     } else if (state.view === 'rotation') {
       $('#view-rotation').innerHTML = rotationHtml(a);
@@ -204,13 +207,37 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     }
   });
 
-  async function build(btn: HTMLButtonElement) {
-    btn.disabled = true;
+  // While the NASA evidence package is built: a thin bar under the top bar (any tab) and a full bar in the panel.
+  let buildAt = 0;
+  let topBar: Loadbar | null = null;
+  function syncBuild() {
     const st = host.querySelector<HTMLElement>('[data-build-status]');
-    if (st) st.hidden = false;
-    try { const ev = await buildEvidence(state.analysis!); set({ analysis: { ...state.analysis!, evidence: ev } }); }
-    catch { toast(t('ws_send_err')); btn.disabled = false; if (st) st.hidden = true; }
+    const btn = host.querySelector<HTMLButtonElement>('[data-build-evidence]');
+    if (btn) btn.hidden = !!buildAt;
+    if (st && buildAt && st.hidden) { st.hidden = false; startLoadbar(st.firstElementChild as HTMLElement, 35000, NASA_SOURCES, buildAt); }
   }
+  async function loadEvidence(manual: boolean) {
+    if (buildAt) return;
+    buildAt = performance.now();
+    const top = $('#bar-load');
+    top.hidden = false;
+    top.innerHTML = loadbarHtml(t('db_building_short'), 'lb--thin');
+    topBar = startLoadbar(top.firstElementChild as HTMLElement, 35000, NASA_SOURCES, buildAt);
+    syncBuild();
+    try {
+      const ev = await buildEvidence(state.analysis!);
+      topBar.done(); buildAt = 0;
+      set({ analysis: { ...state.analysis!, evidence: ev } });
+    } catch {
+      topBar.fail(); buildAt = 0;
+      if (manual) toast(t('ws_send_err'));
+      syncBuild();
+      const st = host.querySelector<HTMLElement>('[data-build-status]'); if (st) st.hidden = true;
+    } finally {
+      setTimeout(() => { if (!buildAt) { top.hidden = true; top.innerHTML = ''; } }, 600);
+    }
+  }
+  async function build(btn: HTMLButtonElement) { btn.disabled = true; await loadEvidence(true); btn.disabled = false; }
 
   subscribe((_, ch) => {
     if ('view' in ch) { renderBar(); renderView(); syncUrl(); if (ch.view === 'chat') requestAnimationFrame(() => bd?.layout()); }
@@ -243,6 +270,6 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
 
   // Kick off the evidence package when the backend has not built it yet.
   if (!a0.evidence && !a0.offline && !a0.readOnly) {
-    void buildEvidence(a0).then((ev) => set({ analysis: { ...state.analysis!, evidence: ev } })).catch(() => {});
+    void loadEvidence(false);
   }
 }

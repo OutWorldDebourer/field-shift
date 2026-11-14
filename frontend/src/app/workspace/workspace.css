@@ -51,7 +51,7 @@
 .tiles--msg { grid-template-columns: repeat(4, 92px); }
 .msg--me .tiles--msg { justify-content: end; }
 .tile .reticle { inset: 12%; }
-.chat__pending { padding: 6px 20px; }
+.chat__pending { padding: 8px 20px 4px; }
 .composer { padding: 10px 12px 12px; border-top: 1px solid var(--rule); display: grid; gap: 8px; }
 .composer.is-busy { opacity: 0.7; pointer-events: none; }
 .composer__previews { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
@@ -341,3 +341,8 @@
 @media (min-width: 900px) {
   .ws__bg .backdrop__ground { filter: brightness(0.5) saturate(0.95) contrast(1.08) blur(0.6px); }
 }
+
+/* NASA data loading bars */
+.bar__load { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; pointer-events: none; }
+.dash__load { margin-top: 14px; }
+.fc__load { margin: 4px 0 10px; }
