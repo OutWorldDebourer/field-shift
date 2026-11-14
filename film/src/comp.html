@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Field Shift demo film</title>
+<!-- The film's page (Lemo-Opuscar contract: window.render(t), DUR, READY, EV, TEXTS).
+     Picture = the product's own globe (frames rendered from frontend/globe.html) + screenshots of the real app,
+     composed with a recording-software camera, the farmer's cursor and the software's lock-on reticle.
+     Served from film/work/ (build.sh copies this file to work/index.html). ?lang=en|es picks the captions. -->
+<style>
+@font-face { font-family: 'Plex'; font-weight: 400; src: url('fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Plex'; font-weight: 500; src: url('fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Sans'; font-weight: 400; src: url('fonts/source-sans-3-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Sans'; font-weight: 600; src: url('fonts/source-sans-3-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Serif'; font-style: italic; font-weight: 400; src: url('fonts/source-serif-4-latin-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Serif'; font-style: italic; font-weight: 500; src: url('fonts/source-serif-4-latin-500-italic.woff2') format('woff2'); }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #03060c; }
+* { box-sizing: border-box; }
+#whip { position: absolute; inset: 0; }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+#bg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+#dawn { position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(180deg, rgba(196,222,240,.72) 0%, rgba(214,226,236,.55) 38%, rgba(246,206,170,.62) 78%, rgba(255,180,120,.7) 100%); }
+#win { position: absolute; border-radius: 14px; overflow: hidden; background: #0d1117;
+  box-shadow: 0 40px 90px rgba(10,20,40,.45), 0 8px 24px rgba(10,20,40,.3); }
+#tb { position: absolute; left: 0; top: 0; right: 0; height: 30px; background: #161b22; border-bottom: 1px solid #262c35; }
+#tb i { position: absolute; top: 10px; width: 11px; height: 11px; border-radius: 50%; background: #3a414b; }
+#content { position: absolute; left: 0; top: 30px; width: 1440px; height: 900px; transform-origin: 0 0; overflow: hidden; }
+#content img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; }
+#appBlur { filter: blur(5px) brightness(.8); }
+#ovl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+#vign { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse 52% 50% at 50% 47%, rgba(0,0,0,0) 55%, rgba(4,8,14,.78) 100%); }
+.pill { position: absolute; color: #f4f7f8; background: rgba(16,21,28,.74); border: 1px solid rgba(244,247,248,.22);
+  border-radius: 999px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+#chap { left: 36px; top: 24px; height: 46px; padding: 0 22px 0 16px; font: 600 24px/44px 'Sans'; }
+#chap b { font: 500 21px/44px 'Plex'; color: #ffbe55; margin-right: 12px; font-weight: 500; }
+#cap { left: 50%; top: 966px; padding: 9px 30px 11px; font: 600 34px/1.25 'Sans'; transform: translateX(-50%); }
+#strip { position: absolute; left: 40px; top: 896px; padding: 10px 140px 12px 18px; font: 600 36px/1.2 'Sans'; color: #f4f7f8; white-space: nowrap;
+  background: linear-gradient(90deg, rgba(3,6,12,.72), rgba(3,6,12,.5) 60%, rgba(3,6,12,0)); }
+#strip::before { content: ''; position: absolute; left: 0; top: 0; width: 120px; height: 2px; background: #f2f5f6; }
+#si { position: absolute; right: 24px; top: 16px; padding: 6px 10px; border-radius: 6px; background: rgba(3,6,12,.5); font: 400 20px/1 'Plex'; color: #f4f7f8; text-shadow: 0 0 6px rgba(3,6,12,.9), 0 0 2px rgba(3,6,12,.9); }
+#title { position: absolute; left: 0; right: 0; top: 34px; text-align: center; font: italic 500 70px/1 'Serif'; color: #f4f7f8; text-shadow: 0 2px 18px rgba(3,6,12,.6); }
+#end { position: absolute; left: 0; right: 0; top: 0; height: 1080px; text-align: center; color: #f4f7f8; }
+#end .shade { position: absolute; left: 0; right: 0; top: 0; height: 460px; background: linear-gradient(180deg, rgba(3,6,12,.72), rgba(3,6,12,.35) 65%, rgba(3,6,12,0)); }
+#end h1 { position: absolute; left: 0; right: 0; top: 92px; margin: 0; font: italic 500 92px/1 'Serif'; text-shadow: 0 2px 20px rgba(3,6,12,.6); }
+#end h2 { position: absolute; left: 0; right: 0; top: 206px; margin: 0; font: 600 38px/1.2 'Sans'; text-shadow: 0 1px 10px rgba(3,6,12,.8); }
+#end h3 { position: absolute; left: 0; right: 0; top: 256px; margin: 0; font: 400 32px/1.2 'Sans'; text-shadow: 0 1px 10px rgba(3,6,12,.8); }
+#end .cr { position: absolute; left: 0; right: 0; top: 836px; font: 400 20px/1.55 'Plex'; text-shadow: 0 0 6px rgba(3,6,12,.95), 0 0 2px rgba(3,6,12,.95); }
+#end .crbg { position: absolute; left: 300px; right: 300px; top: 822px; height: 84px; border-radius: 12px; background: rgba(3,6,12,.55); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><filter id="hb" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur id="hbs" stdDeviation="0 0"/></filter></svg>
+<div id="whip">
+  <div id="stage">
+    <img id="bg" alt="">
+    <div id="dawn"></div>
+    <div id="win"><div id="tb"><i style="left:14px"></i><i style="left:32px"></i><i style="left:50px"></i></div>
+      <div id="content"><img id="app" alt=""><img id="appBlur" alt=""></div></div>
+    <svg id="ovl" viewBox="0 0 1920 1080"></svg>
+  </div>
+</div>
+<div id="vign"></div>
+<div id="title">Field Shift</div>
+<div id="strip"></div>
+<div id="chap" class="pill"></div>
+<div id="cap" class="pill"></div>
+<div id="end"><div class="shade"></div><h1>Field Shift</h1><h2>Team InnoHuando</h2><h3>NASA Space Apps Challenge 2026</h3>
+  <div class="crbg"></div>
+  <div class="cr">Imagery: NASA Blue Marble, VIIRS (NASA GIBS) · Contains modified Copernicus Sentinel data 2026<br>Narration: AI voice (Gemini TTS) · Original music, CC0 samples · Real Field Shift app screens</div></div>
+<div id="si">SI-assisted visuals</div>
+<script>
+const Q = new URLSearchParams(location.search), LANG = Q.get('lang') === 'es' ? 'es' : 'en';
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const ss = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
+const eio = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const back = (x, s = 1.6) => { x = clamp(x); const c = s + 1; return 1 + c * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2); };
+
+window.DUR = 29.96;
+// ---------------------------------------------------------------- geometry
+// The app is recorded at 1440x900 CSS px; the window shows it at K, its content's top-left at (WX, WY + TB) on the stage.
+const K = 0.94, WX = Math.round((1920 - 1440 * K) / 2), WY = 56, TB = 30;
+const WIN = { x: WX, y: WY, w: 1440 * K, h: 900 * K + TB };
+const A = (x, y) => [WX + x * K, WY + TB + y * K];                       // app px -> stage px
+const AR = (b, pad = 0) => b && { x: WX + (b.x - pad) * K, y: WY + TB + (b.y - pad) * K, w: (b.w + 2 * pad) * K, h: (b.h + 2 * pad) * K };
+const C = (r) => [r.x + r.w / 2, r.y + r.h / 2];
+const GLOBE_RET = { x: 845, y: 430, w: 232, h: 226 };                    // the globe's lock-on brackets at the end of the dive (measured)
+
+// ---------------------------------------------------------------- timeline (film seconds)
+// takes: which screenshot of the real app is on screen
+const TAKES = [[8.55, 'field'], [10.35, 'chatA'], [10.95, 'chat'], [13.55, 'dash'], [20.45, 'rot']];
+const CUTS = [10.35, 13.55, 20.45];                                       // chapter seams: whip pan with motion blur
+const OPEN = [8.45, 9.15], CLOSE = [25.6, 26.25];                       // the reticle opens into the window / closes back onto the field
+const CHAPTERS = [[9.15, '01', 'Your field'], [13.55, '02', 'NASA data'], [20.45, '03', 'Options'], [23.05, '04', 'Pre-diagnosis'], [25.9, null, null]];
+let B = null, TL = null;                                                  // boxes.json, timeline.json
+
+function take(t) { let n = null; for (const [t0, name] of TAKES) if (t >= t0) n = name; return t >= CLOSE[1] ? null : n; }
+
+// camera keys: [t, scale, focus x, focus y] in stage px (the focus point is put at the frame centre, clamped to the frame)
+let CAM = [], RET = [], CUR = [], CLICKS = [], EV = [];
+function build() {
+  const b = B;
+  const fld = b.field, ch = b.chat, cA = b.chatA, d = b.dash, r = b.rot;
+  const mid = [960, 540];
+  const cen = (box, pad = 0) => C(AR(box, pad));
+  CAM = [
+    [0, 1, ...mid], [10.45, 1, ...mid],
+    [11.25, 1.42, ...cen(ch.photos)], [11.95, 1.42, ...cen(ch.photos)],
+    [12.55, 1.38, ...cen(ch.temp)], [13.05, 1.38, ...cen(ch.temp)], [13.45, 1.0, ...mid],
+    [13.85, 1.0, ...mid], [14.45, 1.62, ...cen(d.temp)], [15.85, 1.62, ...cen(d.temp)],
+    [16.45, 1.28, ...cen(d.chart)], [17.55, 1.28, ...cen(d.chart)],
+    [18.1, 1.62, ...cen(d.aphid)], [19.45, 1.62, ...cen(d.aphid)], [20.0, 1.0, ...mid],
+    [20.6, 1.0, ...mid], [21.2, 1.13, ...cen(r.strats)], [22.8, 1.13, ...cen(r.strats)],
+    [23.75, 1.5, ...cen(r.dx)], [25.05, 1.5, ...cen(r.dx)], [25.6, 1.0, ...mid], [99, 1, ...mid],
+  ];
+  // the software's reticle: [t, rect | null]  (it snaps with overshoot from the last rect to the next)
+  RET = [
+    [7.55, GLOBE_RET], [8.45, GLOBE_RET], [8.46, null],
+    [9.45, AR(fld.ret, 4)], [10.3, null],
+    [11.4, AR(ch.photo3, 5)], [12.25, AR(ch.temp, 6)], [13.3, null],
+    [14.35, AR(d.temp, 6)], [16.3, AR(d.chart, 6)], [17.95, AR(d.aphid, 6)], [19.6, null],
+    [21.0, AR(r.strats, 8)], [21.95, AR(r.cites, 8)], [22.9, null],
+    [23.95, AR(r.confirm, 8)], [25.45, null],
+    [CLOSE[1], GLOBE_RET], [27.1, { x: 930, y: 512, w: 60, h: 58 }], [28.4, null],
+  ];
+  // the farmer's cursor: [t, app x, app y]  (null = hidden)
+  const P = (box, fx = .5, fy = .5) => A(box.x + box.w * fx, box.y + box.h * fy);
+  CUR = [
+    [9.3, ...A(900, 760)], [9.95, ...P(fld.use, .62, .55)], [10.3, ...P(fld.use, .62, .55)],
+    [10.4, ...A(330, 700)], [10.8, ...P(cA.camera)], [11.05, ...P(cA.camera)], [11.7, ...A(560, 640)],
+    [12.9, ...A(760, 300)], [13.35, ...P(ch.dashTab, .45, .55)], [13.5, ...P(ch.dashTab, .45, .55)],
+    [13.6, ...A(860, 520)], [19.7, ...A(1010, 470)], [20.2, ...P(d.rotTab, .45, .55)], [20.42, ...P(d.rotTab, .45, .55)],
+    [20.5, ...A(1160, 90)], [22.3, ...A(900, 760)], [24.6, ...A(452, 470)], [25.4, ...A(452, 470)],
+  ];
+  CLICKS = [10.1, 10.9, 13.4, 20.3];
+  // sound / cue events for the mixer
+  EV = [
+    { t: 0.0, type: 'orbit' }, { t: 1.1, type: 'dive' }, { t: 7.55, type: 'lock' }, { t: OPEN[0], type: 'suck' }, { t: OPEN[0] + 0.25, type: 'open' },
+    ...CLICKS.map((t) => ({ t, type: 'click' })), { t: 10.95, type: 'photos' },
+    ...CUTS.map((t) => ({ t, type: 'whip' })), ...RET.filter(([t, r], i) => r && i > 1).map(([t]) => ({ t, type: 'snap' })),
+    { t: 14.35, type: 'amber' }, { t: 13.85, type: 'suck' }, { t: 23.3, type: 'promise' },
+    { t: CLOSE[0], type: 'close' }, { t: CLOSE[1] - 0.05, type: 'lock' }, { t: 26.0, type: 'end' },
+  ].sort((a, b) => a.t - b.t);
+  window.EV = EV;
+}
+
+// piecewise eased interpolation of keyed values
+function keyed(keys, t, n) {
+  if (t <= keys[0][0]) return keys[0].slice(1, 1 + n);
+  for (let i = 0; i < keys.length - 1; i++) {
+    const [a, ...va] = keys[i], [b, ...vb] = keys[i + 1];
+    if (t < b) { const e = eio(seg(t, a, b)); return va.slice(0, n).map((v, k) => lerp(v, vb[k], e)); }
+  }
+  return keys[keys.length - 1].slice(1, 1 + n);
+}
+function camAt(t) {
+  let [s, fx, fy] = keyed(CAM, t, 3);
+  // a slow drift so the frame never freezes (inside the app part only)
+  const live = ss(seg(t, OPEN[1], OPEN[1] + .6)) * (1 - ss(seg(t, CLOSE[0] - .4, CLOSE[0])));
+  s *= 1 + 0.012 * live * (0.5 + 0.5 * Math.sin(t * 0.7));
+  fx += 6 * live * Math.sin(t * 0.43); fy += 4 * live * Math.cos(t * 0.37);
+  // keep the frame inside the stage (zoom >= 1 never shows beyond the monitor)
+  const hw = 960 / s, hh = 540 / s;
+  fx = clamp(fx, hw, 1920 - hw); fy = clamp(fy, hh, 1080 - hh);
+  return { s, fx, fy };
+}
+function retAt(t) {
+  let i = -1; for (let k = 0; k < RET.length; k++) if (t >= RET[k][0]) i = k;
+  if (i < 0) return null;
+  const [t1, r1] = RET[i]; if (!r1) return null;
+  let r0 = null; for (let k = i - 1; k >= 0; k--) { if (RET[k][1]) { r0 = RET[k][1]; break; } if (!RET[k][1]) break; }
+  const u = seg(t, t1, t1 + 0.42), e = back(u, 1.9);
+  if (!r0) {   // appear: snap in from 1.5x with overshoot
+    const k = lerp(1.5, 1, e), [cx, cy] = C(r1);
+    return { x: cx - r1.w * k / 2, y: cy - r1.h * k / 2, w: r1.w * k, h: r1.h * k, a: clamp(u * 3) };
+  }
+  return { x: lerp(r0.x, r1.x, e), y: lerp(r0.y, r1.y, e), w: lerp(r0.w, r1.w, e), h: lerp(r0.h, r1.h, e), a: 1 };
+}
+function curAt(t) {
+  if (t < CUR[0][0] || t > CLOSE[0]) return null;
+  // ease between keys, with a soft spring settle (cursor smoothing)
+  for (let i = 0; i < CUR.length - 1; i++) {
+    const [a, ax, ay] = CUR[i], [b, bx, by] = CUR[i + 1];
+    if (t < b) { const u = seg(t, a, b), e = 1 - Math.pow(1 - eio(u), 1.4); return [lerp(ax, bx, e), lerp(ay, by, e)]; }
+  }
+  const l = CUR[CUR.length - 1]; return [l[1], l[2]];
+}
+
+// ---------------------------------------------------------------- drawing
+function brackets(r, sw, alpha = 1, color = '#f2f5f6') {
+  const L = Math.max(14, Math.min(r.w, r.h) * 0.22);
+  const p = (x, y, dx, dy) => `M${x + dx * L},${y} L${x},${y} L${x},${y + dy * L}`;
+  const d = p(r.x, r.y, 1, 1) + p(r.x + r.w, r.y, -1, 1) + p(r.x, r.y + r.h, 1, -1) + p(r.x + r.w, r.y + r.h, -1, -1);
+  return `<path d="${d}" fill="none" stroke="rgba(3,6,12,.55)" stroke-width="${sw + 3}" stroke-linecap="square" opacity="${alpha}"/>` +
+         `<path d="${d}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="square" opacity="${alpha}"/>`;
+}
+const CURSOR = 'M0,0 L0,25 L6.2,19.2 L10.4,28.6 L14.6,26.8 L10.5,17.6 L18.8,17.6 Z';
+function cursorSvg(x, y, s, press) {
+  const k = 1.15 * (1 - 0.12 * press);
+  return `<g transform="translate(${x},${y}) scale(${k})"><path d="${CURSOR}" fill="rgba(0,0,0,.28)" transform="translate(1.5,2.5)"/>` +
+    `<path d="${CURSOR}" fill="#ffffff" stroke="#11151b" stroke-width="1.6" stroke-linejoin="round"/></g>`;
+}
+
+const imgs = {};
+function load(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('missing ' + src)); i.src = src; }); }
+const bg = $('bg');
+async function setBg(src) { if (bg.dataset.src === src) return; bg.dataset.src = src; bg.src = src; try { await bg.decode(); } catch (e) { /* superseded by a newer frame */ } }
+function globeSrc(t) {
+  const F = (n) => String(n).padStart(4, '0');
+  if (t >= 25.2) return `globe-climb/f${F(Math.min(143, Math.round((t - 25.2) * 30)))}.jpg`;
+  return `globe-dive/f${F(Math.min(287, Math.round(t * 30)))}.jpg`;
+}
+
+window.render = async (t) => {
+  // background: the globe (dive, then a blurred wallpaper of the field at dawn, then the climb)
+  await setBg(globeSrc(t));
+  const app = clamp(ss(seg(t, OPEN[0], OPEN[1] + .5)) - ss(seg(t, CLOSE[0], CLOSE[1] + .1)), 0, 1);
+  bg.style.filter = app > 0.001 ? `blur(${(16 * app).toFixed(2)}px) saturate(${1 - .25 * app}) brightness(${1 + .12 * app})` : 'none';
+  $('dawn').style.opacity = (0.85 * app).toFixed(3);
+
+  // window: revealed inside the brackets that open from the field's lock-on
+  const nm = take(t), win = $('win');
+  let frame = null;   // current bracket rect for the open / close move
+  if (t >= OPEN[0] && t < OPEN[1]) frame = lerpRect(GLOBE_RET, WIN, back(seg(t, OPEN[0], OPEN[1]), 1.1));
+  else if (t >= CLOSE[0] && t < CLOSE[1]) frame = lerpRect(WIN, GLOBE_RET, eio(seg(t, CLOSE[0], CLOSE[1])));
+  if (nm) {
+    win.style.display = 'block';
+    Object.assign(win.style, { left: WIN.x + 'px', top: WIN.y + 'px', width: WIN.w + 'px', height: WIN.h + 'px' });
+    $('content').style.transform = `scale(${K})`;
+    const im = $('app'); if (im.dataset.n !== nm) { im.dataset.n = nm; im.src = imgs[nm].src; try { await im.decode(); } catch (e) {} }
+    const f = frame || WIN;
+    const top = f.y - WIN.y, left = f.x - WIN.x, right = WIN.x + WIN.w - (f.x + f.w), bot = WIN.y + WIN.h - (f.y + f.h);
+    win.style.clipPath = frame ? `inset(${top}px ${right}px ${bot}px ${left}px round 10px)` : 'none';
+    // rack focus: blur the chat while the readings are read
+    const rf = nm === 'chat' ? ss(seg(t, 12.0, 12.4)) * (1 - ss(seg(t, 12.95, 13.3))) : 0;
+    const bl = $('appBlur');
+    if (rf > 0.01) {
+      if (bl.dataset.n !== nm) { bl.dataset.n = nm; bl.src = imgs[nm].src; try { await bl.decode(); } catch (e) {} }
+      const p = B.chat.panel, x0 = p.x - 6, y0 = p.y - 6, x1 = p.x + p.w + 6, y1 = p.y + p.h + 6;
+      bl.style.display = 'block'; bl.style.opacity = rf.toFixed(3);
+      bl.style.clipPath = `path(evenodd, 'M0 0 H1440 V900 H0 Z M${x0} ${y0} H${x1} V${y1} H${x0} Z')`;
+    } else bl.style.display = 'none';
+  } else win.style.display = 'none';
+
+  // camera, with the whip pans at the chapter seams
+  const c = camAt(t);
+  let wx = 0, blur = 0;
+  for (const tc of CUTS) { const u = (t - tc) / 0.16; if (Math.abs(u) < 1) { const w = 1 - Math.abs(u); blur = Math.max(blur, 34 * w * w); wx += u < 0 ? -110 * (1 + u) : 110 * (1 - u); } }
+  $('stage').style.transform = `translate(${960 - c.fx * c.s + wx}px, ${540 - c.fy * c.s}px) scale(${c.s})`;
+  $('hbs').setAttribute('stdDeviation', `${blur.toFixed(1)} 0`);
+  $('whip').style.filter = blur > 0.3 ? 'url(#hb)' : 'none';
+
+  // overlay in stage coordinates: the open/close brackets, the reticle, the cursor
+  let svg = '';
+  const sw = 3.2 / c.s;
+  if (frame) svg += brackets(frame, 3.2, 1);
+  const r = retAt(t);
+  if (r && !frame) {
+    const pulse = t < 8.45 ? 0 : 0;
+    svg += brackets(r, Math.max(2.4, sw * 1.15) + pulse, r.a);
+  }
+  const cp = curAt(t);
+  if (cp) {
+    let press = 0, ring = '';
+    for (const tc of CLICKS) {
+      const u = (t - tc) / 0.14; if (Math.abs(u) < 1) press = Math.max(press, 1 - Math.abs(u));
+      const v = seg(t, tc, tc + 0.45); if (v > 0 && v < 1) ring += `<circle cx="${cp[0]}" cy="${cp[1]}" r="${8 + 30 * eio(v)}" fill="none" stroke="rgba(255,255,255,${(0.75 * (1 - v)).toFixed(3)})" stroke-width="${2.4 / c.s}"/>`;
+    }
+    const vis = ss(seg(t, CUR[0][0], CUR[0][0] + .2));
+    svg += ring + `<g opacity="${vis}">${cursorSvg(cp[0], cp[1], c.s, press)}</g>`;
+  }
+  $('ovl').innerHTML = svg;
+
+  // the one promise: push-in with a vignette
+  const vo = ss(seg(t, 23.5, 24.0)) * (1 - ss(seg(t, 25.1, 25.6))) * 0.9;
+  $('vign').style.opacity = vo.toFixed(3);
+  if (vo > 0) { const [vx, vy] = C(AR(B.rot.dx)); const sx = 960 + (vx - c.fx) * c.s, sy = 540 + (vy - c.fy) * c.s;
+    $('vign').style.background = `radial-gradient(ellipse 30% 52% at ${(sx / 19.2).toFixed(1)}% ${(sy / 10.8).toFixed(1)}%, rgba(0,0,0,0) 60%, rgba(4,8,14,.8) 100%)`; }
+
+  // HUD: opening title, chapter pill, captions (transcript strip over the globe, caption pill in the app), end card
+  $('title').style.opacity = (ss(seg(t, 0.25, 0.9)) * (1 - ss(seg(t, 3.3, 3.85)))).toFixed(3);
+  let ch = null; for (const c2 of CHAPTERS) if (t >= c2[0]) ch = c2;
+  const chap = $('chap');
+  if (ch && ch[1]) { chap.style.display = 'block'; chap.innerHTML = `<b>${ch[1]}</b>${ch[2]}`;
+    const k = ss(seg(t, ch[0], ch[0] + .3)); chap.style.opacity = k.toFixed(3); chap.style.transform = `translateY(${(1 - k) * -14}px)`; }
+  else chap.style.display = 'none';
+  const cue = TL.cues[LANG].find((q) => t >= q.t0 && t < q.t1);
+  const strip = $('strip'), cap = $('cap');
+  strip.style.display = cap.style.display = 'none';
+  if (cue) {
+    const el = cue.t0 < OPEN[0] ? strip : cap;
+    el.style.display = 'block'; el.textContent = cue.text;
+    el.style.opacity = (ss(seg(t, cue.t0, cue.t0 + .15)) * (1 - ss(seg(t, cue.t1 - .15, cue.t1)))).toFixed(3);
+  }
+  const e = $('end'); const ek = ss(seg(t, 25.95, 26.3));
+  e.style.display = ek > 0 ? 'block' : 'none'; e.style.opacity = ek.toFixed(3);
+};
+function lerpRect(a, b, e) { return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), w: lerp(a.w, b.w, e), h: lerp(a.h, b.h, e) }; }
+
+// every text on screen, for readcheck (computed from t: render(t) is async and readcheck does not await it)
+window.TEXTS = (t) => {
+  const out = [];
+  if (ss(seg(t, 0.25, 0.9)) * (1 - ss(seg(t, 3.3, 3.85))) > 0.95) out.push({ id: 'title', text: 'Field Shift', x0: 760, y0: 34, x1: 1160, y1: 110 });
+  let ch = null; for (const c2 of CHAPTERS) if (t >= c2[0]) ch = c2;
+  if (ch && ch[1] && t >= ch[0] + 0.3) out.push({ id: 'chap', text: ch[1] + ' ' + ch[2], x0: 36, y0: 24, x1: 300, y1: 70 });
+  if (t >= 26.3) { out.push({ id: 'end1', text: 'Field Shift', x0: 700, y0: 92, x1: 1220, y1: 190 }); out.push({ id: 'end2', text: 'Team InnoHuando', x0: 800, y0: 206, x1: 1120, y1: 252 }); out.push({ id: 'end3h', text: 'NASA Space Apps Challenge 2026', x0: 720, y0: 256, x1: 1200, y1: 300 });
+    out.push({ id: 'end3', text: 'credits', pass: true, x0: 300, y0: 822, x1: 1620, y1: 906 }); }
+  out.push({ id: 'si', text: 'SI-assisted visuals', x0: 1660, y0: 16, x1: 1896, y1: 50 });
+  return out;
+};
+
+(async () => {
+  [B, TL] = await Promise.all([fetch('app/boxes.json').then((r) => r.json()), fetch('timeline.json').then((r) => r.json())]);
+  build();
+  for (const n of ['field', 'chatA', 'chat', 'dash', 'rot']) imgs[n] = await load(`app/${n}.jpg`);
+  await document.fonts.ready;
+  for (const f of ['400 20px Plex', '500 20px Plex', '400 20px Sans', '600 20px Sans', 'italic 500 20px Serif']) await document.fonts.load(f);
+  await window.render(0);
+  window.READY = true;
+})();
+</script>
+</body>
+</html>

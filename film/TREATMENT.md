@@ -20,33 +20,34 @@ Setup (orbit, the question) → turn (lock-on: this field, this season is much w
 - Learn: the scale-as-camera continuity of a single powers-of-ten zoom; calm guided-tour product films (one feature per sentence, real UI, cursor smoothing).
 - Don't take: any layout, typeface, music, shot or logo of those works. No NASA logos or insignia.
 
-## Shot list (≈ 30 s)
+## Shot list (29.96 s, as built)
 
 | # | Time | Framing / move | What | Why |
 |---|------|----------------|------|-----|
-| 1 | 0.0–4.0 | Oblique orbit, limb in frame, slow creep | Sunrise over the Pacific coast of South America; searching reticle over Peru; "ALT 420 km", "NASA Blue Marble" | Scale and context; hook is the planet at dawn |
-| 2 | 4.0–8.5 | Dive, log zoom, tilt to nadir | Plates swap Blue Marble → Sentinel-2; reticle snaps onto the field with overshoot; outline prints; "Huaral valley, Peru" | Going to look for yourself |
-| 3 | 8.5–10.5 | Reticle opens into the app window on a dawn wallpaper | App workspace over the field; chapter pill "01 Your field" | The software's agent becomes the frame (native move) |
-| 4 | 10.5–15.5 | Push-in on chat | Cursor drops two photos; reticle snaps onto one tagged "blurry"; consultant asks for a closer shot | Cursor = farmer, reticle = software |
-| 5 | 15.5–21.0 | Rack focus to the readings column, ▶▶ tag | Readings land, each with source and date; the temperature anomaly lands in amber | One finding per screen |
-| 6 | 21.0–25.5 | Push-in + vignette | "Pre-diagnosis · not a diagnosis"; rotation strategies; "Export technical sheet" | The one promise: confirm with your agronomist |
-| 7 | 25.5–30.0 | Climb back to orbit | Valley shrinks under the reticle; end card "Field Shift · team InnoHuando · NASA Space Apps Challenge 2026"; "SI-assisted visuals" mark | Ending echoes the opening |
+| 1 | 0.0–1.1 | Oblique orbit, limb in frame, slow creep | Sunrise over the Pacific coast; the globe's reticle over Peru; "ALT 420 km", "NASA Blue Marble"; title "Field Shift" | Scale and context; hook is the planet at dawn |
+| 2 | 1.1–8.3 | Dive (log zoom, tilt to nadir) | Plates swap Blue Marble → Sentinel-2; outline prints; "Huaral valley, Peru · 11.47°S 77.21°W"; at 7.55 the reticle snaps onto the field with overshoot (lock-on ping, timpani) | Going to look for yourself |
+| 3 | 8.45–10.35 | The reticle's brackets open out into the app window; the field blurs into a dawn wallpaper | Real field-selection screen (5.1 ha, the app's own reticle on the field); chapter pill "01 Your field"; the cursor clicks "Use this field" | The software's agent becomes the frame (native move) |
+| 4 | 10.35–13.55 | Push-in on the chat, then rack focus to the readings | The cursor sends four photos; the reticle snaps onto photo 3 ("blurry"), then onto the temperature reading (+5.0 °C, amber) | Cursor = farmer, reticle = software |
+| 5 | 13.55–20.45 | Whip pan (chapter seam), suck-out, push-in tile → chart → tile | Real dashboard, "02 NASA data": "+5.0 °C vs normal" (1985–2024), the chart "This season vs 40-year normal", "14.2 aphid generations, +3.5 vs normal" | One finding per screen |
+| 6 | 20.45–23.05 | Whip pan, slow push on the cards | "03 Options": three rotation strategies compared; the reticle moves to "Every number cites its source." | The answer is options, with sources |
+| 7 | 23.05–25.6 | Push-in + vignette on the pre-diagnosis card | "04 Pre-diagnosis": "PRE-DIAGNOSIS · NOT A DIAGNOSIS", confidence Medium, the reticle on "Confirm with your agronomist." | The one promise |
+| 8 | 25.6–29.96 | The window closes back into the reticle; climb back to orbit | End card "Field Shift / Team InnoHuando / NASA Space Apps Challenge 2026" and credits; "SI-assisted visuals" mark | Ending echoes the opening |
 
-## Narration (draft, to time against picture)
+## Narration (recorded, verified with faster-whisper)
 
-EN: "This is the Huaral valley, from orbit. Field Shift dives to one farmer's field. The farmer sends photos; NASA data checks them. This season runs five degrees warmer than its forty-year normal, so aphids breed faster. Three options, every number cited. A pre-diagnosis your agronomist can verify."
+EN: "This is the Huaral valley, from orbit. Field Shift dives to one farmer's field. The farmer sends photos and NASA data checks them. These weeks run five degrees warmer than the forty-year normal, so aphids breed faster. Three options, every number cited. A pre-diagnosis your agronomist can verify."
 
-ES: "Este es el valle de Huaral, desde la órbita. Field Shift baja hasta el campo de un agricultor. El agricultor envía fotos; los datos de la NASA las contrastan. Esta campaña está cinco grados más cálida que su normal de cuarenta años: los pulgones se multiplican más rápido. Tres opciones, cada número con su fuente. Un prediagnóstico que tu agrónomo puede verificar."
+ES (atempo 1.07): "Este es el valle de Huaral, desde la órbita. Field Shift baja hasta el campo de un agricultor. El agricultor envía fotos y los datos de la NASA las contrastan. Estas semanas están cinco grados más cálidas que la normal de cuarenta años. Los pulgones se multiplican más rápido. Tres opciones, cada número con su fuente. Un prediagnóstico que tu agrónomo puede verificar."
 
-"Field Shift" is said in English in both films.
+"Field Shift" is said in English in both films. Each line is cut from the take at its word timings and placed on its shot (`src/timeline.py`); the Spanish lines are longer, so the picture's beats sit where both languages fit.
 
 ## Sound
 
-Dry telemetry palette for orbit and dive (lock-on ping, ticks, low pulse, riser for the dive); the app section switches to a soft hi-fi bed (piano, brushed kit) with UI foley (clicks, a shutter for photos, pops for readings). Suck-out before the amber reading; the lock-on ping returns at the end. Voice ~10 dB over music, −14 LUFS.
+Dry telemetry palette for orbit and dive (FM pings, ticks that divide to accelerate, pulse bass with 2nd/3rd harmonics, detuned-saw pad, noise riser, timpani and a horn stab on the lock-on); a suck-out before the window opens, then the app section switches to a soft hi-fi bed at 96 BPM (upright piano D–Bm–G–A, pizzicato bass, shaker, soft hi-hat) with UI foley (clicks, a shutter and pops for the photos, whooshes and a low tom on the whip pans, small FM blips when the reticle snaps). Suck-out before the amber reading, which lands on glockenspiel and vibraphone; the drums drop under the promise (bowed vibraphone pad); the lock-on ping returns when the window closes, ticks slow down as the camera climbs, timpani and a bowed D chord under the end card. Voice ~10 dB over music (by RMS, music ducked 4 dB under the voice), −14 LUFS, true peak ≤ −1 dBTP.
 
 ## Titles and subtitles
 
-Transcript strip bottom-left in the briefing part (IBM Plex Mono instruments, Source Sans 3 text); frosted caption pills in the app part. Subtitles burned in and exported as `.srt` in the film's language. Credits and the "SI-assisted visuals" mark on screen; AI narration acknowledged in the description and file metadata.
+Transcript strip bottom-left in the briefing part (IBM Plex Mono instruments, Source Sans 3 text), above the globe's ALT and scale bar; frosted caption pills at the bottom centre in the app part; chapter pills top-left (01–04, English in both films: same picture). Subtitles burned in and exported as `.srt` in the film's language. Credits and the "SI-assisted visuals" mark on screen; AI narration acknowledged in the description and file metadata.
 
 ## Material
 

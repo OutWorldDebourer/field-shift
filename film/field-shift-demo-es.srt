@@ -1,0 +1,27 @@
+1
+00:00:00,750 --> 00:00:03,900
+Este es el valle de Huaral, desde la órbita.
+
+2
+00:00:03,950 --> 00:00:07,170
+Field Shift baja hasta el campo de un agricultor.
+
+3
+00:00:10,350 --> 00:00:14,000
+El agricultor envía fotos y los datos de la NASA las contrastan.
+
+4
+00:00:14,050 --> 00:00:18,000
+Estas semanas están 5 °C más cálidas que la normal de 40 años.
+
+5
+00:00:18,050 --> 00:00:20,430
+Los pulgones se multiplican más rápido.
+
+6
+00:00:20,750 --> 00:00:23,700
+Tres opciones, cada número con su fuente.
+
+7
+00:00:23,750 --> 00:00:26,560
+Un prediagnóstico que tu agrónomo puede verificar.

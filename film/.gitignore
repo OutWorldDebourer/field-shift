@@ -1,0 +1,4 @@
+work/
+frames/
+*.lock
+src/node_modules/
