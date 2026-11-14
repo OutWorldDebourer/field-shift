@@ -7,7 +7,8 @@ English is the default language everywhere; Spanish is an opt-in switch.
 |------|------------|
 | `handbook/` | Curated bilingual documentation. Open `handbook/index.html`. |
 | `research/` | Raw research notes and live API tests (English) that feed the handbook. |
-| `tools/` | One-off data tools (GRACE extraction) and their Python venv (git-ignored). |
+| `assets/` | Project media (voice samples, own crop photos). |
+| `tools/` | One-off tools (GRACE extraction, Gemini narration) and their Python venv (git-ignored). |
 | `infra/` | Local Docker services (MariaDB) and deployment files. |
 | `Docs/` | Original inputs from the team owner (challenge text, GO Team mail, terms). Do not edit. |
 | `design-directions/` | Visual direction comps, prompts and the approved references. |

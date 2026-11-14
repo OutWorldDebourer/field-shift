@@ -5,5 +5,6 @@ The Space Apps rules require stating where and how AI ("SI") tools were used. Th
 | Date | Tool | Used for | Output in the repository |
 |------|------|----------|--------------------------|
 | 2026-11-14 | Claude (Anthropic), via Claude Code | Reading the official challenge page, guides and forum; researching NASA data access; drafting documentation in English and Spanish | `handbook/`, `research/`, `README.md` |
+| 2026-11-14 | Gemini text-to-speech (Google AI Studio), voice Algenib | Narration samples for the demo films (English and Spanish) | `assets/voice/` |
 
 Not AI-generated: the project idea and the choice of how to solve the challenge belong to the team.
