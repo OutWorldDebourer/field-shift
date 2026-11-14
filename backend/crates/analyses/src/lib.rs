@@ -2,6 +2,7 @@
 pub mod examples;
 pub mod model;
 pub mod photos;
+pub mod place;
 mod routes;
 pub mod steps;
 pub mod store;

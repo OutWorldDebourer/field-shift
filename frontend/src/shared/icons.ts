@@ -9,6 +9,7 @@ const P: Record<string, string> = {
   slope: '<path d="M3 19h18L21 7Z"/><path d="M15 19a6 6 0 0 0-1.4-3.9"/>',
   water: '<path d="M3 15c2 0 2-1.5 4.5-1.5S10 15 12 15s2-1.5 4.5-1.5S19 15 21 15"/><path d="M3 19c2 0 2-1.5 4.5-1.5S10 19 12 19s2-1.5 4.5-1.5S19 19 21 19"/><path d="M12 3v8M9 8l3 3 3-3"/>',
   orbit: '<circle cx="12" cy="12" r="3.5"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(-25 12 12)"/>',
+  advisor: '<ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-28 12 12)"/><circle cx="20.2" cy="7.6" r="1.3" fill="currentColor" stroke="none"/><path d="M8.4 16.2c-.4-4.6 2.4-8.2 7.4-8.6.5 5-2.7 8.4-7.4 8.6Z"/><path d="M8.4 16.2 13 11.4"/>',
   spark: '<path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l2.6 2.6M15.4 15.4 18 18M6 18l2.6-2.6M15.4 8.6 18 6"/>',
   pin: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/>',
   gps: '<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>',

@@ -2,7 +2,7 @@
 // PDF document chips, status line, composer with up to 10 files — full-resolution photos and PDFs (drag and drop,
 // camera on phone) — voice dictation (transcribes into the box, never sends), crop inputs with suggestions, the
 // "Load information" button, the PDF hint, the example-site card and the closing "enough information" card.
-import { getAnalysis, sendMessage, suggestCrops, type ClientAnalysis, type CropSuggestion } from '../../shared/api';
+import { getAnalysis, sendMessage, startConsultant, suggestCrops, type ClientAnalysis, type CropSuggestion } from '../../shared/api';
 import type { ChatMessage, SectionKey } from '../../shared/contract';
 import { $, esc, toast } from '../../shared/dom';
 import { lang, onLang, pick, t } from '../../shared/i18n';
@@ -41,7 +41,7 @@ export function messageHtml(m: ChatMessage): string {
   const imgs = all.filter((p) => !isPdfAttachment(p)), docs = all.filter(isPdfAttachment);
   const photos = (imgs.length ? `<div class="tiles tiles--msg">${imgs.map((p, i) => photoTile(p, i + 1)).join('')}</div>` : '')
     + (docs.length ? `<div class="doc-chips">${docs.map(docChipHtml).join('')}</div>` : '');
-  if (m.role === 'assistant') return `<li class="msg msg--ai"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span>
+  if (m.role === 'assistant') return `<li class="msg msg--ai"><span class="avatar-ai" aria-hidden="true">${icon('advisor')}</span>
     <div class="msg__col"><span class="sr-only">${esc(t('ws_consultant'))}:</span><div class="bubble bubble--ai">${para(m.body)}</div>${photos}</div></li>`;
   return `<li class="msg msg--me"><div class="msg__col"><span class="sr-only">${esc(t('ws_you'))}:</span>${m.body ? `<div class="bubble bubble--me">${para(m.body)}</div>` : ''}${photos}</div></li>`;
 }
@@ -213,8 +213,27 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     rail.querySelector<HTMLElement>('[data-chime]')?.focus();
   });
 
+  // A new field has no consultant message yet: the consultant writes its opening for this exact place.
+  let opening = false;
+  async function open(a: ClientAnalysis) {
+    if (opening || a.offline || a.readOnly || a.messages.some((m) => m.role === 'assistant')) return;
+    opening = true; sending = true;
+    form.classList.add('is-busy');
+    showPending(t('ws_status_opening'));
+    try {
+      const r = await startConsultant(a, lang());
+      onUpdate({ messages: r.messages, sections: r.sections, ...(r.demo_mode != null ? { demo_mode: r.demo_mode } : {}), ...(Array.isArray(r.steps) ? { steps: r.steps } : {}), ...(r.next_step !== undefined ? { next_step: r.next_step } : {}) });
+    } catch {
+      opening = false;
+      toast(t('ws_send_err'), 6000);
+    } finally {
+      sending = false; form.classList.remove('is-busy'); hidePending();
+    }
+  }
+
   function render(a: ClientAnalysis, just: SectionKey[] = []) {
     const steps = stepsOf(a);
+    void open(a);
     rail.innerHTML = railHtml(steps, just);
     rail.hidden = !!a.readOnly;
     // The consultant's greeting arrives with the analysis: the empty state only shows when there is no message at all.
@@ -222,7 +241,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     const hint = a.readOnly ? '' : `<li class="chat__hint">${icon('pdf')}<p>${esc(t('ws_pdf_hint'))}</p></li>`;
     // The PDF hint and the example-site card sit right under the consultant's greeting.
     const head = shown.length ? messageHtml(shown[0]) + hint + exampleCardHtml(a, steps) : '';
-    log.innerHTML = shown.length ? head + shown.slice(1).map(messageHtml).join('') + doneCardHtml(a, steps) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('spark')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p><p class="chat__empty-hint">${icon('pdf')}${esc(t('ws_pdf_hint'))}</p>${exampleCardHtml(a, steps, true)}</li>`;
+    log.innerHTML = shown.length ? head + shown.slice(1).map(messageHtml).join('') + doneCardHtml(a, steps) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('advisor')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p><p class="chat__empty-hint">${icon('pdf')}${esc(t('ws_pdf_hint'))}</p>${exampleCardHtml(a, steps, true)}</li>`;
     const now = $<HTMLInputElement>('#crop-now', host), before = $<HTMLInputElement>('#crop-before', host);
     const sum = $('.crops__sum', host);
     const both = !!(a.crop_current && a.crop_history[0]);

@@ -1,6 +1,7 @@
 // Field selection (App 1): My GPS | Example site, place search, drop a point or draw an outline with live area,
 // on a licence-clean satellite map (Leaflet + EOX Sentinel-2 cloudless 2016). "Use this field" → POST /api/analyses.
 import type * as Leaflet from 'leaflet';
+import { parseCoords } from './coords';
 import { createAnalysis, examples, type ClientAnalysis, type Example } from '../../shared/api';
 import type { FieldGeom } from '../../shared/contract';
 import { $, esc, toast } from '../../shared/dom';
@@ -71,7 +72,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
         <label for="fs-q" class="fs__label" data-i18n="fs_search">${esc(t('fs_search'))}</label>
         <div class="fs__qrow"><div class="fs__qwrap">${icon('search')}<input id="fs-q" type="search" enterkeyhint="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fs-results" aria-autocomplete="list" aria-describedby="fs-qhint"
           placeholder="${esc(t('fs_search_ph'))}" data-i18n-attr="placeholder:fs_search_ph"></div><button type="button" class="btn btn--glass btn--sm" id="fs-go" data-i18n="fs_search_go">${esc(t('fs_search_go'))}</button></div>
-        <p class="sr-only" id="fs-qhint" data-i18n="fs_search_hint">${esc(t('fs_search_hint'))}</p>
+        <p class="fs__qhint" id="fs-qhint" data-i18n="fs_search_hint">${esc(t('fs_search_hint'))}</p>
         <ul class="fs__results" id="fs-results" role="listbox" hidden></ul>
       </div>
       <div class="fs__tools" role="toolbar" aria-label="${esc(t('fs_draw'))}">
@@ -181,7 +182,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   }
   function finishDraw() {
     if (draft.length < 3) { hint.textContent = t('fs_hint_need3'); return; }
-    ring = draft.slice(); point = ringCenter(ring); draft = []; tool = 'none'; label = label || t('fs_my_field');
+    ring = draft.slice(); point = ringCenter(ring); draft = []; tool = 'none'; exampleId = null; label = '';
     map?.doubleClickZoom.enable();
     renderTools(); drawLayers(); lockOn();
   }
@@ -194,7 +195,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const fail = () => { st.innerHTML = `${esc(t('fs_gps_denied'))} <button type="button" class="fs__retry">${esc(t('ap_retry'))}</button>`; st.querySelector('button')!.addEventListener('click', locate); };
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude: lat, longitude: lon, accuracy } = pos.coords;
-      point = { lat, lon }; ring = []; exampleId = null; label = t('fs_my_field');
+      point = { lat, lon }; ring = []; exampleId = null; label = '';
       st.textContent = t('fs_gps_ok', { m: Math.round(accuracy) });
       map?.setView([lat, lon], 17);
       renderExamples(); drawLayers(); lockOn();
@@ -258,7 +259,17 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     label = p.name.split(',').slice(0, 2).join(',');
     if (!ring.length && tool === 'none') { hint.textContent = t('fs_hint_draw'); }
   };
+  // Coordinates typed or pasted in the search box mark the point directly.
+  const goCoords = (c: { lat: number; lon: number }) => {
+    showResults(false); pin?.remove();
+    point = { lat: c.lat, lon: c.lon }; ring = []; draft = []; tool = 'none'; exampleId = null; label = '';
+    map?.setView([c.lat, c.lon], 16);
+    renderExamples(); renderTools(); drawLayers(); lockOn();
+    hint.textContent = t('fs_coords_ok');
+  };
   const run = async (v: string) => {
+    const c = parseCoords(v);
+    if (c) { goCoords(c); return; }
     if (v.trim().length < 3) { showResults(false); return; }
     try { places = await searchPlaces(v); active = -1; renderResults(); }
     catch (e) { if ((e as Error).name !== 'AbortError') { results.innerHTML = `<li class="fs__none">${esc(t('fs_search_err'))}</li>`; showResults(true); } }
@@ -368,7 +379,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     layer = L.layerGroup().addTo(map);
     map.on('click', (e: Leaflet.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
-      if (tool === 'point') { point = { lat, lon: lng }; ring = []; tool = 'none'; label = label || t('fs_my_field'); renderTools(); drawLayers(); lockOn(); }
+      if (tool === 'point') { point = { lat, lon: lng }; ring = []; tool = 'none'; exampleId = null; label = ''; renderExamples(); renderTools(); drawLayers(); lockOn(); }
       else if (tool === 'draw') { draft.push([lng, lat]); renderTools(); drawLayers(); }
     });
     map.on('dblclick', () => { if (tool === 'draw') finishDraw(); });

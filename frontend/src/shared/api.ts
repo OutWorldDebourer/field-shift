@@ -88,6 +88,11 @@ export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[
   return req(`/api/consultant/${encodeURIComponent(a.id)}/message`, { method: 'POST', body: fd, timeout: 180000 });
 }
 
+/** The consultant's opening, written for this field (place, coordinates, area). Idempotent on the server. */
+export async function startConsultant(a: ClientAnalysis, lang: Lang): Promise<TurnResult> {
+  return req(`/api/consultant/${encodeURIComponent(a.id)}/start`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lang, demo: forceDemo() }), timeout: 60000 });
+}
+
 // ---------------------------------------------------------------- iteration 3
 
 /** POST the "load information" answers; the backend completes the topics they cover and returns the analysis. */

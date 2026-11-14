@@ -78,6 +78,44 @@ pub async fn run_turn(state: &AppState, id: &str, input: TurnInput) -> ApiResult
     Ok(TurnOutput { messages: after.messages.into_iter().filter(|m| m.id >= user_msg).collect(), sections: after.sections, demo_mode, steps: after.steps, next_step: after.next_step })
 }
 
+/// The consultant's opening message, written by the model from the real place, coordinates and area of the field.
+/// Idempotent: if the conversation already has a consultant message, nothing is added. Without the API (no key,
+/// rate limit, demo, failure) the template greeting is used, with the same real place name.
+pub async fn run_start(state: &AppState, id: &str, lang: &str, visitor: &str, force_demo: bool) -> ApiResult<TurnOutput> {
+    let st = store::load(&state.db, id).await?;
+    if !st.messages.iter().any(|m| m.role == "assistant") {
+        store::set_lang(&state.db, id, lang).await?;
+        let key = state.config.secrets.anthropic.clone();
+        let live_ok = !force_demo && key.is_some() && ratelimit::allow(&state.db, visitor).await.unwrap_or(false);
+        let text = if live_ok { opening(state, &st, lang, key.as_deref().unwrap_or_default()).await.map_err(|e| tracing::warn!("opening failed: {e}")).ok() } else { None };
+        match text {
+            Some(t) => { store::add_message(&state.db, id, "assistant", &t, &[]).await?; store::set_demo_mode(&state.db, id, false).await?; }
+            None => store::add_greeting(&state.db, id, lang).await?,
+        }
+    }
+    let after = store::load(&state.db, id).await?;
+    Ok(TurnOutput { messages: after.messages, sections: after.sections, demo_mode: after.demo_mode, steps: after.steps, next_step: after.next_step })
+}
+
+async fn opening(state: &AppState, st: &AnalysisState, lang: &str, key: &str) -> anyhow::Result<String> {
+    let client = anthropic::Client { http: &state.http, key };
+    let ask = format!("{}
+
+[Opening — not written by the farmer] The farmer has just marked this field on the map and opened the chat. Write your first message in the interface language ({lang}). Greet warmly in one short line. Say where the field is: the place name and the coordinates from the context note (as degrees with N/S and E/W, two decimals), and the area if it is above 0. In one sentence, say what you will read for this exact plot from NASA and satellites: heat against a 40-year normal, rain, soil moisture, crop vigor and the 10-day forecast. Say you will go through five topics one by one — **your field**, **soil**, **pest care**, **nutrition** and **rotation** — ending with a technical sheet for their agronomist. If you are confident about what is typically farmed around that place, you may mention it briefly as a question (never as a fact about this plot). End with the first question: what is growing now, and what grew on this plot before. No figures other than the coordinates and area. Under 110 words. Bold the place name.", prompt::context_note(st, lang));
+    let body = json!({
+        "model": anthropic::MODEL,
+        "max_tokens": 2000,
+        "system": [{ "type": "text", "text": prompt::SYSTEM, "cache_control": { "type": "ephemeral" } }],
+        "output_config": { "effort": "low" },
+        "messages": [{ "role": "user", "content": ask }],
+    });
+    let resp = client.create(&body).await?;
+    if resp["stop_reason"] == "refusal" { anyhow::bail!("refusal"); }
+    let t = anthropic::text_of(&resp);
+    if t.trim().is_empty() { anyhow::bail!("empty opening"); }
+    Ok(t)
+}
+
 async fn live(state: &AppState, id: &str, st: &AnalysisState, input: &TurnInput, saved: &[photos::StoredPhoto], key: &str)
     -> anyhow::Result<(String, tools::Effects)> {
     let client = anthropic::Client { http: &state.http, key };

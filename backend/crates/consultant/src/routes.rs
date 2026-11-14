@@ -1,5 +1,5 @@
 //! POST /api/consultant/{id}/message (multipart: text, lang, demo, photos[] up to 10 images).
-use crate::{ratelimit, turn::{run_turn, NewPhoto, TurnInput}};
+use crate::{ratelimit, turn::{run_start, run_turn, NewPhoto, TurnInput}};
 use axum::{
     extract::{ConnectInfo, DefaultBodyLimit, Multipart, Path, State},
     http::HeaderMap,
@@ -12,8 +12,32 @@ use std::net::SocketAddr;
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/{id}/message", post(message))
+        .route("/{id}/start", post(start))
         .route("/transcribe", post(transcribe_route))
         .layer(DefaultBodyLimit::max(130 * 1024 * 1024))
+}
+
+fn client_ip(addr: &SocketAddr, headers: &HeaderMap) -> String {
+    if addr.ip().is_loopback() {
+        headers.get("x-forwarded-for").and_then(|v| v.to_str().ok()).and_then(|v| v.split(',').next()).map(|v| v.trim().to_string())
+            .unwrap_or_else(|| addr.ip().to_string())
+    } else { addr.ip().to_string() }
+}
+
+#[derive(serde::Deserialize)]
+struct StartBody { #[serde(default)] lang: String, #[serde(default)] demo: bool }
+
+/// POST /api/consultant/{id}/start {lang, demo} → the consultant's opening (model-written, template fallback).
+async fn start(
+    State(s): State<AppState>,
+    Path(id): Path<String>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
+    Json(b): Json<StartBody>,
+) -> ApiResult<Json<serde_json::Value>> {
+    let lang = if b.lang == "es" { "es" } else { "en" };
+    let out = run_start(&s, &id, lang, &ratelimit::visitor_id(&client_ip(&addr, &headers)), b.demo).await?;
+    Ok(Json(serde_json::to_value(out).map_err(|e| ApiError::Other(e.into()))?))
 }
 
 async fn message(

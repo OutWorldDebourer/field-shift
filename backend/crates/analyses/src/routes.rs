@@ -25,9 +25,14 @@ async fn create(State(s): State<AppState>, Json(mut n): Json<NewAnalysis>) -> Ap
         n.field = site.field.geom();
         n.label = Some(site.field.label.clone());
         n.location_mode = "example".into();
+    } else {
+        // A marked or drawn field gets its real place name; a label left over on the client (an earlier search or
+        // example) must not name the wrong valley.
+        let c = n.field.center;
+        if let Some(place) = crate::place::reverse(&s.http, c.lat, c.lon, &n.lang).await { n.label = Some(place); }
     }
+    // The consultant writes its own opening (POST /api/consultant/{id}/start); the template greeting is its fallback.
     let id = store::create(&s.db, &n, None).await?;
-    store::add_greeting(&s.db, &id, &n.lang).await?;
     Ok(Json(store::load(&s.db, &id).await?))
 }
 
