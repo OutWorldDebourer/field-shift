@@ -5,7 +5,9 @@ mod demo;
 mod prompt;
 mod ratelimit;
 mod routes;
+mod tiles;
 mod tools;
+mod transcribe;
 mod turn;
 
 pub use routes::routes;

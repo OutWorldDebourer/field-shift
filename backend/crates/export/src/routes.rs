@@ -16,6 +16,7 @@ pub fn routes() -> Router<AppState> {
         .route("/{id}/sheet", get(sheet_html))
         .route("/{id}/series.csv", get(series_csv))
         .route("/{id}/share", post(share))
+        .route("/{id}/package.zip", get(package_zip))
         .route("/shared/{token}", get(shared))
         .route("/shared/{token}/sheet", get(shared_sheet))
 }
@@ -56,4 +57,11 @@ async fn shared_sheet(State(s): State<AppState>, Path(token): Path<String>, Quer
     let st = store::load(&s.db, &id).await?;
     let lang = q.lang.unwrap_or_else(|| st.lang.clone());
     Ok(Html(sheet::render(&st, &lang, &format!("/api/export/{id}/series.csv"))))
+}
+
+async fn package_zip(State(s): State<AppState>, Path(id): Path<String>, Query(q): Query<LangQ>) -> ApiResult<impl IntoResponse> {
+    let lang = match q.lang { Some(l) => l, None => store::load(&s.db, &id).await?.lang };
+    let bytes = crate::package::build(&s, &id, &lang).await?;
+    Ok(([(header::CONTENT_TYPE, "application/zip".to_string()),
+         (header::CONTENT_DISPOSITION, "attachment; filename=\"field-shift-package.zip\"".to_string())], bytes))
 }

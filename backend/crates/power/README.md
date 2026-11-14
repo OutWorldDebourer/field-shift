@@ -15,3 +15,4 @@ NASA POWER daily series, 40-year normals (1985-2024) and agro indicators. Routes
 - `src/meta.rs`: per-value provenance (source, dataset, period, resolution, badge, license, method).
 - `src/stats.rs`: mean, sd, percentiles, `NormalStat`.
 - `src/routes.rs`: axum handlers and query validation.
+| `src/outlook.rs` | Season outlook for 1–6 months: normal vs "current anomaly persists", pest generations to the end (an estimate, not a forecast) |

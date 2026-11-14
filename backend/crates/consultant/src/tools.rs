@@ -28,6 +28,13 @@ pub fn definitions() -> Value {
           "strict": true,
           "input_schema": { "type": "object", "additionalProperties": false, "required": ["index", "tag"],
             "properties": { "index": { "type": "integer" }, "tag": { "type": "string" } } } },
+        { "name": "complete_step", "description": "Mark the active guided topic (or a later one already covered) as done when you have what it needs, or the farmer said they don't know (after record_gap). Gives a one-line summary of what was learned. Returns the next topic.",
+          "strict": true,
+          "input_schema": { "type": "object", "additionalProperties": false, "required": ["key", "summary_en", "summary_es"],
+            "properties": { "key": { "type": "string", "enum": ["field", "soil", "pests", "nutrition", "rotation"] },
+              "summary_en": bi("One line, English, what was learned for this topic."), "summary_es": bi("Same in Spanish.") } } },
+        { "name": "get_sheet", "description": "Read the technical sheet as it stands: each section's state, summary and item titles, the guided topics and the information gaps. Use it to point the farmer to what the sheet already says and to give the closing recommendations.",
+          "input_schema": { "type": "object", "additionalProperties": false, "properties": {} } },
         { "name": "record_gap", "description": "Record an information gap the farmer could not answer (e.g. last fertilizer unknown). It is shown as a declared gap, never guessed.",
           "strict": true,
           "input_schema": { "type": "object", "additionalProperties": false, "required": ["text_en", "text_es"],
@@ -65,6 +72,23 @@ pub async fn execute(state: &AppState, id: &str, name: &str, input: &Value, fx: 
             let i = input["index"].as_u64().unwrap_or(0) as usize;
             fx.photo_tags.push((i, s("tag")));
             Ok(json!({ "ok": true }))
+        }
+        "complete_step" => {
+            let summary = Bi::new(s("summary_en"), s("summary_es"));
+            let next = store::complete_step(&state.db, id, &s("key"), &summary).await.map_err(|e| e.to_string())?;
+            let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;
+            let next_needs = st.steps.iter().find(|x| Some(&x.key) == next.as_ref()).map(|x| x.needs.iter().map(|n| n.en.clone()).collect::<Vec<_>>());
+            Ok(json!({ "ok": true, "next_topic": next, "next_topic_needs": next_needs, "all_done": next.is_none() }))
+        }
+        "get_sheet" => {
+            let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;
+            let sections: Vec<Value> = st.sections.iter().map(|x| {
+                let c = x.content.clone().unwrap_or(Value::Null);
+                json!({ "key": x.key, "state": x.state, "summary": c["summary"]["en"], "items": c["items"].as_array().map(|a| a.iter().filter_map(|i| i["title"]["en"].as_str().map(String::from)).collect::<Vec<_>>()),
+                        "strategies": c["strategies"].as_array().map(|a| a.iter().map(|s| json!({ "name": s["name"]["en"], "current": s["current"], "best_for": s["best_for"]["en"] })).collect::<Vec<_>>()) })
+            }).collect();
+            Ok(json!({ "sections": sections, "steps": st.steps.iter().map(|x| json!({ "key": x.key, "state": x.state, "summary": x.summary.as_ref().map(|b| b.en.clone()) })).collect::<Vec<_>>(),
+                       "prediagnosis": st.prediagnosis, "gaps": st.evidence.as_ref().map(|e| e["gaps"].clone()), "sheet_url": format!("/api/export/{id}/sheet") }))
         }
         "record_gap" => {
             let current = store::sections(&state.db, id).await.map_err(|e| e.to_string())?;

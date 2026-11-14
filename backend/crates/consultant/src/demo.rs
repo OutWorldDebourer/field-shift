@@ -39,50 +39,66 @@ pub async fn reply(state: &AppState, st: &AnalysisState, input: &TurnInput) -> a
     let es = input.lang == "es";
     let t = |en: &str, es_: &str| if es { es_.to_string() } else { en.to_string() };
     let label = t(LABEL_EN, LABEL_ES);
-    if st.crop_current.is_none() {
-        if let Some((cur, prev)) = parse_crops(&input.text) {
-            evidence::resolve_crops(state, &st.id, &cur, &prev).await?;
-            return Ok(format!("{label}\n\n{}", t(
-                "Thank you. Now send 2 to 4 photos: the whole plant, and one leaf from above and from below, in daylight.",
-                "Gracias. Ahora envía de 2 a 4 fotos: la planta entera y una hoja por arriba y por debajo, con luz de día.")));
-        }
-        return Ok(format!("{label}\n\n{}", t(
-            "What are you growing now, and what grew here before? For example: \"peas now, lettuce before\".",
-            "¿Qué cultivas ahora y qué hubo antes en este campo? Por ejemplo: \"arverja ahora, lechuga antes\".")));
-    }
-    // Once the summary has been given, move the conversation forward instead of repeating it.
-    let summarised = st.messages.iter().any(|m| m.role == "assistant" && (m.body.contains("NASA data says") || m.body.contains("dicen los datos de la NASA")));
-    if summarised {
-        let photos = if input.photos.is_empty() { String::new() } else {
-            t("The scripted demo does not look at photos; the live consultant checks each one and asks for a closer shot when needed.
+    let photos = if input.photos.is_empty() { String::new() } else {
+        t("The scripted demo does not look at photos; the live consultant checks each one and asks for a closer shot when needed.
 
 ",
-              "El demo guionizado no revisa fotos; el consultor en vivo revisa cada una y pide una toma más cercana si hace falta.
+          "El demo guionizado no revisa fotos; el consultor en vivo revisa cada una y pide una toma más cercana si hace falta.
 
 ")
-        };
-        return Ok(format!("{label}
+    };
+    let pick = |b: &analyses::Bi| if es { b.es.clone() } else { b.en.clone() };
+    // What to ask next, from the guided topics.
+    let ask_next = |next: Option<String>, st2: &AnalysisState| -> String {
+        match next.and_then(|k| st2.steps.iter().find(|x| x.key == k).cloned()) {
+            Some(step) => {
+                let need = step.needs.first().map(&pick).unwrap_or_default();
+                if es { format!("Siguiente tema: **{}** — ¿{}?", pick(&step.title), need) } else { format!("Next topic: **{}** — {}?", pick(&step.title), need) }
+            }
+            None => t("We now have enough information. Your technical sheet is ready in the panel on the right; the dashboard shows the forecast and the 40-year comparison. This is a pre-diagnosis: confirm it with your agronomist.",
+                      "Ya tenemos suficiente información. Tu ficha técnica está lista en el panel de la derecha; el panel de datos muestra el pronóstico y la comparación con 40 años. Es un prediagnóstico: confírmalo con tu agrónomo."),
+        }
+    };
+    if st.crop_current.is_none() {
+        let Some((cur, prev)) = parse_crops(&input.text) else {
+            return Ok(format!("{label}
 
-{photos}{}", t(
-            "Your pre-diagnosis is in the panels on the right: Soil, Pest care, Nutrition and Rotation, each with its sources. Two questions would sharpen it: where does your water come from, and what fertilizer or manure did you use last? \"I don't know\" is fine; I will note it as a gap.",
-            "Tu prediagnóstico está en los paneles de la derecha: Suelo, Plagas, Nutrición y Rotación, cada uno con sus fuentes. Dos preguntas lo afinarían: ¿de dónde viene tu agua y qué abono o estiércol usaste por última vez? \"No sé\" está bien; lo anoto como vacío.")));
-    }
-    let ev = evidence::build(state, &st.id).await?;
-    evidence::advise(state, &st.id).await?;
-    let mut lines = vec![];
-    if let Some(rs) = ev["readings"].as_array() {
-        for r in rs.iter().filter(|r| r["key"] == true || ["temp_anomaly", "soil_moisture", "ndvi"].contains(&r["id"].as_str().unwrap_or(""))).take(3) {
+{}", t(
+                "What are you growing now, and what grew here before? For example: \"peas now, lettuce before\".",
+                "¿Qué cultivas ahora y qué hubo antes en este campo? Por ejemplo: \"arveja ahora, lechuga antes\".")));
+        };
+        evidence::resolve_crops(state, &st.id, &cur, &prev).await?;
+        let ev = evidence::build(state, &st.id).await?;
+        let summary = analyses::Bi::new(format!("{cur} now; before: {}", if prev.is_empty() { "not stated".into() } else { prev.join(", ") }),
+                                        format!("{cur} ahora; antes: {}", if prev.is_empty() { "no indicado".into() } else { prev.join(", ") }));
+        let next = analyses::store::complete_step(&state.db, &st.id, "field", &summary).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+        evidence::advise(state, &st.id).await?;
+        let st2 = analyses::store::load(&state.db, &st.id).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+        let mut lines = vec![];
+        for r in ev["readings"].as_array().into_iter().flatten().filter(|r| ["temp_anomaly", "soil_moisture", "ndvi"].contains(&r["id"].as_str().unwrap_or(""))).take(3) {
             let label = r.pointer(if es { "/label/es" } else { "/label/en" }).and_then(Value::as_str).unwrap_or("");
             let verdict = r.pointer(if es { "/verdict/es" } else { "/verdict/en" }).and_then(Value::as_str).unwrap_or("");
             lines.push(format!("· {label}: {verdict} ({}, {})", r["source"].as_str().unwrap_or(""), r["date"].as_str().unwrap_or("")));
         }
+        return Ok(format!("{label}
+
+{photos}{}
+{}
+
+{}", t("Here is what NASA data says about the plot you marked:", "Esto dicen los datos de la NASA sobre la parcela que marcaste:"), lines.join("
+"), ask_next(next, &st2)));
     }
-    let photos = if input.photos.is_empty() { String::new() } else {
-        t("The scripted demo does not look at photos; the live consultant checks each one.\n", "El demo guionizado no revisa fotos; el consultor en vivo revisa cada una.\n")
-    };
-    Ok(format!("{label}\n\n{photos}{}\n{}\n\n{}", t("Here is what NASA data says about your field:", "Esto dicen los datos de la NASA sobre tu campo:"), lines.join("\n"),
-        t("The Soil, Pest care, Nutrition and Rotation panels are filled. This is a pre-diagnosis: confirm it with your agronomist.",
-          "Los paneles de Suelo, Plagas, Nutrición y Rotación están listos. Es un prediagnóstico: confírmalo con tu agrónomo.")))
+    let Some(active) = st.next_step.clone() else { return Ok(format!("{label}
+
+{photos}{}", ask_next(None, st))) };
+    let said: String = input.text.trim().chars().take(90).collect();
+    let summary = analyses::Bi::new(format!("Farmer said: {said}"), format!("El agricultor dijo: {said}"));
+    let next = analyses::store::complete_step(&state.db, &st.id, &active, &summary).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    let _ = evidence::advise(state, &st.id).await;
+    let st2 = analyses::store::load(&state.db, &st.id).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    Ok(format!("{label}
+
+{photos}{} {}", t("Noted.", "Anotado."), ask_next(next, &st2)))
 }
 
 #[cfg(test)]

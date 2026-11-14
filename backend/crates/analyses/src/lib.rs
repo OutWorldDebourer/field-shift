@@ -3,6 +3,7 @@ pub mod examples;
 pub mod model;
 pub mod photos;
 mod routes;
+pub mod steps;
 pub mod store;
 
 pub use model::*;

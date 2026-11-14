@@ -21,3 +21,4 @@ imagery = { path = "../imagery" }
 crops = { path = "../crops" }
 earthdata = { path = "../earthdata" }
 climate = { path = "../climate" }
+forecast = { path = "../forecast" }

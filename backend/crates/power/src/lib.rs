@@ -8,6 +8,7 @@ pub mod gdd;
 pub mod indicators;
 pub mod meta;
 pub mod normals;
+pub mod outlook;
 pub mod pests;
 mod routes;
 pub mod stats;
@@ -30,6 +31,7 @@ pub fn routes() -> Router<AppState> {
         .route("/summary", get(routes::summary))
         .route("/series", get(routes::series))
         .route("/monthly", get(routes::monthly))
+        .route("/outlook", get(routes::outlook))
 }
 
 pub fn cache_key(lat: f64, lon: f64) -> String {
@@ -67,6 +69,11 @@ pub async fn series(state: &AppState, lat: f64, lon: f64, from: Option<NaiveDate
 /// The last 12 months, each with its indicators and the 1985-2024 normal band for the same dates.
 pub async fn monthly(state: &AppState, lat: f64, lon: f64, opts: &Options) -> anyhow::Result<MonthlyResponse> {
     summary::build_monthly(&daily(state, lat, lon).await?, opts)
+}
+
+/// Estimate for the next 1–6 months: normal vs "current anomaly persists" scenarios, never a forecast.
+pub async fn outlook(state: &AppState, lat: f64, lon: f64, months: u32) -> anyhow::Result<outlook::Outlook> {
+    outlook::build(&daily(state, lat, lon).await?, months)
 }
 
 pub fn validate(lat: f64, lon: f64) -> anyhow::Result<()> {

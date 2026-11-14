@@ -12,3 +12,4 @@
 | `analyses` | Analyses, fields, messages, photos, sections storage |
 | `consultant` | Claude consultant and scripted demo mode |
 | `export` | Technical sheet, CSV, share link |
+| `forecast` | NASA GEOS-FP 10-day forecast |

@@ -15,3 +15,5 @@ chrono.workspace = true
 anyhow.workspace = true
 tracing.workspace = true
 analyses = { path = "../analyses" }
+zip = { version = "2", default-features = false, features = ["deflate"] }
+imagery = { path = "../imagery" }

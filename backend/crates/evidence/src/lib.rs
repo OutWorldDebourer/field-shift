@@ -35,6 +35,9 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
     let opts = power::Options::default();
     let size_m = from_imagery::snapshot_size_m(&field);
 
+    // NASA GEOS-FP forecast: wait at most 20 s here; if slower, finish it in the background so the cache is warm.
+    let fc_state = state.clone();
+    let fc = tokio::spawn(async move { forecast::forecast(&fc_state, lat, lon, 10).await });
     let (summary, monthly, ndvi, terrain, snap, smap, imerg) = tokio::join!(
         power::summary(state, lat, lon, &opts),
         power::monthly(state, lat, lon, &opts),
@@ -58,6 +61,12 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
     let imerg = to_value(imerg, "imerg", &mut gaps, "IMERG satellite rain could not be read right now.", "No se pudo leer la lluvia satelital IMERG.");
     let grace = to_value(earthdata::grace(state, lat, lon), "grace", &mut gaps, "GRACE water storage unavailable here.", "Almacenamiento de agua GRACE no disponible aquí.");
     let proj = climate::projection(state, lat, lon).ok().and_then(|p| serde_json::to_value(p).ok());
+    let forecast_v = match tokio::time::timeout(std::time::Duration::from_secs(20), fc).await {
+        Ok(Ok(Ok(f))) => serde_json::to_value(f).ok(),
+        Ok(_) => { gaps.push(gap("forecast", "The NASA GEOS-FP forecast could not be read right now.", "No se pudo leer ahora el pronóstico NASA GEOS-FP.")); None }
+        Err(_) => { gaps.push(gap("forecast", "The NASA GEOS-FP forecast is still loading; open the dashboard in a minute.", "El pronóstico NASA GEOS-FP aún se está cargando; abre el panel en un minuto.")); None }
+    };
+    let outlook_v = power::outlook(state, lat, lon, 3).await.ok().and_then(|o| serde_json::to_value(o).ok());
     let mut readings = vec![];
     if let Some(s) = &summary { readings.extend(from_power::readings(s, monthly.as_ref(), from_power::provisional(s))); }
     readings.extend(from_imagery::readings(ndvi.as_ref(), terrain.as_ref()));
@@ -98,6 +107,8 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
         "cycles": ndvi.as_ref().map(|n| n["cycles"].clone()).unwrap_or(json!([])),
         "pests": summary.as_ref().map(from_power::pests).unwrap_or_default(),
         "projection": projection,
+        "forecast": forecast_v,
+        "outlook": outlook_v,
         "imagery": imagery_v,
         "gaps": gaps,
         "power_notes": summary.as_ref().map(|s| s["notes"].clone()).unwrap_or(Value::Null),
@@ -110,7 +121,8 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
 /// The "Your field" section summarises the package so it is ready as soon as the evidence exists.
 async fn mark_field_section(state: &AppState, id: &str, ev: &Value) {
     let n = ev["readings"].as_array().map(|r| r.len()).unwrap_or(0);
-    let state_s = if n == 0 { "gaps" } else { "ready" };
+    let field_done = analyses::store::load(&state.db, id).await.map(|a| a.steps.iter().any(|x| x.key == "field" && x.state == "done")).unwrap_or(false);
+    let state_s = if n == 0 { "gaps" } else if field_done { "ready" } else { "progress" };
     let content = json!({
         "title": { "en": "Your field · NASA data", "es": "Tu campo · datos NASA" },
         "summary": { "en": format!("{n} readings with source, date and scale. Regional readings describe the area, not the plot."),

@@ -19,3 +19,4 @@ analyses = { path = "../analyses" }
 evidence = { path = "../evidence" }
 base64 = "0.22"
 sha2 = "0.10"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp"] }

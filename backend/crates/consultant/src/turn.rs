@@ -2,7 +2,6 @@
 //! script, store the reply and return the new messages and sections.
 use crate::{anthropic, demo, prompt, ratelimit, tools};
 use analyses::{photos, store, AnalysisState, ChatMessage, PhotoRef, Section};
-use base64::Engine;
 use common::{ApiError, ApiResult, AppState};
 use serde_json::{json, Value};
 
@@ -74,10 +73,19 @@ async fn live(state: &AppState, id: &str, st: &AnalysisState, input: &TurnInput,
     -> anyhow::Result<(String, tools::Effects)> {
     let client = anthropic::Client { http: &state.http, key };
     let mut messages = history(st);
-    let mut content: Vec<Value> = saved.iter().enumerate().flat_map(|(i, p)| [
-        json!({ "type": "text", "text": format!("Photo {}:", i + 1) }),
-        json!({ "type": "image", "source": { "type": "base64", "media_type": p.mime, "data": base64::engine::general_purpose::STANDARD.encode(&p.bytes) } }),
-    ]).collect();
+    // Each photo in full, then (for the first four large ones) its quarters at native resolution for tiny insects.
+    let mut content: Vec<Value> = vec![];
+    for (i, p) in saved.iter().enumerate() {
+        content.push(json!({ "type": "text", "text": format!("Photo {}:", i + 1) }));
+        let (media, data) = crate::tiles::model_view(&p.bytes, &p.mime);
+        content.push(json!({ "type": "image", "source": { "type": "base64", "media_type": media, "data": data } }));
+        if i < 4 {
+            for tile in crate::tiles::quarters(&p.bytes) {
+                content.push(json!({ "type": "text", "text": format!("Photo {}, {} at full resolution (for small insects):", i + 1, tile.label) }));
+                content.push(json!({ "type": "image", "source": { "type": "base64", "media_type": "image/jpeg", "data": tile.jpeg_b64 } }));
+            }
+        }
+    }
     content.push(json!({ "type": "text", "text": prompt::context_note(st, &input.lang) }));
     let text = if input.text.trim().is_empty() { "(photos only)".to_string() } else { input.text.trim().to_string() };
     content.push(json!({ "type": "text", "text": text }));

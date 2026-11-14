@@ -122,7 +122,7 @@ pub fn pests(s: &Value) -> Vec<Value> {
     s["pests"].as_array().into_iter().flatten().map(|p| {
         let c = &p["pest"]["citation"];
         json!({
-            "name": p["pest"]["common_name"], "scientific": p["pest"]["scientific_name"],
+            "name": p["pest"]["common_name"], "name_bi": { "en": p["pest"]["common_name"], "es": power::pests::name_es(p["pest"]["key"].as_str().unwrap_or("")) }, "scientific": p["pest"]["scientific_name"],
             "generations_now": p["generations"].as_f64().map(|x| round(x, 1)),
             "generations_normal": p["normal_generations"]["mean"].as_f64().map(|x| round(x, 1)),
             "difference": p["generations"].as_f64().zip(p["normal_generations"]["mean"].as_f64()).map(|(a, b)| round(round(a, 1) - round(b, 1), 1)),

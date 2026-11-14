@@ -9,3 +9,5 @@
 | `src/demo.rs` | Labelled scripted demo mode (fallback, never reads photos) |
 | `src/ratelimit.rs` | 30 live turns/hour per visitor (hashed IP), 400/day global |
 | `src/routes.rs` | `POST /api/consultant/{id}/message` (multipart: text, lang, demo, photos) |
+| `src/tiles.rs` | Model view of each photo (≤1568 px, under the 5 MB API limit) and native-resolution quarters for tiny insects |
+| `src/transcribe.rs` | Voice dictation with Gemini (`POST /api/consultant/transcribe`), transcribe only |

@@ -12,6 +12,7 @@ use std::net::SocketAddr;
 pub fn routes() -> Router<AppState> {
     Router::new()
         .route("/{id}/message", post(message))
+        .route("/transcribe", post(transcribe_route))
         .layer(DefaultBodyLimit::max(60 * 1024 * 1024))
 }
 
@@ -44,4 +45,29 @@ async fn message(
     }
     let out = run_turn(&s, &id, input).await?;
     Ok(Json(serde_json::to_value(out).map_err(|e| ApiError::Other(e.into()))?))
+}
+
+/// POST /api/consultant/transcribe (multipart: audio, lang) → { text, engine }. Counts toward the visitor's live budget.
+async fn transcribe_route(
+    State(s): State<AppState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    mut mp: Multipart,
+) -> ApiResult<Json<serde_json::Value>> {
+    let (mut audio, mut mime, mut lang) = (Vec::new(), String::from("audio/webm"), String::from("en"));
+    while let Some(field) = mp.next_field().await.map_err(|e| ApiError::BadRequest(e.to_string()))? {
+        match field.name().unwrap_or("") {
+            "audio" => {
+                mime = field.content_type().unwrap_or("audio/webm").to_string();
+                audio = field.bytes().await.map_err(|e| ApiError::BadRequest(e.to_string()))?.to_vec();
+            }
+            "lang" => lang = field.text().await.unwrap_or_default(),
+            _ => {}
+        }
+    }
+    if audio.is_empty() { return Err(ApiError::BadRequest("no audio".into())); }
+    if !ratelimit::allow(&s.db, &ratelimit::visitor_id(&addr.ip().to_string())).await.unwrap_or(false) {
+        return Err(ApiError::RateLimited);
+    }
+    let text = crate::transcribe::transcribe(&s, &mime, &audio, &lang).await.map_err(|e| ApiError::Upstream(e.to_string()))?;
+    Ok(Json(serde_json::json!({ "text": text, "engine": "gemini" })))
 }

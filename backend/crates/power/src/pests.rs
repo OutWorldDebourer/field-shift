@@ -167,3 +167,13 @@ mod tests {
         }
     }
 }
+
+/// Spanish common name for the reference pests (Peru usage).
+pub fn name_es(key: &str) -> &'static str {
+    match key {
+        "myzus_persicae" => "Pulgón verde del duraznero",
+        "bemisia_tabaci" => "Mosca blanca",
+        "spodoptera_frugiperda" => "Gusano cogollero",
+        _ => "Plaga",
+    }
+}

@@ -3,7 +3,7 @@ use common::{ApiError, ApiResult, AppState};
 use std::path::PathBuf;
 
 pub const MAX_PHOTOS_PER_MESSAGE: usize = 10;
-pub const MAX_PHOTO_BYTES: usize = 8 * 1024 * 1024;
+pub const MAX_PHOTO_BYTES: usize = 12 * 1024 * 1024;
 
 pub fn uploads_dir(state: &AppState) -> PathBuf { state.config.root.join("backend").join("uploads") }
 
@@ -26,7 +26,7 @@ fn ext_for(mime: &str) -> Option<&'static str> {
 /// Saves one photo and records it; returns its id and public URL.
 pub async fn save(state: &AppState, analysis: &str, mime: &str, bytes: Vec<u8>) -> ApiResult<StoredPhoto> {
     let ext = ext_for(mime).ok_or_else(|| ApiError::BadRequest(format!("unsupported image type {mime}")))?;
-    if bytes.len() > MAX_PHOTO_BYTES { return Err(ApiError::BadRequest("photo larger than 8 MB".into())); }
+    if bytes.len() > MAX_PHOTO_BYTES { return Err(ApiError::BadRequest("photo larger than 12 MB".into())); }
     let dir = uploads_dir(state).join(analysis);
     tokio::fs::create_dir_all(&dir).await.map_err(|e| ApiError::Other(e.into()))?;
     let r = sqlx::query("INSERT INTO photos (analysis_id, file_path, mime, bytes) VALUES (?, '', ?, ?)")

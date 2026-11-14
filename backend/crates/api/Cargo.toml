@@ -27,3 +27,4 @@ analyses = { path = "../analyses" }
 consultant = { path = "../consultant" }
 export = { path = "../export" }
 evidence = { path = "../evidence" }
+forecast = { path = "../forecast" }

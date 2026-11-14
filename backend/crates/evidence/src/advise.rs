@@ -86,8 +86,11 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     let notice = adv["notice"].clone();
 
     // Soil and nutrition
-    store::set_section(&state.db, analysis_id, "soil", "ready", None, Some(&block_content(&adv["soil"], notice.clone()))).await.map_err(|e| anyhow::anyhow!("{e}"))?;
-    store::set_section(&state.db, analysis_id, "nutrition", "ready", None,
+    // A section is "ready" only once its guided topic is done in the conversation; until then its content is prepared.
+    let done = |k: &str| st.steps.iter().any(|x| x.key == k && x.state == "done");
+    let st_of = |k: &str| if done(k) { "ready" } else { "progress" };
+    store::set_section(&state.db, analysis_id, "soil", st_of("soil"), None, Some(&block_content(&adv["soil"], notice.clone()))).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    store::set_section(&state.db, analysis_id, "nutrition", st_of("nutrition"), None,
         Some(&block_content(&adv["nutrition"], json!({ "en": "General guidance: without a soil test this is not a fertilizer prescription.", "es": "Guía general: sin análisis de suelo no es una receta de fertilización." })))).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 
     // Pest care: generations from degree-days where a published threshold exists, then the cited care block
@@ -113,7 +116,7 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     };
     pests["crop_pests"] = json!(crop_pests);
     pests["thresholds"] = adv["pest_thresholds"].clone();
-    store::set_section(&state.db, analysis_id, "pests", "ready", None, Some(&pests)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    store::set_section(&state.db, analysis_id, "pests", st_of("pests"), None, Some(&pests)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 
     // Rotation (annual, semi-perennial) or the perennial system
     let mode = adv["mode"].as_str().unwrap_or("rotation");
@@ -157,10 +160,11 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
         strategies[bi_]["best_for"] = json!({ "en": format!("Best fit: {}", k.1), "es": format!("Mejor opción: {}", k.2) });
     }
     let rotation = json!({ "title": title, "summary": summary, "mode": mode, "strategies": strategies, "items": items, "gaps": adv["gaps"], "prediagnosis": prediagnosis(&ev) });
-    let rot_state = if adv["gaps"].as_array().map(|g| g.is_empty()).unwrap_or(true) { "ready" } else { "gaps" };
+    let rot_state = if !done("rotation") { "progress" } else if adv["gaps"].as_array().map(|g| g.is_empty()).unwrap_or(true) { "ready" } else { "gaps" };
     let note = (rot_state == "gaps").then(|| SBi::new("some information gaps", "algunos vacíos de información"));
     store::set_section(&state.db, analysis_id, "rotation", rot_state, note.as_ref(), Some(&rotation)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
-    store::set_section(&state.db, analysis_id, "sheet", "ready", None, None).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    let sheet_state = if st.next_step.is_none() { "ready" } else { "progress" };
+    store::set_section(&state.db, analysis_id, "sheet", sheet_state, None, None).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 
     // What the consultant gets back: a compact summary it may cite
     Ok(json!({

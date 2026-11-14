@@ -99,7 +99,59 @@ export interface AnalysisState {
   demo_mode: boolean;
   /** Optional (frontend addition): one-line pre-diagnosis headline and confidence for the rotation view. */
   prediagnosis?: { headline: Bi; confidence: 'low' | 'medium' | 'high' } | null;
+  /** Iteration 2: the guided sequence of topics the consultant works through, in order. */
+  steps?: Step[];
+  /** Key of the first step not yet done (null when all are done and the sheet is ready). */
+  next_step?: SectionKey | null;
 }
+
+// ---------------------------------------------------------------- iteration 2 (2026-11-14)
+
+/** One topic of the guided conversation. `done` flips when the consultant has what it needs for that topic. */
+export interface Step {
+  key: SectionKey;            // field → soil → pests → nutrition → rotation → sheet
+  state: 'pending' | 'active' | 'done';
+  title: Bi;                  // "Your field", "Soil" …
+  /** What the consultant still needs for this topic, in plain words ("soil type", "last fertilizer"). */
+  needs: Bi[];
+  /** One-line summary of what was learned, once done. */
+  summary?: Bi;
+}
+
+/** NASA GEOS-FP weather forecast for the field's cell (up to 10 days). */
+export interface Forecast {
+  source: string;             // "NASA GEOS-FP (GMAO)"
+  run: string;                // model run, e.g. "2026-11-14 00 UTC"
+  resolution: string;         // "0.25° × 0.3125° (~25 km)"
+  badge: Badge;               // regional context
+  license: string;
+  days: { date: string; tmin: number; tmax: number; tmean: number; rain_mm: number }[];
+}
+
+/** Our estimate for the rest of the season from NASA POWER normals: two scenarios, never called a forecast. */
+export interface Outlook {
+  label: Bi;                  // "Estimate, not a forecast"
+  months: { month: string; normal_mean: number; normal_lo: number; normal_hi: number; persist_mean: number }[];
+  /** Current 30-day anomaly assumed to persist in the "persist" scenario. */
+  anomaly_c: number;
+  pests: { name: Bi; scientific: string; to_date: number; by_end_normal: number; by_end_persist: number }[];
+  source: string; method: string;
+}
+
+export interface GlossaryTerm { key: string; term: Bi; short: Bi; scale?: Bi }
+
+// EvidencePackage gains (optional): forecast?: Forecast | null; outlook?: Outlook | null;
+// projection gains: d_temp_range?: [number, number]; baseline_period?: string; label?: string; license?: string.
+
+// Iteration 2 endpoints:
+// GET  /api/forecast?lat=&lon=&days=1..10           → Forecast            (NASA GEOS-FP, cached ~6 h)
+// GET  /api/power/outlook?lat=&lon=&months=1..6     → Outlook             (NASA POWER normals + current anomaly)
+// GET  /api/glossary                                → GlossaryTerm[]
+// POST /api/consultant/transcribe  multipart: audio (webm/ogg/mp4/wav ≤ 10 MB), lang → { text, engine: "gemini" }
+// GET  /api/export/:id/package.zip                  → ZIP: sheet.html + data.csv + photos/ (originals) + satellite.png + README.txt
+// POST /api/analyses returns an AnalysisState whose first message is the consultant's greeting
+//      ("I located your field at 11.48°S 77.18°W, 0.57 ha in Huaral…"), and steps/next_step.
+// Photos are stored at full resolution (≤ 12 MB each); the frontend must not downscale below 4096 px.
 
 // Endpoints (method path → body → response):
 // GET  /api/health                                   → { status, database, keys }

@@ -27,11 +27,13 @@ async fn main() -> anyhow::Result<()> {
 pub fn app(state: AppState) -> Router {
     let api = Router::new()
         .route("/health", get(health::health))
+        .route("/glossary", get(export::glossary_route))
         .route("/version", get(|| async { Json(serde_json::json!({ "name": "field-shift", "version": env!("CARGO_PKG_VERSION") })) }))
         .nest("/power", power::routes())
         .nest("/imagery", imagery::routes())
         .nest("/earthdata", earthdata::routes())
         .nest("/climate", climate::routes())
+        .nest("/forecast", forecast::routes())
         .nest("/crops", crops::routes())
         .route("/analyses/{id}/evidence", post(build_evidence))
         .nest("/analyses", analyses::routes())

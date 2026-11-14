@@ -27,6 +27,7 @@ async fn create(State(s): State<AppState>, Json(mut n): Json<NewAnalysis>) -> Ap
         n.location_mode = "example".into();
     }
     let id = store::create(&s.db, &n, None).await?;
+    store::add_greeting(&s.db, &id, &n.lang).await?;
     Ok(Json(store::load(&s.db, &id).await?))
 }
 

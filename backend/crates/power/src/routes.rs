@@ -69,3 +69,11 @@ pub async fn series(State(st): State<AppState>, Query(q): Query<SeriesQuery>) ->
     }
     Ok(Json(s).into_response())
 }
+
+#[derive(serde::Deserialize)]
+pub struct OutlookQuery { lat: f64, lon: f64, months: Option<u32> }
+
+pub async fn outlook(State(st): State<AppState>, Query(q): Query<OutlookQuery>) -> ApiResult<Json<crate::outlook::Outlook>> {
+    crate::validate(q.lat, q.lon).map_err(|e| ApiError::BadRequest(e.to_string()))?;
+    Ok(Json(crate::outlook(&st, q.lat, q.lon, q.months.unwrap_or(3)).await.map_err(|e| ApiError::Upstream(e.to_string()))?))
+}

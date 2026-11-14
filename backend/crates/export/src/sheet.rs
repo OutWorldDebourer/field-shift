@@ -62,6 +62,10 @@ td,.r>span,li,p{overflow-wrap:anywhere;min-width:0}
 .actions{max-width:860px;margin:16px auto;display:flex;gap:10px;justify-content:flex-end;padding:0 4px}
 .actions button,.actions a{font:600 15px "Source Sans 3",sans-serif;padding:11px 18px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none;min-height:44px}
 .actions a{background:#fff;color:var(--ink)}
+.actions .back{background:transparent;border-color:transparent;padding-left:0}
+.fig{margin:0}.fig img{width:100%;max-width:640px;border-radius:6px;display:block}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.photos figure{margin:0}.photos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;display:block}
+.gl dt{font-weight:600;margin-top:10px}.gl dd{margin:2px 0 0}
 footer{margin-top:28px;font-size:14px;color:var(--muted)}
 @media (max-width:640px){
  .page{padding:20px 18px;margin:0}
@@ -108,7 +112,16 @@ fn tile(ring: &[[f64; 2]]) -> String {
     format!("<svg class=\"tile\" viewBox=\"0 0 132 132\" role=\"img\" aria-label=\"Field outline · contorno del campo\"><rect width=\"132\" height=\"132\" rx=\"6\" fill=\"#16222c\" />{poly}<g stroke=\"#fff\" stroke-width=\"1.6\" fill=\"none\">{brackets}</g></svg>")
 }
 
-pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
+/// How the sheet links its files: live URLs in the browser, relative files inside the ZIP package.
+#[derive(Clone, Copy, PartialEq)]
+pub enum Mode { Web, Zip }
+
+pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String { render_mode(st, lang, csv_url, Mode::Web) }
+
+/// File name of a farmer photo inside the ZIP (`photos/<id>.<ext>`), from its URL.
+pub fn zip_photo_name(url: &str) -> String { format!("photos/{}.jpg", url.rsplit('/').next().unwrap_or("photo")) }
+
+pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode) -> String {
     let es = lang == "es";
     let t = |en: &str, es_: &str| if es { es_.to_string() } else { en.to_string() };
     let ev = st.evidence.clone().unwrap_or(Value::Null);
@@ -125,8 +138,10 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
     let mut h = String::with_capacity(48_000);
     h.push_str(&format!("<!doctype html><html lang=\"{lang}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>{} · Field Shift</title><style>{CSS}</style></head><body>",
         t("Technical sheet", "Ficha técnica")));
-    h.push_str(&format!("<div class=\"actions\"><a href=\"{}\">{}</a><button type=\"button\" onclick=\"print()\">{}</button></div>",
-        esc(csv_url), t("Download CSV", "Descargar CSV"), t("Save as PDF / Print", "Guardar PDF / Imprimir")));
+    if mode == Mode::Web {
+        h.push_str(&format!("<div class=\"actions\"><a class=\"back\" href=\"/app.html?a={}\">← {}</a><span style=\"flex:1\"></span><a href=\"{}\">{}</a><a href=\"/api/export/{}/package.zip\">{}</a><button type=\"button\" onclick=\"print()\">{}</button></div>",
+            esc(&st.id), t("Back to analysis", "Volver al análisis"), esc(csv_url), t("Download CSV", "Descargar CSV"), esc(&st.id), t("Download package (ZIP)", "Descargar paquete (ZIP)"), t("Save as PDF / Print", "Guardar PDF / Imprimir")));
+    }
     h.push_str("<main class=\"page\">");
     h.push_str(&format!("<div class=\"run\"><span>Field Shift · {}</span><span>{} {}</span></div>", t("technical sheet", "ficha técnica"), t("Generated", "Generado"), esc(&generated)));
     h.push_str(&format!("<div class=\"head\"><div><h1>{}</h1><div class=\"mono\" style=\"color:var(--muted);margin-top:6px\">{}</div></div>{}</div>",
@@ -190,6 +205,45 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
             esc(pj["horizon"].as_str().unwrap_or("")), esc(pj["scenario"].as_str().unwrap_or("")),
             esc(&pj["models"].as_array().map(|m| m.iter().filter_map(Value::as_str).collect::<Vec<_>>().join(", ")).unwrap_or_default()),
             t("A projection, not a forecast.", "Una proyección, no un pronóstico.")));
+    }
+
+    // NASA forecast (next days) and our season outlook (estimate): what is coming, each with its honest name.
+    if let Some(fc) = ev.get("forecast").filter(|f| f.is_object()) {
+        h.push_str(&format!("<h3>{}</h3><p class=\"cite\">{} · {} · {} · {}</p><div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>",
+            t("Weather forecast, next days (NASA GEOS-FP)", "Pronóstico del tiempo, próximos días (NASA GEOS-FP)"),
+            esc(fc["source"].as_str().unwrap_or("")), t("run", "corrida"), esc(fc["run"].as_str().unwrap_or("")), esc(fc["resolution"].as_str().unwrap_or("")),
+            t("Date", "Fecha"), t("Min °C", "Mín °C"), t("Max °C", "Máx °C"), t("Rain mm", "Lluvia mm")));
+        for d in fc["days"].as_array().into_iter().flatten() {
+            h.push_str(&format!("<tr><td class=\"mono\">{}</td><td class=\"n\">{}</td><td class=\"n\">{}</td><td class=\"n\">{}</td></tr>", esc(d["date"].as_str().unwrap_or("")), num(&d["tmin"]), num(&d["tmax"]), num(&d["rain_mm"])));
+        }
+        h.push_str(&format!("</tbody></table></div><p class=\"cite\">{}</p>", t("A forecast for the surrounding area (regional context); it can change.", "Un pronóstico para la zona (contexto regional); puede cambiar.")));
+    }
+    if let Some(ol) = ev.get("outlook").filter(|o| o.is_object()) {
+        h.push_str(&format!("<h3>{} — {}</h3>", t("Season outlook", "Perspectiva de la campaña"), esc(&bi(&ol["label"], lang))));
+        let months: Vec<String> = ol["months"].as_array().into_iter().flatten().map(|m| format!("{}: {} °C {} · {} °C {}", esc(m["month"].as_str().unwrap_or("")), num(&m["normal_mean"]), t("normal", "normal"), num(&m["persist_mean"]), t("if it stays this warm", "si sigue así de cálido"))).collect();
+        h.push_str(&format!("<p>{}</p>", months.join(" · ")));
+        let pests: Vec<String> = ol["pests"].as_array().into_iter().flatten().map(|p| format!("{}: {} → {} / {}", esc(&bi(&p["name"], lang)), num(&p["to_date"]), num(&p["by_end_normal"]), num(&p["by_end_persist"]))).collect();
+        if !pests.is_empty() {
+            h.push_str(&format!("<p class=\"cite\">{} {}</p>", t("Pest generations so far → by the end of the window (normal / warm):", "Generaciones de plaga hasta hoy → al final del periodo (normal / cálido):"), pests.join(" · ")));
+        }
+    }
+
+    // Satellite picture of the field and the farmer's photos
+    if let Some(img) = ev.get("imagery").filter(|i| i.is_object()) {
+        let src = if mode == Mode::Zip { "satellite.png".to_string() } else { img["snapshot_url"].as_str().unwrap_or("").to_string() };
+        h.push_str(&format!("<h2>{}</h2><figure class=\"fig\"><img src=\"{}\" alt=\"{}\"><figcaption class=\"cite\">{} · {}</figcaption></figure>",
+            t("The field from the satellite", "El campo desde el satélite"), esc(&src), t("Sentinel-2 true-colour image of the field", "Imagen Sentinel-2 en color real del campo"),
+            esc(img["date"].as_str().unwrap_or("")), esc(img["credit"].as_str().unwrap_or(""))));
+    }
+    let photos: Vec<(String, Option<String>)> = st.messages.iter().flat_map(|m| m.photos.iter().map(|p| (p.url.clone(), p.tag.clone()))).collect();
+    if !photos.is_empty() {
+        h.push_str(&format!("<h2>{}</h2><div class=\"photos\">", t("Photos sent by the farmer", "Fotos enviadas por el agricultor")));
+        for (i, (url, tag)) in photos.iter().enumerate() {
+            let src = if mode == Mode::Zip { zip_photo_name(url) } else { url.clone() };
+            h.push_str(&format!("<figure><a href=\"{0}\"><img src=\"{0}\" alt=\"{1} {2}\" loading=\"lazy\"></a><figcaption class=\"cite\">{1} {2}{3}</figcaption></figure>",
+                esc(&src), t("Photo", "Foto"), i + 1, tag.as_ref().map(|g| format!(" · {}", esc(g))).unwrap_or_default()));
+        }
+        h.push_str(&format!("</div><p class=\"cite\">{}</p>", t("Originals at full resolution are in the ZIP package.", "Los originales en resolución completa están en el paquete ZIP.")));
     }
 
     // Result sections (the "Your field" summary is the readings above)
@@ -273,6 +327,14 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
     h.push_str(&format!("<h2>{}</h2>", t("Information gaps", "Vacíos de información")));
     if gaps.is_empty() { h.push_str(&format!("<p>{}</p>", t("None declared.", "Ninguno declarado."))); }
     else { h.push_str(&format!("<ul class=\"gaps\">{}</ul>", gaps.iter().map(|g| format!("<li>{}</li>", esc(&cap(g)))).collect::<String>())); }
+
+    // Glossary annex: the words and acronyms used on this sheet.
+    h.push_str(&format!("<h2>{}</h2><dl class=\"gl\">", t("What the terms mean", "Qué significan los términos")));
+    for term in crate::glossary::terms() {
+        let pick = |b: &crate::glossary::Bi| if lang == "es" { b.es } else { b.en };
+        h.push_str(&format!("<dt>{}</dt><dd>{}{}</dd>", esc(pick(&term.term)), esc(pick(&term.short)), term.scale.as_ref().map(|s| format!(" <span class=\"mono\">({})</span>", esc(pick(s)))).unwrap_or_default()));
+    }
+    h.push_str("</dl>");
 
     h.push_str(&format!("<footer>{}<br>{}</footer>",
         t("Field Shift, team InnoHuando, NASA Space Apps Challenge 2026. Open source (Apache-2.0).", "Field Shift, equipo InnoHuando, NASA Space Apps Challenge 2026. Código abierto (Apache-2.0)."),

@@ -58,7 +58,7 @@ fn parse_ring(wkt: &str) -> Vec<[f64; 2]> {
 pub async fn load(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> { load_raw(db, id).await.map(with_prediagnosis) }
 
 async fn load_raw(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
-    let a = sqlx::query("SELECT lang, location_mode, example_site, crop_current_record, crop_history, demo_mode FROM analyses WHERE id = ?")
+    let a = sqlx::query("SELECT lang, location_mode, example_site, crop_current_record, crop_history, demo_mode, steps FROM analyses WHERE id = ?")
         .bind(id).fetch_optional(db).await?.ok_or(ApiError::NotFound)?;
     let history: Option<Value> = a.try_get("crop_history")?;
     Ok(AnalysisState {
@@ -71,9 +71,17 @@ async fn load_raw(db: &MySqlPool, id: &str) -> ApiResult<AnalysisState> {
         crop_history: history.and_then(|v| v.as_array().cloned()).unwrap_or_default(),
         messages: messages(db, id).await?,
         prediagnosis: None,
+        steps: vec![],
+        next_step: None,
         sections: sections(db, id).await?,
         evidence: latest_evidence(db, id).await?,
         demo_mode: a.try_get::<i8, _>("demo_mode")? != 0,
+    }).map(|mut st: AnalysisState| {
+        let stored: Option<Value> = a.try_get("steps").ok().flatten();
+        let (steps, next) = crate::steps::from_stored(stored.as_ref());
+        st.steps = steps;
+        st.next_step = next;
+        st
     })
 }
 
@@ -176,4 +184,42 @@ pub async fn purge_older_than(db: &MySqlPool, days: i64) -> ApiResult<u64> {
     let r = sqlx::query("DELETE FROM analyses WHERE created_at < NOW() - INTERVAL ? DAY AND (visitor IS NULL OR visitor <> 'seed')")
         .bind(days).execute(db).await?;
     Ok(r.rows_affected())
+}
+
+/// Marks a guided topic done with a one-line summary; its result section becomes "ready" (the sheet when all are done).
+pub async fn complete_step(db: &MySqlPool, id: &str, key: &str, summary: &Bi) -> ApiResult<Option<String>> {
+    if !crate::steps::ORDER[..5].contains(&key) { return Err(ApiError::BadRequest(format!("unknown topic {key}"))); }
+    let stored: Option<Value> = sqlx::query_scalar("SELECT steps FROM analyses WHERE id = ?").bind(id).fetch_optional(db).await?.ok_or(ApiError::NotFound)?;
+    let v = crate::steps::mark_done(stored, key, summary);
+    sqlx::query("UPDATE analyses SET steps = ? WHERE id = ?").bind(&v).bind(id).execute(db).await?;
+    sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = ? AND state <> 'gaps'").bind(id).bind(key).execute(db).await?;
+    let (_, next) = crate::steps::from_stored(Some(&v));
+    if next.is_none() {
+        sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = 'sheet'").bind(id).execute(db).await?;
+    }
+    Ok(next)
+}
+
+/// The consultant's first message, written by the backend so the farmer sees at once what the app knows and why.
+pub async fn add_greeting(db: &MySqlPool, id: &str, lang: &str) -> ApiResult<()> {
+    let f = field(db, id).await?;
+    let (lat, lon) = (f.center.lat, f.center.lon);
+    let coord = format!("{:.2}°{} {:.2}°{}", lat.abs(), if lat < 0.0 { "S" } else { "N" }, lon.abs(), if lon < 0.0 { "W" } else { "E" });
+    let area = if f.area_ha > 0.0 { format!(", {:.2} ha", f.area_ha) } else { String::new() };
+    let place = if lang == "es" && f.label == "Huaral valley, Peru" { "Valle de Huaral, Perú".to_string() } else { f.label.clone() };
+    let body = if lang == "es" {
+        format!("¡Hola! Ubiqué tu campo en **{coord}** ({}{area}). Lo que te mostraré son datos de la NASA y de satélites sobre **la parcela que marcaste en el mapa**, no sobre ti.
+
+Vamos a ver cinco temas, uno por uno: **tu campo**, **suelo**, **manejo de plagas**, **nutrición** y **rotación**. Al terminar tendrás tu ficha técnica para tu agrónomo.
+
+Para empezar: ¿qué cultivas ahora y qué hubo antes en esta parcela?", place)
+    } else {
+        format!("Hello! I located your field at **{coord}** ({}{area}). What I'll show you is NASA and satellite data about **the plot you marked on the map**, not about you.
+
+We'll go through five topics, one at a time: **your field**, **soil**, **pest care**, **nutrition** and **rotation**. At the end you'll have a technical sheet for your agronomist.
+
+To start: what are you growing now, and what grew on this plot before?", place)
+    };
+    add_message(db, id, "assistant", &body, &[]).await?;
+    Ok(())
 }

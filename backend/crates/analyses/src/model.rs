@@ -70,6 +70,9 @@ pub struct AnalysisState {
     pub demo_mode: bool,
     /// Headline + confidence from the rotation section (built by the evidence stage), if any.
     pub prediagnosis: Option<Value>,
+    /// The guided topics in order, and the first one still open (None when all are done).
+    pub steps: Vec<crate::steps::Step>,
+    pub next_step: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
