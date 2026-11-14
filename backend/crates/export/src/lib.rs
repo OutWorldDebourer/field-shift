@@ -3,6 +3,7 @@ mod csv;
 pub mod glossary;
 mod package;
 mod html;
+mod maps;
 mod routes;
 mod sheet;
 

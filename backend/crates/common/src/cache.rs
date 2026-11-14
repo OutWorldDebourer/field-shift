@@ -29,7 +29,7 @@ where
             sqlx::query("REPLACE INTO source_cache (cache_key, source, payload, fetched_at) VALUES (?, ?, ?, NOW())")
                 .bind(key)
                 .bind(source)
-                .bind(payload)
+                .bind(payload.to_string())
                 .execute(db)
                 .await?;
             Ok(v)

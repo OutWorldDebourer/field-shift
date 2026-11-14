@@ -9,7 +9,8 @@ use zip::{write::SimpleFileOptions, ZipWriter};
 pub async fn build(state: &AppState, id: &str, lang: &str) -> ApiResult<Vec<u8>> {
     let st = store::load(&state.db, id).await?;
     let ev = st.evidence.clone().unwrap_or(serde_json::Value::Null);
-    let html = sheet::render_mode(&st, lang, "data.csv", sheet::Mode::Zip);
+    let (maps, map_files) = crate::maps::fetch(state, &st).await;
+    let html = sheet::render_mode(&st, lang, "data.csv", sheet::Mode::Zip, &maps);
     let mut files: Vec<(String, Vec<u8>)> = vec![
         ("sheet.html".into(), html.into_bytes()),
         ("data.csv".into(), csv::render(&ev).into_bytes()),
@@ -32,6 +33,7 @@ pub async fn build(state: &AppState, id: &str, lang: &str) -> ApiResult<Vec<u8>>
             }
         }
     }
+    files.extend(map_files);
     let readme = if lang == "es" {
         "Field Shift — paquete para el agrónomo\n\nsheet.html: ficha técnica (ábrala en un navegador; imprímala o guárdela como PDF).\ndata.csv: todas las lecturas y series con fuente, fecha, resolución y licencia.\nphotos/: fotos del agricultor en resolución completa.\nsatellite.png: imagen Sentinel-2 del campo (Contains modified Copernicus Sentinel data).\n\nPrediagnóstico, no un diagnóstico: la decisión final es del agrónomo.\n"
     } else {

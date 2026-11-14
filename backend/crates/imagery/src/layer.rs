@@ -62,7 +62,7 @@ pub async fn layer(http: &reqwest::Client, root: &Path, kind: &str, lat: f64, lo
 }
 
 fn url(kind: &str, lat: f64, lon: f64, size_m: f64) -> String {
-    format!("/api/imagery/layer.png?kind={kind}&lat={lat}&lon={lon}&size_m={size_m}")
+    format!("/api/imagery/layer.png?kind={kind}&lat={lat}&lon={lon}&size_m={size_m}&v=2")
 }
 
 async fn ndvi_layer(http: &reqwest::Client, lat: f64, lon: f64, size_m: f64) -> anyhow::Result<(Vec<u8>, LayerMeta)> {
@@ -110,7 +110,20 @@ async fn slope_layer(http: &reqwest::Client, lat: f64, lon: f64, size_m: f64) ->
     let valid: Vec<bool> = if bands >= 2 { arr.data[rows * cols..2 * rows * cols].iter().map(|m| *m > 0.0).collect() } else { vec![true; rows * cols] };
     let dx = ARCSEC * 111_320.0 * lat.to_radians().cos();
     let dy = ARCSEC * 110_574.0;
-    let deg = terrain::slope_grid(z, &valid, cols, rows, dx, dy);
+    // NASADEM heights are whole metres: on flat land those 1 m steps alone read as 2–5 % slopes. A 5x5 mean of the
+    // heights (~150 m) first removes that speckle on this 5 km overview while keeping hills and terraces.
+    let mut zs = z.to_vec();
+    for r in 2..rows.saturating_sub(2) {
+        for c in 2..cols.saturating_sub(2) {
+            let (mut sum, mut n) = (0.0, 0.0);
+            for dr in -2i64..=2 { for dc in -2i64..=2 {
+                let k = ((r as i64 + dr) as usize) * cols + (c as i64 + dc) as usize;
+                if valid[k] { sum += z[k]; n += 1.0; }
+            } }
+            if n > 0.0 { zs[r * cols + c] = sum / n; }
+        }
+    }
+    let deg = terrain::slope_grid(&zs, &valid, cols, rows, dx, dy);
     let mut img = image::RgbaImage::new(cols as u32, rows as u32);
     for (i, d) in deg.iter().enumerate() {
         let px = match d {
@@ -125,7 +138,7 @@ async fn slope_layer(http: &reqwest::Client, lat: f64, lon: f64, size_m: f64) ->
         kind: "slope".into(), bbox: [minx, miny, maxx, maxy], date: None, source: "NASADEM (NASA JPL)".into(),
         resolution: "30 m".into(), badge: "field-level".into(), license: "NASA open data, no restrictions".into(),
         credit: "NASADEM_HGT v001, NASA JPL, via Microsoft Planetary Computer".into(),
-        method: "Slope per 30 m cell by Horn's 3x3 method on the native NASADEM grid; classes 0–3, 3–8, 8–15, 15–30, >30 % grouped from FAO Guidelines for soil description (2006).".into(),
+        method: "Slope per 30 m cell by Horn's 3x3 method on the native NASADEM grid after a 5x5 mean of the heights (removes the speckle of whole-metre steps); classes 0–3, 3–8, 8–15, 15–30, >30 % grouped from FAO Guidelines for soil description (2006).".into(),
         image_url: url("slope", lat, lon, size_m),
     }))
 }

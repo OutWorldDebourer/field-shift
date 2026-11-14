@@ -3197,8 +3197,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "crop now: arveja (arverjita); before: lechuga, camote; irrigation: riego por surcos con agua del canal del rÃ­o Chancay, cada 8â€“10 dÃ­as",
-    "es": "cultivo actual: arveja (arverjita); antes: lechuga, camote; riego: riego por surcos con agua del canal del rÃ­o Chancay, cada 8â€“10 dÃ­as"
+    "en": "crop now: arveja (arverjita); before: lechuga, camote; irrigation: riego por surcos con agua del canal del río Chancay, cada 8–10 días",
+    "es": "cultivo actual: arveja (arverjita); antes: lechuga, camote; riego: riego por surcos con agua del canal del río Chancay, cada 8–10 días"
    }
   },
   {
@@ -3210,8 +3210,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "soil: franco arenoso; organic matter: estiÃ©rcol de cuy y gallina antes de sembrar, unas 2 t/ha; residues: los restos de lechuga se amontonan al borde del campo",
-    "es": "suelo: franco arenoso; materia orgánica: estiÃ©rcol de cuy y gallina antes de sembrar, unas 2 t/ha; rastrojos: los restos de lechuga se amontonan al borde del campo"
+    "en": "soil: franco arenoso; organic matter: estiércol de cuy y gallina antes de sembrar, unas 2 t/ha; residues: los restos de lechuga se amontonan al borde del campo",
+    "es": "suelo: franco arenoso; materia orgánica: estiércol de cuy y gallina antes de sembrar, unas 2 t/ha; rastrojos: los restos de lechuga se amontonan al borde del campo"
    }
   },
   {
@@ -3223,8 +3223,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "seen: insectos verdes pequeÃ±os debajo de las hojas tiernas; algunas hojas con galerÃ­as; recent products: una aplicaciÃ³n de insecticida hace tres semanas (no sÃ© el nombre)",
-    "es": "observado: insectos verdes pequeÃ±os debajo de las hojas tiernas; algunas hojas con galerÃ­as; productos recientes: una aplicaciÃ³n de insecticida hace tres semanas (no sÃ© el nombre)"
+    "en": "seen: insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías; recent products: una aplicación de insecticida hace tres semanas (no sé el nombre)",
+    "es": "observado: insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías; productos recientes: una aplicación de insecticida hace tres semanas (no sé el nombre)"
    }
   },
   {
@@ -3236,8 +3236,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "last fertilizer: urea, una bolsa antes de la floraciÃ³n; soil test: ninguno",
-    "es": "último abono: urea, una bolsa antes de la floraciÃ³n; análisis de suelo: ninguno"
+    "en": "last fertilizer: urea, una bolsa antes de la floración; soil test: ninguno",
+    "es": "último abono: urea, una bolsa antes de la floración; análisis de suelo: ninguno"
    }
   },
   {
@@ -3249,8 +3249,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "next crop: maÃ­z u otra hortaliza; harvest use: vainas frescas para el mercado de Lima",
-    "es": "próximo cultivo: maÃ­z u otra hortaliza; destino de la cosecha: vainas frescas para el mercado de Lima"
+    "en": "next crop: maíz u otra hortaliza; harvest use: vainas frescas para el mercado de Lima",
+    "es": "próximo cultivo: maíz u otra hortaliza; destino de la cosecha: vainas frescas para el mercado de Lima"
    }
   },
   {
@@ -3270,12 +3270,12 @@
    "camote"
   ],
   "harvest_use": "vainas frescas para el mercado de Lima",
-  "irrigation": "riego por surcos con agua del canal del rÃ­o Chancay, cada 8â€“10 dÃ­as",
-  "last_fertilizer": "urea, una bolsa antes de la floraciÃ³n",
-  "next_crop": "maÃ­z u otra hortaliza",
-  "organic_matter": "estiÃ©rcol de cuy y gallina antes de sembrar, unas 2 t/ha",
-  "pests_seen": "insectos verdes pequeÃ±os debajo de las hojas tiernas; algunas hojas con galerÃ­as",
-  "products_recent": "una aplicaciÃ³n de insecticida hace tres semanas (no sÃ© el nombre)",
+  "irrigation": "riego por surcos con agua del canal del río Chancay, cada 8–10 días",
+  "last_fertilizer": "urea, una bolsa antes de la floración",
+  "next_crop": "maíz u otra hortaliza",
+  "organic_matter": "estiércol de cuy y gallina antes de sembrar, unas 2 t/ha",
+  "pests_seen": "insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías",
+  "products_recent": "una aplicación de insecticida hace tres semanas (no sé el nombre)",
   "residues": "los restos de lechuga se amontonan al borde del campo",
   "soil_test": "ninguno",
   "soil_type": "franco arenoso"

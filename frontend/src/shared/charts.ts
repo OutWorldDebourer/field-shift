@@ -70,8 +70,15 @@ export function learnCropNames(list: ({ key: string; names: { en: string; es: st
     KNOWN.set(c.key.toLowerCase(), v); KNOWN.set(c.names.en.toLowerCase(), v);
   }
 }
+/** Free-text stages the rotation planner writes in English ("Green manure (legume + cereal mix…)"). */
+const STAGES: [RegExp, { en: string; es: string }][] = [
+  [/^green manure/, { en: 'Green manure', es: 'Abono verde' }], [/^cover crop/, { en: 'Cover crop', es: 'Cultivo de cobertura' }],
+  [/^fallow|^rest/, { en: 'Fallow', es: 'Descanso' }], [/^bare/, { en: 'Bare soil', es: 'Suelo desnudo' }],
+];
 export const cropName = (k: string): string => {
   const l = k.toLowerCase();
+  const st = STAGES.find(([re]) => re.test(l));
+  if (st) { const rest = /\(.*\)/.exec(k)?.[0]; return st[1][lang()] + (rest && lang() === 'en' ? ' ' + rest : ''); }
   return (CROPS[k] ?? CROPS[l.replace(/ /g, '_')] ?? KNOWN.get(l) ?? KNOWN.get(l.replace(/ /g, '_')))?.[lang()] ?? k.replace(/_/g, ' ');
 };
 /** Short crop name for chips: text before a parenthesis ("Green manure (legume + …)" → "Green manure"). */

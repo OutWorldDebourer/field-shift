@@ -105,7 +105,7 @@ pub async fn messages(db: &MySqlPool, id: &str) -> ApiResult<Vec<ChatMessage>> {
 pub async fn add_message(db: &MySqlPool, id: &str, role: &str, body: &str, photos: &[PhotoRef]) -> ApiResult<i64> {
     let meta = if photos.is_empty() { None } else { Some(serde_json::json!({ "photos": photos })) };
     let r = sqlx::query("INSERT INTO messages (analysis_id, role, body, meta) VALUES (?, ?, ?, ?)")
-        .bind(id).bind(role).bind(body).bind(meta).execute(db).await?;
+        .bind(id).bind(role).bind(body).bind(meta.map(|m| m.to_string())).execute(db).await?;
     Ok(r.last_insert_id() as i64)
 }
 
@@ -125,17 +125,17 @@ pub async fn set_section(db: &MySqlPool, id: &str, key: &str, state: &str, note:
     if !SECTION_KEYS.contains(&key) { return Err(ApiError::BadRequest(format!("unknown section {key}"))); }
     let blob = serde_json::json!({ "note": note, "content": content });
     sqlx::query("REPLACE INTO sections (analysis_id, section, state, content) VALUES (?, ?, ?, ?)")
-        .bind(id).bind(key).bind(state).bind(blob).execute(db).await?;
+        .bind(id).bind(key).bind(state).bind(blob.to_string()).execute(db).await?;
     Ok(())
 }
 
 pub async fn set_crops(db: &MySqlPool, id: &str, current: Option<&Value>, history: Option<&[Value]>) -> ApiResult<()> {
     if let Some(c) = current {
         let name = c.pointer("/names/en").and_then(Value::as_str).unwrap_or_default();
-        sqlx::query("UPDATE analyses SET crop_current_record = ?, crop_current = ? WHERE id = ?").bind(c).bind(name).bind(id).execute(db).await?;
+        sqlx::query("UPDATE analyses SET crop_current_record = ?, crop_current = ? WHERE id = ?").bind(c.to_string()).bind(name).bind(id).execute(db).await?;
     }
     if let Some(h) = history {
-        sqlx::query("UPDATE analyses SET crop_history = ? WHERE id = ?").bind(Value::from(h.to_vec())).bind(id).execute(db).await?;
+        sqlx::query("UPDATE analyses SET crop_history = ? WHERE id = ?").bind(Value::from(h.to_vec()).to_string()).bind(id).execute(db).await?;
     }
     Ok(())
 }
@@ -152,7 +152,7 @@ pub async fn set_lang(db: &MySqlPool, id: &str, lang: &str) -> ApiResult<()> {
 }
 
 pub async fn save_evidence(db: &MySqlPool, id: &str, evidence: &Value) -> ApiResult<()> {
-    sqlx::query("INSERT INTO reports (analysis_id, evidence) VALUES (?, ?)").bind(id).bind(evidence).execute(db).await?;
+    sqlx::query("INSERT INTO reports (analysis_id, evidence) VALUES (?, ?)").bind(id).bind(evidence.to_string()).execute(db).await?;
     Ok(())
 }
 
@@ -192,7 +192,7 @@ pub async fn complete_step(db: &MySqlPool, id: &str, key: &str, summary: &Bi) ->
     if !crate::steps::ORDER[..5].contains(&key) { return Err(ApiError::BadRequest(format!("unknown topic {key}"))); }
     let stored: Option<Value> = sqlx::query_scalar("SELECT steps FROM analyses WHERE id = ?").bind(id).fetch_optional(db).await?.ok_or(ApiError::NotFound)?;
     let v = crate::steps::mark_done(stored, key, summary);
-    sqlx::query("UPDATE analyses SET steps = ? WHERE id = ?").bind(&v).bind(id).execute(db).await?;
+    sqlx::query("UPDATE analyses SET steps = ? WHERE id = ?").bind(v.to_string()).bind(id).execute(db).await?;
     sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = ? AND state <> 'gaps'").bind(id).bind(key).execute(db).await?;
     if key == "pests" {
         sqlx::query("UPDATE sections SET state = 'ready' WHERE analysis_id = ? AND section = 'organic' AND content IS NOT NULL").bind(id).execute(db).await?;
@@ -238,6 +238,6 @@ pub async fn merge_facts(db: &MySqlPool, id: &str, new: &Value) -> ApiResult<Val
             if !empty { m.insert(k.clone(), v.clone()); }
         }
     }
-    sqlx::query("UPDATE analyses SET facts = ? WHERE id = ?").bind(&merged).bind(id).execute(db).await?;
+    sqlx::query("UPDATE analyses SET facts = ? WHERE id = ?").bind(merged.to_string()).bind(id).execute(db).await?;
     Ok(merged)
 }

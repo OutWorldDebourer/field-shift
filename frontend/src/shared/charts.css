@@ -36,8 +36,11 @@
 .cal--compact .cal__run { min-height: 24px; padding: 0 5px; font-size: 0.75rem; }
 
 /* Season sequence */
-.seq { display: flex; flex-wrap: wrap; gap: 6px 0; align-items: center; }
-.seq__c { display: inline-flex; align-items: center; min-width: 0; }
+/* Inline layout (not flex-wrap): inside the aligned rows of the Rotation cards, a wrapping flex row was given too
+   little height and its last line spilled onto the next row. */
+.seq { display: block; margin: 0; padding: 0; line-height: 1; }
+.seq__c { display: inline-flex; align-items: center; min-width: 0; max-width: 100%; vertical-align: middle; margin: 0 0 6px; }
+.seq__c span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .seq__c i { font-style: normal; color: var(--ink-2); padding: 0 6px; }
 .seq__c span { display: inline-block; padding: 5px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.82); color: #0f1d29; font-size: 0.8125rem; font-weight: 600; }
 .seq--plan .seq__c span { background: var(--plan); color: #fff; }

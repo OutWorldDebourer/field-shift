@@ -70,7 +70,7 @@ pub async fn run_turn(state: &AppState, id: &str, input: TurnInput) -> ApiResult
         if let Some(r) = refs.iter_mut().filter(|r| r.kind.as_deref() != Some("pdf")).nth(i.saturating_sub(1)) { r.tag = Some(tag); }
     }
     if refs.iter().any(|r| r.tag.is_some()) {
-        sqlx::query("UPDATE messages SET meta = ? WHERE id = ?").bind(json!({ "photos": refs })).bind(user_msg).execute(&state.db).await?;
+        sqlx::query("UPDATE messages SET meta = ? WHERE id = ?").bind(json!({ "photos": refs }).to_string()).bind(user_msg).execute(&state.db).await?;
     }
     store::add_message(&state.db, id, "assistant", &reply, &[]).await?;
     store::set_demo_mode(&state.db, id, demo_mode).await?;

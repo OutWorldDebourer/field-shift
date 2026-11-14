@@ -199,4 +199,3 @@
 .lclass { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 4px 12px; font-size: 0.8125rem; list-style: none; padding: 0; margin: 0; }
 .lclass li { display: flex; align-items: center; gap: 6px; }
 .lclass i { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.45); flex: none; }
-.lyr--slope { image-rendering: pixelated; }

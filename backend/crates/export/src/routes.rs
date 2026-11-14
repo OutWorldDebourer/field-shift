@@ -27,7 +27,8 @@ struct LangQ { lang: Option<String> }
 async fn sheet_html(State(s): State<AppState>, Path(id): Path<String>, Query(q): Query<LangQ>) -> ApiResult<Html<String>> {
     let st = store::load(&s.db, &id).await?;
     let lang = q.lang.unwrap_or_else(|| st.lang.clone());
-    Ok(Html(sheet::render(&st, &lang, &format!("/api/export/{id}/series.csv"))))
+    let (maps, _) = crate::maps::fetch(&s, &st).await;
+    Ok(Html(sheet::render(&st, &lang, &format!("/api/export/{id}/series.csv"), &maps)))
 }
 
 async fn series_csv(State(s): State<AppState>, Path(id): Path<String>) -> ApiResult<impl IntoResponse> {
@@ -56,7 +57,8 @@ async fn shared_sheet(State(s): State<AppState>, Path(token): Path<String>, Quer
     let id = store::by_share_token(&s.db, &token).await?;
     let st = store::load(&s.db, &id).await?;
     let lang = q.lang.unwrap_or_else(|| st.lang.clone());
-    Ok(Html(sheet::render(&st, &lang, &format!("/api/export/{id}/series.csv"))))
+    let (maps, _) = crate::maps::fetch(&s, &st).await;
+    Ok(Html(sheet::render(&st, &lang, &format!("/api/export/{id}/series.csv"), &maps)))
 }
 
 async fn package_zip(State(s): State<AppState>, Path(id): Path<String>, Query(q): Query<LangQ>) -> ApiResult<impl IntoResponse> {

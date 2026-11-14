@@ -116,12 +116,12 @@ fn tile(ring: &[[f64; 2]]) -> String {
 #[derive(Clone, Copy, PartialEq)]
 pub enum Mode { Web, Zip }
 
-pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String { render_mode(st, lang, csv_url, Mode::Web) }
+pub fn render(st: &AnalysisState, lang: &str, csv_url: &str, maps: &crate::maps::Maps) -> String { render_mode(st, lang, csv_url, Mode::Web, maps) }
 
 /// File name of a farmer photo inside the ZIP (`photos/<id>.<ext>`), from its URL.
 pub fn zip_photo_name(url: &str) -> String { format!("photos/{}.jpg", url.rsplit('/').next().unwrap_or("photo")) }
 
-pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode) -> String {
+pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode, maps: &crate::maps::Maps) -> String {
     let es = lang == "es";
     let t = |en: &str, es_: &str| if es { es_.to_string() } else { en.to_string() };
     let ev = st.evidence.clone().unwrap_or(Value::Null);
@@ -136,8 +136,8 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode) ->
     let label = if es && st.field.label == "Huaral valley, Peru" { "Valle de Huaral, Perú".to_string() } else { st.field.label.clone() };
 
     let mut h = String::with_capacity(48_000);
-    h.push_str(&format!("<!doctype html><html lang=\"{lang}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>{} · Field Shift</title><style>{CSS}</style></head><body>",
-        t("Technical sheet", "Ficha técnica")));
+    h.push_str(&format!("<!doctype html><html lang=\"{lang}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>{} · Field Shift</title><style>{CSS}{}</style></head><body>",
+        t("Technical sheet", "Ficha técnica"), crate::maps::CSS));
     if mode == Mode::Web {
         h.push_str(&format!("<div class=\"actions\"><a class=\"back\" href=\"/app.html?a={}\">← {}</a><span style=\"flex:1\"></span><a href=\"{}\">{}</a><a href=\"/api/export/{}/package.zip\">{}</a><button type=\"button\" onclick=\"print()\">{}</button></div>",
             esc(&st.id), t("Back to analysis", "Volver al análisis"), esc(csv_url), t("Download CSV", "Descargar CSV"), esc(&st.id), t("Download package (ZIP)", "Descargar paquete (ZIP)"), t("Save as PDF / Print", "Guardar PDF / Imprimir")));
@@ -243,6 +243,9 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode) ->
             h.push_str(&format!("<p class=\"cite\">{} {}</p>", t("Pest generations so far → by the end of the window (normal / warm):", "Generaciones de plaga hasta hoy → al final del periodo (normal / cálido):"), pests.join(" · ")));
         }
     }
+
+    // The four data maps (same layers as the dashboard map)
+    h.push_str(&crate::maps::section(st, &ev, lang, mode == Mode::Zip, maps));
 
     // Satellite picture of the field and the farmer's photos
     if let Some(img) = ev.get("imagery").filter(|i| i.is_object()) {

@@ -15,6 +15,12 @@ async fn main() -> anyhow::Result<()> {
     tracing::info!("{config:?}");
     let db = MySqlPoolOptions::new().max_connections(10).connect(config.database_url()).await?;
     sqlx::migrate!("../../migrations").run(&db).await?;
+    // Text saved before JSON was sent as UTF-8 text came back garbled ("maÃ­z"): repair it once.
+    match common::text::repair_db(&db).await {
+        Ok(0) => {}
+        Ok(n) => tracing::info!("repaired garbled text in {n} stored values"),
+        Err(e) => tracing::warn!("text repair skipped: {e}"),
+    }
     let bind = config.bind.clone();
     let state = AppState::new(db, config);
     let app = app(state);
