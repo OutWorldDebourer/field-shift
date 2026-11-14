@@ -18,6 +18,7 @@ import { loc } from '../../shared/localize';
 import { alertsFor } from './alerts';
 import { chartHtml, controlsHtml, forecastNow, legendHtml, outlookNow, sourcesHtml, tableHtml, wireForecast, withForecastLoad } from './forecast';
 import { topicsFor, topicsHtml } from './topics';
+import { mountLayers } from './maplayers';
 import './dashboard.css';
 
 export type LayerKey = 'vigor' | 'soil' | 'temp' | 'slope';
@@ -74,7 +75,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <div class="dmap__layers" role="radiogroup" aria-label="${esc(t('db_layers'))}">
         ${LAYERS.map((l) => { const na = !!ev && !ev.readings.some((r) => r.id.startsWith(l.reading)); return `<button type="button" role="radio" aria-checked="${l.key === layer}" data-layer="${l.key}"${na ? ` aria-disabled="true" title="${esc(t('ly_na'))}"` : ''}${opts.preview ? ' tabindex="-1"' : ''}>${esc(t(l.label))}</button>`; }).join('')}
       </div>
-      <div class="dmap__legend" data-legend aria-live="polite">${layerLegend(ev, layer)}</div>
+      <div class="dmap__legend" data-legend aria-live="polite">${layerLegend(ev, layer)}<div class="dmap__lscale" data-lscale></div></div>
     </section>`;
   if (!ev || !ev.readings.length) {
     const gaps = ev?.gaps ?? [];
@@ -196,13 +197,18 @@ export async function mountDashboardMap(root: HTMLElement, a: ClientAnalysis): P
     const dLat = km / 2 / 110.574, dLon = km / 2 / (111.32 * Math.cos((f.center.lat * Math.PI) / 180));
     return L.latLngBounds([f.center.lat - dLat, f.center.lon - dLon], [f.center.lat + dLat, f.center.lon + dLon]);
   };
+  const painter = mountLayers(L, map, a, () => root.querySelector<HTMLElement>('[data-lscale]'), outline, cell, fieldBounds, resKm);
   const setLayer = (k: LayerKey) => {
     overlay?.remove();
     overlay = null;
+    painter.clear();
     root.querySelectorAll<HTMLButtonElement>('[data-layer]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.layer === k)));
     const legend = root.querySelector<HTMLElement>('[data-legend]');
-    if (legend) legend.innerHTML = layerLegend(ev, k);
+    if (legend) legend.innerHTML = layerLegend(ev, k) + '<div class="dmap__lscale" data-lscale></div>';
     const r = ev?.readings.find((x) => x.id.startsWith(LAYERS.find((l) => l.key === k)!.reading));
+    if (outline instanceof L.Polygon) outline.setStyle({ ...fieldStyle, fillOpacity: 0 });
+    // Live data: each layer paints the measurement itself (see maplayers.ts). Offline demo keeps the simple frames.
+    if (!a.offline && (r || k === 'vigor' || k === 'slope')) { painter.paint(k, r); return; }
     if (!r) { if (outline instanceof L.Polygon) outline.setStyle(fieldStyle); map.fitBounds(fieldBounds); return; }
     if (r.badge === 'field-level') {
       const ndvi = k === 'vigor' && r.value != null ? Math.max(0, Math.min(1, r.value)) : null;

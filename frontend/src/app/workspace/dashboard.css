@@ -185,3 +185,18 @@
   .dash__chartwrap { overflow-x: auto; margin: 0 -6px; padding: 0 6px 6px; scrollbar-width: thin; }
   .dash__chartwrap .chart--plus { width: calc(var(--w) * 0.86px); max-width: none; }
 }
+
+/* Data layer scales (maplayers.ts) */
+.dmap__lscale:empty { display: none; }
+.dmap__lscale { display: grid; gap: 6px; margin-top: 2px; }
+/* With a data layer drawn, its scale replaces the 'field 10 m · regional 9 km' line. */
+.dmap__legend:has(.dmap__lscale:not(:empty)) p.dmap__scale { display: none; }
+.lscale { display: grid; gap: 4px; padding-top: 18px; }
+.lscale__bar { position: relative; display: block; height: 10px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.35); }
+.lscale__mark { position: absolute; top: -4px; width: 2px; height: 16px; margin-left: -1px; background: #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6); }
+.lscale__mark b { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 0.75rem; font-weight: 600; padding: 1px 6px; border-radius: 6px; background: rgba(5, 12, 20, 0.85); }
+.lscale__ends { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--ink-2); }
+.lclass { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 4px 12px; font-size: 0.8125rem; list-style: none; padding: 0; margin: 0; }
+.lclass li { display: flex; align-items: center; gap: 6px; }
+.lclass i { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.45); flex: none; }
+.lyr--slope { image-rendering: pixelated; }

@@ -15,4 +15,5 @@ serde_json.workspace = true
 chrono.workspace = true
 anyhow.workspace = true
 tracing.workspace = true
+image = { version = "0.25", default-features = false, features = ["png"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }

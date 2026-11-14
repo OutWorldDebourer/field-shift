@@ -1,5 +1,6 @@
 //! Imagery and terrain for a field through Microsoft Planetary Computer (no account): Sentinel-2 / Landsat NDVI series,
 //! bare-soil periods, a true-colour snapshot and NASADEM slope. Mounted at `/api/imagery`.
+pub mod layer;
 pub mod ndvi;
 pub mod pc;
 pub mod snapshot;
@@ -32,6 +33,8 @@ pub fn routes() -> Router<AppState> {
         .route("/scenes", get(scenes_get).post(scenes_post))
         .route("/terrain", get(terrain_get).post(terrain_post))
         .route("/snapshot.png", get(snapshot_png))
+        .route("/layer.png", get(layer_png))
+        .route("/layer.json", get(layer_json))
         .route("/snapshot.json", get(snapshot_json))
 }
 
@@ -288,6 +291,24 @@ async fn snapshot_png(State(s): State<AppState>, Query(q): Query<SnapshotQuery>)
     h.insert("x-credit", hv(&meta.credit));
     h.insert("access-control-expose-headers", HeaderValue::from_static("x-scene-id, x-scene-date, x-source, x-credit"));
     Ok((h, png))
+}
+
+#[derive(Debug, Deserialize)]
+pub struct LayerQuery { pub kind: String, pub lat: f64, pub lon: f64, pub size_m: Option<f64> }
+
+/// GET /api/imagery/layer.png?kind=ndvi|slope&lat&lon&size_m → the coloured data layer for the dashboard map.
+async fn layer_png(State(s): State<AppState>, Query(q): Query<LayerQuery>) -> ApiResult<impl IntoResponse> {
+    let (png, _) = layer::layer(&s.http, &s.config.root, &q.kind, q.lat, q.lon, q.size_m.unwrap_or(1500.0)).await.map_err(upstream)?;
+    let mut h = HeaderMap::new();
+    h.insert(header::CONTENT_TYPE, HeaderValue::from_static("image/png"));
+    h.insert(header::CACHE_CONTROL, HeaderValue::from_static("public, max-age=3600"));
+    Ok((h, png))
+}
+
+/// GET /api/imagery/layer.json?kind&lat&lon&size_m → where to place the layer, its date, source and method.
+async fn layer_json(State(s): State<AppState>, Query(q): Query<LayerQuery>) -> ApiResult<Json<layer::LayerMeta>> {
+    let (_, meta) = layer::layer(&s.http, &s.config.root, &q.kind, q.lat, q.lon, q.size_m.unwrap_or(1500.0)).await.map_err(upstream)?;
+    Ok(Json(meta))
 }
 
 async fn snapshot_json(State(s): State<AppState>, Query(q): Query<SnapshotQuery>) -> ApiResult<Json<SnapshotMeta>> {

@@ -1142,6 +1142,7 @@ dependencies = [
  "chrono",
  "common",
  "futures-util",
+ "image",
  "reqwest",
  "serde",
  "serde_json",

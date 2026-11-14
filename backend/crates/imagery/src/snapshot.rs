@@ -38,7 +38,7 @@ pub fn cache_dir(root: &Path) -> PathBuf {
     root.join("backend").join("cache").join("imagery")
 }
 
-fn fresh(path: &Path) -> bool {
+pub(crate) fn fresh(path: &Path) -> bool {
     std::fs::metadata(path)
         .and_then(|m| m.modified())
         .ok()
@@ -61,7 +61,7 @@ async fn cloud_over(http: &reqwest::Client, scene: &Scene, feature: &serde_json:
 }
 
 /// Picks the newest Sentinel-2 scene that is clear over the picture area (or the clearest of the recent ones).
-async fn pick_scene(http: &reqwest::Client, lat: f64, lon: f64, bbox: [f64; 4]) -> anyhow::Result<(Scene, f64)> {
+pub(crate) async fn pick_scene(http: &reqwest::Client, lat: f64, lon: f64, bbox: [f64; 4]) -> anyhow::Result<(Scene, f64)> {
     let to = Utc::now().date_naive();
     let from = to - Duration::days(LOOKBACK_DAYS);
     let scenes = stac::search(http, &Field::point(lat, lon), Collection::Sentinel2L2a, from, to, 60.0).await?;
