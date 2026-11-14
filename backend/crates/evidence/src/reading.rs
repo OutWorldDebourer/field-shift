@@ -29,6 +29,11 @@ pub struct Reading {
     pub method: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub series: Vec<Value>,
+    /// True when the latest values come from near-real-time streams (shown as "provisional").
+    #[serde(skip_serializing_if = "std::ops::Not::not", default)]
+    pub provisional: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub note: Option<Bi>,
 }
 
 pub fn gap(id: &str, en: impl Into<String>, es: impl Into<String>) -> Value {

@@ -22,7 +22,7 @@ pub fn readings(ndvi: Option<&Value>, terrain: Option<&Value>) -> Vec<Reading> {
                 license: l["credit"].as_str().unwrap_or("Contains modified Copernicus Sentinel data").into(),
                 method: Some(format!("Mean NDVI over the field outline, cloud-masked; {} clear observations in 24 months; {} bare-soil period(s) detected (NDVI < 0.2 twice in a row).",
                     n["points"].as_array().map(|p| p.len()).unwrap_or(0), bare)),
-                series,
+                series, provisional: false, note: None,
             });
         }
     }
@@ -42,7 +42,7 @@ pub fn readings(ndvi: Option<&Value>, terrain: Option<&Value>) -> Vec<Reading> {
                 resolution: "30 m".into(), badge: "field-level".into(),
                 license: t["license"].as_str().unwrap_or("NASA, public domain").into(),
                 method: t["method"].as_str().map(String::from),
-                series: vec![],
+                series: vec![], provisional: false, note: None,
             });
         }
     }

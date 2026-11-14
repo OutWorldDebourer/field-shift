@@ -10,7 +10,7 @@ fn base(p: &Value, id: &str, label: crate::reading::Bi, value: Option<f64>, unit
         date, resolution: p["resolution"].as_str().unwrap_or("").into(),
         badge: "regional context".into(),
         license: format!("{} DOI {}", p["license"].as_str().unwrap_or(""), p["doi"].as_str().unwrap_or("")),
-        method: None, series: vec![],
+        method: None, series: vec![], provisional: false, note: None,
     }
 }
 

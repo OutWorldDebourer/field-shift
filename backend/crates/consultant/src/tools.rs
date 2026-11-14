@@ -75,6 +75,14 @@ pub async fn execute(state: &AppState, id: &str, name: &str, input: &Value, fx: 
             let st = field.map(|f| f.state.clone()).unwrap_or_else(|| "progress".into());
             let note = field.and_then(|f| f.note.clone());
             store::set_section(&state.db, id, "field", &st, note.as_ref(), Some(&content)).await.map_err(|e| e.to_string())?;
+            // An unknown fertilizer history is a nutrition gap: show it on that section too.
+            let en = s("text_en").to_lowercase();
+            if en.contains("fertili") || en.contains("manure") {
+                if let Some(n) = current.iter().find(|x| x.key == "nutrition") {
+                    let note = Bi::new("needs: last fertilizer used", "falta: último abono usado");
+                    store::set_section(&state.db, id, "nutrition", "gaps", Some(&note), n.content.as_ref()).await.map_err(|e| e.to_string())?;
+                }
+            }
             Ok(json!({ "ok": true }))
         }
         other => Err(format!("unknown tool {other}")),

@@ -17,7 +17,7 @@ fn base(m: &Value, id: &str, label: crate::reading::Bi, value: Option<f64>, unit
         badge: "regional context".into(),
         license: meta["license"].as_str().unwrap_or("NASA open data").into(),
         method: meta["method"].as_str().map(String::from),
-        series: vec![],
+        series: vec![], provisional: false, note: None,
     }
 }
 
@@ -35,6 +35,10 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
         if let (Some(v), Some(a)) = (m["value"].as_f64(), m["anomaly"].as_f64()) {
             let mut r = base(m, "temp_anomaly", bi("Temperature, last 30 days", "Temperatura, últimos 30 días"), Some(round(a, 1)), "°C vs normal", temp_verdict(a));
             r.key = true;
+            r.provisional = provisional;
+            if provisional {
+                r.note = Some(bi("provisional: latest weeks from NASA POWER near-real-time data", "provisional: últimas semanas de datos casi en tiempo real de NASA POWER"));
+            }
             let nw = &s["normals_window"];
             r.method = Some(format!("{:.1} °C mean vs 1985–2024 normal {:.1} °C over the same dates ({} to {}). {}",
                 v, m["normal"]["mean"].as_f64().unwrap_or(f64::NAN), nw["from"].as_i64().unwrap_or(1985), nw["to"].as_i64().unwrap_or(2024),
@@ -53,6 +57,7 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
         let n = m["normal"]["mean"].as_f64().unwrap_or(0.0);
         let verdict = match v {
             Some(x) if x < 1.0 && n < 2.0 => bi("dry, as usual for this season", "seco, como es usual en esta época"),
+            Some(x) if n < 10.0 && x < 20.0 => bi(format!("light rain, as usual on the desert coast (normal {n:.0} mm); far below what the crop needs"), format!("lluvia ligera, como es usual en la costa desértica (normal {n:.0} mm); muy por debajo de lo que necesita el cultivo")),
             Some(x) if x > n * 1.5 + 2.0 => bi(format!("wetter than normal (normal {n:.0} mm)"), format!("más lluvioso que lo normal (normal {n:.0} mm)")),
             Some(x) if x < n * 0.5 => bi(format!("drier than normal (normal {n:.0} mm)"), format!("más seco que lo normal (normal {n:.0} mm)")),
             Some(_) => bi("close to normal", "cerca de lo normal"),
@@ -96,7 +101,9 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
             id: "pest_gen".into(),
             label: bi("Green peach aphid generations this season", "Generaciones de pulgón verde esta campaña"),
             value: g.map(|x| round(x, 1)), unit: "generations".into(),
-            verdict: bi(format!("{} vs normal (degree-days)", signed(d, 1)), format!("{} vs lo normal (grados-día)", signed(d, 1))),
+            verdict: if d >= 0.5 { bi(format!("about {:.1} more generations than normal", d), format!("unas {:.1} generaciones más que lo normal", d)) }
+                else if d <= -0.5 { bi(format!("about {:.1} fewer generations than normal", -d), format!("unas {:.1} generaciones menos que lo normal", -d)) }
+                else { bi("about as many generations as normal", "generaciones similares a lo normal") },
             key: false, source: "NASA POWER + published threshold".into(),
             dataset: meta["dataset"].as_str().unwrap_or("").into(),
             date: meta["period"].as_str().unwrap_or("").replace("..", " – "),
@@ -104,7 +111,7 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
             license: meta["license"].as_str().unwrap_or("").into(),
             method: Some(format!("Single-sine degree-days, {} °C lower threshold, {} °C·day per generation ({} {}).",
                 p["pest"]["lower_c"], p["pest"]["dd_per_generation"], p["pest"]["citation"]["authors"].as_str().unwrap_or(""), p["pest"]["citation"]["year"])),
-            series: vec![],
+            series: vec![], provisional: false, note: None,
         });
     }
     out
