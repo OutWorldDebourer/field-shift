@@ -164,7 +164,7 @@ pub fn render(st: &AnalysisState, lang: &str, csv_url: &str) -> String {
             h.push_str(&format!("<div class=\"r\"><span class=\"lab\">{}</span><span class=\"val{}\">{} {}</span><span class=\"pw\">{}</span><span class=\"src\">{} · <span style=\"white-space:nowrap\">{}</span> · {}<br><span class=\"badge{}\">{}</span></span></div>",
                 esc(&bi(&r["label"], lang)), if key { " key" } else { "" }, esc(&val).replace(' ', "&nbsp;"), esc(&unit).replace(' ', "&nbsp;"), esc(&cap(&bi(&r["verdict"], lang))),
                 esc(&src_l(r["source"].as_str().unwrap_or(""), es)), esc(r["date"].as_str().unwrap_or("")), esc(&res_l(r["resolution"].as_str().unwrap_or(""), es)),
-                if field { " field" } else { "" }, badge_txt));
+                if field { " field" } else { "" }, if r["provisional"] == true { format!("{} · {}", badge_txt, t("provisional", "provisional")) } else { badge_txt.to_string() }));
         }
         h.push_str("</div>");
         let bare: Vec<String> = ev["bare_soil"].as_array().into_iter().flatten().filter_map(|b| Some(format!("{} – {}", b["start"].as_str()?, b["end"].as_str()?))).collect();
