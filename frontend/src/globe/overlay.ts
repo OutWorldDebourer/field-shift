@@ -51,6 +51,8 @@ export class Overlay {
   readonly canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private W = 1; private H = 1; private dpr = 1;
+  /** Horizontal extent of the canvas that is actually inside the viewport (CSS px). */
+  private safeL = 0; private safeR = 1;
   /** When the reticle starts snapping onto the target (ms); Infinity = still searching. */
   private lockAt = Infinity;
 
@@ -64,6 +66,11 @@ export class Overlay {
 
   resize(W: number, H: number, dpr: number) {
     this.W = W; this.H = H; this.dpr = dpr;
+    // the host can be wider than what the visitor sees (page overflow on a phone): keep text inside the visible part
+    const r = this.canvas.getBoundingClientRect();
+    const vw = Math.min(document.documentElement.clientWidth || W, window.visualViewport?.width ?? Infinity, window.innerWidth || Infinity);
+    this.safeL = Math.max(0, -r.left);
+    this.safeR = Math.max(this.safeL + 1, Math.min(W, vw - r.left));
     this.canvas.width = Math.max(1, Math.round(W * dpr));
     this.canvas.height = Math.max(1, Math.round(H * dpr));
   }
@@ -108,6 +115,7 @@ export class Overlay {
     const cam = f.cam, tg = f.target;
     const ts = project(cam, tg.lat, tg.lon);
     const small = W < 620;
+    const sL = this.safeL, sR = this.safeR;
 
     // ---- field outline: prints on along its perimeter
     let bw = 0, bh = 0, bcx = ts.x, bcy = ts.y;
@@ -171,14 +179,16 @@ export class Overlay {
       if (la > 0.004 && tg.label) {
         const name = (f.lang === 'es' && tg.labelEs) || tg.label;
         const coords = formatCoords(tg.lat, tg.lon, f.lang);
-        const s1 = small ? 14 : clamp(W * 0.0145, 17, 21), s2 = s1 * 0.86;
-        const tw = Math.max(this.measure(name, s1), this.measure(coords, s2));
-        const m = small ? 16 : 28;
+        const m = small ? 20 : 28;
+        let s1 = small ? 13.5 : clamp(W * 0.0145, 17, 21), s2 = s1 * 0.86;
+        let tw = Math.max(this.measure(name, s1), this.measure(coords, s2));
+        const room = sR - sL - 2 * m - 30;
+        if (tw > room) { const k = Math.max(0.7, room / tw); s1 *= k; s2 *= k; tw = Math.max(this.measure(name, s1), this.measure(coords, s2)); }
         let ex = cx + rw * 0.36, ey = cy - rh * 0.76;
-        ex = Math.min(ex, W - m - tw - 18);
-        ex = Math.max(ex, m);
+        ex = Math.min(ex, sR - m - tw - 30);
+        ex = Math.max(ex, sL + m);
         if (ey - s1 * 2.6 < m) ey = cy + rh * 0.76 + s1 * 2.6;       // no room above: hang the label below
-        const shelf = tw + 18;
+        const shelf = tw + 24;
         const grow = outCubic(since / 420), shelfGrow = outCubic((since - 260) / 380);
         const px = cx - rw * 0.06, py = cy + rh * 0.02;
         this.hair(() => {
@@ -203,12 +213,12 @@ export class Overlay {
       const m = clamp(W * 0.03, 16, 44), mb = clamp(H * 0.045, 18, 44);
       const sAlt = clamp(W * 0.0155, 14, 23), sCr = Math.max(11, sAlt * 0.78);
       const alt = formatAlt(f.altitudeKm);
-      const stacked = this.measure(alt, sAlt, 500) + this.measure(f.credit, sCr) + 36 > W - 2 * m;
+      const stacked = this.measure(alt, sAlt, 500) + this.measure(f.credit, sCr) + 36 > sR - sL - 2 * m;
       const yBase = H - mb, yAlt = stacked ? yBase - sCr - 12 : yBase;
-      this.text(alt, m, yAlt, sAlt, 1, 'left', 500);
-      this.text(f.credit, W - m, yBase, sCr, 0.92, 'right');
+      this.text(alt, sL + m, yAlt, sAlt, 1, 'left', 500);
+      this.text(f.credit, sR - m, yBase, sCr, 0.92, 'right');
       if (f.scaleBarPx > 8) {
-        const y = yAlt - sAlt - 16, x = m + 1, w = f.scaleBarPx;
+        const y = yAlt - sAlt - 16, x = sL + m + 1, w = f.scaleBarPx;
         this.hair(() => {
           c.moveTo(x, y - 6); c.lineTo(x, y); c.lineTo(x + w, y); c.lineTo(x + w, y - 6);
         }, 1.5, 0.95, 2.6);

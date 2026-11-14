@@ -20,11 +20,18 @@ followed by the parameters listed per file.
 |---|---|---|---|
 | `world-bmng.jpg` (4096×2048) | Blue Marble: Next Generation, shaded relief (`BlueMarble_ShadedRelief`) | `&LAYERS=BlueMarble_ShadedRelief&BBOX=-180,-90,180,90&WIDTH=4096&HEIGHT=2048&FORMAT=image/jpeg` | none (file as served) |
 | `world-bmng-lo.jpg` (1024×512) | same | same | downscaled, for the first frame |
-| `andes-bmng.jpg` (2560×2560) | same | `&LAYERS=BlueMarble_ShadedRelief&BBOX=-93,-24,-61,8&WIDTH=2560&HEIGHT=2560&FORMAT=image/png` | JPEG re-encode |
-| `coast-bmng.jpg` (2048×2048) | same | `&LAYERS=BlueMarble_ShadedRelief&BBOX=-81.2061,-15.4729,-73.2061,-7.4729&WIDTH=2048&HEIGHT=2048&FORMAT=image/png` | JPEG re-encode |
+| `andes-bmng.jpg` (2560×2560) | same | `&LAYERS=BlueMarble_ShadedRelief&BBOX=-93,-24,-61,8&WIDTH=2560&HEIGHT=2560&FORMAT=image/png` | Lima cloud residual replaced (see below), JPEG re-encode |
+| `coast-bmng.jpg` (2048×2048) | same | `&LAYERS=BlueMarble_ShadedRelief&BBOX=-81.2061,-15.4729,-73.2061,-7.4729&WIDTH=2048&HEIGHT=2048&FORMAT=image/png` | Lima cloud residual replaced (see below), JPEG re-encode |
 | `world-night.jpg` (2048×1024) | VIIRS Black Marble night lights (`VIIRS_Black_Marble`) | `&LAYERS=VIIRS_Black_Marble&BBOX=-180,-90,180,90&WIDTH=4096&HEIGHT=2048&FORMAT=image/jpeg` | downscaled |
 | `andes-night.jpg` (1536×1536) | same | `&LAYERS=VIIRS_Black_Marble&BBOX=-93,-24,-61,8&WIDTH=2048&HEIGHT=2048&FORMAT=image/png` | downscaled |
-| `andes-clouds-viirs-20261006.jpg` (1536×1536, greyscale) | VIIRS / Suomi NPP corrected reflectance, true colour, 2026-10-06 (`VIIRS_SNPP_CorrectedReflectance_TrueColor`) | `&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor&TIME=2026-10-06&BBOX=-93,-24,-61,8&WIDTH=2048&HEIGHT=2048&FORMAT=image/png` | cloud opacity derived from the real image (bright, unsaturated pixels), downscaled |
+| `andes-clouds-viirs-20261006.jpg` (1024×1024, greyscale) | VIIRS / Suomi NPP corrected reflectance, true colour, 2026-10-06 (`VIIRS_SNPP_CorrectedReflectance_TrueColor`) | `&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor&TIME=2026-10-06&BBOX=-93,-24,-61,8&WIDTH=2048&HEIGHT=2048&FORMAT=image/png` | cloud opacity derived from the real image (bright, unsaturated pixels), blurred and downscaled so it draws as a soft veil |
+
+Blue Marble carries a baked-in cloud residual over Lima (a white patch on the coast, about 60 km south-east
+of the target). In `andes-bmng.jpg` and `coast-bmng.jpg` only those white pixels, inside the box
+`-77.45,-12.55,-76.65,-11.65`, are replaced with the NASA/USGS Landsat WELD annual true-colour composite
+(public domain; GIBS layer `Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual`, same WMS endpoint,
+`&BBOX=<that box snapped to the plate grid>&FORMAT=image/png`), gain-matched to the surrounding Blue Marble
+land. Andean snow and everything else is untouched. `world-bmng.jpg` is not patched.
 
 Licence: NASA imagery is not copyrighted and is free to reuse with credit
 (https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance).
@@ -74,5 +81,5 @@ still "Contains modified Copernicus Sentinel data 2026".
   not an ephemeris position for a date. Its elevation rises with the dive.
 - Relief contrast at orbit comes from the shaded relief already present in the Blue Marble plates,
   deepened under the low sun. The ocean at orbit is tinted towards navy; Blue Marble's own ocean is near black.
-- Cloud cover is thinned in a disc around the target so the reticle stays readable, and fades out below
-  about 300 km altitude.
+- Cloud cover is drawn thin (at most about two-thirds opaque) and thinned further in a band along the coast
+  around the target so the ground stays readable; it fades out below about 300 km altitude.

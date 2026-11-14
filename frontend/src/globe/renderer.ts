@@ -5,7 +5,7 @@ import {
   Mesh, NoColorSpace, OrthographicCamera, RawShaderMaterial, RepeatWrapping, RGBAFormat, Scene, Texture, Vector2,
   Vector3, Vector4, WebGLRenderer, type IUniform,
 } from 'three';
-import { groundAt } from './camera';
+import { groundAt, projectDir } from './camera';
 import { screenKm, smooth, type DiveFrame } from './dive';
 import manifest from './plates.json';
 import { FRAG, PLATE_SLOTS, VERT } from './shader';
@@ -64,6 +64,7 @@ export class GlobeRenderer {
       uC2: { value: 1 }, uSinLat0: { value: 0 }, uCosLat0: { value: 1 }, uLat0: { value: 0 }, uLon0: { value: 0 },
       tWorld: tex(), tNight: tex(), tNightR: tex(), tCloud: tex(),
       bCloud: v4(), uCloud: { value: 0 }, uNightR: { value: 0 }, uCloudShift: { value: new Vector2() }, uClear: { value: new Vector3() },
+      uSunPx: { value: new Vector2() }, uSunFlare: { value: 0 },
       uSun: { value: new Vector3(0, 0, 1) }, uSunVis: { value: new Vector3(0, 1, 0) },
       uSunAmt: { value: 1 }, uExpo: { value: 1 }, uShade: { value: 1 }, uRelief: { value: 1 }, uWarm: { value: 1 }, uOcean: { value: 1 }, uTime: { value: 0 },
     };
@@ -186,9 +187,12 @@ export class GlobeRenderer {
     const az = f.sunAz * D2R, boxDeg = manifest.regional.box[2] - manifest.regional.box[0];
     const shadowKm = Math.min(26, Math.max(4, 3.2 / Math.tan(Math.max(4, f.sunEl) * D2R)));
     (u.uCloudShift.value as Vector2).set((Math.sin(az) * shadowKm) / 111.19 / boxDeg, (-Math.cos(az) * shadowKm) / 111.19 / boxDeg);
-    (u.uClear.value as Vector3).set(target.lat - cam.lat, target.lon - cam.lon, 2.6);
+    (u.uClear.value as Vector3).set(target.lat - cam.lat, target.lon - cam.lon, 3.0);
     (u.uSun.value as Vector3).fromArray(f.sun); (u.uSunVis.value as Vector3).fromArray(f.sunVis);
     u.uSunAmt.value = f.sunAmt; u.uExpo.value = f.expo; u.uShade.value = f.shade; u.uRelief.value = f.relief; u.uWarm.value = f.warm; u.uOcean.value = f.relief;
+    const sp = projectDir(cam, f.sunVis);
+    (u.uSunPx.value as Vector2).set(sp.x * pr, (cam.H - sp.y) * pr);
+    u.uSunFlare.value = sp.z > 0.05 ? 1 : 0;
     u.uTime.value = time % 1000;
     this.gl.render(this.scene, this.camera);
   }

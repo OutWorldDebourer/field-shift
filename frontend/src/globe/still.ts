@@ -24,7 +24,12 @@ export class StillView {
     this.target = opts.target;
     this.overlay = opts.overlay === false ? null : new Overlay(root);
     this.show();
-    if (document.fonts) document.fonts.load('500 16px "IBM Plex Mono"').then(() => this.draw(), () => undefined);
+    if (document.fonts) {
+      const again = () => this.draw();
+      document.fonts.load('400 16px "IBM Plex Mono"').then(again, again);
+      document.fonts.load('500 16px "IBM Plex Mono"').then(again, again);
+      document.fonts.ready.then(again, again);
+    }
   }
 
   private pick(): StillDef | undefined {

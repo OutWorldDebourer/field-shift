@@ -31,7 +31,9 @@ uniform vec4 gP0, gP1, gP2, gP3, gP4;   // alpha, feather, gain, texture size (0
 uniform vec4 bCloud;                    // regional box shared by the cloud and night-lights plates
 uniform float uCloud, uNightR;
 uniform vec2 uCloudShift;               // cloud shadow offset in plate uv (towards the sun)
-uniform vec3 uClear;                    // clear-sky disc around the target: dlat, dlon (deg, relative), radius (deg)
+uniform vec3 uClear;                    // thinner cloud around the target: dlat, dlon (deg, relative), radius (deg)
+uniform vec2 uSunPx;                    // where the sun sits on screen (device px, origin bottom-left)
+uniform float uSunFlare;
 
 uniform vec3 uSun;                      // light direction on the ground, local frame
 uniform vec3 uSunVis;                   // where the sun is drawn, local frame
@@ -87,7 +89,8 @@ vec4 plate(sampler2D t, vec4 b, vec4 g, vec2 dll, vec4 base) {
     if (mag > 1.15) c = mix(c, texCR(t, uv, g.w), smoothstep(1.15, 1.8, mag));
   } else {
     c = texture(t, uv).rgb;
-    hp = lum(c) - lum(texture(t, uv, 3.2).rgb);
+    float m1 = lum(texture(t, uv, 3.2).rgb);
+    hp = lum(c) - m1 + .7 * (m1 - lum(texture(t, uv, 5.6).rgb));
   }
   return mix(base, vec4(c * g.z, hp), w);
 }
@@ -101,13 +104,20 @@ vec3 stars(vec3 d) {
   return vec3(.85, .9, 1.) * s * (.35 + .65 * fract(h * 91.7)) * tw;
 }
 
-vec3 sunGlow(float cs, float hit) {
+vec3 sunGlow(float cs, float hit, vec2 frag) {
   float ang = acos(clamp(cs, -1., 1.));
-  float a = ang / .021;
-  vec3 c = vec3(1., .97, .90) * smoothstep(1.25, .55, a) * 2.6 * (1. - hit);        // disc
-  c += vec3(1., .82, .56) * (1. / (1. + a * a * .50)) * mix(1.10, .60, hit);         // inner halo
-  c += vec3(1., .52, .22) * exp(-ang * 10.5) * mix(.66, .46, hit);                   // warm bloom
-  c += vec3(.90, .34, .12) * exp(-ang * 5.0) * mix(.085, .06, hit);                  // wide haze
+  float a = ang / .014;
+  vec3 c = vec3(1., .96, .82) * smoothstep(1.35, .5, a) * 6. * (1. - hit);           // white-hot core
+  c += vec3(1., .70, .26) * (1. / (1. + a * a * .30)) * mix(2.2, .85, hit);          // saturated inner halo
+  c += vec3(1., .42, .10) * exp(-ang * 10.5) * mix(.95, .60, hit);                   // orange bloom
+  c += vec3(.95, .26, .06) * exp(-ang * 4.6) * mix(.13, .085, hit);                  // ember haze
+  // flare: a thin streak along the limb and a few faint rays
+  vec2 d = (frag - uSunPx) / uF;
+  float r = length(d);
+  float streak = exp(-abs(d.y) * 110.) * exp(-abs(d.x) * 2.4) * .50 + exp(-abs(d.y) * 34.) * exp(-abs(d.x) * 4.5) * .22;
+  float th = atan(d.y, d.x);
+  float rays = pow(abs(cos(th * 3. + .5)), 60.) + .5 * pow(abs(cos(th * 2. - .35)), 110.);
+  c += vec3(1., .58, .22) * (streak + rays * exp(-r * 10.) * smoothstep(.0, .03, r) * .20) * uSunFlare * mix(1., .55, hit);
   return c * uSunAmt;
 }
 
@@ -120,7 +130,7 @@ void main() {
   float disc = b * b - uC2;
   float cs = dot(dir, uSunVis);
   float sunProx = pow(max(cs, 0.), 34.);
-  vec3 blue = vec3(.24, .50, 1.);
+  vec3 blue = vec3(.26, .54, 1.);
   vec3 warm = vec3(1., .58, .26);
   vec3 col;
 
@@ -130,11 +140,11 @@ void main() {
     float x = max(dmin - RE, 0.) / 26.;
     vec3 pm = normalize(b * dir - Cc);
     float litL = smoothstep(-.22, .18, dot(pm, uSun));
-    float rim = (exp(-x * 1.15) * 1.25 + exp(-x * .30) * .30) * step(0., b);
-    vec3 rimCol = mix(blue + vec3(.10, .12, 0.) * exp(-x * 2.2), warm * 1.25, clamp(sunProx * 1.3, 0., 1.));
+    float rim = (exp(-x * 1.05) * 1.9 + exp(-x * .26) * .50) * step(0., b);
+    vec3 rimCol = mix(blue + vec3(.42, .36, 0.) * exp(-x * 2.4), warm * 1.3, clamp(sunProx * 1.3, 0., 1.));
     col = vec3(.008, .013, .026) + stars(dir) * (1. - clamp(rim * 2., 0., 1.));
     col += rimCol * rim * (.10 + .90 * litL) * uShade;
-    col += sunGlow(cs, 0.);
+    col += sunGlow(cs, 0., frag);
   } else {
     float t = uC2 / (b + sqrt(disc));                // conjugate form: no cancellation near the ground
     vec3 H = uCl + t * dir;                          // hit point, km from the look-at point
@@ -160,14 +170,14 @@ void main() {
 
     // light: a soft terminator, warm at a low sun
     float mu = dot(N, uSun);
-    float lit = smoothstep(-.10, .30, mu);
+    float lit = smoothstep(-.06, .46, mu);
     float low = 1. - smoothstep(.04, .55, mu);
-    vec3 sunCol = mix(vec3(1.), vec3(1.08, .84, .62), low * uWarm);
-    vec3 amb = vec3(.050, .078, .135) * smoothstep(-.30, .10, mu);
+    vec3 sunCol = mix(vec3(1.), vec3(1.10, .83, .58), low * uWarm);
+    vec3 amb = vec3(.050, .082, .150) * smoothstep(-.30, .10, mu);
     // relief: the shaded-relief plates carry their own hillshade (lit from the north-west); a low sun deepens it
     float rl = g.a * uRelief * (.55 + .9 * low);
-    alb *= exp(rl * 3.4);
-    alb += rl * vec3(.50, .20, -.30) * .8;
+    alb *= exp(rl * 3.6);
+    alb += rl * vec3(.55, .20, -.34);
     alb = max(alb, 0.);
     // open water: Blue Marble's ocean is near black; give it the sky it reflects
     float water = smoothstep(-.02, .012, alb.b - alb.r) * (1. - smoothstep(.07, .17, lum(alb))) * uOcean;
@@ -178,12 +188,16 @@ void main() {
     vec2 uc = vec2((dlon - bCloud.x) / (bCloud.z - bCloud.x), (bCloud.w - dlat) / (bCloud.w - bCloud.y));
     float cw = inside(uc, .07) * uCloud;
     if (cw > .002) {
-      float clear = mix(.22, 1., smoothstep(uClear.z * .25, uClear.z, length(vec2((dlon - uClear.y) * uCosLat0, dlat - uClear.x))));
-      float cl = smoothstep(.10, 1., texture(tCloud, uc, .6).r) * cw * clear;
-      float sh = smoothstep(.10, 1., texture(tCloud, uc + uCloudShift, 1.).r) * cw * clear;
-      col *= 1. - .38 * sh * (1. - cl);
-      vec3 cc = (lit * mix(vec3(1.), vec3(1.06, .93, .80), low * uWarm) * .86 + amb * 2.4) * mix(.80, 1.04, cl);
-      col = mix(col, cc, smoothstep(.0, .9, cl) * .9);
+      // thin veil; thinner still in a band along the coast around the target, so the ground stays readable
+      vec2 cp = vec2((dlon - uClear.y) * uCosLat0, dlat - uClear.x);
+      float ac = dot(cp, vec2(.78, .62));               // + inland, - out to sea
+      float cd = length(vec2(dot(cp, vec2(-.62, .78)) / 3.4, ac < 0. ? ac * 2.4 : ac)) / uClear.z;
+      float clear = mix(.06, 1., smoothstep(.45, 1.25, cd));
+      float cl = smoothstep(.12, .95, texture(tCloud, uc, .8).r) * cw * clear * .66;
+      float sh = smoothstep(.12, .95, texture(tCloud, uc + uCloudShift, 1.6).r) * cw * clear * .66;
+      col *= 1. - .30 * sh * (1. - cl);
+      vec3 cc = (.30 + .70 * lit) * mix(vec3(1.), vec3(1.08, .92, .78), low * uWarm) * .98 + amb * 1.6;
+      col = mix(col, cc, cl);
     }
 
     // night lights in the twilight band and beyond
@@ -201,13 +215,16 @@ void main() {
     float haze = pow(1. - muV, 3.4) * uShade;
     vec3 hazeCol = mix(vec3(.36, .58, 1.) * .95, warm * 1.1, clamp(sunProx * 1.4 + pow(max(cs, 0.), 9.) * .35, 0., 1.)) * (.14 + .86 * lit);
     col = mix(col, hazeCol, clamp(haze * .92, 0., 1.));
-    col += hazeCol * pow(1. - muV, 8.) * .55 * uShade;
-    col += sunGlow(cs, 1.) * (.35 + .65 * uShade);
+    col += hazeCol * pow(1. - muV, 8.) * .80 * uShade;
+    col += sunGlow(cs, 1., frag) * (.35 + .65 * uShade);
   }
 
   // shoulder, vignette, dither
-  vec3 k = vec3(.82);
-  col = mix(col, k + (1. - k) * (1. - exp(-(col - k) / (1. - k))), step(k, col));
+  float mx = max(col.r, max(col.g, col.b));          // on the brightest channel, so the sun keeps its orange
+  if (mx > .82) {
+    vec3 hue = col * ((.82 + .18 * (1. - exp(-(mx - .82) / .18))) / mx);
+    col = mix(hue, min(col, vec3(1.)), smoothstep(1.3, 3.2, mx));          // only the core burns to white
+  }
   vec2 q = frag / uRes - .5;
   col *= 1. - .30 * dot(q, q);
   col += (hash(frag + fract(uTime) * 61.) - .5) / 255.;

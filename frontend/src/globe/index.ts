@@ -144,7 +144,11 @@ export function createGlobe(host: HTMLElement, opts: GlobeOptions): GlobeHandle 
     schedule();
     requestAnimationFrame(() => { if (!disposed) opts.onReady?.(); });
   });
-  if (document.fonts) document.fonts.load('500 16px "IBM Plex Mono"').then(() => { dirty = true; }, () => undefined);
+  if (document.fonts) {
+    const again = () => { dirty = true; };
+    document.fonts.load('400 16px "IBM Plex Mono"').then(again, again);
+    document.fonts.load('500 16px "IBM Plex Mono"').then(again, again);
+  }
 
   function teardownLive() {
     if (raf) cancelAnimationFrame(raf);

@@ -109,7 +109,7 @@ export function diveFrame(inp: DiveInput, creep = true): DiveFrame {
     sun: dirOf(s.az, sunEl), sunVis: dirOf(s.az, s.elVis + (sunEl - SUN_EL0) * 0.8),
     sunAz: s.az, sunEl,
     sunAmt: 1 - smooth(0.25, 0.6, p),
-    expo: mix(1.5, 1.22, rise),
+    expo: mix(1.85, 1.22, rise),
     shade: smooth(Math.log(25), Math.log(300), Math.log(altK)),
     relief: smooth(Math.log(40), Math.log(260), Math.log(altK)),
     warm: 1 - smooth(0.05, 0.7, p),
