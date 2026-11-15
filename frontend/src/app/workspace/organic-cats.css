@@ -32,7 +32,11 @@
 .og-row__sig svg { width: 14px; height: 14px; }
 .og-row__note { font-size: 0.8125rem; color: var(--ink-2); margin-top: 6px; }
 .og-row__names { font-size: 0.9375rem; color: var(--ink); margin-bottom: 6px; }
-.og-rows .og-row__how { color: var(--ink); opacity: 0.85; }
+.og-rows .og-row__how { color: var(--ink); opacity: 0.9; }
+.og-rows li > .og-tag { display: inline-block; margin-left: 6px; vertical-align: 1px; }
+.og-rows li { display: block; }
+.og-rows li > .og-row__how, .og-rows li > .og-cite { display: block; margin-top: 3px; }
+.og-rows li > .og-row__sig { display: flex; margin-top: 3px; }
 .og-cat .og-cite { font-size: 0.8125rem; text-decoration: underline; text-underline-offset: 3px; }
 .og-cat > .askbtn, .og-cat > .og-nasa { justify-self: start; }
 @media (max-width: 899px) {

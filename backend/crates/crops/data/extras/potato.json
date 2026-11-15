@@ -1,0 +1,167 @@
+{
+  "conditions": [
+    [
+      "Liriomyza huidobrensis",
+      {
+        "favourable": {
+          "en": "Mild, warm weather with no frost, like on Peru's coast. A study in the Cañete valley found the coastal climate favourable for the fly in both summer and winter. Monthly averages ran from about 13 °C to 29 °C.",
+          "es": "Clima templado a cálido y sin heladas, como en la costa peruana. Un estudio en el valle de Cañete encontró que el clima costero favorece a la mosca tanto en verano como en invierno. Los promedios mensuales iban de unos 13 °C a 29 °C."
+        },
+        "temp_min_c": 13.2,
+        "temp_max_c": 28.7,
+        "humidity": "any",
+        "season": {
+          "en": "Can be present all year on the Peruvian coast. The source reports average temperatures of about 23.6 °C in summer and 15.6 °C in winter.",
+          "es": "Puede estar presente todo el año en la costa peruana. La fuente reporta temperaturas promedio de unos 23,6 °C en verano y 15,6 °C en invierno."
+        },
+        "citation": {
+          "title": "Developing IPM components for leafminer fly in the Canete valley of Peru (Conference)",
+          "author": "OSTI ETDEWEB record (authors not shown in the record we found)",
+          "year": null,
+          "url": "https://www.osti.gov/etdeweb/biblio/20626279"
+        }
+      }
+    ],
+    [
+      "Phthorimaea operculella",
+      {
+        "favourable": {
+          "en": "Long spells of warm, dry weather. Risk is higher when tubers are exposed, the soil is cracked or harvest is late.",
+          "es": "Periodos largos de clima cálido y seco. El riesgo sube si los tubérculos quedan expuestos, el suelo está agrietado o retrasas la cosecha."
+        },
+        "temp_min_c": 20.0,
+        "temp_max_c": 30.0,
+        "humidity": "dry",
+        "citation": {
+          "title": "Potato Tuber Moth (Phthorimaea operculella): A Major Global Pest of Potato Production and Storage",
+          "author": "PotatoPro",
+          "year": null,
+          "url": "https://www.potatopro.com/about/potato-tuber-moth"
+        }
+      }
+    ],
+    [
+      "Myzus persicae",
+      {
+        "favourable": {
+          "en": "Warm weather. The population grows faster as temperature rises and peaks at about 30 °C. Warmer conditions also increase spread of potato virus Y (PVY).",
+          "es": "Clima cálido. La población crece más rápido a medida que sube la temperatura y llega a su máximo cerca de 30 °C. El calor también aumenta la transmisión del virus Y de la papa (PVY)."
+        },
+        "temp_min_c": 10.0,
+        "temp_max_c": 30.0,
+        "humidity": "any",
+        "citation": {
+          "title": "Effects of temperature on the life-history traits of Myzus persicae and its efficiency in transmitting potato virus Y (PVY) in potato crops",
+          "author": "PeerJ (authors not retrieved)",
+          "year": null,
+          "url": "https://peerj.com/articles/21239/"
+        }
+      }
+    ]
+  ],
+  "micronutrients": [
+    {
+      "element": "Zn",
+      "why": {
+        "en": "Zinc is needed for normal growth of young leaves and for photosynthesis, and too little can lower tuber yield and quality.",
+        "es": "El zinc es necesario para el desarrollo normal de las hojas jóvenes y para la fotosíntesis, y su falta puede bajar el rendimiento y la calidad de los tubérculos."
+      },
+      "deficiency": {
+        "en": "Young leaves turn pale green to yellow and stay narrow and cupped upward, sometimes with burnt tips. Veins stay green, dead patches appear, and the plant looks upright and spindly. Excess soil phosphorus can cause this deficiency.",
+        "es": "Las hojas jóvenes se ponen verde pálido a amarillo y quedan angostas y curvadas hacia arriba, a veces con las puntas quemadas. Las venas siguen verdes, aparecen manchas de tejido muerto y la planta se ve erguida y delgada. El exceso de fósforo en el suelo puede causar esta deficiencia."
+      },
+      "citation": {
+        "title": "Comprehensive Guide to Potato Growing Stages and Nutritional Needs",
+        "author": "Haifa Group",
+        "year": null,
+        "url": "https://www.haifa-group.com/crop-guide/field-crops/crop-guide-potato/nutrients-growing-potatoes"
+      }
+    },
+    {
+      "element": "B",
+      "why": {
+        "en": "Boron moves sugars across cell membranes and is key for building cell walls, for cell division and for auxin metabolism.",
+        "es": "El boro mueve los azúcares a través de las membranas celulares y es clave para formar las paredes celulares, para la división celular y para el metabolismo de las auxinas."
+      },
+      "deficiency": {
+        "en": "Growing buds on the foliage or tubers die or grow late. Tips die, and the plant looks bushy and dull. It shows up mostly on sandy, easily leached soils.",
+        "es": "Las yemas en crecimiento del follaje o de los tubérculos mueren o se retrasan. Las puntas mueren y la planta se ve tupida y opaca. Aparece sobre todo en suelos arenosos que se lavan con facilidad."
+      },
+      "citation": {
+        "title": "Deficiency or phytotoxicity of mineral elements",
+        "author": "the French seed potato (FN3PT)",
+        "year": null,
+        "url": "https://www.plantdepommedeterre.org/en/maladie-ravageur/deficiency-or-phytotoxicity-of-mineral-elements/"
+      }
+    },
+    {
+      "element": "Mn",
+      "why": {
+        "en": "This source covers when the problem appears, not what manganese does in the plant: deficiency is mostly limited to high-pH soils, where the plant cannot take up the manganese in the soil.",
+        "es": "Esta fuente explica cuándo aparece el problema, no qué función cumple el manganeso en la planta: la deficiencia se da sobre todo en suelos de pH alto, donde la planta no puede tomar el manganeso del suelo."
+      },
+      "deficiency": {
+        "en": "Symptoms start on the younger leaves. It can be confused with late blight, but manganese deficiency has no smell and does not kill the stem base.",
+        "es": "Los síntomas empiezan en las hojas más jóvenes. Puedes confundirla con el tizón tardío, pero la deficiencia de manganeso no tiene olor y no mata la base del tallo."
+      },
+      "citation": {
+        "title": "Manganese deficiency-Potatoes",
+        "author": "Yara",
+        "year": null,
+        "url": "https://www.yara.us/crop-nutrition/potato/nutrient-deficiencies-in-potatoes/manganese-deficiency-potatoes/"
+      }
+    }
+  ],
+  "biostimulants": [
+    {
+      "category": "seaweed-extract",
+      "name": {
+        "en": "Seaweed extract sprayed on the leaves",
+        "es": "Extracto de algas aplicado al follaje"
+      },
+      "evidence": {
+        "en": "In a 2010 field trial on the potato variety 'Sante', seaweed extract sprayed on the leaves improved growth, tuber yield and tuber quality (nitrogen, soluble solids and protein).",
+        "es": "En un ensayo de campo de 2010 con la variedad de papa 'Sante', el extracto de algas aplicado al follaje mejoró el crecimiento, el rendimiento y la calidad de los tubérculos (nitrógeno, sólidos solubles y proteína)."
+      },
+      "citation": {
+        "title": "Impact of foliar application of seaweed extract on growth, yield and quality of potato (Solanum tuberosum L.)",
+        "author": "AGRIS (FAO) record",
+        "year": 2012,
+        "url": "https://agris.fao.org/search/en/providers/122650/records/647369bc08fd68d5460633b1"
+      }
+    },
+    {
+      "category": "humic-fulvic",
+      "name": {
+        "en": "Water-soluble humic acid sprayed on the leaves",
+        "es": "Ácido húmico soluble en agua aplicado al follaje"
+      },
+      "evidence": {
+        "en": "In greenhouse trials (2014–2015), humic acid sprayed on potato leaves raised fresh tuber yield by about 23–63% compared with the control, at several levels of water shortage.",
+        "es": "En ensayos de invernadero (2014–2015), el ácido húmico aplicado al follaje de la papa aumentó el rendimiento de tubérculo fresco entre 23 y 63% aproximadamente frente al testigo, con distintos niveles de falta de agua."
+      },
+      "stress": {
+        "en": "drought / water shortage",
+        "es": "sequía / falta de agua"
+      },
+      "citation": {
+        "title": "Effect of water soluble humic acid applied to potato foliage on plant growth, photosynthesis characteristics and fresh tuber yield under different water deficits",
+        "author": "PMC (NCBI) article (authors not retrieved)",
+        "year": null,
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7217897/"
+      }
+    }
+  ],
+  "gaps": [
+    "Humidity and season for Myzus persicae in coastal Peru: no source we found gives these for the Huaral valley",
+    "Humidity needs of Liriomyza huidobrensis (no figures in the sources we found)",
+    "Season for Phthorimaea operculella on the Peruvian coast (no local source found)",
+    "Role of manganese in potato (we only found when the deficiency appears and its symptoms)",
+    "Iron, molybdenum and copper in potato (not researched)",
+    "Amino-acid and protein-hydrolysate biostimulants: no potato trial found (one 2026 study of several biostimulants on potato under drought found only limited effects on yield)",
+    "Microbial biostimulants in potato (not researched)",
+    "Salinity and heat stress responses to biostimulants in potato (no source found)",
+    "INIA, SENASA or CIP pest calendars for the Huaral valley (not found within the search limit)"
+  ],
+  "reviewed": false
+}

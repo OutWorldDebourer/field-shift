@@ -1,7 +1,7 @@
 /* Organic view: same frosted glass and serif titles; soft green only for the "matches your pest" badge
    (amber stays reserved for the one key number). */
 :root { --ally: #9fdca3; --ally-bg: rgba(120, 200, 128, 0.18); --ally-ink: #d6f5d8; }
-.view--organic { overflow: auto; padding-right: 4px; }
+.view--organic, .view--prevention { overflow: auto; padding-right: 4px; }
 .ws[data-view='organic'] .ws__bg .backdrop__ground { filter: brightness(0.5) saturate(0.9) blur(2px); }
 .og { display: grid; grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); gap: 16px; align-items: start; }
 .og-side { padding: 22px 22px 20px; display: grid; gap: 14px; position: sticky; top: 0; }

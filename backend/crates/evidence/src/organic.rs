@@ -151,14 +151,16 @@ fn biostim(crop: &CropRecord, facts: Option<&Value>, ev: &Value) -> (Vec<Value>,
     let no_test = facts.and_then(|f| f["soil_test"].as_str()).map(|s| { let s = s.to_lowercase(); s.is_empty() || s.contains("no") || s.contains("unknown") || s.contains("ningun") }).unwrap_or(true);
     let reviewed = t.extras_reviewed == Some(true);
     let mut out = vec![];
+    let mut said_gap = false;
     for m in &t.micronutrients {
         let signal = match ndvi {
             Some(v) if v < 0.5 => Some(json!({ "en": format!("Crop vigor is {v:.2} (Sentinel-2, field-level): if leaves show these symptoms, ask for a leaf or soil test."), "es": format!("El vigor del cultivo es {v:.2} (Sentinel-2, nivel de campo): si las hojas muestran estos síntomas, pide un análisis foliar o de suelo.") })),
-            _ if no_test => Some(json!({ "en": "No soil test given: micronutrient levels are an information gap.", "es": "Sin análisis de suelo: los niveles de micronutrientes son un vacío de información." })),
+            _ if no_test && !said_gap => { said_gap = true; Some(json!({ "en": "No soil test given: micronutrient levels are an information gap.", "es": "Sin análisis de suelo: los niveles de micronutrientes son un vacío de información." })) }
             _ => None,
         };
-        out.push(json!({ "kind": "micronutrient", "name": { "en": format!("{} — {}", m.element, m.why.en), "es": format!("{} — {}", m.element, m.why.es) },
-            "why": { "en": format!("Deficiency signs: {}", m.deficiency.en), "es": format!("Señales de deficiencia: {}", m.deficiency.es) },
+        let (en, es) = element_name(&m.element);
+        out.push(json!({ "kind": "micronutrient", "name": { "en": format!("{en} ({})", m.element), "es": format!("{es} ({})", m.element) },
+            "why": { "en": format!("{} Deficiency signs: {}", m.why.en, m.deficiency.en), "es": format!("{} Señales de deficiencia: {}", m.why.es, m.deficiency.es) },
             "signal": signal, "citation": { "title": m.citation.title, "url": m.citation.url }, "reviewed": reviewed }));
     }
     for b in &t.biostimulants {
@@ -168,4 +170,12 @@ fn biostim(crop: &CropRecord, facts: Option<&Value>, ev: &Value) -> (Vec<Value>,
             "citation": { "title": b.citation.title, "url": b.citation.url }, "reviewed": reviewed }));
     }
     (out, Value::Null)
+}
+
+fn element_name(sym: &str) -> (&'static str, &'static str) {
+    match sym.trim() {
+        "Zn" => ("Zinc", "Zinc"), "B" => ("Boron", "Boro"), "Fe" => ("Iron", "Hierro"), "Mn" => ("Manganese", "Manganeso"),
+        "Mo" => ("Molybdenum", "Molibdeno"), "Cu" => ("Copper", "Cobre"), "Ni" => ("Nickel", "Níquel"), "Cl" => ("Chlorine", "Cloro"),
+        _ => ("Micronutrient", "Micronutriente"),
+    }
 }

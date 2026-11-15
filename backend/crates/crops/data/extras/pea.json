@@ -1,0 +1,178 @@
+{
+  "conditions": [
+    [
+      "Liriomyza huidobrensis",
+      {
+        "favourable": {
+          "en": "Mild weather. A temperature model reports that populations develop between 12 and 27 °C and do best at 18–24 °C. At 32 °C the pupae die.",
+          "es": "Clima templado. Un modelo de temperatura indica que la población se desarrolla entre 12 y 27 °C y que le va mejor entre 18 y 24 °C. A 32 °C las pupas mueren."
+        },
+        "temp_min_c": 12.0,
+        "temp_max_c": 27.0,
+        "humidity": "any",
+        "citation": {
+          "title": "A Temperature-Dependent Phenology Model for Liriomyza huidobrensis (Diptera: Agromyzidae)",
+          "author": "Journal of Economic Entomology (vol. 110, issue 3)",
+          "year": 2017,
+          "url": "https://academic.oup.com/jee/article/110/3/1333/3064060"
+        }
+      }
+    ],
+    [
+      "Acyrthosiphon pisum",
+      {
+        "favourable": {
+          "en": "Mild weather. In a study of aphids reared on pea, 20–25 °C was the best range for growth. At 30 °C and above, adults did not reproduce.",
+          "es": "Clima templado. En un estudio con pulgones criados en arveja, el mejor rango para su crecimiento fue de 20 a 25 °C. A 30 °C o más, los adultos no se reprodujeron."
+        },
+        "temp_min_c": 20.0,
+        "temp_max_c": 25.0,
+        "humidity": "any",
+        "citation": {
+          "title": "Life table and heat tolerance of Acyrthosiphon pisum (Hemiptera: Aphididae) in subtropical Taiwan",
+          "author": "Lu et al., Entomological Science",
+          "year": 2008,
+          "url": "https://onlinelibrary.wiley.com/doi/10.1111/j.1479-8298.2008.00274.x"
+        }
+      }
+    ],
+    [
+      "Bemisia sp.",
+      {
+        "favourable": {
+          "en": "Warm weather. The model predicted the fastest population growth at 26–28 °C (cassava-colonising populations of B. tabaci).",
+          "es": "Clima cálido. El modelo predijo el mayor crecimiento de la población entre 26 y 28 °C (poblaciones de B. tabaci que colonizan yuca)."
+        },
+        "temp_min_c": 26.0,
+        "temp_max_c": 28.0,
+        "humidity": "any",
+        "citation": {
+          "title": "Life history and temperature-dependence of cassava-colonising populations of Bemisia tabaci",
+          "author": "International Potato Center (CIP)",
+          "year": 2020,
+          "url": "https://cipotato.org/publication/life-history-and-temperature-dependence-of-cassava-colonising-populations-of-bemisia-tabaci/"
+        }
+      }
+    ],
+    [
+      "Agrotis sp.",
+      {
+        "favourable": {
+          "en": "Warm weather. In a study of black cutworm (A. ipsilon), 27 °C was the best of the temperatures tested. Soil moisture did not affect larval development, but air humidity affected the first five larval stages.",
+          "es": "Clima cálido. En un estudio con gusano de tierra negro (A. ipsilon), 27 °C fue la mejor de las temperaturas probadas. La humedad del suelo no afectó el desarrollo de las larvas, pero la humedad del aire sí afectó sus primeros cinco estadios."
+        },
+        "humidity": "any",
+        "citation": {
+          "title": "Black Cutworm, Agrotis ipsilon (Hufnagel) (Insecta: Lepidoptera: Noctuidae)",
+          "author": "University of Florida IFAS Extension",
+          "year": null,
+          "url": "https://www.researchgate.net/publication/237761357_Black_Cutworm_Agrotis_ipsilon_Hufnagel_Insecta_Lepidoptera_Noctuidae1"
+        }
+      }
+    ]
+  ],
+  "micronutrients": [
+    {
+      "element": "Mo",
+      "why": {
+        "en": "Molybdenum deficiency is sometimes seen on legumes like pea, and it looks like nitrogen deficiency.",
+        "es": "La falta de molibdeno a veces aparece en leguminosas como la arveja y se parece a la falta de nitrógeno."
+      },
+      "deficiency": {
+        "en": "The older, lower leaves turn yellow all over, and the rest of the plant is often light green.",
+        "es": "Las hojas viejas de abajo se ponen amarillas por completo y el resto de la planta suele verse verde claro."
+      },
+      "citation": {
+        "title": "Guide to Symptoms of Plant Nutrient Deficiencies",
+        "author": "University of Arizona Cooperative Extension",
+        "year": null,
+        "url": "https://extension.arizona.edu/publication/guide-symptoms-plant-nutrient-deficiencies"
+      }
+    },
+    {
+      "element": "B",
+      "why": {
+        "en": "Boron is more likely to run short in dry conditions on limed soils with low exchange capacity, and soil pH above 7 lowers how much boron the plant can take up.",
+        "es": "Es más probable que falte boro en condiciones secas, en suelos encalados con poca capacidad de intercambio, y un pH del suelo mayor a 7 reduce cuánto boro puede absorber la planta."
+      },
+      "deficiency": {
+        "en": "Young leaves turn yellow, the growing tips die, and new side shoots start to grow.",
+        "es": "Las hojas nuevas se ponen amarillas, se mueren las puntas de crecimiento y empiezan a salir brotes laterales nuevos."
+      },
+      "citation": {
+        "title": "Micronutrients in Mississippi Soils and Plant Nutrition",
+        "author": "Mississippi State University Extension",
+        "year": null,
+        "url": "https://extension.msstate.edu/publications/micronutrients-mississippi-soils-and-plant-nutrition"
+      }
+    },
+    {
+      "element": "Zn",
+      "why": {
+        "en": "Plants take up zinc through both leaves and roots, but high soil pH can limit how much is available.",
+        "es": "La planta absorbe zinc por las hojas y por las raíces, pero un pH alto del suelo puede limitar cuánto zinc tiene disponible."
+      },
+      "deficiency": {
+        "en": "Leaves at the tips may grow in a tight cluster (rosette), and new leaves turn yellow between the veins.",
+        "es": "Las hojas de las puntas pueden crecer amontonadas en roseta y las hojas nuevas se ponen amarillas entre las nervaduras."
+      },
+      "citation": {
+        "title": "Guide to Symptoms of Plant Nutrient Deficiencies",
+        "author": "University of Arizona Cooperative Extension",
+        "year": null,
+        "url": "https://extension.arizona.edu/publication/guide-symptoms-plant-nutrient-deficiencies"
+      }
+    }
+  ],
+  "biostimulants": [
+    {
+      "category": "seaweed-extract",
+      "name": {
+        "en": "Brown seaweed extracts (Sargassum vulgare, Colpomenia sinuosa, Padina pavonica)",
+        "es": "Extractos de algas pardas (Sargassum vulgare, Colpomenia sinuosa, Padina pavonica)"
+      },
+      "evidence": {
+        "en": "Soaking pea seeds in seaweed extracts before sowing reduced the harm from salt stress in seedlings, and S. vulgare extract worked best.",
+        "es": "Remojar la semilla de arveja en extractos de algas antes de sembrar redujo el daño por estrés salino en las plántulas, y el extracto de S. vulgare fue el que mejor funcionó."
+      },
+      "stress": {
+        "en": "salinity",
+        "es": "salinidad"
+      },
+      "citation": {
+        "title": "Growth, physiological, and molecular responses of three phaeophyte extracts on salt-stressed pea (Pisum sativum L.) seedlings",
+        "author": "Not identified in search result (PMC open-access article)",
+        "year": 2023,
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10020410/"
+      }
+    },
+    {
+      "category": "microbial",
+      "name": {
+        "en": "Rhizobia inoculant",
+        "es": "Inoculante de rizobios"
+      },
+      "evidence": {
+        "en": "In field trials in Alberta, rhizobia inoculation increased pea seed yield in 9 of 22 trials, by an average of 14%.",
+        "es": "En ensayos de campo en Alberta, inocular con rizobios aumentó el rendimiento de grano de la arveja en 9 de 22 ensayos, en 14 % en promedio."
+      },
+      "citation": {
+        "title": "Response of pea to rhizobia inoculation and starter nitrogen in Alberta",
+        "author": "Clayton, G.W. et al., Canadian Journal of Plant Science",
+        "year": 2004,
+        "url": "https://cdnsciencepub.com/doi/10.4141/P01-006"
+      }
+    }
+  ],
+  "gaps": [
+    "Humidity preferences for all four pests: no source found gave a clear dry-or-humid preference, so 'any' is used. Bemisia's dry-weather association could not be cited",
+    "Season of peak pest pressure in the Huaral valley or coastal Peru (no INIA/SENASA source found)",
+    "Pest sources come from other settings and are not specific to coastal Peru. Liriomyza model: author list not confirmed. Bemisia: cassava-colonising populations. Agrotis: study done on field corn for A. ipsilon; the only source found is a ResearchGate copy and the original EDIS page was not found",
+    "Pea-specific micronutrient sources: the B, Zn and Mo entries come from general extension guides, not pea trials",
+    "Fe, Mn and Cu deficiency on pea (not covered)",
+    "Biostimulant categories with no pea trial found: amino-acids, humic-fulvic and protein-hydrolysate",
+    "Biostimulant evidence for heat or drought stress in pea",
+    "Authors not confirmed in search results: the seaweed-extract paper (PMC10020410), the pea-aphid paper (only 'Lu' seen) and the Alberta rhizobia paper (author and year)"
+  ],
+  "reviewed": false
+}

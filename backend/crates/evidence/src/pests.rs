@@ -172,6 +172,11 @@ pub async fn refresh(state: &AppState, analysis_id: &str) -> anyhow::Result<Opti
     let rows = rows(state, st.field.center.lat, st.field.center.lon, &crops, summary.as_ref()).await;
     apply(state, st.field.center.lat, st.field.center.lon, &mut ev, rows).await;
     analyses::store::save_evidence(&state.db, analysis_id, &ev).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    // The Prevention lights follow the crops too (a crop named in the chat appears there at once).
+    if !crops.is_empty() {
+        let p = crate::prevention::build(&crops, &ev);
+        analyses::store::set_section(&state.db, analysis_id, "prevention", "ready", None, Some(&p)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    }
     Ok(Some(ev))
 }
 

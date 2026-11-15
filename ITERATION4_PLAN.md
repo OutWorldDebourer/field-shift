@@ -12,7 +12,7 @@ The standing rules of `BUILD_PLAN.md` apply to every step (EN default + ES, modu
 | A | Compact chat and floating chat bubble | [x] |
 | B | The consultant knows every view | [x] |
 | C | Organic by categories; "What if I grow…?" | [x] |
-| D | Knowledge research (pest conditions, micronutrients, biostimulants); Prevention tab | [ ] |
+| D | Knowledge research (pest conditions, micronutrients, biostimulants); Prevention tab | [x] |
 | E | Technical sheet and consultant with everything above | [ ] |
 
 Tick a phase only when every acceptance check below it passed in the running app (desktop 1440 px and phone 390 px, EN and ES) and the commit is pushed. Add one line per finished phase to the Decision log in `BUILD_PLAN.md`.
@@ -85,13 +85,13 @@ Tick a phase only when every acceptance check below it passed in the running app
 **Cost rule:** research uses paid API calls. Start with the five Huaral demo crops (pea, lettuce, sweet potato, maize, potato). Researching the other 13 seed crops needs the owner's yes.
 
 **Tasks**
-- [ ] D.1 Extend crop records (`backend/crates/crops/data/*.json`, `model.rs`) with, each value cited or declared a gap:
+- [x] D.1 Extend crop records (`backend/crates/crops/data/*.json`, `model.rs`) with, each value cited or declared a gap:
   per pest, the conditions that favour it (temperature range, dry or humid, season) — e.g. spider mite favoured by hot, dry weather;
   critical micronutrients for the crop (Zn, B, Fe, Mn, Mo…) with deficiency symptoms;
   biostimulant categories with evidence for the crop (amino acids under heat or salinity stress, seaweed extracts, humic and fulvic substances).
   No product names or doses (agronomist's call). Research through the existing pipeline (`crops/src/research.rs`, web search, cite or gap); review and store in the seed JSON; label anything unreviewed "AI-researched, verify".
-- [ ] D.2 Prevention tab (top bar: Chat, Dashboard, Rotation, Prevention, Organic): for every crop in the conversation (current, previous, evaluated), each pest gets a traffic light (low / medium / high) with a plain reason, from NASA degree-day generations vs normal, the GEOS-FP 10-day forecast and the favourable conditions of D.1 ("Spider mite: high risk. Hotter than normal (+5 °C) and dry days up to 30 °C ahead"). Perennials get a year-round monitoring calendar; annuals a calendar by stage (sowing to harvest). Actions: monitoring, cultural practices, when to release natural enemies (links to Organic). Same summary + disclosure pattern.
-- [ ] D.3 Organic "biostimulants and micronutrients" category filled from D.1, linked to signals (low vigor → check micronutrients; no soil test → gap).
+- [x] D.2 Prevention tab (top bar: Chat, Dashboard, Rotation, Prevention, Organic): for every crop in the conversation (current, previous, evaluated), each pest gets a traffic light (low / medium / high) with a plain reason, from NASA degree-day generations vs normal, the GEOS-FP 10-day forecast and the favourable conditions of D.1 ("Spider mite: high risk. Hotter than normal (+5 °C) and dry days up to 30 °C ahead"). Perennials get a year-round monitoring calendar; annuals a calendar by stage (sowing to harvest). Actions: monitoring, cultural practices, when to release natural enemies (links to Organic). Same summary + disclosure pattern.
+- [x] D.3 Organic "biostimulants and micronutrients" category filled from D.1, linked to signals (low vigor → check micronutrients; no soil test → gap).
 
 **Acceptance:** the five Huaral crops carry cited D.1 data; Prevention shows correct, explained risks for pea in Huaral and updates when a crop is added in the chat; audit round passes or is logged.
 

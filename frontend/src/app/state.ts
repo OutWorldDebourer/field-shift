@@ -2,7 +2,7 @@
 import type { ClientAnalysis } from '../shared/api';
 import type { SectionKey } from '../shared/contract';
 
-export type View = 'chat' | 'dashboard' | 'rotation' | 'organic';
+export type View = 'chat' | 'dashboard' | 'rotation' | 'prevention' | 'organic';
 
 export interface AppState {
   analysis: ClientAnalysis | null;
@@ -36,5 +36,5 @@ export function syncUrl(): void {
   } catch { /* ignore */ }
 }
 
-export const VIEWS: View[] = ['chat', 'dashboard', 'rotation', 'organic'];
+export const VIEWS: View[] = ['chat', 'dashboard', 'rotation', 'prevention', 'organic'];
 export const isView = (v: string | null): v is View => !!v && (VIEWS as string[]).includes(v);

@@ -1,0 +1,188 @@
+{
+  "conditions": [
+    [
+      "Spodoptera frugiperda",
+      {
+        "favourable": {
+          "en": "Warm weather. In a lab study on maize leaves, larvae and the full egg-to-adult cycle developed best between 26 and 30 °C, with the optimum at 30 °C.",
+          "es": "Clima cálido. En un estudio de laboratorio con hojas de maíz, las larvas y el ciclo completo de huevo a adulto se desarrollaron mejor entre 26 y 30 °C, con el óptimo en 30 °C."
+        },
+        "temp_min_c": 26.0,
+        "temp_max_c": 30.0,
+        "humidity": "any",
+        "citation": {
+          "title": "The Effect of Temperature on the Development of Spodoptera frugiperda (Lepidoptera: Noctuidae)",
+          "author": "du Plessis, H.; Schlemmer, M.-L.; Van den Berg, J. (Insects, MDPI)",
+          "year": 2020,
+          "url": "https://doi.org/10.3390/insects11040228"
+        }
+      }
+    ],
+    [
+      "Helicoverpa zea",
+      {
+        "favourable": {
+          "en": "Warm weather. Larvae grew faster as it got warmer, taking about 32 days at 20 °C but about 13 days at 34 °C. In tropical and subtropical climates the pest is active all year.",
+          "es": "Clima cálido. Las larvas crecieron más rápido a medida que subía la temperatura: tardaron unos 32 días a 20 °C y unos 13 días a 34 °C. En climas tropicales y subtropicales la plaga está activa todo el año."
+        },
+        "temp_min_c": 20.0,
+        "temp_max_c": 34.0,
+        "humidity": "any",
+        "season": {
+          "en": "All year in tropical and subtropical climates; only in summer at higher latitudes.",
+          "es": "Todo el año en climas tropicales y subtropicales; solo en verano en latitudes más altas."
+        },
+        "citation": {
+          "title": "EENY-145 Corn Earworm, Helicoverpa zea (Boddie) (Lepidoptera: Noctuidae)",
+          "author": "Capinera, J.L. (University of Florida IFAS Extension)",
+          "year": null,
+          "url": "https://ask.ifas.ufl.edu/publication/IN302/pdf"
+        }
+      }
+    ],
+    [
+      "Diatraea saccharalis",
+      {
+        "favourable": {
+          "en": "Warm, humid weather. The borer develops between about 16.7 and 33.9 °C, with the optimum near 27.4 °C. Places at 25 °C or warmer with relative humidity of 70% or more had larger populations. This study was done in sugarcane.",
+          "es": "Clima cálido y húmedo. El barrenador se desarrolla entre unos 16,7 y 33,9 °C, con el óptimo cerca de 27,4 °C. Los lugares con 25 °C o más y humedad relativa de 70% o más tuvieron poblaciones más grandes. Este estudio se hizo en caña de azúcar."
+        },
+        "temp_min_c": 16.7,
+        "temp_max_c": 33.9,
+        "humidity": "humid",
+        "citation": {
+          "title": "Unraveling the effect of temperature and humidity on the life cycle of Diatraea saccharalis (Lepidoptera: Crambidae) and the impact on pest outbreaks",
+          "author": "Environmental Entomology (Oxford Academic)",
+          "year": 2023,
+          "url": "https://academic.oup.com/ee/article-abstract/52/6/1139/7289080?redirectedFrom=fulltext&login=false"
+        }
+      }
+    ]
+  ],
+  "micronutrients": [
+    {
+      "element": "Zn",
+      "why": {
+        "en": "Corn is one of the crops most sensitive to low soil zinc. Deficiency can cut yield, especially on calcareous soils low in zinc that get heavy phosphorus fertilizer, or in cool, wet periods when roots grow slowly.",
+        "es": "El maíz es uno de los cultivos más sensibles a la falta de zinc en el suelo. La deficiencia puede bajar tu rendimiento, sobre todo en suelos calcáreos pobres en zinc que reciben mucho fósforo, o en épocas frías y húmedas cuando las raíces crecen lento."
+      },
+      "deficiency": {
+        "en": "Appears first on the newest leaves: pale stripes between the veins that start at the base of the leaf and run toward the tip, often as broad whitish bands on each side of the midrib.",
+        "es": "Aparece primero en las hojas más nuevas: rayas pálidas entre las nervaduras que empiezan en la base de la hoja y van hacia la punta, muchas veces como bandas blanquecinas anchas a cada lado de la nervadura central."
+      },
+      "citation": {
+        "title": "Micronutrient Management in Nebraska (G1830)",
+        "author": "University of Nebraska–Lincoln Extension",
+        "year": null,
+        "url": "https://extensionpubs.unl.edu/publication/g1830/na/html/view"
+      }
+    },
+    {
+      "element": "Mn",
+      "why": {
+        "en": "Manganese is crucial for photosynthesis and helps the plant form chlorophyll. It is listed among the most common micronutrient deficiencies in corn.",
+        "es": "El manganeso es clave para la fotosíntesis y ayuda a la planta a formar clorofila. Está entre las deficiencias de micronutrientes más comunes en el maíz."
+      },
+      "deficiency": {
+        "en": "Yellowing between the veins (interveinal chlorosis) on the youngest leaves, and weak stands.",
+        "es": "Amarillamiento entre las nervaduras (clorosis intervenal) en las hojas más jóvenes, y plantas débiles en el campo."
+      },
+      "citation": {
+        "title": "Manage Micronutrients For Higher Corn Yields",
+        "author": "Seed Today",
+        "year": null,
+        "url": "https://www.seedtoday.com/article/1006081/manage-micronutrients-for-higher-corn-yields"
+      }
+    },
+    {
+      "element": "B",
+      "why": {
+        "en": "Boron is essential for reproduction. It is important for flowering and pollination, helping pollen move from the tassel through the silks to the kernels.",
+        "es": "El boro es esencial para la reproducción. Es importante para la floración y la polinización, porque ayuda a que el polen pase de la panoja, por los pelos del choclo, hasta los granos."
+      },
+      "deficiency": {
+        "en": "Symptoms show first on the newest leaves and tissues. Because boron is needed for pollination, poor flowering and pollination are a risk.",
+        "es": "Los síntomas aparecen primero en las hojas y tejidos más nuevos. Como el boro se necesita para la polinización, hay riesgo de mala floración y polinización."
+      },
+      "citation": {
+        "title": "Manage Micronutrients For Higher Corn Yields",
+        "author": "Seed Today",
+        "year": null,
+        "url": "https://www.seedtoday.com/article/1006081/manage-micronutrients-for-higher-corn-yields"
+      }
+    }
+  ],
+  "biostimulants": [
+    {
+      "category": "seaweed-extract",
+      "name": {
+        "en": "Tropical seaweed extracts (Kappaphycus alvarezii, Gracilaria debilis, Sargassum cinctum)",
+        "es": "Extractos de algas tropicales (Kappaphycus alvarezii, Gracilaria debilis, Sargassum cinctum)"
+      },
+      "evidence": {
+        "en": "In two-year field trials, maize grain yield went up clearly with these seaweed extracts, by about 29–32% at the best treatment.",
+        "es": "En ensayos de campo de dos años, el rendimiento de grano de maíz subió claramente con estos extractos de algas, alrededor de 29–32% con el mejor tratamiento."
+      },
+      "citation": {
+        "title": "In-depth metabolite characterization of seaweed-based plant biostimulants: Insights into bioactive components",
+        "author": "Algal Research (Elsevier)",
+        "year": 2024,
+        "url": "https://www.sciencedirect.com/science/article/abs/pii/S2211926424001863"
+      }
+    },
+    {
+      "category": "humic-fulvic",
+      "name": {
+        "en": "Humic acids",
+        "es": "Ácidos húmicos"
+      },
+      "evidence": {
+        "en": "Maize seedlings treated with humic acids before moderate salt stress switched on their salt-defence responses early, which reduced salinity stress.",
+        "es": "Las plántulas de maíz tratadas con ácidos húmicos antes de un estrés salino moderado activaron antes sus defensas contra la sal, lo que redujo el estrés por salinidad."
+      },
+      "stress": {
+        "en": "salinity",
+        "es": "salinidad"
+      },
+      "citation": {
+        "title": "Acclimation with humic acids enhances maize and tomato tolerance to salinity",
+        "author": "Chemical and Biological Technologies in Agriculture (SpringerOpen)",
+        "year": 2021,
+        "url": "https://chembioagro.springeropen.com/articles/10.1186/s40538-021-00239-2"
+      }
+    },
+    {
+      "category": "protein-hydrolysate",
+      "name": {
+        "en": "Protein hydrolysate rich in amino acids",
+        "es": "Hidrolizado de proteínas rico en aminoácidos"
+      },
+      "evidence": {
+        "en": "Maize seedlings grown in hydroponics were tested with a protein hydrolysate under low oxygen, salt and nutrient shortage. The authors report it reduced the harm from these stresses.",
+        "es": "Se probó un hidrolizado de proteínas en plántulas de maíz en hidroponía, con falta de oxígeno, sal y falta de nutrientes. Los autores reportan que redujo el daño de estos estreses."
+      },
+      "stress": {
+        "en": "salinity, low oxygen (waterlogging), nutrient deficiency",
+        "es": "salinidad, falta de oxígeno (encharcamiento), deficiencia de nutrientes"
+      },
+      "citation": {
+        "title": "A Novel Biostimulant, Belonging to Protein Hydrolysates, Mitigates Abiotic Stress Effects on Maize Seedlings Grown in Hydroponics",
+        "author": "Agronomy (MDPI)",
+        "year": 2019,
+        "url": "https://mdpi.com/2073-4395/9/1/28/htm"
+      }
+    }
+  ],
+  "gaps": [
+    "Humidity or rainfall preferences of Spodoptera frugiperda and Helicoverpa zea: no source found states them, so humidity is set to 'any'.",
+    "Seasonal patterns of the three pests on the Peruvian coast or in the Huaral valley: no INIA or SENASA source was found.",
+    "Diatraea saccharalis temperature and humidity data come from sugarcane studies, not maize.",
+    "Helicoverpa zea temperature numbers are the range tested in the lab, not a stated optimum.",
+    "Boron deficiency signs: the cited source does not describe the visible leaf symptoms in maize.",
+    "Iron (Fe): no source found explains its role in maize; Fe deficiency signs were found only on a company agronomy page and were left out.",
+    "Copper (Cu) and molybdenum (Mo) in maize: no source found.",
+    "Biostimulant evidence under heat or drought stress in maize field trials was not cited. The humic acid and protein hydrolysate evidence comes only from seedling or hydroponic studies, not field trials.",
+    "Microbial biostimulants on maize: not searched or cited."
+  ],
+  "reviewed": false
+}

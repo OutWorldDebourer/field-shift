@@ -34,7 +34,8 @@
 /* Four tabs */
 @media (max-width: 1240px) { .tabs button { padding: 0 10px; gap: 6px; } }
 @media (max-width: 899px) {
-  .ws .tabs { grid-template-columns: repeat(4, 1fr); }
+  .ws .tabs { grid-template-columns: repeat(5, 1fr); padding-left: 4px; padding-right: 4px; }
+  .ws .tabs [role=tab] { font-size: 0.75rem; padding-left: 2px; padding-right: 2px; }
   .chat__hint { margin-left: 0; }
   .chat__head { align-items: center; }
   .chat__intake { padding: 0 10px; }

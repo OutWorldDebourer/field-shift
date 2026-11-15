@@ -1,0 +1,170 @@
+{
+  "conditions": [
+    [
+      "Euscepes postfasciatus",
+      {
+        "favourable": {
+          "en": "Hot, dry weather. At 27–30 °C the full life cycle takes about 30 days. Cracks in dry soil let weevils reach the storage roots. Weevils also spread from weedy borders and wild morning glory, and in infested cuttings.",
+          "es": "Clima caluroso y seco. Entre 27 y 30 °C el ciclo de vida completo dura unos 30 días. Las grietas del suelo seco dejan que los gorgojos lleguen a las raíces reservantes. También se propagan desde bordes con maleza y campanillas silvestres, y en esquejes infestados."
+        },
+        "temp_min_c": 27.0,
+        "temp_max_c": 30.0,
+        "humidity": "dry",
+        "season": {
+          "en": "Dry periods, when the soil cracks",
+          "es": "Periodos secos, cuando el suelo se agrieta"
+        },
+        "citation": {
+          "title": "Sweetpotato West Indian weevil (119) – Fact sheet",
+          "author": "Pacific Pests, Pathogens and Weeds (Lucidcentral)",
+          "year": null,
+          "url": "https://apps.lucidcentral.org/ppp/text/web_full/entities/sweetpotato_west_indian_weevil_119.htm"
+        }
+      }
+    ],
+    [
+      "Bemisia tabaci",
+      {
+        "favourable": {
+          "en": "Warm weather. It does best between 25 and 32 °C and could not survive above 34 °C in laboratory tests. It does poorly when relative humidity is above 65–70% or below 20–25%, so moderately dry air suits it best.",
+          "es": "Clima cálido. Le va mejor entre 25 y 32 °C y no sobrevivió por encima de 34 °C en pruebas de laboratorio. Le va mal con humedad relativa sobre 65–70 % o bajo 20–25 %, así que el aire moderadamente seco es lo que más le favorece."
+        },
+        "temp_min_c": 25.0,
+        "temp_max_c": 32.0,
+        "humidity": "dry",
+        "season": {
+          "en": "Warm months",
+          "es": "Meses cálidos"
+        },
+        "citation": {
+          "title": "Bemisia tabaci (the Sweet Potato Whitefly)",
+          "author": "Commonwealth Secretariat (Commonwealth iLibrary)",
+          "year": null,
+          "url": "https://www.thecommonwealth-ilibrary.org/index.php/comsec/catalog/download/766/766/5951?inline=1"
+        }
+      }
+    ],
+    [
+      "Spodoptera eridania",
+      {
+        "favourable": {
+          "en": "Mild to warm weather. It can complete development between 15 and 32 °C, but egg-laying and reproduction peak between 20 and 26 °C.",
+          "es": "Clima templado a cálido. Puede completar su desarrollo entre 15 y 32 °C, pero la puesta de huevos y la reproducción alcanzan su máximo entre 20 y 26 °C."
+        },
+        "temp_min_c": 20.0,
+        "temp_max_c": 26.0,
+        "humidity": "any",
+        "citation": {
+          "title": "Flight Phenology of Spodoptera eridania (Stoll, 1781) (Lepidoptera: Noctuidae) in Its Native Range: A Baseline for Managing an Emerging Invasive Pest",
+          "author": "Insects (MDPI) – authors not retrieved",
+          "year": 2025,
+          "url": "https://doi.org/10.3390/insects16080779"
+        }
+      }
+    ],
+    [
+      "Cyclocephala sp.",
+      {
+        "favourable": {
+          "en": "Moist soil. Females prefer to lay eggs in moist, well-drained soil high in organic matter. Adult flights increase after heavy rain. Soil moisture and temperature are key to larval development.",
+          "es": "Suelo húmedo. Las hembras prefieren poner huevos en suelo húmedo, bien drenado y rico en materia orgánica. Los vuelos de adultos aumentan después de lluvias fuertes. La humedad y la temperatura del suelo son clave para el desarrollo de las larvas."
+        },
+        "humidity": "humid",
+        "season": {
+          "en": "After heavy rain or when the soil stays moist (in irrigated fields, heavy watering may act the same way)",
+          "es": "Después de lluvias fuertes o cuando el suelo se mantiene húmedo (en campos con riego, regar en exceso podría tener el mismo efecto)"
+        },
+        "citation": {
+          "title": "Biology, Ecology, and Management of Masked Chafer (Cyclocephala spp.)",
+          "author": "Virginia Tech (VTechWorks)",
+          "year": null,
+          "url": "https://vtechworks.lib.vt.edu/server/api/core/bitstreams/ff6916dc-fe05-444d-8ada-98983e6466d9/content"
+        }
+      }
+    ]
+  ],
+  "micronutrients": [
+    {
+      "element": "B",
+      "why": {
+        "en": "Sweet potato is more sensitive to boron deficiency than many other crops, and lack of boron is a known cause of poor storage-root quality because it affects actively growing shoot and root tissue.",
+        "es": "El camote es más sensible a la falta de boro que muchos otros cultivos, y la falta de boro es una causa conocida de raíces de mala calidad porque afecta los tejidos en crecimiento de tallos y raíces."
+      },
+      "deficiency": {
+        "en": "Compact growth; mottled yellowing, mild puckering and downward curling of young leaves; thick, brittle leaves; blisters and cracks on storage roots; short, very branched side roots with club-shaped tips; less sweet or even bitter flavour. Spraying the leaves may fix the tops while the root symptoms stay.",
+        "es": "Crecimiento compacto; amarillamiento moteado, leve arrugado y hojas jóvenes curvadas hacia abajo; hojas gruesas y quebradizas; ampollas y grietas en las raíces reservantes; raíces laterales cortas y muy ramificadas con puntas en forma de maza; sabor menos dulce o incluso amargo. Si aplicas boro solo a las hojas, la parte aérea puede mejorar y los síntomas de las raíces seguir."
+      },
+      "citation": {
+        "title": "Boron deficiency – Sweetpotato DiagNotes",
+        "author": "Jane O'Sullivan (Sweetpotato DiagNotes, Lucidcentral)",
+        "year": null,
+        "url": "https://keys.lucidcentral.org/keys/sweetpotato/key/Sweetpotato%20Diagnotes/Media/Html/TheProblems/MineralDeficiencies/BoronDeficiency/Boron%20deficiency.htm"
+      }
+    },
+    {
+      "element": "Zn",
+      "why": {
+        "en": "Zinc is critical for leaf growth in sweet potato, and the crop suffers most from a lack of zinc early in establishment and in cool weather.",
+        "es": "El zinc es clave para el crecimiento de las hojas del camote, y el cultivo sufre más por la falta de zinc al inicio del establecimiento y con clima fresco."
+      },
+      "deficiency": {
+        "en": "The first sign is often yellowing between the veins of mature leaves. The most typical sign is smaller young leaves, which may be thick and yellowish. It can be confused with potassium or iron deficiency; with iron deficiency the veins stand out sharply.",
+        "es": "La primera señal suele ser amarillamiento entre las nervaduras de las hojas maduras. La señal más típica son hojas jóvenes más pequeñas, que pueden ser gruesas y amarillentas. Puedes confundirla con falta de potasio o de hierro; con falta de hierro las nervaduras resaltan mucho."
+      },
+      "citation": {
+        "title": "Zinc deficiency – Sweetpotato DiagNotes",
+        "author": "Sweetpotato DiagNotes (Lucidcentral)",
+        "year": null,
+        "url": "https://keys.lucidcentral.org/keys/sweetpotato/key/Sweetpotato%20Diagnotes/Media/Html/TheProblems/MineralDeficiencies/ZincDeficiency/Zn%20deficiency.htm"
+      }
+    }
+  ],
+  "biostimulants": [
+    {
+      "category": "humic-fulvic",
+      "name": {
+        "en": "Humic acid applied to the soil (soil drench)",
+        "es": "Ácido húmico aplicado al suelo (riego al pie)"
+      },
+      "evidence": {
+        "en": "In a sweet potato trial, vine growth and yield went up as the humic acid level increased, while untreated plants grew noticeably less, which also lowered yield and quality.",
+        "es": "En un ensayo con camote, el crecimiento de las guías y el rendimiento subieron al aumentar el nivel de ácido húmico, mientras que las plantas sin tratar crecieron claramente menos, lo que también bajó el rendimiento y la calidad."
+      },
+      "citation": {
+        "title": "Humic acid as soil drench and Effective seaweed enhanced growth and productivity of sweet potato plants",
+        "author": "ResearchGate publication – authors not retrieved",
+        "year": null,
+        "url": "https://www.researchgate.net/publication/370628011_Humic_acid_as_soil_drench_and_Effective_seaweed_enhanced_growth_and_productivity_of_sweet_potato_plants"
+      }
+    },
+    {
+      "category": "seaweed-extract",
+      "name": {
+        "en": "Seaweed extract combined with humic acid",
+        "es": "Extracto de algas combinado con ácido húmico"
+      },
+      "evidence": {
+        "en": "In a sweet potato study that also compared irrigation intervals, the best vine growth, total yield and quality came from treatments that combined a humic acid soil drench with a seaweed product.",
+        "es": "En un estudio con camote que también comparó intervalos de riego, el mejor crecimiento de las guías, rendimiento total y calidad se lograron con tratamientos que combinaban ácido húmico aplicado al suelo con un producto de algas."
+      },
+      "citation": {
+        "title": "Response of yield and quality of sweet potato plants to irrigation intervals and some soil and foliar application treatments",
+        "author": "ResearchGate publication – authors not retrieved",
+        "year": null,
+        "url": "https://www.researchgate.net/publication/348822650_RESPONSE_OF_YIELD_AND_QUALITY_OF_SWEET_POTATO_PLANTS_TO_IRRIGATION_INTERVALS_AND_SOME_SOIL_AND_FOLIAR_APPLICATION_TREATMENTS"
+      }
+    }
+  ],
+  "gaps": [
+    "Weather that favours Ligyrus maimon, Anomala undulata and Golofa spp.: no species-level source found; the white-grub entry uses only Cyclocephala, from a US turfgrass source, not from Peru or sweet potato.",
+    "Numeric temperature ranges for white grubs on sweet potato.",
+    "Peru- or Huaral-specific seasonal timing for all four pests (no INIA, SENASA or CIP source retrieved).",
+    "Iron (Fe) and manganese (Mn) deficiency in sweet potato: no dedicated source retrieved (Fe appears only as a look-alike in the zinc page); molybdenum (Mo) and copper (Cu) not researched.",
+    "Biostimulant evidence linked to a specific stress (heat, salinity, drought) in sweet potato.",
+    "Microbial biostimulants (e.g. mycorrhizae) and amino-acid or protein-hydrolysate biostimulants tested on sweet potato.",
+    "Full author names and years for several cited sources could not be confirmed from the search results.",
+    "The full text of the two sweet potato biostimulant studies was not checked; their findings come from search-result summaries.",
+    "A sweet potato field trial in Florida that reportedly found humic acid and seaweed products rarely raised yield significantly appeared only as a mixed-up excerpt under an unrelated title, so it was left out; independent evidence may be mixed."
+  ],
+  "reviewed": false
+}

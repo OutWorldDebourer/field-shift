@@ -25,6 +25,11 @@ const FILES: &[(&str, &str)] = &[
 
 /// Phase-D research sidecars (`data/extras/<key>.json`): pest conditions, micronutrients, biostimulants.
 const EXTRAS: &[(&str, &str)] = &[
+    ("pea", include_str!("../data/extras/pea.json")),
+    ("lettuce", include_str!("../data/extras/lettuce.json")),
+    ("sweet_potato", include_str!("../data/extras/sweet_potato.json")),
+    ("maize", include_str!("../data/extras/maize.json")),
+    ("potato", include_str!("../data/extras/potato.json")),
 ];
 
 /// All seed records (parsed once; a malformed file is a build-time bug caught by the tests).

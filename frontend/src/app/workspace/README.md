@@ -1,12 +1,13 @@
 # workspace
 
-- `workspace.ts` — shell (top bar, Chat | Dashboard | Rotation | Organic tabs, backdrop, footer notice, phone bottom sheet) and event wiring (topic-done detection, chime, rail/topic clicks, glossary, Load information).
+- `workspace.ts` — shell (top bar, Chat | Dashboard | Rotation | Prevention | Organic tabs, backdrop, footer notice, phone bottom sheet) and event wiring (topic-done detection, chime, rail/topic clicks, glossary, Load information).
 - `chat.ts` — (iteration 4: merges a turn's new messages into the history; holds the opening while the first-step intake is open) progress rail, chat log, photo tiles with reticle, PDF chips, composer (≤10 files: full-resolution photos and PDFs, drag and drop, camera, voice dictation), crop inputs, "Load information" button, PDF hint, example-site card, closing card.
 - `attach.ts`, `attach.css` — iteration 3 attachments: PDFs (≤ 15 MB, real file name, type application/pdf) beside photos; composer document tile; message document chip (opens in a new tab); chat header and four-tab bar styles.
 - `intake.ts`, `intake.css` — "Load information" side sheet (dialog, focus trap, Esc): IntakeForm fields grouped by topic, crop suggestions, chips for earlier crops, "I don't know" per field; POST /api/analyses/:id/intake; example sites pre-fill with `intake_example` (`intake_example_es` in Spanish; bundled sample as fallback), auto-open once per analysis (localStorage), and the example card in the chat. A new analysis opens it as the first step (`openFirst`: one screen, optional photos handed to the chat composer, no model call); "Skip, I'd rather chat" releases the consultant's opening.
 - `facts.ts` — "What you told us" (AnalysisState.facts) in the Your field card.
 - `organic.ts`, `organic.css` — Organic section state, empty state, the Organic section card and the rotation summary row.
 - `organic-cats.ts`, `organic-cats.css` — iteration 4 Organic view: three-line "this week" summary and category cards (allies per pest group, fungi and bacteria, biostimulants and micronutrients, practices, when to act, what harms allies), each with a technical disclosure.
+- `prevention.ts`, `prevention.css` — iteration 4 Prevention tab: per crop in the conversation, a risk light per pest (high / medium / low / no data) with its plain reason, what to do (monitoring, favourable weather with its source, degree-day figures, link to the allies in Organic), a calendar (all year for perennials, by stage for annuals).
 - `evaluate.ts` — "What if I grow…?" form in Rotation (POST …/rotation/evaluate); the fourth "Your proposal" column is drawn by `rotation.ts`.
 - `photos.ts` — originals kept unless > 12 MB or > 4096 px (then JPEG quality 0.92, ≤ 4096 px); size text.
 - `progress.ts` — guided steps (field → soil → pests → nutrition → rotation → sheet): backend `steps`, or derived from sections; display states; newly-done detection.

@@ -26,12 +26,13 @@ import { mountBubble } from './bubble';
 import { wireEvaluate } from './evaluate';
 import { setViewContext } from '../../shared/viewctx';
 import { organicHtml } from './organic';
+import { preventionHtml, wirePrevention } from './prevention';
 import './workspace.css';
 import './guided.css';
 
-const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot' | 'ap_tab_org'; icon: 'chat' | 'dashboard' | 'rotation' | 'ladybug' }[] = [
+const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot' | 'ap_tab_prev' | 'ap_tab_org'; icon: 'chat' | 'dashboard' | 'rotation' | 'alert' | 'ladybug' }[] = [
   { v: 'chat', label: 'ap_tab_chat', icon: 'chat' }, { v: 'dashboard', label: 'ap_tab_dash', icon: 'dashboard' }, { v: 'rotation', label: 'ap_tab_rot', icon: 'rotation' },
-  { v: 'organic', label: 'ap_tab_org', icon: 'ladybug' },
+  { v: 'prevention', label: 'ap_tab_prev', icon: 'alert' }, { v: 'organic', label: 'ap_tab_org', icon: 'ladybug' },
 ];
 
 export function mountWorkspace(host: HTMLElement, onChangeField: () => void): void {
@@ -60,6 +61,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       </section>
       <section class="view view--dashboard" id="view-dashboard" role="tabpanel" aria-labelledby="tab-dashboard" hidden></section>
       <section class="view view--rotation" id="view-rotation" role="tabpanel" aria-labelledby="tab-rotation" hidden></section>
+      <section class="view view--prevention" id="view-prevention" role="tabpanel" aria-labelledby="tab-prevention" hidden></section>
       <section class="view view--organic" id="view-organic" role="tabpanel" aria-labelledby="tab-organic" hidden></section>
     </main>
     <footer class="ws__foot">
@@ -140,7 +142,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   function renderView() {
     const a = state.analysis!;
     ws.dataset.view = state.view;
-    (['chat', 'dashboard', 'rotation', 'organic'] as View[]).forEach((v) => { $(`#view-${v}`).hidden = v !== state.view; });
+    (['chat', 'dashboard', 'rotation', 'prevention', 'organic'] as View[]).forEach((v) => { $(`#view-${v}`).hidden = v !== state.view; });
     bd?.setOutline(state.view === 'rotation' ? 'plan' : 'measured');
     bd?.layout();
     dashCleanup?.(); dashCleanup = null;
@@ -152,6 +154,9 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     } else if (state.view === 'rotation') {
       $('#view-rotation').innerHTML = rotationHtml(a);
       wireEvaluate($('#view-rotation'), () => state.analysis!, (next) => { const cur = state.analysis!; set({ analysis: { ...cur, ...next, offline: cur.offline, readOnly: cur.readOnly, shareToken: cur.shareToken } }); });
+    } else if (state.view === 'prevention') {
+      $('#view-prevention').innerHTML = preventionHtml(a);
+      const pv = $('#view-prevention'); if (!pv.dataset.wired) { wirePrevention(pv); pv.dataset.wired = '1'; }
     } else if (state.view === 'organic') {
       $('#view-organic').innerHTML = organicHtml(a);
     }

@@ -1,0 +1,206 @@
+{
+  "conditions": [
+    [
+      "Liriomyza huidobrensis",
+      {
+        "favourable": {
+          "en": "Mild to cool temperatures. In lab life-table tests it developed between about 12 and 28 °C. Eggs did not develop at 35 °C, and 32 °C killed the pupae.",
+          "es": "Temperaturas templadas a frescas. En pruebas de laboratorio se desarrolló entre unos 12 y 28 °C. Los huevos no se desarrollaron a 35 °C y a 32 °C murieron las pupas."
+        },
+        "temp_min_c": 12.0,
+        "temp_max_c": 28.0,
+        "humidity": "any",
+        "citation": {
+          "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae)",
+          "author": "Mujica N., Sporleder M., Carhuapoma P., Kroschel J. (International Potato Center, CIP)",
+          "year": 2017,
+          "url": "https://cgspace.cgiar.org/handle/10568/81186"
+        }
+      }
+    ],
+    [
+      "Myzus persicae",
+      {
+        "favourable": {
+          "en": "Warm weather that swings between day and night. Populations grew fastest at a fluctuating mean of about 26.7 °C, with lower and upper development limits of 6.5 and 37.3 °C. Very high temperatures slow population growth.",
+          "es": "Clima cálido con variación entre el día y la noche. Las poblaciones crecieron más rápido con una media fluctuante de unos 26,7 °C. Sus límites de desarrollo fueron 6,5 °C (inferior) y 37,3 °C (superior). Las temperaturas muy altas frenan su crecimiento."
+        },
+        "temp_min_c": 6.5,
+        "temp_max_c": 37.3,
+        "humidity": "any",
+        "citation": {
+          "title": "Effects of High and Fluctuating Temperatures on Myzus persicae (Hemiptera: Aphididae)",
+          "author": "Davis J.A., Radcliffe E.B., Ragsdale D.W.",
+          "year": 2006,
+          "url": "https://academic.oup.com/ee/article/35/6/1461/386852"
+        }
+      }
+    ],
+    [
+      "Trichoplusia ni",
+      {
+        "favourable": {
+          "en": "Warm weather. Egg to adult takes 18 to 25 days at 32 to 21 °C, so at least one generation per month is possible in good weather. Development stops below about 10–12 °C, and 40 °C or more can kill some stages.",
+          "es": "Clima cálido. De huevo a adulto tarda de 18 a 25 días entre 32 y 21 °C, así que con buen tiempo puede completar al menos una generación al mes. Por debajo de unos 10–12 °C no se desarrolla, y 40 °C o más puede matar algunas etapas."
+        },
+        "temp_min_c": 10.0,
+        "temp_max_c": 32.0,
+        "humidity": "any",
+        "citation": {
+          "title": "EENY-116/IN273: Cabbage Looper, Trichoplusia ni (Hübner) (Insecta: Lepidoptera: Noctuidae)",
+          "author": "Capinera J.L., University of Florida IFAS Extension",
+          "year": null,
+          "url": "https://ask.ifas.ufl.edu/publication/IN273"
+        }
+      }
+    ]
+  ],
+  "micronutrients": [
+    {
+      "element": "B",
+      "why": {
+        "en": "Boron keeps the growing point and roots developing; in a severe shortage the growing point dies and roots grow very poorly.",
+        "es": "El boro mantiene en desarrollo el punto de crecimiento y las raíces; si falta mucho, el punto de crecimiento muere y las raíces crecen muy poco."
+      },
+      "deficiency": {
+        "en": "Plants are severely stunted and darker green than normal, with the youngest leaves affected. In acute cases the growing point dies and roots are very poor. It can be confused with tipburn.",
+        "es": "Las plantas quedan muy enanas y de un verde más oscuro de lo normal, y se afectan las hojas más jóvenes. En casos agudos muere el punto de crecimiento y las raíces son muy pobres. Puedes confundirlo con la quemadura de puntas (tipburn)."
+      },
+      "citation": {
+        "title": "Nutritional disorders in glasshouse lettuce",
+        "author": "Roorda van Eysinga J.P.N.L., van der Meijs M.Q. (Wageningen)",
+        "year": null,
+        "url": "https://edepot.wur.nl/382628"
+      }
+    },
+    {
+      "element": "Fe",
+      "why": {
+        "en": "Iron is needed to keep young lettuce leaves green; when it runs short, chlorosis always starts on the youngest inner leaves.",
+        "es": "La lechuga necesita hierro para mantener verdes sus hojas jóvenes; cuando falta, la clorosis siempre empieza en las hojas internas más jóvenes."
+      },
+      "deficiency": {
+        "en": "Yellow-green, later lemon-yellow to pale yellow colour between the veins of the youngest leaves, while the main veins stay green. In severe cases the veins also yellow and dead patches appear near the leaf edges. Growth usually is not reduced.",
+        "es": "Las hojas más jóvenes se ponen amarillo verdoso entre las venas, luego amarillo limón o amarillo pálido, mientras las venas principales siguen verdes. En casos graves también se amarillean las venas y aparecen zonas muertas cerca del borde. Por lo general el crecimiento no se reduce."
+      },
+      "citation": {
+        "title": "Iron deficiency-Lettuce",
+        "author": "Yara UK",
+        "year": null,
+        "url": "https://www.yara.co.uk/crop-nutrition/lettuce/nutrient-deficiencies-lettuce/iron-deficiency-lettuce/"
+      }
+    },
+    {
+      "element": "Zn",
+      "why": {
+        "en": "Lettuce is moderately sensitive to zinc, and an adequate supply is essential for healthy growth, yield and nutritional quality.",
+        "es": "La lechuga es moderadamente sensible al zinc, y un buen suministro es esencial para que crezca sana y dé buen rendimiento y calidad nutritiva."
+      },
+      "deficiency": {
+        "en": "Yellowing between the veins, deformed leaves, dead spots and stunted growth. Lower stem diameter, fewer leaves and lower yield have also been reported.",
+        "es": "Amarillamiento entre las venas, hojas deformadas, manchas muertas y crecimiento enano. También se han reportado tallos más delgados, menos hojas y menor rendimiento."
+      },
+      "citation": {
+        "title": "Growth and Photosynthetic Responses of Lactuca sativa L. to Different Zinc Fertilizer Sources and Applications",
+        "author": "Horticulturae (MDPI) authors",
+        "year": 2025,
+        "url": "https://doi.org/10.3390/horticulturae11101221"
+      }
+    },
+    {
+      "element": "Mo",
+      "why": {
+        "en": "Molybdenum is needed for normal lettuce growth, and deficiency is more likely in acid (low pH) conditions.",
+        "es": "La lechuga necesita molibdeno para crecer normalmente, y la deficiencia es más probable en suelos ácidos (pH bajo)."
+      },
+      "deficiency": {
+        "en": "Growth is clearly held back and plants turn pale green. Leaves wilt from the tips and edges, then the tissue dies and turns brown-yellow. It can be confused with calcium deficiency.",
+        "es": "El crecimiento se frena claramente y las plantas se ponen verde pálido. Las hojas se marchitan desde las puntas y los bordes, y luego el tejido muere y se vuelve pardo amarillento. Puedes confundirlo con la deficiencia de calcio."
+      },
+      "citation": {
+        "title": "Molybdenum deficiency-Lettuce",
+        "author": "Yara UK",
+        "year": null,
+        "url": "https://www.yara.co.uk/crop-nutrition/lettuce/nutrient-deficiencies-lettuce/molybdenum-deficiency-lettuce/"
+      }
+    }
+  ],
+  "biostimulants": [
+    {
+      "category": "seaweed-extract",
+      "name": {
+        "en": "Seaweed extract",
+        "es": "Extracto de algas marinas"
+      },
+      "evidence": {
+        "en": "In greenhouse lettuce under salinity (40 mM NaCl), seaweed extract lowered leaf sodium by 9.4% and improved salt tolerance compared with untreated plants.",
+        "es": "En lechuga de invernadero con salinidad (40 mM de NaCl), el extracto de algas bajó el sodio en hoja un 9,4% y mejoró la tolerancia a la sal frente a las plantas sin tratar."
+      },
+      "stress": {
+        "en": "salinity",
+        "es": "salinidad"
+      },
+      "citation": {
+        "title": "Plant biostimulants from seaweeds or vegetal proteins enhance the salinity tolerance in greenhouse lettuce by modulating plant metabolism in a distinctive manner",
+        "author": "Rouphael Y. et al.",
+        "year": null,
+        "url": "https://www.researchgate.net/publication/362317992_Plant_biostimulants_from_seaweeds_or_vegetal_proteins_enhance_the_salinity_tolerance_in_greenhouse_lettuce_by_modulating_plant_metabolism_in_a_distinctive_manner"
+      }
+    },
+    {
+      "category": "protein-hydrolysate",
+      "name": {
+        "en": "Plant-derived protein hydrolysate",
+        "es": "Hidrolizado de proteína vegetal"
+      },
+      "evidence": {
+        "en": "In the same greenhouse lettuce salinity trial, protein hydrolysates lowered leaf sodium by 15.6%, significantly reduced chloride and improved salt tolerance.",
+        "es": "En el mismo ensayo de lechuga de invernadero con salinidad, los hidrolizados de proteína bajaron el sodio en hoja un 15,6%, redujeron bastante el cloruro y mejoraron la tolerancia a la sal."
+      },
+      "stress": {
+        "en": "salinity",
+        "es": "salinidad"
+      },
+      "citation": {
+        "title": "Plant biostimulants from seaweeds or vegetal proteins enhance the salinity tolerance in greenhouse lettuce by modulating plant metabolism in a distinctive manner",
+        "author": "Rouphael Y. et al.",
+        "year": null,
+        "url": "https://www.researchgate.net/publication/362317992_Plant_biostimulants_from_seaweeds_or_vegetal_proteins_enhance_the_salinity_tolerance_in_greenhouse_lettuce_by_modulating_plant_metabolism_in_a_distinctive_manner"
+      }
+    },
+    {
+      "category": "amino-acids",
+      "name": {
+        "en": "Free amino acid-rich protein hydrolysate",
+        "es": "Hidrolizado de proteína rico en aminoácidos libres"
+      },
+      "evidence": {
+        "en": "In greenhouse lettuce under well-watered and water-deficit conditions, it improved growth under water deficit and raised leaf nitrogen, proline and total protein in both water conditions.",
+        "es": "En lechuga de invernadero con riego normal y con déficit de agua, mejoró el crecimiento bajo déficit hídrico y aumentó el nitrógeno, la prolina y la proteína total de las hojas en ambas condiciones."
+      },
+      "stress": {
+        "en": "drought / deficit irrigation",
+        "es": "sequía / riego deficitario"
+      },
+      "citation": {
+        "title": "Leafamine®, a Free Amino Acid-Rich Biostimulant, Promotes Growth Performance of Deficit-Irrigated Lettuce",
+        "author": "Hamedeh H. et al.",
+        "year": 2022,
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9266813/"
+      }
+    }
+  ],
+  "gaps": [
+    "Seasonal timing of all three pests on the Peruvian central coast or in the Huaral valley (no INIA or SENASA source found), so 'season' is null for every pest",
+    "Humidity preferences for all three pests: no source stated one, so humidity is set to 'any'",
+    "The temperature ranges are lab development limits (development range for Liriomyza huidobrensis and Trichoplusia ni, thresholds for Myzus persicae), not field outbreak ranges",
+    "Lettuce-specific roles and symptoms of Mn and Cu, and data on which micronutrients are most often deficient in Huaral soils",
+    "The 'why' sentences for Fe and Mo are taken mainly from symptom descriptions; the sources did not give a full physiological role for lettuce",
+    "Fe and Mo citations are from a fertilizer company's crop-nutrition pages (Yara), not an independent extension service",
+    "Author lists not checked: the seaweed and protein-hydrolysate source is attributed to 'Rouphael Y. et al.' based on the text found, and the Zn paper's authors were not shown in the search result",
+    "Field trial evidence on lettuce for humic/fulvic substances and microbial biostimulants",
+    "Biostimulant trials on lettuce under heat stress or in open-field conditions like the Peruvian coast",
+    "Peru-specific (INIA, SENASA, CIP local) guidance on lettuce pests and nutrition"
+  ],
+  "reviewed": false
+}

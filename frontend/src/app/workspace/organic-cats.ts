@@ -87,14 +87,14 @@ export function organicCatsHtml(a: ClientAnalysis, c: Org): string {
   const cards = [
     ...byPest.slice(0, 4).map(([pest, list], i) => card({
       id: `og-p${i}`, ic: 'ladybug', title: t('og_for_pest_t', { p: pest }), n: list.length,
-      line: esc(t('og_ally_line', { n: list.length, p: pest })), body: `<p class="og-row__names">${esc(names(list))}</p><ul class="og-rows">${list.map(agentRow).join('')}</ul>`,
+      line: esc(t(list.length === 1 ? 'og_ally_line_1' : 'og_ally_line', { n: list.length, p: pest })), body: `<p class="og-row__names">${esc(names(list))}</p><ul class="og-rows">${list.map(agentRow).join('')}</ul>`,
       ask: t('ask_allies', { p: pest }), cls: list.some((b) => b.for_reported_pest) ? 'is-match' : '',
     })),
     card({ id: 'og-mic', ic: 'soil', title: t('og_c_micro'), n: microbes.length,
       line: microbes.length ? esc(t('og_c_micro_l', { x: microbes.slice(0, 3).map((b) => pick(b.name)).join(', ') })) : esc(t('og_none')),
       body: microbes.length ? `<ul class="og-rows">${microbes.map(agentRow).join('')}</ul>` : '', ask: microbes.length ? t('og_c_micro') : undefined }),
     card({ id: 'og-bio', ic: 'nutrition', title: t('og_c_bio'), n: bio.length,
-      line: bio.length ? esc(t('og_c_bio_l', { x: bio.slice(0, 3).map((b) => pick(b.name)).join(', ') })) : esc(pick(c.biostim_gap) || t('og_c_bio_gap')),
+      line: bio.length ? esc((bio.find((b) => b.signal) ? `${pick(bio.find((b) => b.signal)!.signal!)} ` : '') + t('og_c_bio_l', { x: bio.slice(0, 3).map((b) => pick(b.name)).join(', ') })) : esc(pick(c.biostim_gap) || t('og_c_bio_gap')),
       body: bio.length ? `<ul class="og-rows">${bio.map((b) => `<li><b>${esc(pick(b.name))}</b> <span class="og-tag mono">${esc(b.kind === 'micronutrient' ? t('og_micro') : t('og_biostim'))}</span>${b.reviewed === false ? ` <span class="og-tag mono">${esc(t('og_ai_verify'))}</span>` : ''}
         <span class="og-row__how">${esc(pick(b.why))}</span>${b.signal ? `<span class="og-row__sig">${icon('orbit')}${esc(pick(b.signal))}</span>` : ''}${cite(b.citation)}</li>`).join('')}</ul><p class="og-row__note">${esc(t('og_no_doses'))}</p>` : '',
       ask: bio.length ? t('ask_bio') : undefined }),
