@@ -17,7 +17,7 @@ import { preparePhoto, MAX_PHOTOS } from './photos';
 import { ACCEPT, asPdf, docChipHtml, isPdfAttachment, isPdfFile, MAX_PDF_BYTES, previewHtml, type Attachment, type Pending } from './attach';
 import { exampleCardHtml } from './intake';
 import { stepsOf } from './progress';
-import { doneCardHtml, railHtml } from './rail';
+import { closeDoneCard, doneCardHtml, railHtml } from './rail';
 
 const TAGS: Record<string, { en: string; es: string }> = { blurry: { en: 'blurry', es: 'borrosa' } };
 
@@ -252,6 +252,14 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   });
   // Quick replies fill the message box; the farmer decides whether to send.
   log.addEventListener('click', (e) => {
+    const x = (e.target as HTMLElement).closest<HTMLElement>('[data-done-close]');
+    if (x) {
+      const a = getA();
+      if (a) closeDoneCard(a.id);
+      x.closest('.chat__done')?.remove();
+      text.focus({ preventScroll: true });
+      return;
+    }
     const q = (e.target as HTMLElement).closest<HTMLElement>('[data-qr]');
     if (q) prefill(q.dataset.qr ?? '');
   });

@@ -36,10 +36,22 @@ export function railHtml(steps: Step[], just: SectionKey[] = [], expanded = fals
       <p class="rail__next" aria-live="polite">${line}</p></div>`;
 }
 
-/** The closing card shown in the chat when every topic is done. */
+const DONE_KEY = (id: string) => `fs-done-closed:${id}`;
+
+/** Remembers (per analysis, in this browser) that the farmer closed the closing card. */
+export function closeDoneCard(id: string): void {
+  try { localStorage.setItem(DONE_KEY(id), '1'); } catch { /* storage blocked: closed for this view only */ }
+}
+
+function doneClosed(id: string): boolean {
+  try { return localStorage.getItem(DONE_KEY(id)) === '1'; } catch { return false; }
+}
+
+/** The closing card shown in the chat when every topic is done (until the farmer closes it). */
 export function doneCardHtml(a: ClientAnalysis, steps: Step[]): string {
-  if (!allDone(steps) || a.readOnly) return '';
+  if (!allDone(steps) || a.readOnly || doneClosed(a.id)) return '';
   return `<li class="msg chat__done"><div class="done glass">
+    <button type="button" class="done__x" data-done-close aria-label="${esc(t('close'))}" title="${esc(t('close'))}">${icon('close')}</button>
     <span class="done__mark" aria-hidden="true">${icon('check')}</span>
     <h3 class="serif">${esc(t('done_t'))}</h3><p>${esc(t('done_b'))}</p>
     <div class="done__a"><button type="button" class="btn btn--solid btn--sm" data-export="sheet">${icon('sheet')}${esc(t('done_sheet'))}</button>

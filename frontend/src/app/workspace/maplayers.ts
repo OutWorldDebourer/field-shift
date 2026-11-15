@@ -70,7 +70,8 @@ export function mountLayers(L: typeof Leaflet, map: Leaflet.Map, a: ClientAnalys
     const el = slot()?.firstElementChild as HTMLElement | null;
     const bar = el ? startLoadbar(el, kind === 'ndvi' ? 15000 : 8000, [kind === 'ndvi' ? 'Sentinel-2 L2A' : 'NASADEM']) : null;
     const m = await getLayer(kind, f.center.lat, f.center.lon, sizeM);
-    if (my !== token) return;
+    // The dashboard may have re-rendered (and removed this map) while the layer was loading.
+    if (my !== token || !map.getPane('overlayPane')) return;
     if (!m) { bar?.fail(); setSlot(`<p class="dmap__note">${esc(t('ly_img_na'))}</p>`); return; }
     bar?.done();
     const [w, s, e, n] = m.bbox;
