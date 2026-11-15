@@ -32,3 +32,6 @@ const nameOf = (n: PestName | Row): PestName => (n && typeof n === 'object' && '
 /** Capitalised for the start of a line. Accepts a name or a whole pest row. */
 export const pestTitle = (n: PestName | Row): string => { const s = pestName(nameOf(n)); return s.charAt(0).toUpperCase() + s.slice(1); };
 export const pestLower = (n: PestName | Row): string => pestName(nameOf(n));
+
+/** A pest of the farmer's current crop (alerts and topics never use general reference pests or other crops' pests). */
+export const ownCropPest = (p: { role?: string; reference?: boolean }): boolean => !p.reference && (p.role == null || p.role === 'current');

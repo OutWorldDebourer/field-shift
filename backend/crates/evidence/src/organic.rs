@@ -94,7 +94,7 @@ pub fn build(crop: &CropRecord, facts: Option<&Value>, ev: &Value) -> Value {
 
     // When to act: NASA degree-days (pest generations) and the GEOS-FP forecast.
     let mut timing: Vec<Value> = vec![];
-    for p in ev["pests"].as_array().into_iter().flatten() {
+    for p in ev["pests"].as_array().into_iter().flatten().filter(|p| p["role"] == "current") {
         if let (Some(now), Some(norm)) = (p["generations_now"].as_f64(), p["generations_normal"].as_f64()) {
             if now - norm >= 1.0 {
                 let en = p["name_bi"]["en"].as_str().or(p["name"].as_str()).unwrap_or("");

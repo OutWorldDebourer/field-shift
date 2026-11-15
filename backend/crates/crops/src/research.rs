@@ -47,7 +47,8 @@ Guidance: Kc from FAO-56 Table 12 or a published crop-coefficient study; tempera
 }
 
 /// Researches `query` with Claude and returns a validated record (origin ai-researched, labelled "AI-researched, verify").
-pub async fn research(http: &reqwest::Client, api_key: &str, query: &str) -> anyhow::Result<CropRecord> {
+/// `db`, when given, receives the token usage of every call (`api_usage`, kind "research").
+pub async fn research(http: &reqwest::Client, api_key: &str, query: &str, db: Option<&sqlx::MySqlPool>) -> anyhow::Result<CropRecord> {
     let tools = json!([{ "type": "web_search_20260209", "name": "web_search", "max_uses": MAX_SEARCHES }]);
     let mut messages = vec![json!({ "role": "user", "content": user_prompt(query) })];
     let mut seen_urls: HashSet<String> = HashSet::new();
@@ -74,6 +75,10 @@ pub async fn research(http: &reqwest::Client, api_key: &str, query: &str) -> any
             .map_err(|e| anyhow!("anthropic request failed: {}", e.without_url()))?;
         let status = resp.status();
         let msg: Value = resp.json().await.map_err(|e| anyhow!("anthropic response unreadable: {}", e.without_url()))?;
+        if let Some(db) = db {
+            let call = common::usage::Call { analysis_id: None, kind: "research", turn_key: Some(query), round: attempt as u32 + 1, model: MODEL };
+            common::usage::record(db, &call, common::usage::Usage::of(&msg)).await;
+        }
         if !status.is_success() {
             let m = msg.pointer("/error/message").and_then(Value::as_str).unwrap_or("unknown error");
             bail!("anthropic API {status}: {m}");

@@ -59,7 +59,7 @@ pub async fn resolve(state: &AppState, q: &str) -> ApiResult<CropRecord> {
     }
     let key = state.config.secrets.anthropic.as_deref()
         .ok_or_else(|| ApiError::Upstream("crop not in the knowledge base and AI research is not configured".into()))?;
-    let rec = research::research(&state.http, key, q).await.map_err(|e| ApiError::Upstream(e.to_string()))?;
+    let rec = research::research(&state.http, key, q, Some(&state.db)).await.map_err(|e| ApiError::Upstream(e.to_string()))?;
     if let Some(s) = seed::get(&rec.key) {
         return Ok(s.clone());
     }
@@ -152,7 +152,7 @@ mod network_tests {
         let cfg = common::config::Config::load().expect("config");
         let key = cfg.secrets.anthropic.clone().expect("anthropic key in env.txt");
         let http = reqwest::Client::builder().user_agent("FieldShift/0.1 (NASA Space Apps 2026)").build().unwrap();
-        let rec = research::research(&http, &key, "pitahaya").await.expect("research");
+        let rec = research::research(&http, &key, "pitahaya", None).await.expect("research");
         assert_eq!(rec.origin, Origin::AiResearched);
         assert_eq!(rec.label.as_deref(), Some(research::LABEL));
         for c in rec.citations() { assert!(c.url.starts_with("http"), "{c:?}"); }

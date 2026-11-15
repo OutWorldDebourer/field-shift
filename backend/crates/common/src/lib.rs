@@ -5,6 +5,7 @@ pub mod config;
 pub mod error;
 pub mod geo;
 pub mod state;
+pub mod usage;
 
 pub use error::{ApiError, ApiResult};
 pub use state::AppState;

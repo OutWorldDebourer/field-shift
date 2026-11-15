@@ -47,7 +47,13 @@ export function messageHtml(m: ChatMessage): string {
   return `<li class="msg msg--me"><div class="msg__col"><span class="sr-only">${esc(t('ws_you'))}:</span>${m.body ? `<div class="bubble bubble--me">${para(m.body)}</div>` : ''}${photos}</div></li>`;
 }
 
-export interface Chat { render(a: ClientAnalysis, just?: SectionKey[]): void; prefill(s: string): void; destroy(): void }
+export interface Chat {
+  render(a: ClientAnalysis, just?: SectionKey[]): void; prefill(s: string): void; destroy(): void;
+  /** While held, a new analysis does not ask the model for its opening (the first-step intake is open). */
+  holdOpening(on: boolean): void;
+  /** Files chosen in the intake form wait in the composer, to be sent when the farmer chooses. */
+  addFiles(files: File[]): Promise<void>;
+}
 
 export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, onUpdate: (patch: Partial<ClientAnalysis>) => void): Chat {
   const coarse = matchMedia('(pointer: coarse)').matches;
@@ -226,9 +232,9 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   });
 
   // A new field has no consultant message yet: the consultant writes its opening for this exact place.
-  let opening = false;
+  let opening = false, held = false;
   async function open(a: ClientAnalysis) {
-    if (opening || a.offline || a.readOnly || a.messages.some((m) => m.role === 'assistant')) return;
+    if (held || opening || a.offline || a.readOnly || a.messages.some((m) => m.role === 'assistant')) return;
     opening = true; sending = true;
     form.classList.add('is-busy');
     showPending(t('ws_status_opening'), 9000, ['OpenStreetMap', 'NASA POWER']);
@@ -292,5 +298,9 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     grow();
     requestAnimationFrame(() => { text.focus(); text.setSelectionRange(s.length, s.length); });
   }
-  return { render, prefill, destroy: () => { off(); dict.stop(); } };
+  return {
+    render, prefill, destroy: () => { off(); dict.stop(); },
+    holdOpening: (on) => { held = on; const a = getA(); if (!on && a) void open(a); },
+    addFiles: (files) => addFiles(files),
+  };
 }

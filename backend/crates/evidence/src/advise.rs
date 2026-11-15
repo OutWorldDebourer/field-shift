@@ -25,16 +25,20 @@ pub async fn resolve_crops(state: &AppState, analysis_id: &str, current: &str, p
     }
     let cur_v = summary(&cur);
     store::set_crops(&state.db, analysis_id, Some(&cur_v), Some(&prev)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    // A package built before the crop was known carries reference pests: switch it to this crop's own pests now.
+    if let Err(e) = crate::pests::refresh(state, analysis_id).await { tracing::warn!("pest refresh: {e}"); }
     Ok(json!({ "current": cur_v, "previous": prev }))
 }
 
 fn signals(ev: &Value) -> FieldSignals {
     let reading = |id: &str| ev["readings"].as_array().and_then(|r| r.iter().find(|x| x["id"] == id)).and_then(|x| x["value"].as_f64());
-    let aphid = ev["pests"].as_array().and_then(|p| p.iter().find(|x| x["scientific"].as_str().unwrap_or("").contains("Myzus")));
+    let rows = ev["pests"].as_array().cloned().unwrap_or_default();
+    let lead = crate::pests::leading(&rows).filter(|p| p["reference"] != true);
     FieldSignals {
         heat_stress_days: reading("heat_days"),
         water_balance_mm: reading("water_balance"),
-        pest_generation_delta: aphid.and_then(|a| a["difference"].as_f64()),
+        pest_generation_delta: lead.and_then(|a| a["difference"].as_f64()),
+        pest_name: lead.map(|a| crops::model::L10n::new(a["name"]["en"].as_str().unwrap_or(""), a["name"]["es"].as_str().unwrap_or(""))),
         bare_soil: ev["bare_soil"].as_array().map(|b| !b.is_empty()),
     }
 }
@@ -81,7 +85,13 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     for p in &st.crop_history {
         if let Some(k) = p["key"].as_str() { if let Ok(r) = crops::resolve(state, k).await { prev.push(r); } }
     }
-    let ev = match st.evidence.clone() { Some(e) if e["readings"].as_array().map(|r| !r.is_empty()).unwrap_or(false) => e, _ => crate::build(state, analysis_id).await? };
+    let mut ev = match st.evidence.clone() { Some(e) if e["readings"].as_array().map(|r| !r.is_empty()).unwrap_or(false) => e, _ => crate::build(state, analysis_id).await? };
+    // The package's pests follow the crops the farmer named (current, previous, planned next), never fixed ones.
+    let (lat, lon) = (st.field.center.lat, st.field.center.lon);
+    let crops_all = crate::pests::crops_of(state, &st).await;
+    let rows = crate::pests::rows(state, lat, lon, &crops_all, None).await;
+    crate::pests::apply(state, lat, lon, &mut ev, rows).await;
+    store::save_evidence(&state.db, analysis_id, &ev).await.map_err(|e| anyhow::anyhow!("{e}"))?;
     let adv = serde_json::to_value(crops::advice(&cur_rec, &prev, &signals(&ev)))?;
     let notice = adv["notice"].clone();
 
@@ -89,14 +99,14 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     // A section is "ready" only once its guided topic is done in the conversation; until then its content is prepared.
     let done = |k: &str| st.steps.iter().any(|x| x.key == k && x.state == "done");
     let st_of = |k: &str| if done(k) { "ready" } else { "progress" };
-    store::set_section(&state.db, analysis_id, "soil", st_of("soil"), None, Some(&block_content(&adv["soil"], notice.clone()))).await.map_err(|e| anyhow::anyhow!("{e}"))?;
-    store::set_section(&state.db, analysis_id, "nutrition", st_of("nutrition"), None,
-        Some(&block_content(&adv["nutrition"], json!({ "en": "General guidance: without a soil test this is not a fertilizer prescription.", "es": "Guía general: sin análisis de suelo no es una receta de fertilización." })))).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    let soil_c = block_content(&adv["soil"], notice.clone());
+    let nutr_c = block_content(&adv["nutrition"], json!({ "en": "General guidance: without a soil test this is not a fertilizer prescription.", "es": "Guía general: sin análisis de suelo no es una receta de fertilización." }));
+    store::set_section(&state.db, analysis_id, "soil", st_of("soil"), None, Some(&soil_c)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    store::set_section(&state.db, analysis_id, "nutrition", st_of("nutrition"), None, Some(&nutr_c)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 
     // Pest care: generations from degree-days where a published threshold exists, then the cited care block
     let mut pests = block_content(&adv["pest_care"], json!({ "en": "", "es": "" }));
     let thresholds = adv["pest_thresholds"].as_array().cloned().unwrap_or_default();
-    let (lat, lon) = (st.field.center.lat, st.field.center.lon);
     let crop_pests = crate::crop_pests::generations(state, lat, lon, &thresholds).await.unwrap_or_else(|e| { tracing::warn!("crop pests: {e}"); vec![] });
     let line = |p: &Value, es: bool| -> Option<String> {
         let name = p["name"][if es { "es" } else { "en" }].as_str()?;
@@ -172,14 +182,21 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     // What the consultant gets back: a compact summary it may cite
     Ok(json!({
         "crop": adv["crop"], "mode": mode, "notice": notice,
-        "strategies": strategies.iter().map(|s| json!({ "name": s["name"], "current": s["current"], "scores": s["scores"], "why": s["why"] })).collect::<Vec<_>>(),
+        "strategies": strategies.iter().map(|s| json!({ "name": s["name"], "current": s["current"], "scores": s["scores"], "why": s["why"], "best_for": s["best_for"] })).collect::<Vec<_>>(),
         "practices": items.iter().map(|i| i["title"].clone()).collect::<Vec<_>>(),
-        "soil": adv["soil"]["items"].as_array().map(|a| a.iter().map(|i| i["text"]["en"].clone()).collect::<Vec<_>>()),
-        "pest_care": adv["pest_care"]["items"].as_array().map(|a| a.iter().map(|i| i["text"]["en"].clone()).collect::<Vec<_>>()),
-        "nutrition": adv["nutrition"]["items"].as_array().map(|a| a.iter().map(|i| i["text"]["en"].clone()).collect::<Vec<_>>()),
+        // Item titles only (the full cited text is in the sections the farmer sees).
+        "soil": item_titles(&soil_c), "pest_care": item_titles(&pests), "nutrition": item_titles(&nutr_c),
         "gaps": adv["gaps"],
         "sections_written": ["soil", "pests", "nutrition", "rotation"],
     }))
+}
+
+/// Item titles (or the body when an item has no title) of a section, bilingual.
+fn item_titles(c: &Value) -> Vec<Value> {
+    c["items"].as_array().into_iter().flatten().map(|i| {
+        let t = |l: &str| { let s = i["title"][l].as_str().unwrap_or(""); if s.is_empty() { i["body"][l].as_str().unwrap_or("").to_string() } else { s.to_string() } };
+        json!({ "en": t("en"), "es": t("es") })
+    }).collect()
 }
 
 /// One-line pre-diagnosis from the package's own signals (never from photos), with a confidence that reflects scale:
@@ -189,7 +206,7 @@ fn prediagnosis(ev: &Value) -> Value {
     let mut en = vec![]; let mut es = vec![];
     if r("temp_anomaly").is_some_and(|a| a >= 2.0) { en.push("a much warmer season than normal"); es.push("una campaña mucho más cálida que lo normal"); }
     if r("water_balance").is_some_and(|w| w < -50.0) { en.push("a large irrigation deficit"); es.push("un gran déficit de riego"); }
-    if r("pest_gen").is_some() && ev["pests"].as_array().map(|p| p.iter().any(|x| x["difference"].as_f64().unwrap_or(0.0) >= 1.0)).unwrap_or(false) {
+    if r("pest_gen").is_some() && ev["pests"].as_array().map(|p| p.iter().any(|x| x["role"] == "current" && x["difference"].as_f64().unwrap_or(0.0) >= 1.0)).unwrap_or(false) {
         en.push("pest pressure above normal"); es.push("presión de plagas mayor a lo normal");
     }
     let field = r("ndvi").is_some();

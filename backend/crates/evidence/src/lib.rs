@@ -7,6 +7,7 @@ mod from_earthdata;
 mod from_imagery;
 mod from_power;
 mod organic;
+pub mod pests;
 pub mod reading;
 
 use axum::Router;
@@ -33,6 +34,8 @@ fn to_value<T: serde::Serialize>(r: anyhow::Result<T>, what: &str, gaps: &mut Ve
 pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value> {
     let fo = analyses::store::field(&state.db, analysis_id).await.map_err(|e| anyhow::anyhow!("{e}"))?;
     let field: Field = fo.geom();
+    let st = analyses::store::load(&state.db, analysis_id).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    let crops = pests::crops_of(state, &st).await;
     let (lat, lon) = (field.center.lat, field.center.lon);
     let opts = power::Options::default();
     let size_m = from_imagery::snapshot_size_m(&field);
@@ -99,7 +102,8 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
         "snapshot_url": format!("/api/imagery/snapshot.png?lat={lat}&lon={lon}&size_m={size_m}&px=1024"),
         "credit": m["credit"], "date": m["date"], "bbox": m["bbox"], "scene_id": m["scene_id"],
     }));
-    let ev = json!({
+    let pest_rows = pests::rows(state, lat, lon, &crops, summary.as_ref()).await;
+    let mut ev = json!({
         "field": fo,
         "generated_at": chrono::Utc::now().to_rfc3339(),
         "readings": readings,
@@ -107,7 +111,7 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
         "ndvi_series": from_imagery::series(ndvi.as_ref()),
         "bare_soil": ndvi.as_ref().map(|n| n["bare_soil"].clone()).unwrap_or(json!([])),
         "cycles": ndvi.as_ref().map(|n| n["cycles"].clone()).unwrap_or(json!([])),
-        "pests": summary.as_ref().map(from_power::pests).unwrap_or_default(),
+        "pests": [],
         "projection": projection,
         "forecast": forecast_v,
         "outlook": outlook_v,
@@ -115,6 +119,7 @@ pub async fn build(state: &AppState, analysis_id: &str) -> anyhow::Result<Value>
         "gaps": gaps,
         "power_notes": summary.as_ref().map(|s| s["notes"].clone()).unwrap_or(Value::Null),
     });
+    pests::apply(state, lat, lon, &mut ev, pest_rows).await;
     analyses::store::save_evidence(&state.db, analysis_id, &ev).await.map_err(|e| anyhow::anyhow!("{e}"))?;
     mark_field_section(state, analysis_id, &ev).await;
     Ok(ev)

@@ -205,12 +205,16 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode, ma
         h.push_str(&format!("<div class=\"lic\">{} {}</div>", t("Licences:", "Licencias:"), licences.iter().map(|l| esc(l)).collect::<Vec<_>>().join(" · ")));
     }
     if let Some(pests) = ev["pests"].as_array().filter(|p| !p.is_empty()) {
-        h.push_str(&format!("<h3>{}</h3><div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>",
-            t("Reference pests (general published models, not specific to this crop): generations from degree-days, NASA POWER temperature, regional", "Plagas de referencia (modelos publicados generales, no específicos de este cultivo): generaciones por grados-día, temperatura NASA POWER, regional"),
-            t("Pest", "Plaga"), t("This season", "Esta campaña"), t("40-year normal", "Normal de 40 años")));
+        let reference = pests.iter().all(|p| p["reference"] == true);
+        h.push_str(&format!("<h3>{}</h3><div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>",
+            if reference { t("Reference pests (general published models, not your crop: no crop was given): generations from degree-days, NASA POWER temperature, regional", "Plagas de referencia (modelos publicados generales, no tu cultivo: no se indicó cultivo): generaciones por grados-día, temperatura NASA POWER, regional") }
+            else { t("Pests of your crops: generations from each pest's published degree-day threshold and NASA POWER temperature, regional (— = no published threshold, qualitative guidance)", "Plagas de tus cultivos: generaciones según el umbral publicado de grados-día de cada plaga y la temperatura NASA POWER, regional (— = sin umbral publicado, guía cualitativa)") },
+            t("Pest", "Plaga"), t("Crop", "Cultivo"), t("This season", "Esta campaña"), t("40-year normal", "Normal de 40 años")));
         for p in pests {
-            h.push_str(&format!("<tr><td>{} <i>{}</i><div class=\"cite\">{}</div></td><td class=\"n\">{}</td><td class=\"n\">{}</td></tr>",
-                esc(p["name"].as_str().unwrap_or("")), esc(p["scientific"].as_str().unwrap_or("")), esc(p["citation"].as_str().unwrap_or("")),
+            let name = if p["name"].is_object() { bi(&p["name"], lang) } else { p["name"].as_str().unwrap_or("").to_string() };
+            let crop = if p["crop"].is_object() { bi(&p["crop"]["name"], lang) } else { t("reference", "referencia").to_string() };
+            h.push_str(&format!("<tr><td>{} <i>{}</i><div class=\"cite\">{}</div></td><td>{}</td><td class=\"n\">{}</td><td class=\"n\">{}</td></tr>",
+                esc(&name), esc(p["scientific"].as_str().unwrap_or("")), esc(p["citation"].as_str().unwrap_or("")), esc(&crop),
                 num(&p["generations_now"]), num(&p["generations_normal"])));
         }
         h.push_str("</tbody></table></div>");

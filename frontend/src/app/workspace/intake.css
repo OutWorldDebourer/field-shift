@@ -9,6 +9,10 @@
 .in__form { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .in__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 14px 18px 18px; display: grid; gap: 14px; align-content: start; }
 .in__lede { font-size: 1rem; color: var(--ink-2); }
+.in__lede--first { color: var(--ink); font-size: 1.0625rem; line-height: 1.45; margin-bottom: 4px; }
+.in-f__hint { font-size: 0.875rem; color: var(--ink-2); margin: 0 0 8px; }
+.in-photos__btn { cursor: pointer; }
+.in-photos__n { font-size: 0.8125rem; color: var(--ink-2); margin-top: 6px; min-height: 1em; }
 .in__banner { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; padding: 12px 14px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.7);
   background: rgba(255, 255, 255, 0.12); font-size: 1rem; line-height: 1.4; font-weight: 600; }
 .in__banner svg { width: 20px; height: 20px; margin-top: 2px; }
@@ -64,3 +68,6 @@
 .facts dt { font-size: 0.875rem; color: var(--ink-2); }
 .facts dd { margin: 0; font-size: 0.9375rem; line-height: 1.35; }
 @media (max-width: 899px) { .facts dt, .facts dd { font-size: 1rem; } .facts dl > div { grid-template-columns: 1fr; gap: 0; } }
+
+/* The top bar and the phone tab bar sit in another stacking context: hide them while the modal sheet is open. */
+body:has(.in.is-open) .tabs, body:has(.in.is-open) .bar { visibility: hidden; }

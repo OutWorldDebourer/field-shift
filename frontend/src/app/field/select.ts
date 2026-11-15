@@ -68,6 +68,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       <div class="fs__pane" data-pane="gps">
         <p class="fs__status" id="fs-gps-status" aria-live="polite"></p>
       </div>
+      <button type="button" class="btn btn--glass btn--sm fs__last" id="fs-last" hidden>${icon('pin')}<span><span data-i18n="fs_last">${esc(t('fs_last'))}</span><small class="mono" id="fs-last-meta"></small></span></button>
       <div class="fs__search" role="search">
         <label for="fs-q" class="fs__label" data-i18n="fs_search">${esc(t('fs_search'))}</label>
         <div class="fs__qrow"><div class="fs__qwrap">${icon('search')}<input id="fs-q" type="search" enterkeyhint="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="fs-results" aria-autocomplete="list" aria-describedby="fs-qhint"
@@ -398,17 +399,26 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const ex = await examples();
     exampleList = ex.list;
     renderExamples();
+    // A new analysis starts on an empty map: the last field comes back only when the farmer asks for it.
     let saved: { field: FieldGeom; label: string } | null = null;
     try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { /* ignore */ }
-    if (!exampleId && !saved?.field && exampleList[0]) exampleId = exampleList[0].id;
+    const lastBtn = $<HTMLButtonElement>('#fs-last', host);
+    if (saved?.field?.center && !exampleId) {
+      const s = saved;
+      lastBtn.hidden = false;
+      $('#fs-last-meta', host).textContent = s.label || `${fmtCoord(s.field.center.lat, s.field.center.lon)}`;
+      lastBtn.addEventListener('click', () => {
+        mode = 'gps'; exampleId = null; tool = 'none'; draft = []; renderMode(); renderExamples();
+        ring = s.field.ring ?? []; point = s.field.center; label = s.label; renderTools(); drawLayers(); lockOn();
+        map?.setView([point.lat, point.lon], 16);
+        lastBtn.hidden = true;
+      });
+    }
     const h = exampleList.find((e) => e.id === (exampleId ?? 'huaral')) ?? exampleList[0];
     if (h) void addSnapshot(L, map, h.field.center.lat, h.field.center.lon, 5000).then((m) => { snapDate = m?.date ?? null; snapBox = (m?.bbox as [number, number, number, number]) ?? null; instr(); renderReadout(); });
     if (exampleId) {
       chooseExample(exampleId);
       if (opts.go) void use();
-    } else if (saved?.field) {
-      mode = 'gps'; renderMode();
-      ring = saved.field.ring; point = saved.field.center; label = saved.label; drawLayers(); map.setView([point.lat, point.lon], 16);
     }
   })().catch(() => { $('#fs-map', host).innerHTML = `<p class="fs__loading mono">${esc(t('fs_search_err'))}</p>`; toast(t('fs_search_err')); });
 

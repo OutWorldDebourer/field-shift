@@ -18,6 +18,9 @@ pub struct FieldSignals {
     pub water_balance_mm: Option<f64>,
     /// Estimated extra pest generations per season versus the 40-year baseline (computed by the caller).
     pub pest_generation_delta: Option<f64>,
+    /// The pest `pest_generation_delta` refers to: the current crop's leading pest (its own published threshold).
+    #[serde(default)]
+    pub pest_name: Option<L10n>,
     /// True when NDVI shows bare-soil periods on the field (Sentinel-2/Landsat).
     pub bare_soil: Option<bool>,
 }
@@ -189,7 +192,7 @@ pub fn advice(current: &CropRecord, previous: &[CropRecord], signals: &FieldSign
     for (name, missing) in [
         ("heat-stress days / días de estrés por calor", signals.heat_stress_days.is_none()),
         ("water balance / balance hídrico", signals.water_balance_mm.is_none()),
-        ("pest generations / generaciones de plagas", signals.pest_generation_delta.is_none()),
+        ("pest generations (no published degree-day threshold for this crop's pests) / generaciones de plagas (sin umbral publicado de grados-día para las plagas de este cultivo)", signals.pest_generation_delta.is_none()),
         ("bare-soil periods / periodos de suelo desnudo", signals.bare_soil.is_none()),
     ] {
         if missing {
@@ -262,7 +265,7 @@ mod tests {
     use crate::seed;
 
     fn s() -> FieldSignals {
-        FieldSignals { heat_stress_days: Some(14.0), water_balance_mm: Some(-120.0), pest_generation_delta: Some(1.2), bare_soil: Some(true) }
+        FieldSignals { heat_stress_days: Some(14.0), water_balance_mm: Some(-120.0), pest_generation_delta: Some(1.2), pest_name: Some(L10n::new("Pea aphid", "Pulgón de la arveja")), bare_soil: Some(true) }
     }
 
     fn all_text(a: &Advice) -> Vec<&L10n> {

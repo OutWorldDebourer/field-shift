@@ -34,7 +34,21 @@ fn add_months(d: NaiveDate, m: u32) -> NaiveDate {
     NaiveDate::from_ymd_opt(total / 12, (total % 12) as u32 + 1, 1).unwrap()
 }
 
-pub fn build(d: &PowerDaily, months: u32) -> anyhow::Result<Outlook> {
+/// A pest to project: published lower threshold (and upper cutoff, if any) and degree-days per generation.
+#[derive(Clone, Debug)]
+pub struct PestModel { pub name: Bi, pub scientific: String, pub lower_c: f64, pub upper_c: Option<f64>, pub dd_per_generation: f64 }
+
+/// The general reference pests (used only when no crop is known).
+pub fn reference_models() -> Vec<PestModel> {
+    pests::table().into_iter().map(|p| PestModel {
+        name: Bi { en: p.common_name.into(), es: crate::pests::name_es(p.key).into() }, scientific: p.scientific_name.into(),
+        lower_c: p.lower_c, upper_c: p.upper_c, dd_per_generation: p.dd_per_generation }).collect()
+}
+
+pub fn build(d: &PowerDaily, months: u32) -> anyhow::Result<Outlook> { build_with(d, months, &reference_models()) }
+
+/// The outlook with the given pests (the field's own crop pests when known).
+pub fn build_with(d: &PowerDaily, months: u32, models: &[PestModel]) -> anyhow::Result<Outlook> {
     let months = months.clamp(1, 6);
     let all = days::days(d);
     let end = days::last_complete(&all).ok_or_else(|| anyhow::anyhow!("no complete POWER days"))?;
@@ -64,7 +78,7 @@ pub fn build(d: &PowerDaily, months: u32) -> anyhow::Result<Outlook> {
     // Pests: generations so far this season, then the remaining window averaged over 1985-2024 (normal) and shifted by the anomaly (persist).
     let season_start = days::default_season_start(d_lat(d), end);
     let mut out_pests = vec![];
-    for p in pests::table() {
+    for p in models {
         let gen = |from: NaiveDate, to: NaiveDate, shift: f64, year: Option<i32>| -> Option<f64> {
             let (f, t) = match year { Some(y) => days::same_window(from, to, y), None => (from, to) };
             let s = days::slice(&all, f, t);
@@ -77,8 +91,8 @@ pub fn build(d: &PowerDaily, months: u32) -> anyhow::Result<Outlook> {
             if v.is_empty() { 0.0 } else { v.iter().sum::<f64>() / v.len() as f64 }
         };
         out_pests.push(OutlookPest {
-            name: Bi { en: p.common_name.into(), es: crate::pests::name_es(p.key).into() },
-            scientific: p.scientific_name.into(),
+            name: p.name.clone(),
+            scientific: p.scientific.clone(),
             to_date: r1(so_far), by_end_normal: r1(so_far + avg(0.0)), by_end_persist: r1(so_far + avg(anomaly)),
         });
     }

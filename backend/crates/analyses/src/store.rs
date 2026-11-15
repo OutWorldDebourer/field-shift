@@ -214,13 +214,13 @@ pub async fn add_greeting(db: &MySqlPool, id: &str, lang: &str) -> ApiResult<()>
     let body = if lang == "es" {
         format!("¡Hola! Ubiqué tu campo en **{coord}** ({}{area}). Lo que te mostraré son datos de la NASA y de satélites sobre **la parcela que marcaste en el mapa**, no sobre ti.
 
-Vamos a ver cinco temas, uno por uno: **tu campo**, **suelo**, **manejo de plagas**, **nutrición** y **rotación**. Al terminar tendrás tu ficha técnica para tu agrónomo.
+Veremos cinco temas: **tu campo**, **suelo**, **manejo de plagas**, **nutrición** y **rotación**. Al terminar tendrás tu ficha técnica para tu agrónomo.
 
 Para empezar: ¿qué cultivas ahora y qué hubo antes en esta parcela?", place)
     } else {
         format!("Hello! I located your field at **{coord}** ({}{area}). What I'll show you is NASA and satellite data about **the plot you marked on the map**, not about you.
 
-We'll go through five topics, one at a time: **your field**, **soil**, **pest care**, **nutrition** and **rotation**. At the end you'll have a technical sheet for your agronomist.
+We'll cover five topics: **your field**, **soil**, **pest care**, **nutrition** and **rotation**. At the end you'll have a technical sheet for your agronomist.
 
 To start: what are you growing now, and what grew on this plot before?", place)
     };

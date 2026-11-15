@@ -5,7 +5,7 @@ import { esc } from '../../shared/dom';
 import { findReading, signed } from '../../shared/evidence';
 import { fmt, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
-import { pestTitle } from '../../shared/pests';
+import { ownCropPest, pestTitle } from '../../shared/pests';
 
 export interface Topic { id: string; label: string; prompt: string }
 
@@ -21,7 +21,7 @@ export function topicsFor(ev: EvidencePackage, f: Forecast | null | undefined, o
   }
   const wb = findReading(ev, 'water_balance');
   if (wb?.value != null && wb.value < -20) out.push({ id: 'water', label: t('tp_water'), prompt: t('tp_water_q', { mm: signed(wb.value, 'mm', 0) }) });
-  const pests = ev.pests
+  const pests = ev.pests.filter(ownCropPest)
     .filter((p) => p.generations_now != null && p.generations_normal != null && p.generations_now > p.generations_normal)
     .sort((a, b) => (b.generations_now! - b.generations_normal!) - (a.generations_now! - a.generations_normal!));
   for (const p of pests.slice(0, 2)) {

@@ -39,7 +39,9 @@ fn signals_evidence(s: &FieldSignals) -> Vec<Evidence> {
     let mut v = vec![];
     if let Some(d) = s.heat_stress_days { v.push(signal(format!("Heat-stress days this season: {d:.0}"), format!("Días de estrés por calor esta campaña: {d:.0}"))); }
     if let Some(w) = s.water_balance_mm { v.push(signal(format!("Water balance: {w:.0} mm"), format!("Balance hídrico: {w:.0} mm"))); }
-    if let Some(g) = s.pest_generation_delta { v.push(signal(format!("Green peach aphid generations vs 40-year normal: {g:+.1}"), format!("Generaciones de pulgón verde frente a la normal de 40 años: {g:+.1}"))); }
+    if let (Some(g), Some(n)) = (s.pest_generation_delta, s.pest_name.as_ref()) {
+        v.push(signal(format!("{} generations vs 40-year normal: {g:+.1}", n.en), format!("Generaciones de {} frente a la normal de 40 años: {g:+.1}", n.es.to_lowercase())));
+    }
     v
 }
 

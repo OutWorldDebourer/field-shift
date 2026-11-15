@@ -37,9 +37,9 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
         if warmer { "Monitor pests every week: with this season's heat, pests develop faster and populations grow sooner." } else { "Monitor pests every week, especially in warm spells: pests develop faster with heat." },
         if warmer { "Monitoree las plagas cada semana: con el calor de esta campaña se desarrollan más rápido y las poblaciones crecen antes." } else { "Monitoree las plagas cada semana, sobre todo en épocas de calor: con más calor se desarrollan más rápido." },
         vec![refs::temperature_pest_development()], true));
-    if let Some(g) = s.pest_generation_delta.filter(|g| *g != 0.0) {
-        items.push(item(format!("Estimated pest generations versus the 40-year baseline: {g:+.1} per season for the green peach aphid reference model (NASA POWER degree-days, regional context)."),
-                        format!("Generaciones de plaga estimadas frente a la línea base de 40 años: {g:+.1} por campaña según el modelo de referencia del pulgón verde (grados-día NASA POWER, contexto regional)."), vec![], false));
+    if let (Some(g), Some(n)) = (s.pest_generation_delta.filter(|g| *g != 0.0), s.pest_name.as_ref()) {
+        items.push(item(format!("{}: {g:+.1} generations this season versus the 40-year normal, from its published degree-day threshold (NASA POWER temperature, regional context).", n.en),
+                        format!("{}: {g:+.1} generaciones esta campaña frente a la normal de 40 años, según su umbral publicado de grados-día (temperatura NASA POWER, contexto regional).", n.es), vec![], false));
     }
     if c.crop_type == CropType::Annual {
         items.push(item("Rotate to a crop of another botanical family to break pest and disease cycles.",

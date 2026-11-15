@@ -40,6 +40,8 @@ fn summary(parts: &[(&str, &str, Option<&str>)]) -> Option<Bi> {
 }
 
 pub async fn apply(state: &AppState, id: &str, f: &IntakeForm, lang: &str) -> anyhow::Result<()> {
+    // The intake can be the very first step (before any consultant message): then the reply also says hello.
+    let first = !store::load(&state.db, id).await.map_err(|x| anyhow::anyhow!("{x}"))?.messages.iter().any(|m| m.role == "assistant");
     store::merge_facts(&state.db, id, &serde_json::to_value(f)?).await.map_err(|x| anyhow::anyhow!("{x}"))?;
     let es = lang == "es";
     store::add_message(&state.db, id, "user",
@@ -90,6 +92,19 @@ pub async fn apply(state: &AppState, id: &str, f: &IntakeForm, lang: &str) -> an
         (false, Some(n)) => if es { format!("Gracias, registré: {done_names}. Con eso preparé esas secciones con datos de la NASA y fuentes citadas.\n\n{n}") } else { format!("Thanks, I recorded: {done_names}. With that I prepared those sections from NASA data and cited sources.\n\n{n}") },
         (false, None) => if es { "Gracias, con esto ya tenemos suficiente información para todos los temas. Tu ficha técnica está lista en el panel de la derecha, y la pestaña Orgánico reúne los controladores biológicos para tus plagas. Es un prediagnóstico: confírmalo con tu agrónomo.".to_string() } else { "Thanks, we now have enough information for every topic. Your technical sheet is ready in the panel on the right, and the Organic tab gathers the biological controls for your pests. This is a pre-diagnosis: confirm it with your agronomist.".to_string() },
     };
+    let body = if first { format!("{}
+
+{body}", hello(&st.field, es)) } else { body };
     store::add_message(&state.db, id, "assistant", &body, &[]).await.map_err(|x| anyhow::anyhow!("{x}"))?;
     Ok(())
+}
+
+/// A template hello with the field's place, coordinates and area (no model call).
+fn hello(f: &analyses::FieldOut, es: bool) -> String {
+    let (lat, lon) = (f.center.lat, f.center.lon);
+    let coord = format!("{:.2}°{} {:.2}°{}", lat.abs(), if lat < 0.0 { "S" } else { "N" }, lon.abs(), if lon < 0.0 { "W" } else { "E" });
+    let area = if f.area_ha > 0.0 { format!(", {:.2} ha", f.area_ha) } else { String::new() };
+    let place = if es && f.label == "Huaral valley, Peru" { "Valle de Huaral, Perú".to_string() } else { f.label.clone() };
+    if es { format!("¡Hola! Tu campo está en **{coord}** ({place}{area}). Leí tu formulario junto con los datos de la NASA y de satélites de esta parcela.") }
+    else { format!("Hello! Your field is at **{coord}** ({place}{area}). I read your form together with NASA and satellite data for this plot.") }
 }

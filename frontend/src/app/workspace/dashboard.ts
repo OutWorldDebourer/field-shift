@@ -13,7 +13,7 @@ import { fmt, fmtDateShort, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
 import { glossBtn, glossHeaderBtn } from '../../shared/glosspanel';
-import { pestTitle } from '../../shared/pests';
+import { pestLower, pestTitle } from '../../shared/pests';
 import { loc } from '../../shared/localize';
 import { alertsFor } from './alerts';
 import { chartHtml, controlsHtml, forecastNow, legendHtml, outlookNow, sourcesHtml, tableHtml, wireForecast, withForecastLoad } from './forecast';
@@ -91,7 +91,9 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
   const tl = currentTimeline(a);
   const startMonth = new Date(ev.generated_at).getUTCMonth() + 1;
   const proj = ev.projection;
-  const pests = ev.pests.filter((p) => p.generations_now != null);
+  const pests = ev.pests.filter((p) => p.generations_now != null && p.role !== 'previous');
+  const qualitative = ev.pests.filter((p) => p.qualitative && p.role === 'current');
+  const isRef = pests.length > 0 && pests.every((p) => p.reference);
   return `<div class="dash${opts.preview ? ' dash--preview' : ''}">
     ${map}
     <div class="dash__side">
@@ -115,9 +117,12 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_ndvi_title'))}${glossBtn('ndvi', t('db_ndvi_title'))}</h3>${ndviLine(ev)}${ndviChart(ev.ndvi_series, { w: narrow() ? 360 : 420, h: 150 })}
           <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}${glossBtn('pest_gen', t('db_pests'))}</h3>
-          ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(pestTitle(p))}</b> <i>${esc(p.scientific)}</i></span>
+          ${isRef ? `<p class="dash__note">${esc(t('db_pests_ref'))}</p>` : ''}
+          ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(pestTitle(p))}</b> <i>${esc(p.scientific)}</i>${p.crop && p.role !== 'current' ? ` <small>· ${esc(pick(p.crop.name))}</small>` : ''}</span>
             <span class="mono">${fmt(p.generations_now!, 1)} ${esc(t('db_now'))} · ${p.generations_normal != null ? fmt(p.generations_normal, 1) + ' ' + esc(t('db_norm')) : '—'}</span></li>`).join('')}</ul>
-            <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · ${esc(t('degree_days'))} · ${esc(t('regional'))}</p>` : `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>`}
+            <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · ${esc(t('degree_days'))} · ${esc(t('regional'))}</p>` : ''}
+          ${qualitative.length ? `<p class="dash__note">${esc(t(pests.some((p) => p.role === 'current') ? 'db_pests_qual_some' : 'db_pests_qual', { p: qualitative.map((p) => pestLower(p)).join(', ') }))}</p>` : ''}
+          ${!pests.length && !qualitative.length ? `<p class="chart-empty">${esc(t('db_no_evidence'))}</p>` : ''}
         </section></div>`}
     </div>
   </div>`;

@@ -29,6 +29,9 @@
 .ex[aria-pressed='true'] { border-color: #fff; background: rgba(255, 255, 255, 0.16); box-shadow: inset 3px 0 0 0 #fff; }
 .ex__name { font-size: 1.0625rem; font-weight: 600; }
 .ex__meta { font-size: 0.75rem; color: var(--ink-2); }
+.fs__last { width: 100%; justify-content: flex-start; text-align: left; margin-top: 8px; }
+.fs__last > span { display: grid; gap: 1px; }
+.fs__last small { font-size: 0.75rem; color: var(--ink-2); font-weight: 400; }
 .ex__soon { font-size: 0.75rem; color: var(--ink-3); padding: 2px 4px; }
 .fs__status { font-size: 0.9375rem; color: var(--ink-2); min-height: 1.4em; }
 .fs__label { display: block; font-size: 0.9375rem; font-weight: 600; margin-bottom: 6px; }

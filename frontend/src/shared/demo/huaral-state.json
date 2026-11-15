@@ -1,6 +1,6 @@
 {
  "id": "demo-huaral",
- "lang": "es",
+ "lang": "en",
  "location_mode": "example",
  "example_site": "huaral",
  "field": {
@@ -113,7 +113,7 @@
     "declared_gaps": [
      {
       "en": "No soil test available",
-      "es": "Sin análisis de suelo"
+      "es": "Sin anÃ¡lisis de suelo"
      }
     ],
     "items": [],
@@ -124,20 +124,20 @@
      "water_balance",
      "heat_days",
      "gdd",
-     "pest_gen",
      "ndvi",
      "slope",
      "soil_moisture",
      "rain_imerg",
-     "grace"
+     "grace",
+     "pest_gen"
     ],
     "summary": {
      "en": "12 readings with source, date and scale. Regional readings describe the area, not the plot.",
      "es": "12 lecturas con fuente, fecha y escala. Las lecturas regionales describen la zona, no la parcela."
     },
     "title": {
-     "en": "Your field · NASA data",
-     "es": "Tu campo · datos NASA"
+     "en": "Your field Â· NASA data",
+     "es": "Tu campo Â· datos NASA"
     }
    }
   },
@@ -150,7 +150,7 @@
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Feed the soil with compost, humus or well-made manure every season; heavy use of agrochemicals harms the soil microorganisms that make nutrients available.",
-       "es": "Alimente el suelo con compost, humus o estiércol bien descompuesto cada campaña; el uso excesivo de agroquímicos daña a los microorganismos del suelo que ponen los nutrientes a disposición."
+       "es": "Alimente el suelo con compost, humus o estiÃ©rcol bien descompuesto cada campaÃ±a; el uso excesivo de agroquÃ­micos daÃ±a a los microorganismos del suelo que ponen los nutrientes a disposiciÃ³n."
       },
       "citations": [
        {
@@ -167,15 +167,15 @@
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "this beneficial fungus protects roots against soil-borne diseases and supports nutrition.",
-       "es": "este hongo benéfico protege las raíces contra enfermedades del suelo y favorece la nutrición."
+       "es": "este hongo benÃ©fico protege las raÃ­ces contra enfermedades del suelo y favorece la nutriciÃ³n."
       },
       "citations": [
        {
-        "title": "Trichoderma Species: Our Best Fungal Allies in the Biocontrol of Plant Diseases—A Review. Plants 12(3):432",
+        "title": "Trichoderma Species: Our Best Fungal Allies in the Biocontrol of Plant Diseasesâ€”A Review. Plants 12(3):432",
         "url": "https://doi.org/10.3390/plants12030432"
        },
        {
-        "title": "Memoria Anual 2016, Subdirección de Control Biológico",
+        "title": "Memoria Anual 2016, SubdirecciÃ³n de Control BiolÃ³gico",
         "url": "https://repositorio.senasa.gob.pe/bitstreams/294c749d-a012-4828-924c-e888585c3592/download"
        }
       ],
@@ -188,7 +188,7 @@
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Grow green manures (legumes, alone or mixed with a cereal) and incorporate them before they mature.",
-       "es": "Siembre abonos verdes (leguminosas solas o con un cereal) e incorpórelos antes de que maduren."
+       "es": "Siembre abonos verdes (leguminosas solas o con un cereal) e incorpÃ³relos antes de que maduren."
       },
       "citations": [
        {
@@ -205,7 +205,7 @@
       "basis": null,
       "body": {
        "en": "cover it between crops (cover crop or mulch) to protect soil life.",
-       "es": "Las imágenes satelitales muestran periodos de suelo desnudo en este campo: cúbralo entre cultivos (cobertura o mulch) para proteger la vida del suelo."
+       "es": "Las imÃ¡genes satelitales muestran periodos de suelo desnudo en este campo: cÃºbralo entre cultivos (cobertura o mulch) para proteger la vida del suelo."
       },
       "citations": [
        {
@@ -220,7 +220,7 @@
      }
     ],
     "summary": {
-     "en": "Use compost or humus enriched with Trichoderma · Satellite images show periods of bare soil on this field",
+     "en": "Use compost or humus enriched with Trichoderma Â· Satellite images show periods of bare soil on this field",
      "es": "Use compost o humus enriquecido con Trichoderma"
     },
     "title": {
@@ -243,7 +243,7 @@
       },
       "degree_days": 307.5,
       "difference": 1.5,
-      "generations_normal": 3.8,
+      "generations_normal": 3.9,
       "generations_now": 5.3,
       "lower_threshold_c": 6.1,
       "name": {
@@ -252,7 +252,7 @@
       },
       "note": "Egg to adult (total immature stages)",
       "scientific": "Liriomyza huidobrensis",
-      "season": "2026-08-01 – 2026-11-09",
+      "season": "2026-08-01 â€“ 2026-11-10",
       "threshold_citation": {
        "author": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J.",
        "title": "A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344",
@@ -269,16 +269,16 @@
       },
       "degree_days": 150.4,
       "difference": 3.0,
-      "generations_normal": 10.3,
-      "generations_now": 13.3,
+      "generations_normal": 10.4,
+      "generations_now": 13.4,
       "lower_threshold_c": 2.4,
       "name": {
        "en": "Pea aphid",
-       "es": "Pulgón verde de la arveja"
+       "es": "PulgÃ³n verde de la arveja"
       },
       "note": "Nymph to adult, host peas (Model 2)",
       "scientific": "Acyrthosiphon pisum",
-      "season": "2026-08-01 – 2026-11-09",
+      "season": "2026-08-01 â€“ 2026-11-10",
       "threshold_citation": {
        "author": "UC Statewide IPM Program",
        "title": "Pea Aphid phenology models",
@@ -292,7 +292,7 @@
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "with this season's heat, pests develop faster and populations grow sooner.",
-       "es": "con el calor de esta campaña se desarrollan más rápido y las poblaciones crecen antes."
+       "es": "con el calor de esta campaÃ±a se desarrollan mÃ¡s rÃ¡pido y las poblaciones crecen antes."
       },
       "citations": [
        {
@@ -308,20 +308,20 @@
      {
       "basis": null,
       "body": {
-       "en": "+3.5 per season for the green peach aphid reference model (NASA POWER degree-days, regional context).",
-       "es": "+3.5 por campaña según el modelo de referencia del pulgón verde (grados-día NASA POWER, contexto regional)."
+       "en": "+3.0 generations this season versus the 40-year normal, from its published degree-day threshold (NASA POWER temperature, regional context).",
+       "es": "+3.0 generaciones esta campaÃ±a frente a la normal de 40 aÃ±os, segÃºn su umbral publicado de grados-dÃ­a (temperatura NASA POWER, contexto regional)."
       },
       "citations": [],
       "title": {
-       "en": "Estimated pest generations versus the 40-year baseline",
-       "es": "Generaciones de plaga estimadas frente a la línea base de 40 años"
+       "en": "Pea aphid",
+       "es": "PulgÃ³n verde de la arveja"
       }
      },
      {
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Rotate to a crop of another botanical family to break pest and disease cycles.",
-       "es": "Rote a un cultivo de otra familia botánica para cortar el ciclo de plagas y enfermedades."
+       "es": "Rote a un cultivo de otra familia botÃ¡nica para cortar el ciclo de plagas y enfermedades."
       },
       "citations": [
        {
@@ -338,7 +338,7 @@
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Incorporate or compost crop residues soon after harvest; do not pile them at the field edge, where they become a source of pests and diseases, and avoid burning.",
-       "es": "Incorpore o composte los residuos poco después de la cosecha; no los amontone en el borde del campo, donde se vuelven foco de plagas y enfermedades, y evite quemarlos."
+       "es": "Incorpore o composte los residuos poco despuÃ©s de la cosecha; no los amontone en el borde del campo, donde se vuelven foco de plagas y enfermedades, y evite quemarlos."
       },
       "citations": [
        {
@@ -359,37 +359,37 @@
       },
       "citations": [
        {
-        "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
+        "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en frÃ­jol cultivado en la zona de Lima, PerÃº. Revista Colombiana de EntomologÃ­a 24:103-107",
         "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
        }
       ],
       "title": {
        "en": "Biological control",
-       "es": "Control biológico"
+       "es": "Control biolÃ³gico"
       }
      },
      {
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
-       "en": "Bt (bacterium) against Lepidopteran larvae; used as entomopathogen in pea IPM trial in Huánuco.",
-       "es": "Bt (bacteria) contra Larvas de lepidópteros; usado como entomopatógeno en ensayo MIP de arveja en Huánuco."
+       "en": "Bt (bacterium) against Lepidopteran larvae; used as entomopathogen in pea IPM trial in HuÃ¡nuco.",
+       "es": "Bt (bacteria) contra Larvas de lepidÃ³pteros; usado como entomopatÃ³geno en ensayo MIP de arveja en HuÃ¡nuco."
       },
       "citations": [
        {
-        "title": "Integración de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la región Huánuco, Perú. Enfoque UTE 13(3):58-68",
+        "title": "IntegraciÃ³n de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la regiÃ³n HuÃ¡nuco, PerÃº. Enfoque UTE 13(3):58-68",
         "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
        }
       ],
       "title": {
        "en": "Biological control",
-       "es": "Control biológico"
+       "es": "Control biolÃ³gico"
       }
      },
      {
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Convergent lady beetle (insect) against Pea aphid (Acyrthosiphon pisum).",
-       "es": "Mariquita convergente (insecto) contra Pulgón verde (Acyrthosiphon pisum)."
+       "es": "Mariquita convergente (insecto) contra PulgÃ³n verde (Acyrthosiphon pisum)."
       },
       "citations": [
        {
@@ -399,14 +399,14 @@
       ],
       "title": {
        "en": "Biological control",
-       "es": "Control biológico"
+       "es": "Control biolÃ³gico"
       }
      },
      {
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Aphid parasitoid wasp (insect) against Pea aphid (Acyrthosiphon pisum).",
-       "es": "Avispita parasitoide de pulgones (insecto) contra Pulgón verde (Acyrthosiphon pisum)."
+       "es": "Avispita parasitoide de pulgones (insecto) contra PulgÃ³n verde (Acyrthosiphon pisum)."
       },
       "citations": [
        {
@@ -416,43 +416,43 @@
       ],
       "title": {
        "en": "Biological control",
-       "es": "Control biológico"
+       "es": "Control biolÃ³gico"
       }
      },
      {
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Trichoderma (fungus) against Damping-off and root rot (SENASA general biocontrol use in Peru).",
-       "es": "Trichoderma (hongo) contra Chupadera y pudrición de raíces (uso general de SENASA en Perú)."
+       "es": "Trichoderma (hongo) contra Chupadera y pudriciÃ³n de raÃ­ces (uso general de SENASA en PerÃº)."
       },
       "citations": [
        {
-        "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+        "title": "101,910 hectÃ¡reas se atendieron con controladores biolÃ³gicos (SENASA report on 2021 biological control)",
         "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
        }
       ],
       "title": {
        "en": "Biological control",
-       "es": "Control biológico"
+       "es": "Control biolÃ³gico"
       }
      },
      {
       "basis": null,
       "body": {
        "en": "No crop-specific degree-day threshold for: Whitefly, Cutworm. Guidance for these pests is qualitative.",
-       "es": "Mosca blanca, Gusano de tierra. La guía para estas plagas es cualitativa."
+       "es": "Mosca blanca, Gusano de tierra. La guÃ­a para estas plagas es cualitativa."
       },
       "citations": [],
       "title": {
        "en": "",
-       "es": "Sin umbral de grados-día específico para este cultivo"
+       "es": "Sin umbral de grados-dÃ­a especÃ­fico para este cultivo"
       }
      },
      {
       "basis": null,
       "body": {
        "en": "Generations are computed from published degree-days for: Pea leafminer (serpentine leafminer), Pea aphid (see the pest table).",
-       "es": "Las generaciones se calculan con grados-día publicados para: Mosca minadora, Pulgón verde de la arveja (ver la tabla de plagas)."
+       "es": "Las generaciones se calculan con grados-dÃ­a publicados para: Mosca minadora, PulgÃ³n verde de la arveja (ver la tabla de plagas)."
       },
       "citations": [
        {
@@ -471,8 +471,8 @@
      }
     ],
     "summary": {
-     "en": "Estimated generations of this crop's pests this season vs the 40-year normal, from published thresholds and NASA POWER temperature (regional context; season window 2026-08-01 – 2026-11-09, sowing date not given): Pea leafminer (serpentine leafminer): 5.3 vs 3.8 (+1.5); Pea aphid: 13.3 vs 10.3 (+3.0).",
-     "es": "Generaciones estimadas de las plagas de este cultivo esta campaña vs la normal de 40 años, con umbrales publicados y temperatura NASA POWER (contexto regional; ventana de campaña 2026-08-01 – 2026-11-09, sin fecha de siembra): Mosca minadora: 5.3 vs 3.8 (+1.5); Pulgón verde de la arveja: 13.3 vs 10.3 (+3.0)."
+     "en": "Estimated generations of this crop's pests this season vs the 40-year normal, from published thresholds and NASA POWER temperature (regional context; season window 2026-08-01 â€“ 2026-11-10, sowing date not given): Pea leafminer (serpentine leafminer): 5.3 vs 3.9 (+1.5); Pea aphid: 13.4 vs 10.4 (+3.0).",
+     "es": "Generaciones estimadas de las plagas de este cultivo esta campaÃ±a vs la normal de 40 aÃ±os, con umbrales publicados y temperatura NASA POWER (contexto regional; ventana de campaÃ±a 2026-08-01 â€“ 2026-11-10, sin fecha de siembra): Mosca minadora: 5.3 vs 3.9 (+1.5); PulgÃ³n verde de la arveja: 13.4 vs 10.4 (+3.0)."
     },
     "thresholds": [
      {
@@ -508,7 +508,7 @@
       "lower_threshold_c": 2.4,
       "name": {
        "en": "Pea aphid",
-       "es": "Pulgón verde de la arveja"
+       "es": "PulgÃ³n verde de la arveja"
       },
       "note": "Nymph to adult, host peas (Model 2)",
       "scientific_name": "Acyrthosiphon pisum",
@@ -534,8 +534,8 @@
      {
       "basis": null,
       "body": {
-       "en": "pea fixes its own nitrogen (about 53–75 kg N/ha); the crop that follows benefits from it.",
-       "es": "arveja fija su propio nitrógeno (alrededor de 53–75 kg N/ha); el cultivo siguiente se beneficia."
+       "en": "pea fixes its own nitrogen (about 53â€“75 kg N/ha); the crop that follows benefits from it.",
+       "es": "arveja fija su propio nitrÃ³geno (alrededor de 53â€“75 kg N/ha); el cultivo siguiente se beneficia."
       },
       "citations": [
        {
@@ -556,7 +556,7 @@
       "basis": "Field Shift interview with agronomist Ing. Cenia (2026)",
       "body": {
        "en": "Base nutrition on organic matter (compost, humus, green manures) and adjust fertilizer with a soil analysis.",
-       "es": "Base la nutrición en materia orgánica (compost, humus, abonos verdes) y ajuste el fertilizante con un análisis de suelo."
+       "es": "Base la nutriciÃ³n en materia orgÃ¡nica (compost, humus, abonos verdes) y ajuste el fertilizante con un anÃ¡lisis de suelo."
       },
       "citations": [
        {
@@ -573,22 +573,22 @@
       "basis": null,
       "body": {
        "en": "fertilizer doses are an information gap.",
-       "es": "las dosis de fertilizante son un vacío de información."
+       "es": "las dosis de fertilizante son un vacÃ­o de informaciÃ³n."
       },
       "citations": [],
       "title": {
        "en": "No soil analysis in the evidence package",
-       "es": "No hay análisis de suelo en el paquete de evidencias"
+       "es": "No hay anÃ¡lisis de suelo en el paquete de evidencias"
       }
      }
     ],
     "summary": {
      "en": "No soil analysis in the evidence package",
-     "es": "No hay análisis de suelo en el paquete de evidencias"
+     "es": "No hay anÃ¡lisis de suelo en el paquete de evidencias"
     },
     "title": {
      "en": "Nutrition",
-     "es": "Nutrición"
+     "es": "NutriciÃ³n"
     }
    }
   },
@@ -602,12 +602,12 @@
     "prediagnosis": {
      "basis": {
       "en": "From NASA readings only; photos and a field visit by your agronomist decide.",
-      "es": "Solo a partir de lecturas NASA; las fotos y la visita de tu agrónomo deciden."
+      "es": "Solo a partir de lecturas NASA; las fotos y la visita de tu agrÃ³nomo deciden."
      },
      "confidence": "medium",
      "headline": {
       "en": "Likely a much warmer season than normal, a large irrigation deficit and pest pressure above normal",
-      "es": "Probablemente una campaña mucho más cálida que lo normal, un gran déficit de riego y presión de plagas mayor a lo normal"
+      "es": "Probablemente una campaÃ±a mucho mÃ¡s cÃ¡lida que lo normal, un gran dÃ©ficit de riego y presiÃ³n de plagas mayor a lo normal"
      }
     },
     "strategies": [
@@ -632,8 +632,8 @@
       ],
       "current": true,
       "evidence": {
-       "en": "pea Kc mid: 1.15 pea seasonal water need: 350–500 mm/season pea: Legume: when used strategically in a rotation it provides N to the following crop (e.g. maize or vegetables). For soil-borne diseases, rotate to non-host crops until the pathogen dies out. Heat-stress days this season: 0 (NASA POWER, regional context ~50 km) Water balance: -121 mm (NASA POWER, regional context ~50 km) Green peach aphid generations vs 40-year normal: +3.5 (NASA POWER, regional context ~50 km) Repeating a crop family keeps its pests and soil-borne diseases supplied with a host.",
-       "es": "arveja Kc medio: 1.15 arveja necesidad de agua por campaña: 350–500 mm/season arveja: Leguminosa: bien ubicada en la rotación aporta N al cultivo siguiente (p. ej. maíz u hortalizas). Contra enfermedades del suelo, rotar con cultivos no hospederos hasta que el patógeno desaparezca. Días de estrés por calor esta campaña: 0 (NASA POWER, contexto regional ~50 km) Balance hídrico: -121 mm (NASA POWER, contexto regional ~50 km) Generaciones de pulgón verde frente a la normal de 40 años: +3.5 (NASA POWER, contexto regional ~50 km) Repetir la misma familia mantiene un hospedero para sus plagas y enfermedades del suelo."
+       "en": "pea Kc mid: 1.15 pea seasonal water need: 350â€“500 mm/season pea: Legume: when used strategically in a rotation it provides N to the following crop (e.g. maize or vegetables). For soil-borne diseases, rotate to non-host crops until the pathogen dies out. Heat-stress days this season: 0 (NASA POWER, regional context ~50 km) Water balance: -122 mm (NASA POWER, regional context ~50 km) Pea aphid generations vs 40-year normal: +3.0 (NASA POWER, regional context ~50 km) Repeating a crop family keeps its pests and soil-borne diseases supplied with a host.",
+       "es": "arveja Kc medio: 1.15 arveja necesidad de agua por campaÃ±a: 350â€“500 mm/season arveja: Leguminosa: bien ubicada en la rotaciÃ³n aporta N al cultivo siguiente (p. ej. maÃ­z u hortalizas). Contra enfermedades del suelo, rotar con cultivos no hospederos hasta que el patÃ³geno desaparezca. DÃ­as de estrÃ©s por calor esta campaÃ±a: 0 (NASA POWER, contexto regional ~50 km) Balance hÃ­drico: -122 mm (NASA POWER, contexto regional ~50 km) Generaciones de pulgÃ³n verde de la arveja frente a la normal de 40 aÃ±os: +3.0 (NASA POWER, contexto regional ~50 km) Repetir la misma familia mantiene un hospedero para sus plagas y enfermedades del suelo."
       },
       "evidence_list": [
        {
@@ -641,24 +641,24 @@
         "es": "arveja Kc medio: 1.15"
        },
        {
-        "en": "pea seasonal water need: 350–500 mm/season",
-        "es": "arveja necesidad de agua por campaña: 350–500 mm/season"
+        "en": "pea seasonal water need: 350â€“500 mm/season",
+        "es": "arveja necesidad de agua por campaÃ±a: 350â€“500 mm/season"
        },
        {
         "en": "pea: Legume: when used strategically in a rotation it provides N to the following crop (e.g. maize or vegetables). For soil-borne diseases, rotate to non-host crops until the pathogen dies out.",
-        "es": "arveja: Leguminosa: bien ubicada en la rotación aporta N al cultivo siguiente (p. ej. maíz u hortalizas). Contra enfermedades del suelo, rotar con cultivos no hospederos hasta que el patógeno desaparezca."
+        "es": "arveja: Leguminosa: bien ubicada en la rotaciÃ³n aporta N al cultivo siguiente (p. ej. maÃ­z u hortalizas). Contra enfermedades del suelo, rotar con cultivos no hospederos hasta que el patÃ³geno desaparezca."
        },
        {
         "en": "Heat-stress days this season: 0 (NASA POWER, regional context ~50 km)",
-        "es": "Días de estrés por calor esta campaña: 0 (NASA POWER, contexto regional ~50 km)"
+        "es": "DÃ­as de estrÃ©s por calor esta campaÃ±a: 0 (NASA POWER, contexto regional ~50 km)"
        },
        {
-        "en": "Water balance: -121 mm (NASA POWER, regional context ~50 km)",
-        "es": "Balance hídrico: -121 mm (NASA POWER, contexto regional ~50 km)"
+        "en": "Water balance: -122 mm (NASA POWER, regional context ~50 km)",
+        "es": "Balance hÃ­drico: -122 mm (NASA POWER, contexto regional ~50 km)"
        },
        {
-        "en": "Green peach aphid generations vs 40-year normal: +3.5 (NASA POWER, regional context ~50 km)",
-        "es": "Generaciones de pulgón verde frente a la normal de 40 años: +3.5 (NASA POWER, contexto regional ~50 km)"
+        "en": "Pea aphid generations vs 40-year normal: +3.0 (NASA POWER, regional context ~50 km)",
+        "es": "Generaciones de pulgÃ³n verde de la arveja frente a la normal de 40 aÃ±os: +3.0 (NASA POWER, contexto regional ~50 km)"
        },
        {
         "en": "Repeating a crop family keeps its pests and soil-borne diseases supplied with a host.",
@@ -667,30 +667,30 @@
       ],
       "gaps": {
        "en": "No local price or yield data: income is a relative estimate; check prices in your market.",
-       "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado."
+       "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimaciÃ³n relativa; consulte precios en su mercado."
       },
       "gaps_list": [
        {
         "en": "No local price or yield data: income is a relative estimate; check prices in your market.",
-        "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado."
+        "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimaciÃ³n relativa; consulte precios en su mercado."
        }
       ],
       "name": {
        "en": "Keep pea next season (current plan)",
-       "es": "Repetir arveja la próxima campaña (plan actual)"
+       "es": "Repetir arveja la prÃ³xima campaÃ±a (plan actual)"
       },
       "risks": {
        "en": "Same family (Fabaceae) again: pests and root diseases carry over. Warmer seasons speed up pest reproduction; more sprays may be needed.",
-       "es": "Misma familia (Fabaceae) otra vez: plagas y enfermedades de raíz se mantienen. Con más calor las plagas se reproducen más rápido; podrían necesitarse más aplicaciones."
+       "es": "Misma familia (Fabaceae) otra vez: plagas y enfermedades de raÃ­z se mantienen. Con mÃ¡s calor las plagas se reproducen mÃ¡s rÃ¡pido; podrÃ­an necesitarse mÃ¡s aplicaciones."
       },
       "risks_list": [
        {
         "en": "Same family (Fabaceae) again: pests and root diseases carry over.",
-        "es": "Misma familia (Fabaceae) otra vez: plagas y enfermedades de raíz se mantienen."
+        "es": "Misma familia (Fabaceae) otra vez: plagas y enfermedades de raÃ­z se mantienen."
        },
        {
         "en": "Warmer seasons speed up pest reproduction; more sprays may be needed.",
-        "es": "Con más calor las plagas se reproducen más rápido; podrían necesitarse más aplicaciones."
+        "es": "Con mÃ¡s calor las plagas se reproducen mÃ¡s rÃ¡pido; podrÃ­an necesitarse mÃ¡s aplicaciones."
        }
       ],
       "scores": {
@@ -714,13 +714,13 @@
       ],
       "why": {
        "en": "Baseline for comparison: the crop you grow now, again.",
-       "es": "Línea base para comparar: el mismo cultivo otra vez."
+       "es": "LÃ­nea base para comparar: el mismo cultivo otra vez."
       }
      },
      {
       "best_for": {
        "en": "Best fit: break pest cycles",
-       "es": "Mejor opción: cortar el ciclo de plagas"
+       "es": "Mejor opciÃ³n: cortar el ciclo de plagas"
       },
       "citations": [
        {
@@ -750,8 +750,8 @@
       ],
       "current": false,
       "evidence": {
-       "en": "pea Kc mid: 1.15 maize Kc mid: 1.2 maize seasonal water need: 500–800 mm/season pea N fixation: 53–75 kg N/ha maize: Cereal (Poaceae); benefits strongly from following a legume such as alfalfa, pea or bean, which provides N to the subsequent crop. Avoid continuous maize; rotate to non-host crops to break pest and disease cycles. Heat-stress days this season: 0 (NASA POWER, regional context ~50 km) Water balance: -121 mm (NASA POWER, regional context ~50 km) Green peach aphid generations vs 40-year normal: +3.5 (NASA POWER, regional context ~50 km) Rotating to a crop of another family breaks pest and disease cycles; legumes leave N for the next crop.",
-       "es": "arveja Kc medio: 1.15 maíz Kc medio: 1.2 maíz necesidad de agua por campaña: 500–800 mm/season arveja fijación de N: 53–75 kg N/ha maíz: Cereal (Poaceae); se beneficia de sembrarse tras una leguminosa (alfalfa, arveja o frijol), que aporta N al cultivo siguiente. Evitar maíz tras maíz; rotar con no hospederos para cortar ciclos de plagas y enfermedades. Días de estrés por calor esta campaña: 0 (NASA POWER, contexto regional ~50 km) Balance hídrico: -121 mm (NASA POWER, contexto regional ~50 km) Generaciones de pulgón verde frente a la normal de 40 años: +3.5 (NASA POWER, contexto regional ~50 km) Rotar a otra familia corta el ciclo de plagas y enfermedades; las leguminosas dejan N al cultivo siguiente."
+       "en": "pea Kc mid: 1.15 maize Kc mid: 1.2 maize seasonal water need: 500â€“800 mm/season pea N fixation: 53â€“75 kg N/ha maize: Cereal (Poaceae); benefits strongly from following a legume such as alfalfa, pea or bean, which provides N to the subsequent crop. Avoid continuous maize; rotate to non-host crops to break pest and disease cycles. Heat-stress days this season: 0 (NASA POWER, regional context ~50 km) Water balance: -122 mm (NASA POWER, regional context ~50 km) Pea aphid generations vs 40-year normal: +3.0 (NASA POWER, regional context ~50 km) Rotating to a crop of another family breaks pest and disease cycles; legumes leave N for the next crop.",
+       "es": "arveja Kc medio: 1.15 maÃ­z Kc medio: 1.2 maÃ­z necesidad de agua por campaÃ±a: 500â€“800 mm/season arveja fijaciÃ³n de N: 53â€“75 kg N/ha maÃ­z: Cereal (Poaceae); se beneficia de sembrarse tras una leguminosa (alfalfa, arveja o frijol), que aporta N al cultivo siguiente. Evitar maÃ­z tras maÃ­z; rotar con no hospederos para cortar ciclos de plagas y enfermedades. DÃ­as de estrÃ©s por calor esta campaÃ±a: 0 (NASA POWER, contexto regional ~50 km) Balance hÃ­drico: -122 mm (NASA POWER, contexto regional ~50 km) Generaciones de pulgÃ³n verde de la arveja frente a la normal de 40 aÃ±os: +3.0 (NASA POWER, contexto regional ~50 km) Rotar a otra familia corta el ciclo de plagas y enfermedades; las leguminosas dejan N al cultivo siguiente."
       },
       "evidence_list": [
        {
@@ -760,31 +760,31 @@
        },
        {
         "en": "maize Kc mid: 1.2",
-        "es": "maíz Kc medio: 1.2"
+        "es": "maÃ­z Kc medio: 1.2"
        },
        {
-        "en": "maize seasonal water need: 500–800 mm/season",
-        "es": "maíz necesidad de agua por campaña: 500–800 mm/season"
+        "en": "maize seasonal water need: 500â€“800 mm/season",
+        "es": "maÃ­z necesidad de agua por campaÃ±a: 500â€“800 mm/season"
        },
        {
-        "en": "pea N fixation: 53–75 kg N/ha",
-        "es": "arveja fijación de N: 53–75 kg N/ha"
+        "en": "pea N fixation: 53â€“75 kg N/ha",
+        "es": "arveja fijaciÃ³n de N: 53â€“75 kg N/ha"
        },
        {
         "en": "maize: Cereal (Poaceae); benefits strongly from following a legume such as alfalfa, pea or bean, which provides N to the subsequent crop. Avoid continuous maize; rotate to non-host crops to break pest and disease cycles.",
-        "es": "maíz: Cereal (Poaceae); se beneficia de sembrarse tras una leguminosa (alfalfa, arveja o frijol), que aporta N al cultivo siguiente. Evitar maíz tras maíz; rotar con no hospederos para cortar ciclos de plagas y enfermedades."
+        "es": "maÃ­z: Cereal (Poaceae); se beneficia de sembrarse tras una leguminosa (alfalfa, arveja o frijol), que aporta N al cultivo siguiente. Evitar maÃ­z tras maÃ­z; rotar con no hospederos para cortar ciclos de plagas y enfermedades."
        },
        {
         "en": "Heat-stress days this season: 0 (NASA POWER, regional context ~50 km)",
-        "es": "Días de estrés por calor esta campaña: 0 (NASA POWER, contexto regional ~50 km)"
+        "es": "DÃ­as de estrÃ©s por calor esta campaÃ±a: 0 (NASA POWER, contexto regional ~50 km)"
        },
        {
-        "en": "Water balance: -121 mm (NASA POWER, regional context ~50 km)",
-        "es": "Balance hídrico: -121 mm (NASA POWER, contexto regional ~50 km)"
+        "en": "Water balance: -122 mm (NASA POWER, regional context ~50 km)",
+        "es": "Balance hÃ­drico: -122 mm (NASA POWER, contexto regional ~50 km)"
        },
        {
-        "en": "Green peach aphid generations vs 40-year normal: +3.5 (NASA POWER, regional context ~50 km)",
-        "es": "Generaciones de pulgón verde frente a la normal de 40 años: +3.5 (NASA POWER, contexto regional ~50 km)"
+        "en": "Pea aphid generations vs 40-year normal: +3.0 (NASA POWER, regional context ~50 km)",
+        "es": "Generaciones de pulgÃ³n verde de la arveja frente a la normal de 40 aÃ±os: +3.0 (NASA POWER, contexto regional ~50 km)"
        },
        {
         "en": "Rotating to a crop of another family breaks pest and disease cycles; legumes leave N for the next crop.",
@@ -793,30 +793,30 @@
       ],
       "gaps": {
        "en": "No local price or yield data: income is a relative estimate; check prices in your market. Check local seed, water turn and market for maize before choosing.",
-       "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado. Verifique semilla, turno de riego y mercado local para maíz antes de elegir."
+       "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimaciÃ³n relativa; consulte precios en su mercado. Verifique semilla, turno de riego y mercado local para maÃ­z antes de elegir."
       },
       "gaps_list": [
        {
         "en": "No local price or yield data: income is a relative estimate; check prices in your market.",
-        "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado."
+        "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimaciÃ³n relativa; consulte precios en su mercado."
        },
        {
         "en": "Check local seed, water turn and market for maize before choosing.",
-        "es": "Verifique semilla, turno de riego y mercado local para maíz antes de elegir."
+        "es": "Verifique semilla, turno de riego y mercado local para maÃ­z antes de elegir."
        }
       ],
       "name": {
        "en": "Follow with maize (Poaceae)",
-       "es": "Seguir con maíz (Poaceae)"
+       "es": "Seguir con maÃ­z (Poaceae)"
       },
       "risks": {
        "en": "A new crop needs know-how, seed and buyers for maize.",
-       "es": "Un cultivo nuevo requiere conocimiento, semilla y compradores para maíz."
+       "es": "Un cultivo nuevo requiere conocimiento, semilla y compradores para maÃ­z."
       },
       "risks_list": [
        {
         "en": "A new crop needs know-how, seed and buyers for maize.",
-        "es": "Un cultivo nuevo requiere conocimiento, semilla y compradores para maíz."
+        "es": "Un cultivo nuevo requiere conocimiento, semilla y compradores para maÃ­z."
        }
       ],
       "scores": {
@@ -836,11 +836,11 @@
        "lechuga",
        "camote",
        "arveja",
-       "maíz"
+       "maÃ­z"
       ],
       "why": {
        "en": "Uses the nitrogen left by the legume with a Poaceae crop, a different family.",
-       "es": "Aprovecha el nitrógeno que deja la leguminosa con un cultivo de Poaceae, otra familia."
+       "es": "Aprovecha el nitrÃ³geno que deja la leguminosa con un cultivo de Poaceae, otra familia."
       }
      },
      {
@@ -850,35 +850,35 @@
         "url": "https://www.sare.org/publications/building-soils-for-better-crops/cover-crops"
        },
        {
-        "title": "Trichoderma Species: Our Best Fungal Allies in the Biocontrol of Plant Diseases—A Review. Plants 12(3):432",
+        "title": "Trichoderma Species: Our Best Fungal Allies in the Biocontrol of Plant Diseasesâ€”A Review. Plants 12(3):432",
         "url": "https://doi.org/10.3390/plants12030432"
        }
       ],
       "current": false,
       "evidence": {
-       "en": "Cover crops incorporated before maturity (green manures) add organic matter, feed soil life, and legumes in the mix supply nitrogen to the next crop. Compost or humus enriched with Trichoderma protects roots against soil-borne diseases. Heat-stress days this season: 0 (NASA POWER, regional context ~50 km) Water balance: -121 mm (NASA POWER, regional context ~50 km) Green peach aphid generations vs 40-year normal: +3.5 (NASA POWER, regional context ~50 km) Satellite NDVI shows bare-soil periods on this field (Sentinel-2 / Landsat, field-level)",
-       "es": "Los cultivos de cobertura incorporados antes de madurar (abonos verdes) aportan materia orgánica, alimentan la vida del suelo y la leguminosa de la mezcla aporta nitrógeno al cultivo siguiente. El compost o humus enriquecido con Trichoderma protege las raíces contra enfermedades del suelo. Días de estrés por calor esta campaña: 0 (NASA POWER, contexto regional ~50 km) Balance hídrico: -121 mm (NASA POWER, contexto regional ~50 km) Generaciones de pulgón verde frente a la normal de 40 años: +3.5 (NASA POWER, contexto regional ~50 km) El NDVI satelital muestra periodos de suelo desnudo en este campo (Sentinel-2 / Landsat, nivel de campo)"
+       "en": "Cover crops incorporated before maturity (green manures) add organic matter, feed soil life, and legumes in the mix supply nitrogen to the next crop. Compost or humus enriched with Trichoderma protects roots against soil-borne diseases. Heat-stress days this season: 0 (NASA POWER, regional context ~50 km) Water balance: -122 mm (NASA POWER, regional context ~50 km) Pea aphid generations vs 40-year normal: +3.0 (NASA POWER, regional context ~50 km) Satellite NDVI shows bare-soil periods on this field (Sentinel-2 / Landsat, field-level)",
+       "es": "Los cultivos de cobertura incorporados antes de madurar (abonos verdes) aportan materia orgÃ¡nica, alimentan la vida del suelo y la leguminosa de la mezcla aporta nitrÃ³geno al cultivo siguiente. El compost o humus enriquecido con Trichoderma protege las raÃ­ces contra enfermedades del suelo. DÃ­as de estrÃ©s por calor esta campaÃ±a: 0 (NASA POWER, contexto regional ~50 km) Balance hÃ­drico: -122 mm (NASA POWER, contexto regional ~50 km) Generaciones de pulgÃ³n verde de la arveja frente a la normal de 40 aÃ±os: +3.0 (NASA POWER, contexto regional ~50 km) El NDVI satelital muestra periodos de suelo desnudo en este campo (Sentinel-2 / Landsat, nivel de campo)"
       },
       "evidence_list": [
        {
         "en": "Cover crops incorporated before maturity (green manures) add organic matter, feed soil life, and legumes in the mix supply nitrogen to the next crop.",
-        "es": "Los cultivos de cobertura incorporados antes de madurar (abonos verdes) aportan materia orgánica, alimentan la vida del suelo y la leguminosa de la mezcla aporta nitrógeno al cultivo siguiente."
+        "es": "Los cultivos de cobertura incorporados antes de madurar (abonos verdes) aportan materia orgÃ¡nica, alimentan la vida del suelo y la leguminosa de la mezcla aporta nitrÃ³geno al cultivo siguiente."
        },
        {
         "en": "Compost or humus enriched with Trichoderma protects roots against soil-borne diseases.",
-        "es": "El compost o humus enriquecido con Trichoderma protege las raíces contra enfermedades del suelo."
+        "es": "El compost o humus enriquecido con Trichoderma protege las raÃ­ces contra enfermedades del suelo."
        },
        {
         "en": "Heat-stress days this season: 0 (NASA POWER, regional context ~50 km)",
-        "es": "Días de estrés por calor esta campaña: 0 (NASA POWER, contexto regional ~50 km)"
+        "es": "DÃ­as de estrÃ©s por calor esta campaÃ±a: 0 (NASA POWER, contexto regional ~50 km)"
        },
        {
-        "en": "Water balance: -121 mm (NASA POWER, regional context ~50 km)",
-        "es": "Balance hídrico: -121 mm (NASA POWER, contexto regional ~50 km)"
+        "en": "Water balance: -122 mm (NASA POWER, regional context ~50 km)",
+        "es": "Balance hÃ­drico: -122 mm (NASA POWER, contexto regional ~50 km)"
        },
        {
-        "en": "Green peach aphid generations vs 40-year normal: +3.5 (NASA POWER, regional context ~50 km)",
-        "es": "Generaciones de pulgón verde frente a la normal de 40 años: +3.5 (NASA POWER, contexto regional ~50 km)"
+        "en": "Pea aphid generations vs 40-year normal: +3.0 (NASA POWER, regional context ~50 km)",
+        "es": "Generaciones de pulgÃ³n verde de la arveja frente a la normal de 40 aÃ±os: +3.0 (NASA POWER, contexto regional ~50 km)"
        },
        {
         "en": "Satellite NDVI shows bare-soil periods on this field (Sentinel-2 / Landsat, field-level)",
@@ -887,30 +887,30 @@
       ],
       "gaps": {
        "en": "No local price or yield data: income is a relative estimate; check prices in your market. No soil analysis in the evidence package: organic matter gain cannot be quantified.",
-       "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado. No hay análisis de suelo en el paquete de evidencias: no se puede cuantificar la ganancia de materia orgánica."
+       "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimaciÃ³n relativa; consulte precios en su mercado. No hay anÃ¡lisis de suelo en el paquete de evidencias: no se puede cuantificar la ganancia de materia orgÃ¡nica."
       },
       "gaps_list": [
        {
         "en": "No local price or yield data: income is a relative estimate; check prices in your market.",
-        "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado."
+        "es": "Sin datos locales de precio o rendimiento: el ingreso es una estimaciÃ³n relativa; consulte precios en su mercado."
        },
        {
         "en": "No soil analysis in the evidence package: organic matter gain cannot be quantified.",
-        "es": "No hay análisis de suelo en el paquete de evidencias: no se puede cuantificar la ganancia de materia orgánica."
+        "es": "No hay anÃ¡lisis de suelo en el paquete de evidencias: no se puede cuantificar la ganancia de materia orgÃ¡nica."
        }
       ],
       "name": {
        "en": "Green-manure break, then maize",
-       "es": "Pausa con abono verde y luego maíz"
+       "es": "Pausa con abono verde y luego maÃ­z"
       },
       "risks": {
        "en": "One season without sales; needs irrigation water for the cover.",
-       "es": "Una campaña sin ventas; necesita agua de riego para la cobertura."
+       "es": "Una campaÃ±a sin ventas; necesita agua de riego para la cobertura."
       },
       "risks_list": [
        {
         "en": "One season without sales; needs irrigation water for the cover.",
-        "es": "Una campaña sin ventas; necesita agua de riego para la cobertura."
+        "es": "Una campaÃ±a sin ventas; necesita agua de riego para la cobertura."
        }
       ],
       "scores": {
@@ -931,22 +931,22 @@
        "lechuga",
        "camote",
        "arveja",
-       "Abono verde (mezcla leguminosa + cereal, incorporada en floración)",
-       "maíz"
+       "Abono verde (mezcla leguminosa + cereal, incorporada en floraciÃ³n)",
+       "maÃ­z"
       ],
       "why": {
        "en": "Rebuilds the soil and fully breaks the pest host between cash crops, at the cost of one season without harvest.",
-       "es": "Recupera el suelo y corta por completo el hospedero de plagas entre cultivos comerciales, a costa de una campaña sin cosecha."
+       "es": "Recupera el suelo y corta por completo el hospedero de plagas entre cultivos comerciales, a costa de una campaÃ±a sin cosecha."
       }
      }
     ],
     "summary": {
-     "en": "Your current plan and two alternatives, scored 1–5 (5 = best; for risk, 5 = lowest).",
+     "en": "Your current plan and two alternatives, scored 1â€“5 (5 = best; for risk, 5 = lowest).",
      "es": "Tu plan actual y dos alternativas, puntuadas de 1 a 5 (5 = mejor; en riesgo, 5 = menor)."
     },
     "title": {
      "en": "Rotation: three strategies",
-     "es": "Rotación: tres estrategias"
+     "es": "RotaciÃ³n: tres estrategias"
     }
    }
   },
@@ -959,6 +959,25 @@
    "state": "ready",
    "content": {
     "agents": [
+     {
+      "citation": {
+       "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en frÃ­jol cultivado en la zona de Lima, PerÃº. Revista Colombiana de EntomologÃ­a 24:103-107",
+       "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+      },
+      "crop": "pea",
+      "for_reported_pest": true,
+      "kind": "insect",
+      "name": {
+       "en": "Leafminer parasitoid wasp",
+       "es": "Avispita parasitoide de minadora"
+      },
+      "note": null,
+      "scientific": "Diglyphus websteri",
+      "targets": {
+       "en": "Larvae of the leafminer Liriomyza huidobrensis (recorded on bean in Lima)",
+       "es": "Larvas de la mosca minadora Liriomyza huidobrensis (registrado en frijol en Lima)"
+      }
+     },
      {
       "citation": {
        "title": "Pea Aphid / Alfalfa: Pest Management Guidelines",
@@ -975,7 +994,7 @@
       "scientific": "Hippodamia convergens",
       "targets": {
        "en": "Pea aphid (Acyrthosiphon pisum)",
-       "es": "Pulgón verde (Acyrthosiphon pisum)"
+       "es": "PulgÃ³n verde (Acyrthosiphon pisum)"
       }
      },
      {
@@ -994,7 +1013,45 @@
       "scientific": "Aphidius ervi",
       "targets": {
        "en": "Pea aphid (Acyrthosiphon pisum)",
-       "es": "Pulgón verde (Acyrthosiphon pisum)"
+       "es": "PulgÃ³n verde (Acyrthosiphon pisum)"
+      }
+     },
+     {
+      "citation": {
+       "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en frÃ­jol cultivado en la zona de Lima, PerÃº. Revista Colombiana de EntomologÃ­a 24:103-107",
+       "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+      },
+      "crop": "common bean",
+      "for_reported_pest": true,
+      "kind": "insect",
+      "name": {
+       "en": "Leafminer parasitoid wasp",
+       "es": "Avispita parasitoide de minadora"
+      },
+      "note": null,
+      "scientific": "Halticoptera arduine",
+      "targets": {
+       "en": "Leafminer Liriomyza huidobrensis on bean",
+       "es": "Mosca minadora Liriomyza huidobrensis en frijol"
+      }
+     },
+     {
+      "citation": {
+       "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en frÃ­jol cultivado en la zona de Lima, PerÃº. Revista Colombiana de EntomologÃ­a 24:103-107",
+       "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+      },
+      "crop": "common bean",
+      "for_reported_pest": true,
+      "kind": "insect",
+      "name": {
+       "en": "Leafminer parasitoid wasp",
+       "es": "Avispita parasitoide de minadora"
+      },
+      "note": null,
+      "scientific": "Chrysocharis flacilla",
+      "targets": {
+       "en": "Leafminer Liriomyza huidobrensis on bean",
+       "es": "Mosca minadora Liriomyza huidobrensis en frijol"
       }
      },
      {
@@ -1013,12 +1070,12 @@
       "scientific": "Trioxys complanatus",
       "targets": {
        "en": "Spotted alfalfa aphid",
-       "es": "Pulgón manchado de la alfalfa"
+       "es": "PulgÃ³n manchado de la alfalfa"
       }
      },
      {
       "citation": {
-       "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+       "title": "101,910 hectÃ¡reas se atendieron con controladores biolÃ³gicos (SENASA report on 2021 biological control)",
        "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
       },
       "crop": "alfalfa",
@@ -1070,7 +1127,7 @@
       "scientific": "Chrysopidae",
       "targets": {
        "en": "Aphids and small larvae on quinoa",
-       "es": "Pulgones y larvas pequeñas en quinua"
+       "es": "Pulgones y larvas pequeÃ±as en quinua"
       }
      },
      {
@@ -1083,7 +1140,7 @@
       "kind": "insect",
       "name": {
        "en": "Hoverfly larvae",
-       "es": "Larvas de sírfido"
+       "es": "Larvas de sÃ­rfido"
       },
       "note": null,
       "scientific": "Allograpta sp.",
@@ -1094,7 +1151,7 @@
      },
      {
       "citation": {
-       "title": "Plagas y enemigos naturales en el algodonero Tangüis en La Molina. Ecología Aplicada 23(1)",
+       "title": "Plagas y enemigos naturales en el algodonero TangÃ¼is en La Molina. EcologÃ­a Aplicada 23(1)",
        "url": "https://www.lamolina.edu.pe/ecolapl/2024_v23_n1_a02_535_Cruz_et_al_Plagas_y_enemigos.htm"
       },
       "crop": "cotton",
@@ -1108,7 +1165,7 @@
       "scientific": "Lysiphlebus testaceipes",
       "targets": {
        "en": "Cotton aphid (Aphis gossypii)",
-       "es": "Pulgón del algodonero (Aphis gossypii)"
+       "es": "PulgÃ³n del algodonero (Aphis gossypii)"
       }
      },
      {
@@ -1121,37 +1178,75 @@
       "kind": "insect",
       "name": {
        "en": "Hoverfly larvae",
-       "es": "Larvas de sírfido"
+       "es": "Larvas de sÃ­rfido"
       },
       "note": null,
       "scientific": "Syrphidae",
       "targets": {
        "en": "Cotton aphid",
-       "es": "Pulgón del algodonero"
+       "es": "PulgÃ³n del algodonero"
       }
      },
      {
       "citation": {
-       "title": "Parasitoides de la mosca minadora Liriomyza huidobrensis en fríjol cultivado en la zona de Lima, Perú. Revista Colombiana de Entomología 24:103-107",
-       "url": "https://revistacolombianaentomologia.univalle.edu.co/index.php/SOCOLEN/article/download/9843/12290/30503"
+       "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Ãšnica' en La Molina (EcologÃ­a Aplicada 24(2))",
+       "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
       },
-      "crop": "pea",
-      "for_reported_pest": false,
+      "crop": "lettuce",
+      "for_reported_pest": true,
       "kind": "insect",
       "name": {
-       "en": "Leafminer parasitoid wasp",
-       "es": "Avispita parasitoide de minadora"
+       "en": "Halticoptera arduine (parasitoid wasp)",
+       "es": "Halticoptera arduine (avispita parasitoide)"
+      },
+      "note": null,
+      "scientific": "Halticoptera arduine",
+      "targets": {
+       "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+       "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+      }
+     },
+     {
+      "citation": {
+       "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Ãšnica' en La Molina (EcologÃ­a Aplicada 24(2))",
+       "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+      },
+      "crop": "lettuce",
+      "for_reported_pest": true,
+      "kind": "insect",
+      "name": {
+       "en": "Diglyphus websteri (parasitoid wasp)",
+       "es": "Diglyphus websteri (avispita parasitoide)"
       },
       "note": null,
       "scientific": "Diglyphus websteri",
       "targets": {
-       "en": "Larvae of the leafminer Liriomyza huidobrensis (recorded on bean in Lima)",
-       "es": "Larvas de la mosca minadora Liriomyza huidobrensis (registrado en frijol en Lima)"
+       "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+       "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
       }
      },
      {
       "citation": {
-       "title": "Integración de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la región Huánuco, Perú. Enfoque UTE 13(3):58-68",
+       "title": "Ocurrencia estacional de Liriomyza huidobrensis Blanchard y sus parasitoides en papa cv. 'Ãšnica' en La Molina (EcologÃ­a Aplicada 24(2))",
+       "url": "https://www.lamolina.edu.pe/ecolapl/2025_v24_n2_a20_562_Saravia_et_al_Parasitoides_de_Liriomyza_huidobrensis.pdf"
+      },
+      "crop": "lettuce",
+      "for_reported_pest": true,
+      "kind": "insect",
+      "name": {
+       "en": "Chrysocharis (parasitoid wasp)",
+       "es": "Chrysocharis (avispita parasitoide)"
+      },
+      "note": null,
+      "scientific": "Chrysocharis spp.",
+      "targets": {
+       "en": "Leafminer fly larvae (Liriomyza huidobrensis)",
+       "es": "Larvas de mosca minadora (Liriomyza huidobrensis)"
+      }
+     },
+     {
+      "citation": {
+       "title": "IntegraciÃ³n de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la regiÃ³n HuÃ¡nuco, PerÃº. Enfoque UTE 13(3):58-68",
        "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
       },
       "crop": "pea",
@@ -1164,13 +1259,13 @@
       "note": null,
       "scientific": "Bacillus thuringiensis",
       "targets": {
-       "en": "Lepidopteran larvae; used as entomopathogen in pea IPM trial in Huánuco",
-       "es": "Larvas de lepidópteros; usado como entomopatógeno en ensayo MIP de arveja en Huánuco"
+       "en": "Lepidopteran larvae; used as entomopathogen in pea IPM trial in HuÃ¡nuco",
+       "es": "Larvas de lepidÃ³pteros; usado como entomopatÃ³geno en ensayo MIP de arveja en HuÃ¡nuco"
       }
      },
      {
       "citation": {
-       "title": "101,910 hectáreas se atendieron con controladores biológicos (SENASA report on 2021 biological control)",
+       "title": "101,910 hectÃ¡reas se atendieron con controladores biolÃ³gicos (SENASA report on 2021 biological control)",
        "url": "https://agraria.pe/noticias/101-910-hectareas-se-atendieron-con-controladores-biologicos-27082"
       },
       "crop": "pea",
@@ -1184,24 +1279,24 @@
       "scientific": "Trichoderma spp.",
       "targets": {
        "en": "Damping-off and root rot (SENASA general biocontrol use in Peru)",
-       "es": "Chupadera y pudrición de raíces (uso general de SENASA en Perú)"
+       "es": "Chupadera y pudriciÃ³n de raÃ­ces (uso general de SENASA en PerÃº)"
       }
      }
     ],
     "avoid": [
      {
       "en": "Broad-spectrum insecticides also kill lady beetles, lacewings, parasitoid wasps and soil life; frequent sprays raise costs. Ask your agronomist for selective options first (agronomist interview).",
-      "es": "Los insecticidas de amplio espectro también matan mariquitas, crisopas, avispitas parasitoides y la vida del suelo; aplicar seguido sube los costos. Pida primero a su agrónomo opciones selectivas (entrevista a la agrónoma)."
+      "es": "Los insecticidas de amplio espectro tambiÃ©n matan mariquitas, crisopas, avispitas parasitoides y la vida del suelo; aplicar seguido sube los costos. Pida primero a su agrÃ³nomo opciones selectivas (entrevista a la agrÃ³noma)."
      },
      {
       "en": "Burning residues destroys organic matter and beneficial organisms.",
-      "es": "Quemar los rastrojos destruye la materia orgánica y los organismos benéficos."
+      "es": "Quemar los rastrojos destruye la materia orgÃ¡nica y los organismos benÃ©ficos."
      }
     ],
     "gaps": [
      {
       "en": "Local availability and prices of biological controllers are not in the data: ask SENASA or your agronomist.",
-      "es": "La disponibilidad y precios locales de controladores biológicos no están en los datos: consulte a SENASA o a su agrónomo."
+      "es": "La disponibilidad y precios locales de controladores biolÃ³gicos no estÃ¡n en los datos: consulte a SENASA o a su agrÃ³nomo."
      }
     ],
     "practices": [
@@ -1209,11 +1304,11 @@
       "basis": "agronomist interview",
       "body": {
        "en": "Trichoderma is a beneficial fungus that protects roots from soil-borne diseases and helps nutrition; it is added to compost or humus before use.",
-       "es": "Trichoderma es un hongo benéfico que protege las raíces de enfermedades del suelo y ayuda a la nutrición; se incorpora al compost o humus antes de usarlo."
+       "es": "Trichoderma es un hongo benÃ©fico que protege las raÃ­ces de enfermedades del suelo y ayuda a la nutriciÃ³n; se incorpora al compost o humus antes de usarlo."
       },
       "citations": [
        {
-        "title": "Trichoderma Species: Our Best Fungal Allies in the Biocontrol of Plant Diseases—A Review. Plants 12(3):432",
+        "title": "Trichoderma Species: Our Best Fungal Allies in the Biocontrol of Plant Diseasesâ€”A Review. Plants 12(3):432",
         "url": "https://doi.org/10.3390/plants12030432"
        }
       ],
@@ -1225,7 +1320,7 @@
      {
       "body": {
        "en": "Cover crops and flowering strips keep lady beetles, lacewings and parasitoid wasps near the field between crops.",
-       "es": "Los cultivos de cobertura y las franjas con flores mantienen mariquitas, crisopas y avispitas parasitoides cerca del campo entre campañas."
+       "es": "Los cultivos de cobertura y las franjas con flores mantienen mariquitas, crisopas y avispitas parasitoides cerca del campo entre campaÃ±as."
       },
       "citations": [
        {
@@ -1235,14 +1330,14 @@
       ],
       "title": {
        "en": "Give natural enemies a home: flowering borders and cover crops",
-       "es": "Dé refugio a los enemigos naturales: bordes con flores y cultivos de cobertura"
+       "es": "DÃ© refugio a los enemigos naturales: bordes con flores y cultivos de cobertura"
       }
      },
      {
       "basis": "agronomist interview",
       "body": {
        "en": "Incorporate or compost crop residues soon after harvest; piles at the field edge become a source of pests and diseases, and burning harms the soil.",
-       "es": "Incorpore o composte los rastrojos poco después de la cosecha; los montones al borde del campo se vuelven foco de plagas y enfermedades, y la quema daña el suelo."
+       "es": "Incorpore o composte los rastrojos poco despuÃ©s de la cosecha; los montones al borde del campo se vuelven foco de plagas y enfermedades, y la quema daÃ±a el suelo."
       },
       "citations": [
        {
@@ -1258,7 +1353,7 @@
      {
       "body": {
        "en": "Rotating to a crop of another botanical family leaves pests without their host.",
-       "es": "Rotar a un cultivo de otra familia botánica deja a las plagas sin su hospedero."
+       "es": "Rotar a un cultivo de otra familia botÃ¡nica deja a las plagas sin su hospedero."
       },
       "citations": [
        {
@@ -1268,51 +1363,47 @@
       ],
       "title": {
        "en": "Break pest cycles with rotation",
-       "es": "Corte el ciclo de las plagas con rotación"
+       "es": "Corte el ciclo de las plagas con rotaciÃ³n"
       }
      },
      {
       "body": {
        "en": "SENASA produces and supports biological controllers (beneficial insects and fungi) for farmers; ask your agronomist or the local SENASA office which ones are available for your pest.",
-       "es": "SENASA produce y promueve controladores biológicos (insectos y hongos benéficos) para agricultores; consulte a su agrónomo o a la oficina local de SENASA cuáles hay para su plaga."
+       "es": "SENASA produce y promueve controladores biolÃ³gicos (insectos y hongos benÃ©ficos) para agricultores; consulte a su agrÃ³nomo o a la oficina local de SENASA cuÃ¡les hay para su plaga."
       },
       "citations": [
        {
-        "title": "Memoria Anual 2016, Subdirección de Control Biológico",
+        "title": "Memoria Anual 2016, SubdirecciÃ³n de Control BiolÃ³gico",
         "url": "https://repositorio.senasa.gob.pe/bitstreams/294c749d-a012-4828-924c-e888585c3592/download"
        }
       ],
       "title": {
        "en": "Biological controllers in Peru",
-       "es": "Controladores biológicos en el Perú"
+       "es": "Controladores biolÃ³gicos en el PerÃº"
       }
      }
     ],
     "summary": {
-     "en": "12 natural enemies and beneficial microorganisms with published sources, 9 of them for the pests you reported. Release rates and products are decided with your agronomist.",
-     "es": "12 enemigos naturales y microorganismos benéficos con fuente publicada, 9 para las plagas que reportó. Las dosis y productos se deciden con su agrónomo."
+     "en": "17 natural enemies and beneficial microorganisms with published sources, 15 of them for the pests you reported. Release rates and products are decided with your agronomist.",
+     "es": "17 enemigos naturales y microorganismos benÃ©ficos con fuente publicada, 15 para las plagas que reportÃ³. Las dosis y productos se deciden con su agrÃ³nomo."
     },
     "timing": [
      {
-      "en": "Green peach aphid: 14.2 generations this season vs 10.7 normally (NASA POWER degree-days). Check twice a week and protect or release its natural enemies early, while numbers are low.",
-      "es": "Pulgón verde del duraznero: 14.2 generaciones esta campaña vs 10.7 lo normal (grados-día NASA POWER). Revise dos veces por semana y proteja o libere a sus enemigos naturales temprano, cuando aún son pocas."
+      "en": "Pea leafminer (serpentine leafminer): 5.3 generations this season vs 3.9 normally (NASA POWER degree-days). Check twice a week and protect or release its natural enemies early, while numbers are low.",
+      "es": "Mosca minadora: 5.3 generaciones esta campaÃ±a vs 3.9 lo normal (grados-dÃ­a NASA POWER). Revise dos veces por semana y proteja o libere a sus enemigos naturales temprano, cuando aÃºn son pocas."
      },
      {
-      "en": "Sweetpotato / silverleaf whitefly: 3.5 generations this season vs 2.1 normally (NASA POWER degree-days). Check twice a week and protect or release its natural enemies early, while numbers are low.",
-      "es": "Mosca blanca: 3.5 generaciones esta campaña vs 2.1 lo normal (grados-día NASA POWER). Revise dos veces por semana y proteja o libere a sus enemigos naturales temprano, cuando aún son pocas."
+      "en": "Pea aphid: 13.4 generations this season vs 10.4 normally (NASA POWER degree-days). Check twice a week and protect or release its natural enemies early, while numbers are low.",
+      "es": "PulgÃ³n verde de la arveja: 13.4 generaciones esta campaÃ±a vs 10.4 lo normal (grados-dÃ­a NASA POWER). Revise dos veces por semana y proteja o libere a sus enemigos naturales temprano, cuando aÃºn son pocas."
      },
      {
-      "en": "Fall armyworm: 2.5 generations this season vs 1.3 normally (NASA POWER degree-days). Check twice a week and protect or release its natural enemies early, while numbers are low.",
-      "es": "Gusano cogollero: 2.5 generaciones esta campaña vs 1.3 lo normal (grados-día NASA POWER). Revise dos veces por semana y proteja o libere a sus enemigos naturales temprano, cuando aún son pocas."
-     },
-     {
-      "en": "Warm days ahead (up to 30 °C on 2026-11-15, NASA GEOS-FP forecast): pests develop faster in heat, so inspect leaf undersides more often.",
-      "es": "Vienen días cálidos (hasta 30 °C el 2026-11-15, pronóstico NASA GEOS-FP): con calor las plagas se desarrollan más rápido; revise el envés de las hojas más seguido."
+      "en": "Warm days ahead (up to 30 Â°C on 2026-11-15, NASA GEOS-FP forecast): pests develop faster in heat, so inspect leaf undersides more often.",
+      "es": "Vienen dÃ­as cÃ¡lidos (hasta 30 Â°C el 2026-11-15, pronÃ³stico NASA GEOS-FP): con calor las plagas se desarrollan mÃ¡s rÃ¡pido; revise el envÃ©s de las hojas mÃ¡s seguido."
      }
     ],
     "title": {
      "en": "Organic and biological pest management",
-     "es": "Manejo orgánico y biológico de plagas"
+     "es": "Manejo orgÃ¡nico y biolÃ³gico de plagas"
     }
    }
   }
@@ -1449,13 +1540,13 @@
    },
    {
     "month": "2026-11",
-    "normal_hi": 19.02,
-    "normal_lo": 17.2,
-    "normal_mean": 18.09,
-    "normal_rain": 1.04,
+    "normal_hi": 19.04,
+    "normal_lo": 17.27,
+    "normal_mean": 18.12,
+    "normal_rain": 1.09,
     "partial": true,
-    "rain": 2.19,
-    "t_mean": 23.01
+    "rain": 2.3,
+    "t_mean": 23.06
    }
   ],
   "cycles": [
@@ -1595,7 +1686,7 @@
    ],
    "license": "NASA GMAO GEOS-FP data, no restrictions on use; cite NASA GMAO",
    "method": "Hourly time-averaged 2 m temperature (tavg1_2d_slv_Nx) and total precipitation (tavg1_2d_flx_Nx) of the latest 00 UTC run, grouped into local solar days",
-   "resolution": "0.25° × 0.3125° (~25 km)",
+   "resolution": "0.25Â° Ã— 0.3125Â° (~25 km)",
    "run": "2026-11-14 00 UTC",
    "source": "NASA GEOS-FP (GMAO)"
   },
@@ -1604,11 +1695,11 @@
     "id": "soil_lab",
     "text": {
      "en": "No soil laboratory analysis: nutrient advice is general, not a fertilizer prescription.",
-     "es": "Sin análisis de suelo de laboratorio: la nutrición es general, no una receta de fertilización."
+     "es": "Sin anÃ¡lisis de suelo de laboratorio: la nutriciÃ³n es general, no una receta de fertilizaciÃ³n."
     }
    }
   ],
-  "generated_at": "2026-11-14T20:44:18.643048300+00:00",
+  "generated_at": "2026-11-15T02:07:32.625467100+00:00",
   "imagery": {
    "bbox": [
     -77.21166850528867,
@@ -2154,12 +2245,12 @@
   "outlook": {
    "anomaly_c": 5.0,
    "badge": "regional context",
-   "from": "2026-11-10",
+   "from": "2026-11-11",
    "label": {
     "en": "Estimate, not a forecast",
-    "es": "Estimación, no pronóstico"
+    "es": "EstimaciÃ³n, no pronÃ³stico"
    },
-   "method": "Two scenarios for 2026-11-10..2027-01-31: the 1985–2024 normal, and the normal shifted by the last 30 days' anomaly (+5.0 °C). Pest generations: single-sine degree-days summed over the same calendar window in each normal year (and shifted for the warm scenario), added to this season's generations so far.",
+   "method": "Two scenarios for 2026-11-11..2027-01-31: the 1985â€“2024 normal, and the normal shifted by the last 30 days' anomaly (+5.0 Â°C). Pest generations: single-sine degree-days summed over the same calendar window in each normal year (and shifted for the warm scenario), added to this season's generations so far.",
    "months": [
     {
      "month": "2026-12",
@@ -2178,75 +2269,381 @@
    ],
    "pests": [
     {
-     "by_end_normal": 24.7,
-     "by_end_persist": 27.9,
+     "by_end_normal": 9.2,
+     "by_end_persist": 10.5,
      "name": {
-      "en": "Green peach aphid",
-      "es": "Pulgón verde del duraznero"
+      "en": "Pea leafminer (serpentine leafminer)",
+      "es": "Mosca minadora"
      },
-     "scientific": "Myzus persicae (Sulzer)",
-     "to_date": 14.1
+     "scientific": "Liriomyza huidobrensis",
+     "to_date": 5.3
     },
     {
-     "by_end_normal": 5.9,
-     "by_end_persist": 7.3,
+     "by_end_normal": 23.3,
+     "by_end_persist": 26.0,
      "name": {
-      "en": "Sweetpotato / silverleaf whitefly",
-      "es": "Mosca blanca"
+      "en": "Pea aphid",
+      "es": "PulgÃ³n verde de la arveja"
      },
-     "scientific": "Bemisia tabaci (Gennadius), biotype B (MEAM1)",
-     "to_date": 3.5
-    },
-    {
-     "by_end_normal": 4.2,
-     "by_end_persist": 5.2,
-     "name": {
-      "en": "Fall armyworm",
-      "es": "Gusano cogollero"
-     },
-     "scientific": "Spodoptera frugiperda (J.E. Smith)",
-     "to_date": 2.5
+     "scientific": "Acyrthosiphon pisum",
+     "to_date": 13.4
     }
    ],
-   "source": "NASA POWER (MERRA-2 / CERES SYN1deg) normals 1985–2024",
+   "source": "NASA POWER (MERRA-2 / CERES SYN1deg) normals 1985â€“2024",
    "to": "2027-01-31"
   },
   "pests": [
    {
-    "citation": "Whalon, M.E.; Smilowitz, Z. (1979). Temperature-dependent model for predicting field populations of green peach aphid, Myzus persicae (Homoptera: Aphididae). The Canadian Entomologist 111: 1025-1032 (thresholds as tabulated by UC IPM, https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/). https://doi.org/10.4039/Ent1111025-9",
-    "difference": 3.5,
-    "generations_normal": 10.7,
-    "generations_now": 14.2,
-    "name": "Green peach aphid",
-    "name_bi": {
-     "en": "Green peach aphid",
-     "es": "Pulgón verde del duraznero"
+    "citation": "Mujica, N., Sporleder, M., Carhuapoma, P., Kroschel, J. (2017). A temperature-dependent phenology model for Liriomyza huidobrensis (Diptera: Agromyzidae). J. Econ. Entomol. 110(3):1333-1344. https://pmc.ncbi.nlm.nih.gov/articles/PMC5444682/",
+    "crop": {
+     "key": "pea",
+     "name": {
+      "en": "pea",
+      "es": "arveja"
+     }
     },
-    "scientific": "Myzus persicae (Sulzer)"
+    "degree_days": 307.5,
+    "difference": 1.5,
+    "generations_normal": 3.9,
+    "generations_now": 5.3,
+    "lower_threshold_c": 6.1,
+    "name": {
+     "en": "Pea leafminer (serpentine leafminer)",
+     "es": "Mosca minadora"
+    },
+    "name_bi": {
+     "en": "Pea leafminer (serpentine leafminer)",
+     "es": "Mosca minadora"
+    },
+    "qualitative": false,
+    "reference": false,
+    "role": "current",
+    "scientific": "Liriomyza huidobrensis",
+    "season": "2026-08-01 â€“ 2026-11-10",
+    "source": {
+     "title": "Serpentine leafminer fly, Liriomyza huidobrensis. Pest Distribution and Risk Atlas for Africa, pp. 114-125",
+     "url": "https://ilcym.cipotato.org/wp-content/uploads/2016/11/4.3.1-1.pdf"
+    }
    },
    {
-    "citation": "Bosco, D.; Caciagli, P. (1998). Bionomics and ecology of Bemisia tabaci (Sternorrhyncha: Aleyrodidae) in Italy. European Journal of Entomology 95(4): 519-527. https://www.eje.cz/artkey/eje-199804-0005_Bionomics_and_ecology_of_Bemisia_tabaci_Sternorrhyncha_Aleyrodidae_in_Italy.php",
-    "difference": 1.4,
-    "generations_normal": 2.1,
-    "generations_now": 3.5,
-    "name": "Sweetpotato / silverleaf whitefly",
+    "citation": "UC Statewide IPM Program (n.d.). Pea Aphid phenology models. https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/",
+    "crop": {
+     "key": "pea",
+     "name": {
+      "en": "pea",
+      "es": "arveja"
+     }
+    },
+    "degree_days": 150.4,
+    "difference": 3.0,
+    "generations_normal": 10.4,
+    "generations_now": 13.4,
+    "lower_threshold_c": 2.4,
+    "name": {
+     "en": "Pea aphid",
+     "es": "PulgÃ³n verde de la arveja"
+    },
     "name_bi": {
-     "en": "Sweetpotato / silverleaf whitefly",
+     "en": "Pea aphid",
+     "es": "PulgÃ³n verde de la arveja"
+    },
+    "qualitative": false,
+    "reference": false,
+    "role": "current",
+    "scientific": "Acyrthosiphon pisum",
+    "season": "2026-08-01 â€“ 2026-11-10",
+    "source": {
+     "title": "Pea Aphid phenology models",
+     "url": "https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/"
+    }
+   },
+   {
+    "citation": "Valverde RodrÃ­guez, A., Eugenio Ruiz, R., David, E.N.E., Campos Albornoz, M.E. (2022). IntegraciÃ³n de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la regiÃ³n HuÃ¡nuco, PerÃº. Enfoque UTE 13(3):58-68. https://www.redalyc.org/journal/5722/572270556006/html/",
+    "crop": {
+     "key": "pea",
+     "name": {
+      "en": "pea",
+      "es": "arveja"
+     }
+    },
+    "degree_days": null,
+    "difference": null,
+    "generations_normal": null,
+    "generations_now": null,
+    "lower_threshold_c": null,
+    "name": {
+     "en": "Whitefly",
      "es": "Mosca blanca"
     },
-    "scientific": "Bemisia tabaci (Gennadius), biotype B (MEAM1)"
+    "name_bi": {
+     "en": "Whitefly",
+     "es": "Mosca blanca"
+    },
+    "qualitative": true,
+    "reference": false,
+    "role": "current",
+    "scientific": "Bemisia sp.",
+    "season": null,
+    "source": {
+     "title": "IntegraciÃ³n de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la regiÃ³n HuÃ¡nuco, PerÃº. Enfoque UTE 13(3):58-68",
+     "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
+    }
    },
    {
-    "citation": "du Plessis, H.; Schlemmer, M.-L.; Van den Berg, J. (2020). The Effect of Temperature on the Development of Spodoptera frugiperda (Lepidoptera: Noctuidae). Insects 11(4): 228. https://doi.org/10.3390/insects11040228",
-    "difference": 1.2,
-    "generations_normal": 1.3,
-    "generations_now": 2.5,
-    "name": "Fall armyworm",
-    "name_bi": {
-     "en": "Fall armyworm",
-     "es": "Gusano cogollero"
+    "citation": "Valverde RodrÃ­guez, A., Eugenio Ruiz, R., David, E.N.E., Campos Albornoz, M.E. (2022). IntegraciÃ³n de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la regiÃ³n HuÃ¡nuco, PerÃº. Enfoque UTE 13(3):58-68. https://www.redalyc.org/journal/5722/572270556006/html/",
+    "crop": {
+     "key": "pea",
+     "name": {
+      "en": "pea",
+      "es": "arveja"
+     }
     },
-    "scientific": "Spodoptera frugiperda (J.E. Smith)"
+    "degree_days": null,
+    "difference": null,
+    "generations_normal": null,
+    "generations_now": null,
+    "lower_threshold_c": null,
+    "name": {
+     "en": "Cutworm",
+     "es": "Gusano de tierra"
+    },
+    "name_bi": {
+     "en": "Cutworm",
+     "es": "Gusano de tierra"
+    },
+    "qualitative": true,
+    "reference": false,
+    "role": "current",
+    "scientific": "Agrotis sp.",
+    "season": null,
+    "source": {
+     "title": "IntegraciÃ³n de los componentes del Manejo Integrado de Plagas en el cultivo de Pisum sativum en la regiÃ³n HuÃ¡nuco, PerÃº. Enfoque UTE 13(3):58-68",
+     "url": "https://www.redalyc.org/journal/5722/572270556006/html/"
+    }
+   },
+   {
+    "citation": "Mujica, N., Carhuapoma, P., Kroschel, J. / International Potato Center (CIP) (2016). Pest distribution and risk atlas for Africa, 4.3.1 Serpentine leafminer fly, Liriomyza huidobrensis. https://ilcym.cipotato.org/wp-content/uploads/2016/11/4.3.1-1.pdf",
+    "crop": {
+     "key": "lettuce",
+     "name": {
+      "en": "lettuce",
+      "es": "lechuga"
+     }
+    },
+    "degree_days": null,
+    "difference": null,
+    "generations_normal": null,
+    "generations_now": null,
+    "lower_threshold_c": null,
+    "name": {
+     "en": "Serpentine leafminer fly",
+     "es": "Mosca minadora"
+    },
+    "name_bi": {
+     "en": "Serpentine leafminer fly",
+     "es": "Mosca minadora"
+    },
+    "qualitative": true,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Liriomyza huidobrensis",
+    "season": null,
+    "source": {
+     "title": "Pest distribution and risk atlas for Africa, 4.3.1 Serpentine leafminer fly, Liriomyza huidobrensis",
+     "url": "https://ilcym.cipotato.org/wp-content/uploads/2016/11/4.3.1-1.pdf"
+    }
+   },
+   {
+    "citation": "UC Statewide IPM Program (n.d.). UC IPM Phenology model database: Green peach aphid (Model 1, Whalon & Smilowitz 1979). https://ipm.ucanr.edu/weather/phenology-models-description/green-peach-aphid/",
+    "crop": {
+     "key": "lettuce",
+     "name": {
+      "en": "lettuce",
+      "es": "lechuga"
+     }
+    },
+    "degree_days": 129.8,
+    "difference": 3.5,
+    "generations_normal": 10.8,
+    "generations_now": 14.3,
+    "lower_threshold_c": 4.0,
+    "name": {
+     "en": "Green peach aphid",
+     "es": "PulgÃ³n verde del duraznero"
+    },
+    "name_bi": {
+     "en": "Green peach aphid",
+     "es": "PulgÃ³n verde del duraznero"
+    },
+    "qualitative": false,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Myzus persicae",
+    "season": "2026-08-01 â€“ 2026-11-10",
+    "source": {
+     "title": "Lettuce: Pest Management Guidelines",
+     "url": "https://ipm.ucanr.edu/agriculture/lettuce/"
+    }
+   },
+   {
+    "citation": "UC Statewide IPM Program (n.d.). UC IPM Phenology model database: Cabbage looper (Model 1, Toba et al. 1973). https://ipm.ucanr.edu/weather/phenology-models-description/cabbage-looper/",
+    "crop": {
+     "key": "lettuce",
+     "name": {
+      "en": "lettuce",
+      "es": "lechuga"
+     }
+    },
+    "degree_days": 439.7,
+    "difference": 1.0,
+    "generations_normal": 1.8,
+    "generations_now": 2.8,
+    "lower_threshold_c": 10.0,
+    "name": {
+     "en": "Cabbage looper",
+     "es": "Gusano medidor"
+    },
+    "name_bi": {
+     "en": "Cabbage looper",
+     "es": "Gusano medidor"
+    },
+    "qualitative": false,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Trichoplusia ni",
+    "season": "2026-08-01 â€“ 2026-11-10",
+    "source": {
+     "title": "Lettuce: Pest Management Guidelines",
+     "url": "https://ipm.ucanr.edu/agriculture/lettuce/"
+    }
+   },
+   {
+    "citation": "INIA, EstaciÃ³n Experimental Donoso - Huaral (2001). Camote INIA 306 Huambachero: nueva variedad de camote morado. https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf",
+    "crop": {
+     "key": "sweet_potato",
+     "name": {
+      "en": "sweet potato",
+      "es": "camote"
+     }
+    },
+    "degree_days": null,
+    "difference": null,
+    "generations_normal": null,
+    "generations_now": null,
+    "lower_threshold_c": null,
+    "name": {
+     "en": "Sweet potato weevil",
+     "es": "Gorgojo del camote"
+    },
+    "name_bi": {
+     "en": "Sweet potato weevil",
+     "es": "Gorgojo del camote"
+    },
+    "qualitative": true,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Euscepes postfasciatus",
+    "season": null,
+    "source": {
+     "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+     "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+    }
+   },
+   {
+    "citation": "UC Statewide IPM Program (n.d.). UC IPM Phenology model database: Sweetpotato whitefly (Zalom et al. 1985). https://ipm.ucanr.edu/weather/phenology-models-description/sweetpotato-whitefly/",
+    "crop": {
+     "key": "sweet_potato",
+     "name": {
+      "en": "sweet potato",
+      "es": "camote"
+     }
+    },
+    "degree_days": 316.1,
+    "difference": 1.4,
+    "generations_normal": 2.5,
+    "generations_now": 3.9,
+    "lower_threshold_c": 10.0,
+    "name": {
+     "en": "Sweetpotato whitefly",
+     "es": "Mosca blanca"
+    },
+    "name_bi": {
+     "en": "Sweetpotato whitefly",
+     "es": "Mosca blanca"
+    },
+    "qualitative": false,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Bemisia tabaci",
+    "season": "2026-08-01 â€“ 2026-11-10",
+    "source": {
+     "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+     "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+    }
+   },
+   {
+    "citation": "INIA, EstaciÃ³n Experimental Donoso - Huaral (2001). Camote INIA 306 Huambachero: nueva variedad de camote morado. https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf",
+    "crop": {
+     "key": "sweet_potato",
+     "name": {
+      "en": "sweet potato",
+      "es": "camote"
+     }
+    },
+    "degree_days": null,
+    "difference": null,
+    "generations_normal": null,
+    "generations_now": null,
+    "lower_threshold_c": null,
+    "name": {
+     "en": "Southern armyworm",
+     "es": "Gusano ejÃ©rcito"
+    },
+    "name_bi": {
+     "en": "Southern armyworm",
+     "es": "Gusano ejÃ©rcito"
+    },
+    "qualitative": true,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Spodoptera eridania",
+    "season": null,
+    "source": {
+     "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+     "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+    }
+   },
+   {
+    "citation": "INIA, EstaciÃ³n Experimental Donoso - Huaral (2001). Camote INIA 306 Huambachero: nueva variedad de camote morado. https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf",
+    "crop": {
+     "key": "sweet_potato",
+     "name": {
+      "en": "sweet potato",
+      "es": "camote"
+     }
+    },
+    "degree_days": null,
+    "difference": null,
+    "generations_normal": null,
+    "generations_now": null,
+    "lower_threshold_c": null,
+    "name": {
+     "en": "White grubs",
+     "es": "Gusano chacarero"
+    },
+    "name_bi": {
+     "en": "White grubs",
+     "es": "Gusano chacarero"
+    },
+    "qualitative": true,
+    "reference": false,
+    "role": "previous",
+    "scientific": "Ligyrus maimon, Anomala undulata, Golofa spp., Cyclocephala sp.",
+    "season": null,
+    "source": {
+     "title": "Camote INIA 306 Huambachero: nueva variedad de camote morado",
+     "url": "https://repositorio.inia.gob.pe/bitstream/20.500.12955/719/1/Trip-Camote-INIA306.pdf"
+    }
    }
   ],
   "power_notes": [
@@ -2292,21 +2689,21 @@
    {
     "badge": "regional context",
     "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-10-11 – 2026-11-09",
+    "date": "2026-10-12 â€“ 2026-11-10",
     "id": "temp_anomaly",
     "key": true,
     "label": {
      "en": "Temperature, last 30 days",
-     "es": "Temperatura, últimos 30 días"
+     "es": "Temperatura, Ãºltimos 30 dÃ­as"
     },
     "license": "NASA open data, no restrictions; cite NASA POWER",
-    "method": "22.8 °C mean vs 1985–2024 normal 17.8 °C over the same dates (1985 to 2024). Latest weeks come from POWER near-real-time streams and are provisional.",
+    "method": "22.8 Â°C mean vs 1985â€“2024 normal 17.9 Â°C over the same dates (1985 to 2024). Latest weeks come from POWER near-real-time streams and are provisional.",
     "note": {
      "en": "provisional: latest weeks from NASA POWER near-real-time data",
-     "es": "provisional: últimas semanas de datos casi en tiempo real de NASA POWER"
+     "es": "provisional: Ãºltimas semanas de datos casi en tiempo real de NASA POWER"
     },
     "provisional": true,
-    "resolution": "~0.5° × 0.625° grid cell (about 50 km)",
+    "resolution": "~0.5Â° Ã— 0.625Â° grid cell (about 50 km)",
     "series": [
      {
       "t": "2025-12",
@@ -2354,29 +2751,29 @@
      },
      {
       "t": "2026-11",
-      "v": 23.01
+      "v": 23.06
      }
     ],
     "source": "NASA POWER",
-    "unit": "°C vs normal",
+    "unit": "Â°C vs normal",
     "value": 5.0,
     "verdict": {
-     "en": "much warmer than normal (+5.0 °C)",
-     "es": "mucho más cálido que lo normal (+5.0 °C)"
+     "en": "much warmer than normal (+5.0 Â°C)",
+     "es": "mucho mÃ¡s cÃ¡lido que lo normal (+5.0 Â°C)"
     }
    },
    {
     "badge": "regional context",
     "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-10-11 – 2026-11-09",
+    "date": "2026-10-12 â€“ 2026-11-10",
     "id": "rain_30d",
     "label": {
      "en": "Rain, last 30 days",
-     "es": "Lluvia, últimos 30 días"
+     "es": "Lluvia, Ãºltimos 30 dÃ­as"
     },
     "license": "NASA open data, no restrictions; cite NASA POWER",
     "method": "Sum of daily PRECTOTCORR; normal = same calendar dates in 1985-2024 (40 years)",
-    "resolution": "~0.5° × 0.625° grid cell (about 50 km)",
+    "resolution": "~0.5Â° Ã— 0.625Â° grid cell (about 50 km)",
     "series": [
      {
       "t": "2025-12",
@@ -2424,7 +2821,7 @@
      },
      {
       "t": "2026-11",
-      "v": 2.19
+      "v": 2.3
      }
     ],
     "source": "NASA POWER",
@@ -2432,41 +2829,41 @@
     "value": 6.7,
     "verdict": {
      "en": "light rain, as usual on the desert coast (normal 3 mm); far below what the crop needs",
-     "es": "lluvia ligera, como es usual en la costa desértica (normal 3 mm); muy por debajo de lo que necesita el cultivo"
+     "es": "lluvia ligera, como es usual en la costa desÃ©rtica (normal 3 mm); muy por debajo de lo que necesita el cultivo"
     }
    },
    {
     "badge": "regional context",
     "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-10-11 – 2026-11-09",
+    "date": "2026-10-12 â€“ 2026-11-10",
     "id": "et0_30d",
     "label": {
-     "en": "Crop water demand (ET₀), last 30 days",
-     "es": "Demanda de agua (ET₀), últimos 30 días"
+     "en": "Crop water demand (ETâ‚€), last 30 days",
+     "es": "Demanda de agua (ETâ‚€), Ãºltimos 30 dÃ­as"
     },
     "license": "NASA open data, no restrictions; cite NASA POWER",
     "method": "FAO-56 Penman-Monteith grass reference ET0 (Allen et al. 1998, FAO Irrigation and Drainage Paper 56, eq. 6), daily step, G = 0; inputs from POWER T2M_MAX, T2M_MIN, T2MDEW (actual vapour pressure, eq. 14; RH2M fallback, eq. 19), WS2M, ALLSKY_SFC_SW_DWN, PS (or eq. 7 from the POWER cell elevation), Rso from eq. 37; normal = same calendar dates in 1985-2024 (40 years)",
-    "resolution": "~0.5° × 0.625° grid cell (about 50 km)",
+    "resolution": "~0.5Â° Ã— 0.625Â° grid cell (about 50 km)",
     "source": "NASA POWER",
     "unit": "mm",
     "value": 128.0,
     "verdict": {
      "en": "+28 mm vs normal: the air pulls more water from the crop",
-     "es": "+28 mm vs lo normal: el aire extrae más agua del cultivo"
+     "es": "+28 mm vs lo normal: el aire extrae mÃ¡s agua del cultivo"
     }
    },
    {
     "badge": "regional context",
     "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-10-11 – 2026-11-09",
+    "date": "2026-10-12 â€“ 2026-11-10",
     "id": "water_balance",
     "label": {
-     "en": "Water balance (rain − ET₀), last 30 days",
-     "es": "Balance hídrico (lluvia − ET₀), últimos 30 días"
+     "en": "Water balance (rain âˆ’ ETâ‚€), last 30 days",
+     "es": "Balance hÃ­drico (lluvia âˆ’ ETâ‚€), Ãºltimos 30 dÃ­as"
     },
     "license": "NASA open data, no restrictions; cite NASA POWER",
-    "method": "Climatic water balance = PRECTOTCORR total - ET0 × Kc (FAO-56 single crop coefficient, Kc from the request, default 1.0); irrigation, runoff, percolation and soil storage not modelled (Kc = 1); normal = same calendar dates in 1985-2024 (40 years)",
-    "resolution": "~0.5° × 0.625° grid cell (about 50 km)",
+    "method": "Climatic water balance = PRECTOTCORR total - ET0 Ã— Kc (FAO-56 single crop coefficient, Kc from the request, default 1.0); irrigation, runoff, percolation and soil storage not modelled (Kc = 1); normal = same calendar dates in 1985-2024 (40 years)",
+    "resolution": "~0.5Â° Ã— 0.625Â° grid cell (about 50 km)",
     "series": [
      {
       "t": "2025-12",
@@ -2514,29 +2911,29 @@
      },
      {
       "t": "2026-11",
-      "v": -37.75
+      "v": -41.98
      }
     ],
     "source": "NASA POWER",
     "unit": "mm",
-    "value": -121.0,
+    "value": -122.0,
     "verdict": {
      "en": "dry: irrigation must cover this deficit (irrigation not modelled)",
-     "es": "seco: el riego debe cubrir este déficit (riego no modelado)"
+     "es": "seco: el riego debe cubrir este dÃ©ficit (riego no modelado)"
     }
    },
    {
     "badge": "regional context",
     "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-08-01 – 2026-11-09",
+    "date": "2026-08-01 â€“ 2026-11-10",
     "id": "heat_days",
     "label": {
-     "en": "Heat-stress days (≥ 32 °C) this season",
-     "es": "Días de estrés por calor (≥ 32 °C) esta campaña"
+     "en": "Heat-stress days (â‰¥ 32 Â°C) this season",
+     "es": "DÃ­as de estrÃ©s por calor (â‰¥ 32 Â°C) esta campaÃ±a"
     },
     "license": "NASA open data, no restrictions; cite NASA POWER",
-    "method": "Days with T2M_MAX ≥ 32 °C (default 32 °C, overridable per crop); normal = same calendar dates in 1985-2024 (40 years)",
-    "resolution": "~0.5° × 0.625° grid cell (about 50 km)",
+    "method": "Days with T2M_MAX â‰¥ 32 Â°C (default 32 Â°C, overridable per crop); normal = same calendar dates in 1985-2024 (40 years)",
+    "resolution": "~0.5Â° Ã— 0.625Â° grid cell (about 50 km)",
     "source": "NASA POWER",
     "unit": "days",
     "value": 0.0,
@@ -2548,41 +2945,21 @@
    {
     "badge": "regional context",
     "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-08-01 – 2026-11-09",
+    "date": "2026-08-01 â€“ 2026-11-10",
     "id": "gdd",
     "label": {
-     "en": "Growing degree-days this season (base 10 °C)",
-     "es": "Grados-día de crecimiento esta campaña (base 10 °C)"
+     "en": "Growing degree-days this season (base 10 Â°C)",
+     "es": "Grados-dÃ­a de crecimiento esta campaÃ±a (base 10 Â°C)"
     },
     "license": "NASA open data, no restrictions; cite NASA POWER",
-    "method": "Growing degree days, averaging method: sum of max(0, (Tmax + Tmin)/2 - base), POWER T2M_MAX / T2M_MIN (base 10 °C); normal = same calendar dates in 1985-2024 (40 years)",
-    "resolution": "~0.5° × 0.625° grid cell (about 50 km)",
+    "method": "Growing degree days, averaging method: sum of max(0, (Tmax + Tmin)/2 - base), POWER T2M_MAX / T2M_MIN (base 10 Â°C); normal = same calendar dates in 1985-2024 (40 years)",
+    "resolution": "~0.5Â° Ã— 0.625Â° grid cell (about 50 km)",
     "source": "NASA POWER",
-    "unit": "°C·day",
-    "value": 1231.0,
+    "unit": "Â°CÂ·day",
+    "value": 1245.0,
     "verdict": {
-     "en": "+446 vs normal: crops and pests develop faster",
-     "es": "+446 vs lo normal: cultivos y plagas se desarrollan más rápido"
-    }
-   },
-   {
-    "badge": "regional context",
-    "dataset": "POWER Daily API v2, community AG, https://power.larc.nasa.gov/api/temporal/daily/point",
-    "date": "2026-08-01 – 2026-11-09",
-    "id": "pest_gen",
-    "label": {
-     "en": "Green peach aphid generations this season",
-     "es": "Generaciones de pulgón verde esta campaña"
-    },
-    "license": "NASA open data, no restrictions; cite NASA POWER",
-    "method": "Single-sine degree-days, 4.0 °C lower threshold, 129.8 °C·day per generation (Whalon, M.E.; Smilowitz, Z. 1979).",
-    "resolution": "~0.5° × 0.625°",
-    "source": "NASA POWER + published threshold",
-    "unit": "generations",
-    "value": 14.2,
-    "verdict": {
-     "en": "about 3.5 more generations than normal",
-     "es": "unas 3.5 generaciones más que lo normal"
+     "en": "+452 vs normal: crops and pests develop faster",
+     "es": "+452 vs lo normal: cultivos y plagas se desarrollan mÃ¡s rÃ¡pido"
     }
    },
    {
@@ -2592,7 +2969,7 @@
     "id": "ndvi",
     "label": {
      "en": "Crop vigor (NDVI), latest clear image",
-     "es": "Vigor del cultivo (NDVI), última imagen despejada"
+     "es": "Vigor del cultivo (NDVI), Ãºltima imagen despejada"
     },
     "license": "Contains modified Copernicus Sentinel data 2026, processed by Microsoft Planetary Computer",
     "method": "Mean NDVI over the field outline, cloud-masked; 88 clear observations in 24 months; 2 bare-soil period(s) detected (NDVI < 0.2 twice in a row).",
@@ -2780,7 +3157,7 @@
     "method": "NASADEM 1-arc-second (~30 m) elevation read at native resolution from the Planetary Computer data API; slope per cell by Horn's 3x3 method with cell sizes in metres at the field latitude; mean and max over the cells whose centres fall inside the field (nearest cell for very small fields).",
     "resolution": "30 m",
     "source": "NASADEM",
-    "unit": "°",
+    "unit": "Â°",
     "value": 1.6,
     "verdict": {
      "en": "nearly flat (~3%)",
@@ -2797,7 +3174,7 @@
      "es": "Humedad del suelo de la zona (5 cm superiores)"
     },
     "license": "NASA Earth science data, no restrictions on use; cite the dataset DOI DOI 10.5067/T5RUATAQREF8",
-    "method": "SMAP L4 9 km model-assimilation cell; anomaly -0.002 m³/m³ vs the same date in earlier years. Describes the desert and hills around the valley, not an irrigated plot.",
+    "method": "SMAP L4 9 km model-assimilation cell; anomaly -0.002 mÂ³/mÂ³ vs the same date in earlier years. Describes the desert and hills around the valley, not an irrigated plot.",
     "resolution": "9 km EASE-Grid 2.0 cell (model-assimilated, not the irrigated field itself)",
     "series": [
      {
@@ -2858,25 +3235,25 @@
      }
     ],
     "source": "NASA SMAP L4",
-    "unit": "m³/m³",
+    "unit": "mÂ³/mÂ³",
     "value": 0.063,
     "verdict": {
      "en": "close to the same date in past years",
-     "es": "similar a la misma fecha en años anteriores"
+     "es": "similar a la misma fecha en aÃ±os anteriores"
     }
    },
    {
     "badge": "regional context",
     "dataset": "GPM_3IMERGDL v07",
-    "date": "2026-10-15 – 2026-11-13",
+    "date": "2026-10-15 â€“ 2026-11-13",
     "id": "rain_imerg",
     "label": {
      "en": "Satellite rain estimate, last 30 days",
-     "es": "Lluvia estimada por satélite, últimos 30 días"
+     "es": "Lluvia estimada por satÃ©lite, Ãºltimos 30 dÃ­as"
     },
     "license": "NASA Earth science data, no restrictions on use; cite the dataset DOI DOI 10.5067/GPM/IMERGDL/DAY/07",
     "method": "Sum of GPM IMERG Late daily estimates for the ~10 km cell; light coastal drizzle is often missed.",
-    "resolution": "0.1° grid cell (~10 km)",
+    "resolution": "0.1Â° grid cell (~10 km)",
     "series": [
      {
       "t": "2026-10-15",
@@ -3004,21 +3381,21 @@
     "value": 4.4,
     "verdict": {
      "en": "2 rainy day(s)",
-     "es": "2 día(s) con lluvia"
+     "es": "2 dÃ­a(s) con lluvia"
     }
    },
    {
     "badge": "regional context",
     "dataset": "TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4 vRL06.3Mv04",
-    "date": "2002-04-17 – 2026-09-16",
+    "date": "2002-04-17 â€“ 2026-09-16",
     "id": "grace",
     "label": {
      "en": "Water stored in the region (GRACE)",
-     "es": "Agua almacenada en la región (GRACE)"
+     "es": "Agua almacenada en la regiÃ³n (GRACE)"
     },
     "license": "NASA Earth science data, no restrictions on use; cite the dataset DOI DOI 10.5067/TEMSC-3JC634",
     "method": "Total water storage anomaly (soil, groundwater, snow) for a ~300 km mascon; regional context for long-term change only.",
-    "resolution": "~300 km mascon (0.5° grid posting)",
+    "resolution": "~300 km mascon (0.5Â° grid posting)",
     "series": [
      {
       "t": "2023-10-16",
@@ -3170,7 +3547,27 @@
     "value": 2.0,
     "verdict": {
      "en": "slowly wetting since 2002 (+0.24 cm/yr)",
-     "es": "se humedece lentamente desde 2002 (+0.24 cm/año)"
+     "es": "se humedece lentamente desde 2002 (+0.24 cm/aÃ±o)"
+    }
+   },
+   {
+    "badge": "regional context",
+    "dataset": "POWER daily T2M_MIN / T2M_MAX",
+    "date": "2026-08-01 â€“ 2026-11-10",
+    "id": "pest_gen",
+    "label": {
+     "en": "Pea aphid generations this season",
+     "es": "Generaciones de pulgÃ³n verde de la arveja esta campaÃ±a"
+    },
+    "license": "NASA open data",
+    "method": "Single-sine degree-days, 2.4 Â°C lower threshold, 150.4 Â°CÂ·day per generation. UC Statewide IPM Program (n.d.). Pea Aphid phenology models. https://ipm.ucanr.edu/weather/phenology-models-description/pea-aphid/",
+    "resolution": "~0.5Â° Ã— 0.625Â°",
+    "source": "NASA POWER + published threshold",
+    "unit": "generations",
+    "value": 13.4,
+    "verdict": {
+     "en": "about 3.0 more generations than normal",
+     "es": "unas 3.0 generaciones mÃ¡s que lo normal"
     }
    }
   ]
@@ -3179,12 +3576,12 @@
  "prediagnosis": {
   "basis": {
    "en": "From NASA readings only; photos and a field visit by your agronomist decide.",
-   "es": "Solo a partir de lecturas NASA; las fotos y la visita de tu agrónomo deciden."
+   "es": "Solo a partir de lecturas NASA; las fotos y la visita de tu agrÃ³nomo deciden."
   },
   "confidence": "medium",
   "headline": {
    "en": "Likely a much warmer season than normal, a large irrigation deficit and pest pressure above normal",
-   "es": "Probablemente una campaña mucho más cálida que lo normal, un gran déficit de riego y presión de plagas mayor a lo normal"
+   "es": "Probablemente una campaÃ±a mucho mÃ¡s cÃ¡lida que lo normal, un gran dÃ©ficit de riego y presiÃ³n de plagas mayor a lo normal"
   }
  },
  "steps": [
@@ -3197,8 +3594,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "crop now: arveja (arverjita); before: lechuga, camote; irrigation: riego por surcos con agua del canal del río Chancay, cada 8–10 días",
-    "es": "cultivo actual: arveja (arverjita); antes: lechuga, camote; riego: riego por surcos con agua del canal del río Chancay, cada 8–10 días"
+    "en": "crop now: arveja (arverjita); before: lechuga, camote; irrigation: riego por surcos con agua del canal del rÃ­o Chancay, cada 8â€“10 dÃ­as",
+    "es": "cultivo actual: arveja (arverjita); antes: lechuga, camote; riego: riego por surcos con agua del canal del rÃ­o Chancay, cada 8â€“10 dÃ­as"
    }
   },
   {
@@ -3210,8 +3607,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "soil: franco arenoso; organic matter: estiércol de cuy y gallina antes de sembrar, unas 2 t/ha; residues: los restos de lechuga se amontonan al borde del campo",
-    "es": "suelo: franco arenoso; materia orgánica: estiércol de cuy y gallina antes de sembrar, unas 2 t/ha; rastrojos: los restos de lechuga se amontonan al borde del campo"
+    "en": "soil: franco arenoso; organic matter: estiÃ©rcol de cuy y gallina antes de sembrar, unas 2 t/ha; residues: los restos de lechuga se amontonan al borde del campo",
+    "es": "suelo: franco arenoso; materia orgÃ¡nica: estiÃ©rcol de cuy y gallina antes de sembrar, unas 2 t/ha; rastrojos: los restos de lechuga se amontonan al borde del campo"
    }
   },
   {
@@ -3223,8 +3620,8 @@
    },
    "needs": [],
    "summary": {
-    "en": "seen: insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías; recent products: una aplicación de insecticida hace tres semanas (no sé el nombre)",
-    "es": "observado: insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías; productos recientes: una aplicación de insecticida hace tres semanas (no sé el nombre)"
+    "en": "seen: insectos verdes pequeÃ±os debajo de las hojas tiernas; algunas hojas con galerÃ­as; recent products: una aplicaciÃ³n de insecticida hace tres semanas (no sÃ© el nombre)",
+    "es": "observado: insectos verdes pequeÃ±os debajo de las hojas tiernas; algunas hojas con galerÃ­as; productos recientes: una aplicaciÃ³n de insecticida hace tres semanas (no sÃ© el nombre)"
    }
   },
   {
@@ -3232,12 +3629,12 @@
    "state": "done",
    "title": {
     "en": "Nutrition",
-    "es": "Nutrición"
+    "es": "NutriciÃ³n"
    },
    "needs": [],
    "summary": {
-    "en": "last fertilizer: urea, una bolsa antes de la floración; soil test: ninguno",
-    "es": "último abono: urea, una bolsa antes de la floración; análisis de suelo: ninguno"
+    "en": "last fertilizer: urea, una bolsa antes de la floraciÃ³n; soil test: ninguno",
+    "es": "Ãºltimo abono: urea, una bolsa antes de la floraciÃ³n; anÃ¡lisis de suelo: ninguno"
    }
   },
   {
@@ -3245,12 +3642,12 @@
    "state": "done",
    "title": {
     "en": "Rotation",
-    "es": "Rotación"
+    "es": "RotaciÃ³n"
    },
    "needs": [],
    "summary": {
-    "en": "next crop: maíz u otra hortaliza; harvest use: vainas frescas para el mercado de Lima",
-    "es": "próximo cultivo: maíz u otra hortaliza; destino de la cosecha: vainas frescas para el mercado de Lima"
+    "en": "next crop: maÃ­z u otra hortaliza; harvest use: vainas frescas para el mercado de Lima",
+    "es": "prÃ³ximo cultivo: maÃ­z u otra hortaliza; destino de la cosecha: vainas frescas para el mercado de Lima"
    }
   },
   {
@@ -3258,7 +3655,7 @@
    "state": "done",
    "title": {
     "en": "Technical sheet",
-    "es": "Ficha técnica"
+    "es": "Ficha tÃ©cnica"
    },
    "needs": []
   }
@@ -3270,12 +3667,12 @@
    "camote"
   ],
   "harvest_use": "vainas frescas para el mercado de Lima",
-  "irrigation": "riego por surcos con agua del canal del río Chancay, cada 8–10 días",
-  "last_fertilizer": "urea, una bolsa antes de la floración",
-  "next_crop": "maíz u otra hortaliza",
-  "organic_matter": "estiércol de cuy y gallina antes de sembrar, unas 2 t/ha",
-  "pests_seen": "insectos verdes pequeños debajo de las hojas tiernas; algunas hojas con galerías",
-  "products_recent": "una aplicación de insecticida hace tres semanas (no sé el nombre)",
+  "irrigation": "riego por surcos con agua del canal del rÃ­o Chancay, cada 8â€“10 dÃ­as",
+  "last_fertilizer": "urea, una bolsa antes de la floraciÃ³n",
+  "next_crop": "maÃ­z u otra hortaliza",
+  "organic_matter": "estiÃ©rcol de cuy y gallina antes de sembrar, unas 2 t/ha",
+  "pests_seen": "insectos verdes pequeÃ±os debajo de las hojas tiernas; algunas hojas con galerÃ­as",
+  "products_recent": "una aplicaciÃ³n de insecticida hace tres semanas (no sÃ© el nombre)",
   "residues": "los restos de lechuga se amontonan al borde del campo",
   "soil_test": "ninguno",
   "soil_type": "franco arenoso"

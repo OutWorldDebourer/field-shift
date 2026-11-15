@@ -76,6 +76,11 @@ pub async fn outlook(state: &AppState, lat: f64, lon: f64, months: u32) -> anyho
     outlook::build(&daily(state, lat, lon).await?, months)
 }
 
+/// The outlook with the given pest models (the field's own crop pests).
+pub async fn outlook_with(state: &AppState, lat: f64, lon: f64, months: u32, models: &[outlook::PestModel]) -> anyhow::Result<outlook::Outlook> {
+    outlook::build_with(&daily(state, lat, lon).await?, months, models)
+}
+
 pub fn validate(lat: f64, lon: f64) -> anyhow::Result<()> {
     anyhow::ensure!(lat.is_finite() && (-90.0..=90.0).contains(&lat), "lat must be within -90..90");
     anyhow::ensure!(lon.is_finite() && (-180.0..=180.0).contains(&lon), "lon must be within -180..180");

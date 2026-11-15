@@ -51,7 +51,16 @@ export function exampleCardHtml(a: ClientAnalysis, steps: Step[], inline = false
 
 const autoKey = (id: string) => `fs-intake-auto:${id}`;
 
-export interface Intake { open(from?: HTMLElement | null): void; autoOpen(): void; close(): void }
+export interface Intake {
+  open(from?: HTMLElement | null): void; autoOpen(): void; close(): void;
+  /** The first step of a new analysis: one form for everything, no model call. `onSkip` runs when the farmer
+   *  prefers to chat (skip button, close or Esc); `onPhotos` receives the optional photos after a submit. */
+  openFirst(onSkip: () => void, onPhotos: (files: File[]) => void): void;
+}
+
+/** A new analysis: no consultant message and no topic done yet. */
+export const isFresh = (a: ClientAnalysis): boolean =>
+  !a.readOnly && !a.offline && !a.messages.some((m) => m.role === 'assistant') && !stepsOf(a).some((s) => s.state === 'done');
 
 export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply: (next: ClientAnalysis) => void): Intake {
   root.insertAdjacentHTML('beforeend', `<div class="in-scrim" hidden></div><aside class="in glass" role="dialog" aria-modal="true" aria-labelledby="in-t" hidden></aside>`);
@@ -60,6 +69,8 @@ export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply
   let values: IntakeForm = {};
   let example = false;
   let busy = false;
+  let first: { onSkip: () => void; onPhotos: (files: File[]) => void } | null = null;
+  let photos: File[] = [];
 
   // ---------- render ----------
   const fieldHtml = (f: Field): string => {
@@ -87,16 +98,22 @@ export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply
   const chipHtml = (c: string) => `<span class="in-chip" data-chip="${esc(c)}">${esc(c)}<button type="button" data-unchip aria-label="${esc(t('in_remove_chip', { x: c }))}">${icon('close')}</button></span>`;
 
   function render() {
-    const lede = example ? `<p class="in__banner">${icon('info')}<span>${esc(t('in_example'))}</span></p>` : `<p class="in__lede">${esc(t('in_lede'))}</p>`;
+    const lede = (first ? `<p class="in__lede in__lede--first">${esc(t('in_first_lede'))}</p>` : '')
+      + (example ? `<p class="in__banner">${icon('info')}<span>${esc(t('in_example'))}</span></p>` : first ? '' : `<p class="in__lede">${esc(t('in_lede'))}</p>`);
+    const photoBox = first ? `<fieldset class="in-g in-g--photos"><legend class="in-g__t">${icon('camera')}<span class="serif">${esc(t('in_photos'))}</span></legend>
+      <p class="in-f__hint">${esc(t('in_photos_hint'))}</p>
+      <label class="btn btn--glass btn--sm in-photos__btn">${icon('camera')}<span>${esc(t('in_photos_add'))}</span><input type="file" accept="image/*" multiple data-in-photos hidden></label>
+      <p class="in-photos__n mono" data-in-photos-n>${photos.length ? esc(t('in_photos_n', { n: photos.length })) : ''}</p></fieldset>` : '';
     panel.innerHTML = `<header class="in__head"><div><h2 class="serif" id="in-t">${esc(t('in_title'))}</h2></div>
         <button type="button" class="icon-btn" data-in-close aria-label="${esc(t('close'))}">${icon('close')}</button></header>
       <form class="in__form" novalidate>
         <div class="in__body">${lede}
           ${GROUPS.map((g) => `<fieldset class="in-g"><legend class="in-g__t">${icon(SEC_ICON[g.key] as IconName)}<span class="serif">${esc(t(TITLE[g.key]))}</span></legend>
             ${g.fields.map(fieldHtml).join('')}</fieldset>`).join('')}
+          ${photoBox}
         </div>
         <footer class="in__foot"><p class="status-line in__busy" hidden><i class="tick"></i><span>${esc(t('in_busy'))}</span></p>
-          <div class="in__acts"><button type="button" class="btn btn--glass btn--sm" data-in-close>${esc(t('in_cancel'))}</button>
+          <div class="in__acts"><button type="button" class="btn btn--glass btn--sm" data-in-close>${esc(t(first ? 'in_skip' : 'in_cancel'))}</button>
           <button type="submit" class="btn btn--solid btn--sm">${icon('check')}${esc(t('in_submit'))}</button></div></footer>
       </form>`;
     wireCombos();
@@ -148,6 +165,15 @@ export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply
     panel.classList.remove('is-open'); scrim.hidden = true;
     setTimeout(() => { panel.hidden = true; }, 260);
     returnTo?.focus?.();
+    // Leaving the first-step form without submitting = "I'd rather chat": the consultant opens the conversation.
+    if (first) { const f = first; first = null; photos = []; f.onSkip(); }
+  }
+  function openFirst(onSkip: () => void, onPhotos: (files: File[]) => void) {
+    const a = getA();
+    if (!a || !isFresh(a)) { onSkip(); return; }
+    first = { onSkip, onPhotos }; photos = [];
+    try { localStorage.setItem(autoKey(a.id), '1'); } catch { /* storage blocked */ }
+    void open(null);
   }
   function autoOpen() {
     const a = getA();
@@ -172,8 +198,11 @@ export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply
       const next = await submitIntake(a, form);
       busy = false;
       panel.classList.remove('is-busy');
+      const done = first; first = null;
       close();
       apply(next);
+      if (done && photos.length) done.onPhotos(photos);
+      photos = [];
       const n = newlyDone(before, stepsOf({ ...a, ...next })).length;
       toast(n ? t('in_done', { n }) : t('in_done0'), 4200);
     } catch {
@@ -187,6 +216,14 @@ export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply
 
   // ---------- events ----------
   panel.addEventListener('submit', (e) => { e.preventDefault(); void submit(); });
+  panel.addEventListener('change', (e) => {
+    const inp = (e.target as HTMLElement).closest<HTMLInputElement>('[data-in-photos]');
+    if (!inp?.files) return;
+    photos = [...photos, ...Array.from(inp.files)].slice(0, 10);
+    inp.value = '';
+    const n = panel.querySelector<HTMLElement>('[data-in-photos-n]');
+    if (n) n.textContent = t('in_photos_n', { n: photos.length });
+  });
   panel.addEventListener('click', (e) => {
     const el = e.target as HTMLElement;
     if (el.closest('[data-in-close]')) { close(); return; }
@@ -253,5 +290,5 @@ export function mountIntake(root: HTMLElement, getA: () => ClientAnalysis, apply
     });
   }
 
-  return { open: (from) => { void open(from ?? null); }, autoOpen, close };
+  return { open: (from) => { void open(from ?? null); }, autoOpen, close, openFirst };
 }

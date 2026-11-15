@@ -45,7 +45,12 @@ export interface EvidencePackage {
   /** Monthly this year vs 40-year normal band (POWER). */
   climate_monthly: { month: string; t_mean: number | null; normal_mean: number; normal_lo: number; normal_hi: number; rain: number | null; normal_rain: number }[];
   ndvi_series: { date: string; ndvi: number; sensor: string; scene: string }[];
-  pests: { name: string; scientific: string; generations_now: number | null; generations_normal: number | null; citation: string }[];
+  /** The field's own crops' pests (role current / previous / next); `reference` rows only while no crop is known. */
+  pests: {
+    name: string | Bi; name_bi?: Bi; scientific: string; generations_now: number | null; generations_normal: number | null; citation: string;
+    crop?: { key: string; name: Bi } | null; role?: 'current' | 'previous' | 'next' | 'reference'; reference?: boolean; qualitative?: boolean;
+    difference?: number | null; note?: Bi;
+  }[];
   projection: { horizon: string; scenario: string; d_temp_c: number | null; d_rain_pct: number | null; models: string[] } | null;
   imagery: { snapshot_url: string; credit: string; date: string } | null;
   gaps: Gap[];

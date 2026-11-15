@@ -48,6 +48,9 @@ pub fn definitions() -> Value {
     ])
 }
 
+/// The text sent back to the model for a tool's output.
+pub fn result_text(v: &Value) -> String { v.to_string() }
+
 /// Side effects collected while running tools that the turn applies at the end.
 #[derive(Default)]
 pub struct Effects {
@@ -61,8 +64,20 @@ pub async fn execute(state: &AppState, id: &str, name: &str, input: &Value, fx: 
             let prev: Vec<String> = input["previous"].as_array().map(|a| a.iter().filter_map(|x| x.as_str().map(String::from)).collect()).unwrap_or_default();
             evidence::resolve_crops(state, id, &s("current"), &prev).await.map_err(|e| e.to_string())
         }
-        "get_evidence" => evidence::build(state, id).await.map(compact_evidence).map_err(|e| e.to_string()),
-        "get_advice" => evidence::advise(state, id).await.map_err(|e| e.to_string()),
+        // The stored package (built once, refreshed when the crops change), compacted in the conversation language.
+        "get_evidence" => {
+            let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;
+            let ev = match st.evidence.filter(|e| e["readings"].as_array().is_some_and(|r| !r.is_empty())) {
+                Some(e) => e,
+                None => evidence::build(state, id).await.map_err(|e| e.to_string())?,
+            };
+            Ok(crate::compact::evidence(&ev, lang(&st.lang)))
+        }
+        "get_advice" => {
+            let a = evidence::advise(state, id).await.map_err(|e| e.to_string())?;
+            let st_lang = store::load(&state.db, id).await.map(|s| s.lang).unwrap_or_default();
+            Ok(crate::compact::advice(&a, lang(&st_lang)))
+        }
         "update_section" => {
             let key = s("key");
             let note = (!s("note_en").is_empty()).then(|| Bi::new(s("note_en"), s("note_es")));
@@ -137,17 +152,4 @@ fn add_observation(content: &mut Value, key: &str, o: Bi) {
     }
 }
 
-/// The model gets the readings without long series (keeps the request small); the UI gets the full package.
-fn compact_evidence(mut ev: Value) -> Value {
-    if let Some(rs) = ev.get_mut("readings").and_then(Value::as_array_mut) {
-        for r in rs { if let Some(o) = r.as_object_mut() { o.remove("series"); } }
-    }
-    if let Some(o) = ev.as_object_mut() {
-        if let Some(n) = o.remove("ndvi_series").and_then(|v| v.as_array().cloned()) {
-            o.insert("ndvi_latest".into(), json!(n.last()));
-            o.insert("ndvi_points".into(), json!(n.len()));
-        }
-        o.remove("climate_monthly");
-    }
-    ev
-}
+fn lang(l: &str) -> &'static str { if l == "es" { "es" } else { "en" } }

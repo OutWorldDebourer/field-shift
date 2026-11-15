@@ -21,7 +21,7 @@ import { chime } from './chime';
 import { newlyDone, stepsOf } from './progress';
 import { flipLine } from './rail';
 import { copernicusGloss } from './credit';
-import { mountIntake } from './intake';
+import { isFresh, mountIntake } from './intake';
 import { organicHtml } from './organic';
 import './workspace.css';
 import './guided.css';
@@ -263,10 +263,14 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   });
   addEventListener('resize', () => bd?.layout());
 
+  // A new analysis starts with the one-screen intake (no model call); the consultant's opening waits for "Skip".
+  const fresh = isFresh(a0);
+  if (fresh) chat.holdOpening(true);
   renderAll();
   syncUrl();
   requestAnimationFrame(() => bd?.layout());
-  intake.autoOpen();
+  if (fresh) intake.openFirst(() => chat.holdOpening(false), (files) => { void chat.addFiles(files); });
+  else intake.autoOpen();
 
   // Kick off the evidence package when the backend has not built it yet.
   if (!a0.evidence && !a0.offline && !a0.readOnly) {

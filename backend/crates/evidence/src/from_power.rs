@@ -1,4 +1,4 @@
-//! NASA POWER summary and monthly series → readings, pest table and the "this season vs normal" chart rows.
+//! NASA POWER summary and monthly series → readings and the "this season vs normal" chart rows (pests: `pests.rs`).
 use crate::reading::{bi, round, signed, temp_verdict, Reading};
 use serde_json::{json, Value};
 
@@ -93,42 +93,7 @@ pub fn readings(s: &Value, monthly: Option<&Value>, provisional: bool) -> Vec<Re
             bi(format!("{} vs normal: crops and pests develop {}", signed(a, 0), if a > 50.0 { "faster" } else if a < -50.0 { "slower" } else { "at the usual pace" }),
                format!("{} vs lo normal: cultivos y plagas se desarrollan {}", signed(a, 0), if a > 50.0 { "más rápido" } else if a < -50.0 { "más lento" } else { "al ritmo usual" }))));
     }
-    if let Some(p) = s["pests"].as_array().and_then(|ps| ps.iter().find(|p| p["pest"]["key"].as_str().map(|k| k == "myzus_persicae").unwrap_or(false))) {
-        let g = p["generations"].as_f64();
-        let d = match (p["generations"].as_f64(), p["normal_generations"]["mean"].as_f64()) { (Some(a), Some(b)) => round(a, 1) - round(b, 1), _ => p["difference"].as_f64().unwrap_or(0.0) };
-        let meta = &p["meta"];
-        out.push(Reading {
-            id: "pest_gen".into(),
-            label: bi("Green peach aphid generations this season", "Generaciones de pulgón verde esta campaña"),
-            value: g.map(|x| round(x, 1)), unit: "generations".into(),
-            verdict: if d >= 0.5 { bi(format!("about {:.1} more generations than normal", d), format!("unas {:.1} generaciones más que lo normal", d)) }
-                else if d <= -0.5 { bi(format!("about {:.1} fewer generations than normal", -d), format!("unas {:.1} generaciones menos que lo normal", -d)) }
-                else { bi("about as many generations as normal", "generaciones similares a lo normal") },
-            key: false, source: "NASA POWER + published threshold".into(),
-            dataset: meta["dataset"].as_str().unwrap_or("").into(),
-            date: meta["period"].as_str().unwrap_or("").replace("..", " – "),
-            resolution: "~0.5° × 0.625°".into(), badge: "regional context".into(),
-            license: meta["license"].as_str().unwrap_or("").into(),
-            method: Some(format!("Single-sine degree-days, {} °C lower threshold, {} °C·day per generation ({} {}).",
-                p["pest"]["lower_c"], p["pest"]["dd_per_generation"], p["pest"]["citation"]["authors"].as_str().unwrap_or(""), p["pest"]["citation"]["year"])),
-            series: vec![], provisional: false, note: None,
-        });
-    }
     out
-}
-
-/// Pest rows for the evidence package.
-pub fn pests(s: &Value) -> Vec<Value> {
-    s["pests"].as_array().into_iter().flatten().map(|p| {
-        let c = &p["pest"]["citation"];
-        json!({
-            "name": p["pest"]["common_name"], "name_bi": { "en": p["pest"]["common_name"], "es": power::pests::name_es(p["pest"]["key"].as_str().unwrap_or("")) }, "scientific": p["pest"]["scientific_name"],
-            "generations_now": p["generations"].as_f64().map(|x| round(x, 1)),
-            "generations_normal": p["normal_generations"]["mean"].as_f64().map(|x| round(x, 1)),
-            "difference": p["generations"].as_f64().zip(p["normal_generations"]["mean"].as_f64()).map(|(a, b)| round(round(a, 1) - round(b, 1), 1)),
-            "citation": format!("{} ({}). {}. {}. {}", c["authors"].as_str().unwrap_or(""), c["year"], c["title"].as_str().unwrap_or(""), c["published_in"].as_str().unwrap_or(""), c["url"].as_str().unwrap_or("")),
-        })
-    }).collect()
 }
 
 /// Monthly rows: this year vs the 1985–2024 band for the same dates.

@@ -1,6 +1,6 @@
 // Helpers that read the evidence package without assuming which readings exist (new readings just appear).
 import type { Bi, EvidencePackage, Reading } from './contract';
-import { fmt, t } from './i18n';
+import { fmt, pick, t } from './i18n';
 
 export const findReading = (ev: EvidencePackage | null | undefined, prefix: string): Reading | undefined =>
   ev?.readings.find((r) => r.id.startsWith(prefix));
@@ -24,7 +24,8 @@ export function shortLabel(r: Reading): string | undefined {
   if (r.id.startsWith('temp')) return t('r_temp_vs');
   if (r.id.startsWith('soil_moisture')) return t('r_soil');
   if (r.id === 'rain_30d' || r.id.startsWith('rain')) return t('r_rain');
-  if (r.id.startsWith('pest')) return t('r_pest');
+  // Named after the crop's leading pest by the backend ("Pea aphid generations this season"); older packages: generic.
+  if (r.id.startsWith('pest')) return r.label.en.startsWith('Green peach aphid') ? t('r_pest') : pick(r.label).replace(/ (this season|esta campaña)$/, '');
   if (r.id === 'slope') return t('r_slope');
   if (r.id === 'grace') return t('r_storage');
   if (r.id.startsWith('water_balance')) return t('r_water');
