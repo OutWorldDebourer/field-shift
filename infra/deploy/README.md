@@ -21,6 +21,7 @@ visitor ──HTTPS──▶ Caddy :443 ──▶ fieldshift 127.0.0.1:8787 ─�
 | `Caddyfile.tmpl` | HTTPS site, compression, security headers, no buffering for streamed answers | installed by `bootstrap.sh` |
 | `mariadb.cnf` | MariaDB sized for 1 GB RAM, bound to 127.0.0.1 | installed by `bootstrap.sh` |
 | `backup.sh` | Nightly `mariadb-dump`, last 7 kept in `/opt/fieldshift/backups` | cron |
+| `local-deploy.sh` | The same deploy from this computer (Docker builds the Linux binary): `bash infra/deploy/local-deploy.sh <ip> [site]`; `FS_DRY_RUN=1` only builds | Claude or the owner, when GitHub Actions is unavailable |
 
 Workflows: `.github/workflows/ci.yml` (tests + build on every push to `main`, never deploys) and
 `.github/workflows/deploy.yml` (publishes; only on "Run workflow" or a pushed `v*` tag).
@@ -41,7 +42,7 @@ These create accounts, resources or public things, so they are the owner's.
    ```powershell
    .\infra\deploy\github-setup.ps1 -Ip <server IP>
    ```
-4. **First deploy:** `gh workflow run Deploy` (or GitHub → Actions → Deploy → Run workflow). About 8 minutes the
+4. **First deploy:** `gh workflow run Deploy`, or from this computer `bash infra/deploy/local-deploy.sh <server IP>` (or GitHub → Actions → Deploy → Run workflow). About 8 minutes the
    first time. The site answers at `https://<ip-with-dashes>.sslip.io`.
 5. **Domain.** Claim the free domain from the Space Apps Global Offers (GoDaddy Registry → Porkbun; non-premium
    names only). In Porkbun → DNS add an `A` record for the bare domain (and `www` if wanted) pointing at the server
@@ -50,6 +51,10 @@ These create accounts, resources or public things, so they are the owner's.
 6. **Before submitting:** submit the domain for classification at FortiGuard (fortiguard.com → Web Filter
    Lookup → "Request a review") so school and company networks do not block a brand-new domain; make the
    repository public if the submission requires it.
+
+> **GitHub Actions is blocked on this account right now** ("recent account payments have failed or your spending
+> limit needs to be increased", GitHub → Settings → Billing & plans). Until that is fixed — or the repository is
+> made public, where Actions is free — CI does not run and deploys go through `local-deploy.sh`.
 
 ## Everyday changes
 
