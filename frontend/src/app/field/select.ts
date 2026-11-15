@@ -84,8 +84,9 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       <button type="button" class="btn btn--glass btn--sm fs__finish" id="fs-finish" hidden>${icon('polygon')}<span data-i18n="fs_finish">${esc(t('fs_finish'))}</span></button>
       <p class="fs__hint" id="fs-hint" aria-live="polite"></p>
       <div class="fs__readout" id="fs-readout" aria-live="polite"></div>
-      <p class="fs__why" id="fs-why" data-i18n="fs_why">${esc(t('fs_why'))}</p>
-      <div class="fs__actions"><button type="button" class="btn btn--solid fs__use" id="fs-use" disabled>${esc(t('fs_use'))}${icon('arrow')}</button>
+      <div class="fs__actions"><p class="fs__why" id="fs-why" data-i18n="fs_why">${esc(t('fs_why'))}</p>
+        <button type="button" class="btn btn--solid fs__use" id="fs-use" aria-disabled="true" aria-describedby="fs-why"><span class="fs__use-t">${esc(t('fs_use'))}</span>${icon('arrow')}</button>
+        <p class="sr-only" id="fs-live" aria-live="polite"></p>
 </div>
       <div class="fs__error" id="fs-error" role="alert" hidden></div>
     </aside>
@@ -94,6 +95,15 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
 
   const examplesEl = $('#fs-examples', host), hint = $('#fs-hint', host), readout = $('#fs-readout', host);
   const useBtn = $<HTMLButtonElement>('#fs-use', host), finishBtn = $<HTMLButtonElement>('#fs-finish', host);
+  // aria-disabled (not disabled): keyboard and screen-reader users can reach the button and hear why it waits.
+  let busy = false;
+  const usable = () => useBtn.getAttribute('aria-disabled') !== 'true';
+  const setUsable = (on: boolean) => {
+    useBtn.setAttribute('aria-disabled', String(!on));
+    $('#fs-why', host).hidden = on;
+    // the reason describes the button only while it waits (aria-describedby is read even when its text is hidden)
+    if (on) useBtn.removeAttribute('aria-describedby'); else useBtn.setAttribute('aria-describedby', 'fs-why');
+  };
   const reticle = $('#fs-reticle', host), areaTag = $('#fs-area-tag', host);
 
   // ---------- render helpers ----------
@@ -119,12 +129,18 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const r = currentRing();
     const area = ringAreaHa(r);
     const c = r.length >= 3 ? ringCenter(r) : point;
-    if (!c) { readout.innerHTML = `<span class="fs__none">${esc(t('fs_none'))}</span>`; useBtn.disabled = true; $('#fs-why', host).hidden = false; areaTag.hidden = true; return; }
+    if (!c) { readout.innerHTML = ''; setUsable(false); areaTag.hidden = true; return; }
     readout.innerHTML = r.length >= 3
       ? `<span class="mono fs__k">${esc(t('fs_area'))}</span><b class="fs__area num">${fmt(area, area < 10 ? 1 : 0)} ha</b><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`
       : `<span class="mono fs__k">${esc(t('fs_point_only'))}</span><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`;
-    useBtn.disabled = !(ring.length >= 3 || (point && tool !== 'draw'));
-    $('#fs-why', host).hidden = !useBtn.disabled;
+    const wasOff = !usable();
+    if (busy) return void placeReticle();
+    setUsable(!!(ring.length >= 3 || (point && tool !== 'draw')));
+    // The moment a field is chosen, the button lights up once and says so ("you can start"); field.css keeps it lit.
+    if (wasOff && usable()) {
+      useBtn.classList.remove('is-arming'); void useBtn.offsetWidth; useBtn.classList.add('is-arming');
+      $('#fs-live', host).textContent = t('fs_ready_sr');
+    }
     if (r.length >= 3) { areaTag.hidden = false; areaTag.innerHTML = `<b>${fmt(area, area < 10 ? 1 : 0)} ha</b><br><span>${esc(coveredDate() ? t('fs_img_date', { d: fmtDate(coveredDate()!) }) : t('fs_img_base'))}</span>`; } else areaTag.hidden = true;
     placeReticle();
   }
@@ -204,6 +220,8 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   }
 
   async function use() {
+    if (busy) return;
+    if (!usable()) { $('#fs-why', host).hidden = false; $('#fs-live', host).textContent = t('fs_why'); return; }
     const err = $('#fs-error', host);
     err.hidden = true;
     const r = ring.length >= 3 ? ring : [];
@@ -211,8 +229,11 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     if (!c) return;
     const field: FieldGeom = { center: { lat: +c.lat.toFixed(6), lon: +c.lon.toFixed(6) }, ring: r.map(([lo, la]) => [+lo.toFixed(6), +la.toFixed(6)]) };
     try { localStorage.setItem(KEY, JSON.stringify({ field, label })); } catch { /* ignore */ }
-    useBtn.disabled = true;
-    useBtn.innerHTML = `<span class="status-line"><i class="tick"></i>${esc(t('fs_creating'))}</span>`;
+    // Busy: the button stays lit but steady while the analysis is created (no flare, no second "you can start").
+    busy = true; useBtn.classList.add('is-busy'); useBtn.setAttribute('aria-busy', 'true');
+    $('#fs-live', host).textContent = t('fs_creating');
+    // only the label changes (the arrow is hidden by CSS while busy), so nothing replays afterwards
+    useBtn.querySelector('.fs__use-t')!.textContent = t('fs_creating');
     try {
       const a = await createAnalysis({ field, location_mode: exampleId ? 'example' : mode === 'gps' && !r.length ? 'gps' : 'map', example_site: exampleId, lang: lang(), label: label || undefined });
       opts.onDone(a);
@@ -223,7 +244,8 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       err.querySelector('[data-retry]')!.addEventListener('click', use);
       err.querySelector('[data-demo]')!.addEventListener('click', () => { chooseExample('huaral'); void use(); });
     } finally {
-      useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`;
+      busy = false; useBtn.classList.remove('is-busy'); useBtn.removeAttribute('aria-busy');
+      useBtn.querySelector('.fs__use-t')!.textContent = t('fs_use');
       renderReadout();
     }
   }
@@ -316,7 +338,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   });
   finishBtn.addEventListener('click', finishDraw);
   useBtn.addEventListener('click', use);
-  const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); useBtn.innerHTML = `${esc(t('fs_use'))}${icon('arrow')}`; $('#fs-tiles', host).textContent = t('fs_map_loading_tiles'); langHooks.forEach((f) => f()); });
+  const offLang = onLang(() => { renderExamples(); renderTools(); renderReadout(); const ut = useBtn.querySelector('.fs__use-t'); if (ut) ut.textContent = t(busy ? 'fs_creating' : 'fs_use'); $('#fs-tiles', host).textContent = t('fs_map_loading_tiles'); langHooks.forEach((f) => f()); });
 
   renderMode(); renderTools(); renderReadout();
 

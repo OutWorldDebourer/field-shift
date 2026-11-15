@@ -77,7 +77,17 @@
 .fs__lede, .fs__hint, .fs__status { color: rgba(244, 248, 250, 0.94); font-size: 1rem; }
 .fs__osm, .ex__meta, .fs__c { font-size: 0.8125rem; color: rgba(244, 248, 250, 0.9); }
 .fs__why { font-size: 0.9375rem; color: rgba(244, 248, 250, 0.94); }
-.fs__use:disabled { opacity: 1; background: #b9c4cc; color: #2c3a45; box-shadow: none; cursor: not-allowed; }
+/* waiting: a quiet glass button, so lighting up is a real dark-to-light change, not only a hue change */
+.fs__use[aria-disabled='true'], .fs__use[aria-disabled='true']:hover { opacity: 1; background: rgba(255, 255, 255, 0.03); color: var(--ink-2); border: 1px dashed rgba(255, 255, 255, 0.28); box-shadow: none; cursor: not-allowed; }
+.fs__use[aria-disabled='true'] svg { transform: none !important; }
+.fs__use.is-busy { cursor: progress; }
+.fs__readout:empty { display: none; }
+.fs__use.is-busy svg { display: none; }
+@media (max-width: 760px) {
+  /* the fixed bar fades the panel text above it instead of slicing it */
+  .fs__actions::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 14px; pointer-events: none; background: linear-gradient(to top, #0b1622, rgba(11, 22, 34, 0)); }
+}
+.fs__actions .fs__why { margin: 0 0 8px; }
 .fs__area-tag span { font-size: 0.8125rem; }
 .fs__retry { border: 0; background: none; color: #fff; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; padding: 0 4px; }
 .fs__alt { position: absolute; z-index: 600; right: 18px; bottom: 44px; font-size: 1rem; pointer-events: none; }
@@ -157,3 +167,36 @@
 .fs__tiles { position: absolute; z-index: 1001; left: 50%; top: 84px; transform: translateX(-50%); margin: 0; padding: 6px 14px; background: rgba(8, 16, 26, 0.86); color: #f5f8f9; font-size: 0.875rem; }
 
 .fs__qhint { margin-top: 6px; font-size: 0.8125rem; color: var(--ink-2); line-height: 1.35; }
+
+/* Ready to start (owner's request): once a field is chosen, "Use this field" lights up green, in the app's aurora
+   family (green → teal → cyan, dark text), with a soft glow. "Go" has its own motion: a light sheen crosses it three
+   times and the arrow nudges, then it rests; a one-time flare marks the moment. (In the workspace the same family
+   means "covered" and stays still: steady glow = covered, sheen + arrow = go.) Reduced motion: lit, still. */
+.fs__use[aria-disabled='false'] {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: linear-gradient(100deg, #7fe6b0, #4fd6b4 55%, #3fcfa6); color: var(--night); border-color: transparent; bottom: auto;
+  box-shadow: 0 0 0 1px rgba(184, 245, 212, 0.8), 0 0 22px -6px rgba(95, 220, 192, 0.55);
+}
+.fs__use[aria-disabled='false']:hover { background: linear-gradient(100deg, #8ff0bf, #5fe2c2 55%, #4fdcb3); }
+/* creating the analysis: still lit, steady, slightly calmer */
+.fs__use.is-busy[aria-disabled='false'] { filter: saturate(0.75); cursor: progress; }
+.fs__use.is-busy[aria-disabled='false']::after { animation: none; display: none; }
+.fs__use[aria-disabled='false']::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.7) 50%, transparent 60%);
+  transform: translateX(-110%); animation: fs-use-sheen 3.2s ease-in-out 0.4s 3;
+}
+.fs__use[aria-disabled='false'] svg { animation: fs-use-nudge 3.2s ease-in-out 0.4s 3; }
+@keyframes fs-use-sheen { 0% { transform: translateX(-110%); } 55%, 100% { transform: translateX(110%); } }
+@keyframes fs-use-nudge { 0%, 40%, 100% { transform: none; } 55% { transform: translateX(5px); } }
+.fs__use.is-arming[aria-disabled='false'] { animation: fs-use-flare 1.6s ease-out 1; }
+@keyframes fs-use-flare {
+  0% { box-shadow: 0 0 0 0 rgba(142, 238, 187, 0.7); }
+  40% { box-shadow: 0 0 0 6px rgba(142, 238, 187, 0), 0 0 20px 0 rgba(95, 220, 192, 0.7); }
+  100% { box-shadow: 0 0 0 1px rgba(184, 245, 212, 0.8), 0 0 22px -6px rgba(95, 220, 192, 0.55); }
+}
+.fs__use:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .fs__use[aria-disabled='false']::after { animation: none; display: none; }
+  .fs__use[aria-disabled='false'] svg, .fs__use.is-arming[aria-disabled='false'] { animation: none; }
+}

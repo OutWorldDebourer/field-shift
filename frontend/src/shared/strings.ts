@@ -187,6 +187,7 @@ const S = {
   fs_map_loading: { en: 'Loading the satellite map…', es: 'Cargando el mapa satelital…' },
   fs_coming: { en: 'More example sites coming soon', es: 'Más sitios de ejemplo próximamente' },
   fs_why: { en: 'Draw or pick a field first.', es: 'Primero dibuja o elige un campo.' },
+  fs_ready_sr: { en: 'Field chosen. You can start.', es: 'Campo elegido. Ya puedes empezar.' },
   fs_img_date: { en: 'Image {d}', es: 'Imagen {d}' },
   fs_img_base: { en: 'Base image 2016, may be outdated', es: 'Imagen base 2016, puede estar desactualizada' },
   fs_full: { en: 'Full map', es: 'Mapa completo' },
