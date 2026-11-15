@@ -171,8 +171,9 @@
 .strat.is-best { border-color: var(--plan-light); box-shadow: var(--shadow), inset 0 0 0 1px var(--plan-light); }
 /* The three cards share their rows (subgrid): rows line up across cards and each grows to its tallest content,
    so a crop sequence that wraps to three lines no longer spills onto the scores below. */
-.strats { grid-template-rows: repeat(5, auto); row-gap: 0; }
-.strat { grid-row: span 5; grid-template-rows: subgrid; row-gap: 12px; }
+.strats { grid-template-rows: repeat(6, auto); row-gap: 0; }
+.strat { grid-row: span 6; grid-template-rows: subgrid; row-gap: 12px; }
+.strat > .askbtn { justify-self: start; align-self: end; margin-top: 0; }
 .strat__head { display: grid; gap: 8px; justify-items: start; align-content: start; }
 .strat__head h3 { font-size: 1.375rem; line-height: 1.12; }
 .strat__tag { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.6); }

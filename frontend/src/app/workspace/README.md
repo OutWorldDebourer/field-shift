@@ -1,14 +1,17 @@
 # workspace
 
 - `workspace.ts` — shell (top bar, Chat | Dashboard | Rotation | Organic tabs, backdrop, footer notice, phone bottom sheet) and event wiring (topic-done detection, chime, rail/topic clicks, glossary, Load information).
-- `chat.ts` — progress rail, chat log, photo tiles with reticle, PDF chips, composer (≤10 files: full-resolution photos and PDFs, drag and drop, camera, voice dictation), crop inputs, "Load information" button, PDF hint, example-site card, closing card.
+- `chat.ts` — (iteration 4: merges a turn's new messages into the history; holds the opening while the first-step intake is open) progress rail, chat log, photo tiles with reticle, PDF chips, composer (≤10 files: full-resolution photos and PDFs, drag and drop, camera, voice dictation), crop inputs, "Load information" button, PDF hint, example-site card, closing card.
 - `attach.ts`, `attach.css` — iteration 3 attachments: PDFs (≤ 15 MB, real file name, type application/pdf) beside photos; composer document tile; message document chip (opens in a new tab); chat header and four-tab bar styles.
 - `intake.ts`, `intake.css` — "Load information" side sheet (dialog, focus trap, Esc): IntakeForm fields grouped by topic, crop suggestions, chips for earlier crops, "I don't know" per field; POST /api/analyses/:id/intake; example sites pre-fill with `intake_example` (`intake_example_es` in Spanish; bundled sample as fallback), auto-open once per analysis (localStorage), and the example card in the chat. A new analysis opens it as the first step (`openFirst`: one screen, optional photos handed to the chat composer, no model call); "Skip, I'd rather chat" releases the consultant's opening.
 - `facts.ts` — "What you told us" (AnalysisState.facts) in the Your field card.
 - `organic.ts`, `organic.css` — Organic view from section "organic" (OrganicContent): agents grouped by kind with citations and the soft-green "matches a pest you reported" badge, practices (agronomist-interview tag), when to act (NASA data tag), what harms your allies, gaps, empty state; plus the Organic section card and the rotation summary row.
 - `photos.ts` — originals kept unless > 12 MB or > 4096 px (then JPEG quality 0.92, ≤ 4096 px); size text.
 - `progress.ts` — guided steps (field → soil → pests → nutrition → rotation → sheet): backend `steps`, or derived from sections; display states; newly-done detection.
-- `rail.ts` — chips + "Next topic … I need …" line + chime toggle; the "We have enough information" card.
+- `rail.ts` — thin progress bar (six dots, "n/6 done · topic"), expanding to the named topic chips and the "Next topic … I need …" line; chime toggle; the "We have enough information" card.
+- `chat-compact.css` — iteration 4 compact chat: one-line crop header, thin rail, lighter messages, quick replies, one-row composer with the voice menu, narrower column; on phone the rail is the only progress control.
+- `quickreplies.ts` — two or three suggestions under the consultant's last message (draft answers for the active topic, "I don't know"; follow-ups once all topics are done); they fill the box, never send.
+- `bubble.ts`, `bubble.css` — floating chat bubble off the Chat tab (unread dot, preview on hover/focus or for 6 s on a new reply) and the mini chat (same chat element moved in the DOM; "Asking about: view · card"; Esc / scrim close; bottom sheet on phone).
 - `chime.ts` — soft WebAudio chime when a topic is done (mute saved per device; silent with reduced motion).
 - `dictation.ts` — voice to text in the box, never sends: Gemini (MediaRecorder → /api/consultant/transcribe, ≤ 120 s) or Browser (Web Speech); Gemini failure falls back to Browser.
 - `sections.ts` — section column (states follow the steps; done cards show the step summary), phone round buttons, section bodies, progress rings.

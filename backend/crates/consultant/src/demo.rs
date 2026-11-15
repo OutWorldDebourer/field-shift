@@ -35,10 +35,16 @@ pub fn parse_crops(text: &str) -> Option<(String, Vec<String>)> {
 
 const STOP: [&str; 24] = ["now", "ahora", "i", "grow", "growing", "we", "have", "tengo", "sembré", "planted", "is", "es", "el", "la", "los", "las", "de", "en", "mi", "my", "field", "campo", "there", "hay"];
 
+/// The scripted reply; the demo label is said once per conversation (the header flag keeps showing it).
 pub async fn reply(state: &AppState, st: &AnalysisState, input: &TurnInput) -> anyhow::Result<String> {
+    reply_raw(state, st, input).await.map(|s| s.trim_start().to_string())
+}
+
+async fn reply_raw(state: &AppState, st: &AnalysisState, input: &TurnInput) -> anyhow::Result<String> {
     let es = input.lang == "es";
     let t = |en: &str, es_: &str| if es { es_.to_string() } else { en.to_string() };
-    let label = t(LABEL_EN, LABEL_ES);
+    let said = st.messages.iter().any(|m| m.role == "assistant" && (m.body.starts_with(LABEL_EN) || m.body.starts_with(LABEL_ES)));
+    let label = if said { String::new() } else { t(LABEL_EN, LABEL_ES) };
     let photos = if input.photos.is_empty() { String::new() } else {
         t("The scripted demo does not look at photos; the live consultant checks each one and asks for a closer shot when needed.
 
@@ -78,7 +84,12 @@ pub async fn reply(state: &AppState, st: &AnalysisState, input: &TurnInput) -> a
         for r in ev["readings"].as_array().into_iter().flatten().filter(|r| ["temp_anomaly", "soil_moisture", "ndvi"].contains(&r["id"].as_str().unwrap_or(""))).take(3) {
             let label = r.pointer(if es { "/label/es" } else { "/label/en" }).and_then(Value::as_str).unwrap_or("");
             let verdict = r.pointer(if es { "/verdict/es" } else { "/verdict/en" }).and_then(Value::as_str).unwrap_or("");
-            lines.push(format!("· {label}: {verdict} ({}, {})", r["source"].as_str().unwrap_or(""), r["date"].as_str().unwrap_or("")));
+            let badge = match (r["badge"].as_str().unwrap_or(""), es) {
+                ("field-level", false) => "field-level".to_string(), ("field-level", true) => "nivel de campo".to_string(),
+                (_, false) => format!("regional context, {}", r["resolution"].as_str().unwrap_or("")), (_, true) => format!("contexto regional, {}", r["resolution"].as_str().unwrap_or("")),
+            };
+            let prov = if r["provisional"] == true { if es { ", provisional" } else { ", provisional" } } else { "" };
+            lines.push(format!("· {label}: {verdict} ({}, {}; {badge}{prov})", r["source"].as_str().unwrap_or(""), r["date"].as_str().unwrap_or("")));
         }
         return Ok(format!("{label}
 

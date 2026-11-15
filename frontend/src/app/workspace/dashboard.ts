@@ -1,6 +1,7 @@
 // Dashboard tab (App 4): field map with outline and an honest-scale layer switch, metric tiles from
 // evidence.readings, "This season vs 40-year normal", NDVI series, 12-month crop calendar, alerts, projection.
 // `dashboardHtml` is pure markup (also used by the index preview); `mountDashboardMap` adds the live Leaflet map.
+import { askBtn } from '../../shared/viewctx';
 import type * as Leaflet from 'leaflet';
 import type { ClientAnalysis } from '../../shared/api';
 import type { EvidencePackage, Reading } from '../../shared/contract';
@@ -86,7 +87,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
       <div class="dash__load" data-build-status hidden>${loadbarHtml(t('db_building'))}</div>
     </section></div></div>`;
   }
-  const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r, shortLabel(r) ?? pick(r.label))}</li>`).join('');
+  const tiles = tilesFor(ev, 6).map((r) => `<li class="tile-m glass">${dataRow(r, shortLabel(r) ?? pick(r.label))}${opts.preview || a.readOnly ? '' : askBtn(t('ask_reading', { x: pick(r.label) }))}</li>`).join('');
   const alerts = alertsFor(ev);
   const tl = currentTimeline(a);
   const startMonth = new Date(ev.generated_at).getUTCMonth() + 1;
@@ -118,7 +119,7 @@ export function dashboardHtml(a: ClientAnalysis, opts: { preview?: boolean; laye
           <p class="dash__src mono">${esc([...new Set(ev.ndvi_series.map((n) => n.sensor))].join(' · '))} · 10–30 m · ${esc(t('field_level'))}</p></section>
         <section class="glass dash__card"><h3 class="dash__h">${esc(t('db_pests'))}${glossBtn('pest_gen', t('db_pests'))}</h3>
           ${isRef ? `<p class="dash__note">${esc(t('db_pests_ref'))}</p>` : ''}
-          ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(pestTitle(p))}</b> <i>${esc(p.scientific)}</i>${p.crop && p.role !== 'current' ? ` <small>· ${esc(pick(p.crop.name))}</small>` : ''}</span>
+          ${pests.length ? `<ul class="pests">${pests.map((p) => `<li><span><b>${esc(pestTitle(p))}</b> <i>${esc(p.scientific)}</i>${p.crop && p.role !== 'current' ? ` <small>· ${esc(pick(p.crop.name))}</small>` : ''}${opts.preview || a.readOnly ? '' : askBtn(t('ask_pest', { x: pestTitle(p) }))}</span>
             <span class="mono">${fmt(p.generations_now!, 1)} ${esc(t('db_now'))} · ${p.generations_normal != null ? fmt(p.generations_normal, 1) + ' ' + esc(t('db_norm')) : '—'}</span></li>`).join('')}</ul>
             <p class="dash__src mono" title="${esc(pests.map((p) => p.citation).join(' | '))}">NASA POWER · ${esc(t('degree_days'))} · ${esc(t('regional'))}</p>` : ''}
           ${qualitative.length ? `<p class="dash__note">${esc(t(pests.some((p) => p.role === 'current') ? 'db_pests_qual_some' : 'db_pests_qual', { p: qualitative.map((p) => pestLower(p)).join(', ') }))}</p>` : ''}

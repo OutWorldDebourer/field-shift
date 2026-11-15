@@ -35,7 +35,7 @@ pub fn needs(key: &str) -> Vec<Bi> {
         "soil" => vec![b("soil type (sandy, loamy, clay…)", "tipo de suelo (arenoso, franco, arcilloso…)"), b("organic matter added (manure, compost, green manure)", "materia orgánica que agrega (estiércol, compost, abono verde)"), b("what is done with crop residues", "qué hace con los rastrojos")],
         "pests" => vec![b("insects or damage seen, and where on the plant", "insectos o daños vistos y en qué parte de la planta"), b("close, sharp photos of the affected leaves", "fotos cercanas y nítidas de las hojas afectadas"), b("products applied recently", "productos aplicados recientemente")],
         "nutrition" => vec![b("last fertilizer used and when", "último abono usado y cuándo"), b("any soil test available", "si tiene análisis de suelo")],
-        "rotation" => vec![b("what the farmer would like to plant next", "qué le gustaría sembrar después"), b("market or family use of the harvest", "si la cosecha es para venta o consumo")],
+        "rotation" => vec![b("what you would like to plant next", "qué te gustaría sembrar después"), b("market or family use of the harvest", "si la cosecha es para venta o consumo")],
         _ => vec![],
     }
 }

@@ -19,5 +19,6 @@
 - `demo/` — bundled Huaral demo dataset.
 - `glossary.ts` — bundled bilingual glossary (fallback for GET /api/glossary, same keys) and reading id → term.
 - `glosspanel.ts`, `glosspanel.css` — ⓘ "What does it mean?" buttons and the glossary side panel (enabled per page).
-- `pests.ts` — pest names in the UI language (`name_bi` from the backend, else a local map).
+- `pests.ts` — pest names in the UI language (`name_bi` from the backend, else a local map); `ownCropPest` keeps reference and other crops' pests out of alerts and topics.
+- `viewctx.ts`, `askbtn.css` — what the farmer is looking at (tab + focused card), sent with every chat turn; the "Ask about this" button.
 - `localize.ts` — Spanish for English fragments inside backend units and source lines ("vs normal", "generations", …).

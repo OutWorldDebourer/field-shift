@@ -52,13 +52,16 @@ async fn message(
         headers.get("x-forwarded-for").and_then(|v| v.to_str().ok()).and_then(|v| v.split(',').next()).map(|v| v.trim().to_string())
             .unwrap_or_else(|| addr.ip().to_string())
     } else { addr.ip().to_string() };
-    let mut input = TurnInput { text: String::new(), lang: "en".into(), photos: vec![], visitor: ratelimit::visitor_id(&ip), force_demo: false };
+    let mut input = TurnInput { text: String::new(), lang: "en".into(), photos: vec![], visitor: ratelimit::visitor_id(&ip), force_demo: false, view: None, focus: None };
     while let Some(field) = mp.next_field().await.map_err(|e| ApiError::BadRequest(e.to_string()))? {
         let name = field.name().unwrap_or("").to_string();
         match name.as_str() {
             "text" => input.text = field.text().await.map_err(|e| ApiError::BadRequest(e.to_string()))?,
             "lang" => input.lang = if field.text().await.unwrap_or_default() == "es" { "es".into() } else { "en".into() },
             "demo" => input.force_demo = field.text().await.unwrap_or_default() == "1",
+            // What the farmer is looking at (tab and focused card), so "this one" can be resolved.
+            "view" => { let v = field.text().await.unwrap_or_default(); if crate::views::VIEWS.contains(&v.as_str()) || v == "chat" { input.view = Some(v); } }
+            "focus" => { let f: String = field.text().await.unwrap_or_default().chars().filter(|c| !c.is_control()).take(160).collect(); if !f.trim().is_empty() { input.focus = Some(f); } }
             "photos" | "photos[]" => {
                 let name = field.file_name().map(|n| n.chars().take(120).collect::<String>());
                 let mut mime = field.content_type().unwrap_or("application/octet-stream").to_string();

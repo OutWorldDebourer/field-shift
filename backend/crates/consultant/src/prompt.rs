@@ -40,3 +40,13 @@ pub fn context_note(st: &AnalysisState, lang: &str) -> String {
         sections.join(", ")
     )
 }
+
+/// Where the farmer is in the app: the tab and the card they focused, so "this one" / "esta" can be resolved.
+pub fn viewing_note(view: Option<&str>, focus: Option<&str>) -> Option<String> {
+    let v = view.filter(|v| *v != "chat");
+    if v.is_none() && focus.is_none() { return None; }
+    let tab = v.unwrap_or("chat");
+    let read = v.map(|t| format!(" Call get_view(\"{t}\") for exactly what that tab shows before answering about it;")).unwrap_or_default();
+    Some(format!("[Context — not written by the farmer] The farmer is looking at: the {tab} tab{}. Words like \"this one\", \"this\", \"esta\" or \"este\" refer to it.{read} do not ask which one they mean.",
+        focus.map(|f| format!(" · {f}")).unwrap_or_default()))
+}

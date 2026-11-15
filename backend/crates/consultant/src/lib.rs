@@ -11,6 +11,7 @@ mod tiles;
 mod tools;
 mod transcribe;
 mod turn;
+mod views;
 
 pub use routes::routes;
 pub use turn::{run_turn, NewPhoto, TurnInput};

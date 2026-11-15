@@ -10,7 +10,9 @@ import { lang, onLang, pick, t } from '../../shared/i18n';
 import { icon } from '../../shared/icons';
 import { debounce } from '../field/search';
 import { chimeOn, setChime, unlockAudio } from './chime';
-import { micButtonHtml, mountDictation, voiceLineHtml } from './dictation';
+import { micButtonHtml, mountDictation, voiceMenuHtml, voiceStatusHtml } from './dictation';
+import { quickRepliesHtml } from './quickreplies';
+import './chat-compact.css';
 import { preparePhoto, MAX_PHOTOS } from './photos';
 import { ACCEPT, asPdf, docChipHtml, isPdfAttachment, isPdfFile, MAX_PDF_BYTES, previewHtml, type Attachment, type Pending } from './attach';
 import { exampleCardHtml } from './intake';
@@ -47,8 +49,18 @@ export function messageHtml(m: ChatMessage): string {
   return `<li class="msg msg--me"><div class="msg__col"><span class="sr-only">${esc(t('ws_you'))}:</span>${m.body ? `<div class="bubble bubble--me">${para(m.body)}</div>` : ''}${photos}</div></li>`;
 }
 
+/** A live turn returns only its own new messages: keep the earlier history and append them (offline turns return
+ *  the whole list, which this also handles). */
+export function mergeMessages(prev: ChatMessage[], incoming: ChatMessage[]): ChatMessage[] {
+  if (!incoming.length) return prev;
+  const first = Math.min(...incoming.map((m) => m.id));
+  return [...prev.filter((m) => m.id > 0 && m.id < first), ...incoming];
+}
+
 export interface Chat {
   render(a: ClientAnalysis, just?: SectionKey[]): void; prefill(s: string): void; destroy(): void;
+  /** Focus the message box (used when the chat opens in the floating bubble). */
+  focus(): void;
   /** While held, a new analysis does not ask the model for its opening (the first-step intake is open). */
   holdOpening(on: boolean): void;
   /** Files chosen in the intake form wait in the composer, to be sent when the farmer chooses. */
@@ -70,7 +82,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
           <ul id="crop-before-list" class="crop__list" role="listbox" hidden></ul></div>
         <p id="crop-hint" class="sr-only">${esc(t('ws_crop_hint'))}</p>
       </div></div>
-      <button type="button" class="btn btn--glass btn--sm chat__intake" data-intake aria-haspopup="dialog">${icon('clipboard')}<span>${esc(t('in_btn'))}</span></button>
+      <button type="button" class="btn btn--glass btn--sm chat__intake" data-intake aria-haspopup="dialog" title="${esc(t('in_btn'))}">${icon('clipboard')}<span class="chat__intake-t">${esc(t('in_btn'))}</span><span class="chat__intake-s">${esc(t('in_btn_short'))}</span></button>
     </header>
     <nav class="rail" aria-label="${esc(t('rail_label'))}"></nav>
     <ol class="chat__log" aria-live="polite" aria-label="${esc(t('ws_chat_label'))}"></ol>
@@ -82,10 +94,10 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
           <input type="file" accept="${ACCEPT}" multiple class="sr-only"></label>
         <label class="sr-only" for="composer-text">${esc(t('ws_input_ph'))}</label>
         <textarea id="composer-text" rows="1" placeholder="${esc(t('ws_input_ph'))}" enterkeyhint="send"></textarea>
-        ${micButtonHtml()}
+        <div class="composer__micbox">${micButtonHtml()}${voiceMenuHtml()}</div>
         <button type="submit" class="composer__send" aria-label="${esc(t('ws_send'))}">${icon('send')}</button>
       </div>
-      ${voiceLineHtml()}
+      ${voiceStatusHtml()}
     </form>
     <div class="chat__drop" hidden><p class="serif">${esc(t('ws_drop'))}</p></div>`;
 
@@ -171,7 +183,7 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
         if (fresh && Array.isArray(fresh.steps)) { r.steps = fresh.steps; r.next_step = fresh.next_step ?? null; }
       }
       onUpdate({
-        messages: r.messages, sections: r.sections,
+        messages: mergeMessages(getA()?.messages ?? a.messages, r.messages), sections: r.sections,
         ...(r.demo_mode != null ? { demo_mode: r.demo_mode } : {}),
         ...(Array.isArray(r.steps) ? { steps: r.steps } : {}),
         ...(r.next_step !== undefined ? { next_step: r.next_step } : {}),
@@ -221,14 +233,27 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   function scrollEnd() { requestAnimationFrame(() => { log.scrollTop = log.scrollHeight; }); }
 
   const rail = $('.rail', host);
+  let railOpen = false;
   rail.addEventListener('click', (e) => {
-    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-chime]');
+    const el = e.target as HTMLElement;
+    if (el.closest('[data-rail-toggle]')) {
+      railOpen = !railOpen;
+      const a = getA(); if (a) rail.innerHTML = railHtml(stepsOf(a), [], railOpen);
+      rail.querySelector<HTMLElement>('[data-rail-toggle]')?.focus();
+      return;
+    }
+    const b = el.closest<HTMLButtonElement>('[data-chime]');
     if (!b) return;
     const on = !chimeOn();
     setChime(on);
     if (on) unlockAudio();
-    const a = getA(); if (a) rail.innerHTML = railHtml(stepsOf(a));
+    const a = getA(); if (a) rail.innerHTML = railHtml(stepsOf(a), [], railOpen);
     rail.querySelector<HTMLElement>('[data-chime]')?.focus();
+  });
+  // Quick replies fill the message box; the farmer decides whether to send.
+  log.addEventListener('click', (e) => {
+    const q = (e.target as HTMLElement).closest<HTMLElement>('[data-qr]');
+    if (q) prefill(q.dataset.qr ?? '');
   });
 
   // A new field has no consultant message yet: the consultant writes its opening for this exact place.
@@ -252,19 +277,21 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   function render(a: ClientAnalysis, just: SectionKey[] = []) {
     const steps = stepsOf(a);
     void open(a);
-    rail.innerHTML = railHtml(steps, just);
+    rail.innerHTML = railHtml(steps, just, railOpen);
     rail.hidden = !!a.readOnly;
     // The consultant's greeting arrives with the analysis: the empty state only shows when there is no message at all.
     const shown = a.messages.filter((m) => m.role !== 'status' || m.body);
     const hint = a.readOnly ? '' : `<li class="chat__hint">${icon('pdf')}<p>${esc(t('ws_pdf_hint'))}</p></li>`;
     // The PDF hint and the example-site card sit right under the consultant's greeting.
     const head = shown.length ? messageHtml(shown[0]) + hint + exampleCardHtml(a, steps) : '';
-    log.innerHTML = shown.length ? head + shown.slice(1).map(messageHtml).join('') + doneCardHtml(a, steps) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('advisor')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p><p class="chat__empty-hint">${icon('pdf')}${esc(t('ws_pdf_hint'))}</p>${exampleCardHtml(a, steps, true)}</li>`;
+    log.innerHTML = shown.length ? head + shown.slice(1).map(messageHtml).join('') + doneCardHtml(a, steps) + (sending ? '' : quickRepliesHtml(a)) : `<li class="chat__empty"><span class="avatar-ai" aria-hidden="true">${icon('advisor')}</span><h3 class="serif">${esc(t('ws_empty_t'))}</h3><p>${esc(t('ws_empty_b'))}</p><p class="chat__empty-hint">${icon('pdf')}${esc(t('ws_pdf_hint'))}</p>${exampleCardHtml(a, steps, true)}</li>`;
     const now = $<HTMLInputElement>('#crop-now', host), before = $<HTMLInputElement>('#crop-before', host);
     const sum = $('.crops__sum', host);
-    const both = !!(a.crop_current && a.crop_history[0]);
-    host.classList.toggle('has-crops', both);
-    if (both) sum.innerHTML = `<span>${esc(t('ws_crops_sum', { now: pick(a.crop_current!.names), before: pick(a.crop_history[0].names) }))}</span><u>${esc(t('ws_edit'))}</u>`;
+    // One line: "pea now · lettuce before · Edit" (or "No crop yet · Add"); the inputs open on demand.
+    host.classList.add('has-crops');
+    const line = a.crop_current && a.crop_history[0] ? t('ws_crops_sum', { now: pick(a.crop_current.names), before: pick(a.crop_history[0].names) })
+      : a.crop_current ? t('ws_crops_now', { now: pick(a.crop_current.names) }) : t('ws_crops_none');
+    sum.innerHTML = `<span>${esc(line)}</span><u>${esc(t(a.crop_current ? 'ws_edit' : 'ws_add'))}</u>`;
     if (document.activeElement !== now) now.value = a.crop_current ? pick(a.crop_current.names) : '';
     if (document.activeElement !== before) before.value = a.crop_history[0] ? pick(a.crop_history[0].names) : '';
     const ro = !!a.readOnly;
@@ -285,7 +312,9 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
     host.querySelector('[for=crop-before]')!.textContent = t('ws_crop_before');
     $('.composer__send', host).setAttribute('aria-label', t('ws_send'));
     $('.chat__drop p', host).textContent = t('ws_drop');
-    $('.chat__intake span', host).textContent = t('in_btn');
+    $('.chat__intake .chat__intake-t', host).textContent = t('in_btn');
+    $('.chat__intake .chat__intake-s', host).textContent = t('in_btn_short');
+    $('.chat__intake', host).title = t('in_btn');
     $('.composer__cam', host).title = t('ws_add_photos');
     $('.composer__cam .sr-only', host).textContent = t('ws_add_photos');
     rail.setAttribute('aria-label', t('rail_label'));
@@ -296,10 +325,12 @@ export function mountChat(host: HTMLElement, getA: () => ClientAnalysis | null, 
   function prefill(s: string) {
     text.value = s;
     grow();
-    requestAnimationFrame(() => { text.focus(); text.setSelectionRange(s.length, s.length); });
+    const blank = s.indexOf('…');
+    requestAnimationFrame(() => { text.focus(); if (blank >= 0) text.setSelectionRange(blank, blank + 1); else text.setSelectionRange(s.length, s.length); });
   }
   return {
     render, prefill, destroy: () => { off(); dict.stop(); },
+    focus: () => { scrollEnd(); text.focus({ preventScroll: true }); },
     holdOpening: (on) => { held = on; const a = getA(); if (!on && a) void open(a); },
     addFiles: (files) => addFiles(files),
   };

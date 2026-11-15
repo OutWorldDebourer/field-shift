@@ -1,5 +1,6 @@
 // Typed client for the Rust backend (/api, see contract.ts) with timeouts and an offline fallback to the
 // bundled Huaral demo dataset. Anything served from the bundle is flagged `offline` so the UI can say "Demo data".
+import { getViewContext } from './viewctx';
 import type { AnalysisState, Bi, ChatMessage, EvidencePackage, FieldGeom, Forecast, GlossaryTerm, IntakeForm, Lang, Outlook, Section, SectionKey, Step } from './contract';
 import { DEMO_CROPS, DEMO_EXAMPLES, DEMO_EVIDENCE, DEMO_ID, HUARAL_INTAKE_EXAMPLE, demoAnalysis, demoReply } from './demo/huaral';
 
@@ -83,6 +84,9 @@ export async function sendMessage(a: ClientAnalysis, text: string, photos: Blob[
   fd.append('text', text);
   fd.append('lang', lang);
   if (forceDemo()) fd.append('demo', '1');
+  const ctx = getViewContext();
+  fd.append('view', ctx.view);
+  if (ctx.focus) fd.append('focus', ctx.focus);
   // Images keep the iteration-2 naming; PDFs (iteration 3) go up with their real file name and type.
   photos.forEach((b, i) => fd.append('photos', b, b.type === 'application/pdf' ? (b instanceof File && b.name ? b.name : `document-${i + 1}.pdf`) : `photo-${i + 1}.${EXT[b.type] ?? 'jpg'}`));
   return req(`/api/consultant/${encodeURIComponent(a.id)}/message`, { method: 'POST', body: fd, timeout: 180000 });

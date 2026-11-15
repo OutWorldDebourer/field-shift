@@ -33,6 +33,10 @@ pub fn definitions() -> Value {
           "input_schema": { "type": "object", "additionalProperties": false, "required": ["key", "summary_en", "summary_es"],
             "properties": { "key": { "type": "string", "enum": ["field", "soil", "pests", "nutrition", "rotation"] },
               "summary_en": bi("One line, English, what was learned for this topic."), "summary_es": bi("Same in Spanish.") } } },
+        { "name": "get_view", "description": "Read exactly what one tab of the app shows the farmer, with the same numbers, in the conversation language: dashboard (reading tiles, pests, forecast, outlook), rotation (strategies numbered 1-3 left to right, with their 1-5 scores, best fit, why, evidence, gaps, risks), organic (natural enemies numbered as on screen, practices, timing), prevention (pest risk lights), sheet (sections and gaps). Use it when the farmer asks about something they are looking at; the context note says which tab and item.",
+          "strict": true,
+          "input_schema": { "type": "object", "additionalProperties": false, "required": ["view"],
+            "properties": { "view": { "type": "string", "enum": ["dashboard", "rotation", "organic", "prevention", "sheet"] } } } },
         { "name": "get_sheet", "description": "Read the technical sheet as it stands: each section's state, summary and item titles, the guided topics and the information gaps. Use it to point the farmer to what the sheet already says and to give the closing recommendations.",
           "input_schema": { "type": "object", "additionalProperties": false, "properties": {} } },
         { "name": "record_facts", "description": "Record what the farmer told you (or what an attached document says) as short plain answers. Use only the fields you learned; they appear on the technical sheet as 'What the farmer told us'.",
@@ -104,6 +108,11 @@ pub async fn execute(state: &AppState, id: &str, name: &str, input: &Value, fx: 
         "record_facts" => {
             let merged = store::merge_facts(&state.db, id, input).await.map_err(|e| e.to_string())?;
             Ok(json!({ "ok": true, "facts": merged }))
+        }
+        "get_view" => {
+            let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;
+            let l = lang(&st.lang);
+            Ok(crate::views::view(&st, &s("view"), l))
         }
         "get_sheet" => {
             let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;

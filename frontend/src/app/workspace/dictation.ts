@@ -35,11 +35,15 @@ function mime(): string {
 /** Mic button markup for the composer row. */
 export const micButtonHtml = () => `<button type="button" class="composer__mic" data-mic aria-pressed="false" aria-label="${esc(t('mic_start'))}" title="${esc(t('mic_start'))}">${icon('mic')}</button>`;
 
-/** The voice line under the composer: live status and the engine switch. */
-export function voiceLineHtml(): string {
+/** Live dictation status, shown above the composer row only while it has something to say. */
+export const voiceStatusHtml = (): string => `<p class="voice__status" data-voice-status aria-live="polite"></p>`;
+
+/** The microphone menu (iteration 4): a small caret next to the mic opens the engine choice (Gemini | browser). */
+export function voiceMenuHtml(): string {
   const br = !!SR();
-  return `<div class="voice"><p class="voice__status" data-voice-status aria-live="polite"></p>
-    <div class="voice__eng" role="radiogroup" aria-label="${esc(t('mic_engine'))}"><span class="voice__lbl mono" aria-hidden="true">${esc(t('mic_label'))}</span>
+  return `<button type="button" class="composer__micmenu" data-micmenu aria-expanded="false" aria-controls="voice-menu" aria-label="${esc(t('mic_engine'))}" title="${esc(t('mic_engine'))}">${icon('down')}</button>
+    <div class="voice__menu glass" id="voice-menu" hidden><p class="voice__lbl mono">${esc(t('mic_engine'))}</p>
+      <div class="voice__eng" role="radiogroup" aria-label="${esc(t('mic_engine'))}">
       <button type="button" role="radio" data-engine="gemini"${canRecord() ? '' : ` aria-disabled="true" title="${esc(t('mic_unavailable'))}"`}>${esc(t('mic_gemini'))}</button>
       <button type="button" role="radio" data-engine="browser"${br ? '' : ` aria-disabled="true" title="${esc(t('mic_browser_na'))}"`}>${esc(t('mic_browser'))}</button></div></div>`;
 }
@@ -160,8 +164,21 @@ export function mountDictation(root: HTMLElement, text: HTMLTextAreaElement, onT
     if (!b || b.getAttribute('aria-disabled') === 'true') { if (b) toast(b.title); return; }
     if (busy !== 'idle') return;
     engine = b.dataset.engine as Engine; save(engine); paintEngine();
+    setMenu(false);
+    btn.focus();
   });
   paintEngine();
+  // The engine menu next to the microphone: micCaret toggles it; Esc or a click elsewhere closes it.
+  const micCaret = root.querySelector<HTMLButtonElement>('[data-micmenu]');
+  const menu = root.querySelector<HTMLElement>('#voice-menu');
+  function setMenu(open: boolean) {
+    if (!micCaret || !menu) return;
+    menu.hidden = !open; micCaret.setAttribute('aria-expanded', String(open));
+    if (open) menu.querySelector<HTMLElement>('[aria-checked=true]')?.focus();
+  }
+  micCaret?.addEventListener('click', () => setMenu(menu?.hidden ?? false));
+  menu?.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); setMenu(false); micCaret?.focus(); } });
+  document.addEventListener('click', (e) => { if (menu && !menu.hidden && !(e.target as HTMLElement).closest('.composer__micbox')) setMenu(false); });
 
   return {
     stop() { if (busy === 'rec') media?.stop(); if (busy === 'listen') rec?.abort(); },
@@ -169,7 +186,8 @@ export function mountDictation(root: HTMLElement, text: HTMLTextAreaElement, onT
       const l = t(busy === 'rec' || busy === 'listen' ? 'mic_stop' : 'mic_start');
       btn.setAttribute('aria-label', l); btn.title = l;
       root.querySelector('.voice__eng')?.setAttribute('aria-label', t('mic_engine'));
-      const lbl = root.querySelector('.voice__lbl'); if (lbl) lbl.textContent = t('mic_label');
+      const lbl = root.querySelector('.voice__lbl'); if (lbl) lbl.textContent = t('mic_engine');
+      const cm = root.querySelector<HTMLElement>('[data-micmenu]'); if (cm) { cm.title = t('mic_engine'); cm.setAttribute('aria-label', t('mic_engine')); }
       const br = root.querySelector('[data-engine=browser]'); if (br) br.textContent = t('mic_browser');
     },
   };

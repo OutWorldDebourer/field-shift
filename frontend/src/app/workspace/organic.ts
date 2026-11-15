@@ -2,6 +2,7 @@
 // (OrganicContent): natural enemies and beneficial microorganisms grouped by kind (each with its citation and a
 // soft-green badge when it matches a pest the farmer reported), practices, when to act (NASA degree-days and
 // forecast), what harms the allies, and gaps. Also the small pieces reused by the section column and rotation view.
+import { askBtn } from '../../shared/viewctx';
 import type { ClientAnalysis } from '../../shared/api';
 import type { Bi, BioAgent, OrganicContent, Section, SectionState } from '../../shared/contract';
 import { esc } from '../../shared/dom';
@@ -56,7 +57,7 @@ function agentCard(b: BioAgent): string {
     ${b.scientific ? `<p class="og-agent__sci"><i>${esc(b.scientific)}</i></p>` : ''}
     ${pick(b.targets) ? `<p class="og-agent__t"><b>${esc(t('og_controls'))}:</b> ${esc(pick(b.targets))}</p>` : ''}
     ${b.note ? `<p class="og-agent__note">${esc(b.note)}</p>` : ''}
-    ${cite}</li>`;
+    ${cite}${askBtn(t('ask_agent', { x: `${pick(b.name)}${b.scientific ? ` (${b.scientific})` : ''}` }))}</li>`;
 }
 
 function agentsHtml(agents: BioAgent[]): string {

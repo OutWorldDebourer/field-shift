@@ -1,6 +1,7 @@
 // Rotation view (App 5): the pre-diagnosis card (headline, confidence, soil/pest/nutrition summaries) and three
 // strategy columns with a 12-month plan strip and 1–5 dot scores. Perennial crops (or content without strategies)
 // get practice cards instead: inter-row cover, intercropping, residue, biological control — driven by the data.
+import { askBtn } from '../../shared/viewctx';
 import type { ClientAnalysis } from '../../shared/api';
 import type { SectionContent } from '../../shared/contract';
 import { dots, learnCropNames, timelineStrip } from '../../shared/charts';
@@ -35,6 +36,7 @@ function strategyCol(s: Strategy, startMonth: number, idx: number): string {
       <dt>${esc(t('rt_gaps'))}</dt><dd>${esc(pick(s.gaps))}</dd><dt>${esc(t('rt_risks'))}</dt><dd>${esc(pick(s.risks))}</dd>
       ${cites(s).length ? `<dt>${esc(t('rt_sources'))}</dt><dd class="strat__cites">${uniq(cites(s)).map((c) => `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title)}</a>`).join('')}</dd>` : ''}</dl>
     </details>
+    ${askBtn(t('ask_strategy', { n: idx + 1, x: pick(s.name).replace(/\s*\((current plan|plan actual)\)\s*$/i, '') }))}
   </article>`;
 }
 

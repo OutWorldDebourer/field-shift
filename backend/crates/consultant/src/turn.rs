@@ -18,6 +18,10 @@ pub struct TurnInput {
     pub photos: Vec<NewPhoto>,
     pub visitor: String,
     pub force_demo: bool,
+    /// The tab the farmer is on when sending (chat, dashboard, rotation, organic, prevention, sheet).
+    pub view: Option<String>,
+    /// The card they focused or asked about, e.g. "rotation · strategy 2 (Follow with maize)".
+    pub focus: Option<String>,
 }
 
 #[derive(serde::Serialize)]
@@ -147,6 +151,7 @@ async fn live(state: &AppState, id: &str, st: &AnalysisState, input: &TurnInput,
         }
     }
     content.push(json!({ "type": "text", "text": prompt::context_note(st, &input.lang) }));
+    if let Some(v) = prompt::viewing_note(input.view.as_deref(), input.focus.as_deref()) { content.push(json!({ "type": "text", "text": v })); }
     let text = if !input.text.trim().is_empty() { input.text.trim().to_string() } else if n_doc > 0 { "(documents attached)".to_string() } else { "(photos only)".to_string() };
     content.push(json!({ "type": "text", "text": text }));
     push(&mut messages, "user", Value::Array(content));

@@ -9,8 +9,8 @@ The standing rules of `BUILD_PLAN.md` apply to every step (EN default + ES, modu
 | Phase | Title | State |
 |---|---|---|
 | 0 | Honest pests, clean start, one intake, lean API calls | [x] |
-| A | Compact chat and floating chat bubble | [ ] |
-| B | The consultant knows every view | [ ] |
+| A | Compact chat and floating chat bubble | [x] |
+| B | The consultant knows every view | [x] |
 | C | Organic by categories; "What if I grow…?" | [ ] |
 | D | Knowledge research (pest conditions, micronutrients, biostimulants); Prevention tab | [ ] |
 | E | Technical sheet and consultant with everything above | [ ] |
@@ -45,13 +45,13 @@ Tick a phase only when every acceptance check below it passed in the running app
 ## Phase A · Compact chat and floating bubble
 
 **Tasks**
-- [ ] A.1 Compact header: one line "pea now · lettuce before · Edit" plus an icon button for "Load information".
-- [ ] A.2 Topic rail becomes a thin progress bar with six dots and the active topic name; expands on click.
-- [ ] A.3 Lighter messages: slightly smaller type, narrower bubbles, 28 px avatar, less empty space.
-- [ ] A.4 Quick replies: two or three suggestions under the last consultant message, from the active topic and the recommended topics.
-- [ ] A.5 One-row composer: camera, text, microphone; the Gemini/Browser voice choice moves into a microphone menu.
-- [ ] A.6 Narrower chat column so more of the map shows.
-- [ ] A.7 Floating bubble: leaving the Chat tab animates the chat into a bubble (bottom right; above the bottom bar on phone) with an unread dot and a hover preview of the last message. Clicking opens a mini chat (about 380 × 540 px; a bottom sheet on phone) over the current view, using the same chat instance moved in the DOM (draft text and pending photos survive). Header says "Asking about: Rotation". Esc closes; focus returns to the bubble; reduced motion shows it without animation.
+- [x] A.1 Compact header: one line "pea now · lettuce before · Edit" plus an icon button for "Load information".
+- [x] A.2 Topic rail becomes a thin progress bar with six dots and the active topic name; expands on click.
+- [x] A.3 Lighter messages: slightly smaller type, narrower bubbles, 28 px avatar, less empty space.
+- [x] A.4 Quick replies: two or three suggestions under the last consultant message, from the active topic and the recommended topics.
+- [x] A.5 One-row composer: camera, text, microphone; the Gemini/Browser voice choice moves into a microphone menu.
+- [x] A.6 Narrower chat column so more of the map shows.
+- [x] A.7 Floating bubble: leaving the Chat tab animates the chat into a bubble (bottom right; above the bottom bar on phone) with an unread dot and a hover preview of the last message. Clicking opens a mini chat (about 380 × 540 px; a bottom sheet on phone) over the current view, using the same chat instance moved in the DOM (draft text and pending photos survive). Header says "Asking about: Rotation". Esc closes; focus returns to the bubble; reduced motion shows it without animation.
 
 **Acceptance:** chat audit round by a fresh auditor (BUILD_PLAN audit gate); bubble works on every tab, phone and desktop; no console errors.
 
@@ -60,9 +60,9 @@ Tick a phase only when every acceptance check below it passed in the running app
 ## Phase B · The consultant knows every view
 
 **Tasks**
-- [ ] B.1 New consultant tool `get_view(view)` (`dashboard`, `rotation`, `organic`, `prevention`, `sheet`) returning exactly the data each view renders (the same builders the frontend uses, compacted, in the conversation language).
-- [ ] B.2 The frontend sends the current view and focused item with each turn (e.g. `rotation · strategy 2`); the context note says "The farmer is looking at …".
-- [ ] B.3 "Ask about this" button on cards (a reading, a strategy, an agent, a pest) that opens the chat (or the bubble) with the question prefilled.
+- [x] B.1 New consultant tool `get_view(view)` (`dashboard`, `rotation`, `organic`, `prevention`, `sheet`) returning exactly the data each view renders (the same builders the frontend uses, compacted, in the conversation language).
+- [x] B.2 The frontend sends the current view and focused item with each turn (e.g. `rotation · strategy 2`); the context note says "The farmer is looking at …".
+- [x] B.3 "Ask about this" button on cards (a reading, a strategy, an agent, a pest) that opens the chat (or the bubble) with the question prefilled.
 
 **Acceptance:** asking "why does this one have low risk?" from Rotation strategy 2 gets an answer about strategy 2 without naming it; the tool returns the same numbers the view shows.
 

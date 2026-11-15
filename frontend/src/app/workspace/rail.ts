@@ -1,5 +1,6 @@
-// Progress rail at the top of the chat: six topic chips (done = check, active = highlighted, pending = dim),
-// a "Next topic: … — I need: …" line, the chime toggle, and the closing card once every topic is done.
+// Progress rail at the top of the chat (iteration 4: compact). A thin bar with six dots and the active topic's name;
+// a click expands the six topic chips and the "Next topic: … — I need: …" line. Also the chime toggle and the
+// closing card once every topic is done.
 import type { ClientAnalysis } from '../../shared/api';
 import type { SectionKey, Step } from '../../shared/contract';
 import { esc } from '../../shared/dom';
@@ -10,7 +11,7 @@ import { allDone, SHORT, TITLE } from './progress';
 
 export const SEC_ICON: Record<SectionKey, IconName> = { field: 'field', soil: 'soil', pests: 'bug', nutrition: 'nutrition', rotation: 'rotation', sheet: 'sheet' };
 
-export function railHtml(steps: Step[], just: SectionKey[] = []): string {
+export function railHtml(steps: Step[], just: SectionKey[] = [], expanded = false): string {
   const active = steps.find((s) => s.state === 'active');
   const name = (s: Step) => pick(s.title) || t(TITLE[s.key]);
   const chips = steps.map((s) => {
@@ -24,9 +25,15 @@ export function railHtml(steps: Step[], just: SectionKey[] = []): string {
     ? `<span class="rail__all">${icon('check')}${esc(t('rail_all'))}</span>`
     : `${esc(t('rail_next', { t: '' }))}<b>${esc(name(active))}</b>${needs.length ? ` <span class="rail__needs">— ${esc(t('rail_needs', { x: needs.join(', ') }))}</span>` : ''}`;
   const on = chimeOn();
-  return `<div class="rail__row"><ol class="rail__chips" aria-label="${esc(t('rail_label'))}">${chips}</ol>
+  const done = steps.filter((s) => s.state === 'done').length;
+  const dots = steps.map((s) => `<i class="rail__dot is-${s.state}${just.includes(s.key) ? ' is-just' : ''}"></i>`).join('');
+  const now = active ? `<span class="rail__count mono">${esc(t('rail_count', { n: done, m: steps.length }))}</span><b>${esc(name(active))}</b>`
+    : `<b>${esc(t('rail_all'))}</b>`;
+  return `<div class="rail__bar"><button type="button" class="rail__toggle" data-rail-toggle aria-expanded="${expanded}" aria-controls="rail-more">
+        <span class="rail__dots" aria-hidden="true">${dots}</span><span class="rail__now">${now}</span>${icon('down')}</button>
       <button type="button" class="rail__snd" data-chime aria-pressed="${on}" aria-label="${esc(t(on ? 'chime_on' : 'chime_off'))}" title="${esc(t(on ? 'chime_on' : 'chime_off'))}">${icon(on ? 'sound' : 'mute')}</button></div>
-    <p class="rail__next" aria-live="polite">${line}</p>`;
+    <div class="rail__more" id="rail-more"${expanded ? '' : ' hidden'}><ol class="rail__chips" aria-label="${esc(t('rail_label'))}">${chips}</ol>
+      <p class="rail__next" aria-live="polite">${line}</p></div>`;
 }
 
 /** The closing card shown in the chat when every topic is done. */

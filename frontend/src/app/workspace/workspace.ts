@@ -22,6 +22,8 @@ import { newlyDone, stepsOf } from './progress';
 import { flipLine } from './rail';
 import { copernicusGloss } from './credit';
 import { isFresh, mountIntake } from './intake';
+import { mountBubble } from './bubble';
+import { setViewContext } from '../../shared/viewctx';
 import { organicHtml } from './organic';
 import './workspace.css';
 import './guided.css';
@@ -95,6 +97,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   });
 
   const chat = mountChat($('#chat'), () => state.analysis, (patch) => { set({ analysis: { ...state.analysis!, ...patch } }); });
+  const bubble = mountBubble(ws, $('#chat'), chat);
   wireExports(ws, () => state.analysis);
   wireDownloadMenu(ws, () => state.analysis);
   const intake = mountIntake(ws, () => state.analysis!, (next) => {
@@ -187,6 +190,13 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     const sh = el.closest<HTMLElement>('[data-sheet]');
     if (sh) { openSheet(sh.dataset.sheet as SectionKey, sh); return; }
     if (el.closest('[data-close]') || el.id === 'scrim') { closeSheet(); return; }
+    // "Ask about this": remember the card, then open the chat right here (the bubble's mini chat off the Chat tab).
+    const ask = el.closest<HTMLElement>('[data-ask]');
+    if (ask) {
+      setViewContext(state.view, ask.dataset.ask ?? null);
+      if (state.view === 'chat') chat.focus(); else bubble.open();
+      return;
+    }
     const go = el.closest<HTMLElement>('[data-goto]');
     if (go) { if (!$('#sheet').hidden) closeSheet(); set({ view: go.dataset.goto as View }); return; }
     if (el.closest('#chip')) { onChangeField(); return; }
@@ -240,7 +250,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   async function build(btn: HTMLButtonElement) { btn.disabled = true; await loadEvidence(true); btn.disabled = false; }
 
   subscribe((_, ch) => {
-    if ('view' in ch) { renderBar(); renderView(); syncUrl(); if (ch.view === 'chat') requestAnimationFrame(() => bd?.layout()); }
+    if ('view' in ch) { setViewContext(state.view); renderBar(); renderView(); syncUrl(); if (ch.view === 'chat') requestAnimationFrame(() => bd?.layout()); }
     if ('open' in ch) renderSections();
     if ('analysis' in ch) {
       const steps = stepsOf(state.analysis!);
@@ -254,6 +264,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       if (k && !$('#sheet').hidden) $('#sheet').innerHTML = sheetHtml(state.analysis!, k);
     }
     if ('snapshotCredit' in ch) renderBar();
+    if ('view' in ch || 'analysis' in ch) bubble.sync(state.analysis!, state.view);
   });
   onLang((l) => {
     // Scripted demo bubbles carry both languages: re-render them in the new one so history never mixes languages.
@@ -267,6 +278,8 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   const fresh = isFresh(a0);
   if (fresh) chat.holdOpening(true);
   renderAll();
+  setViewContext(state.view);
+  bubble.sync(a0, state.view);
   syncUrl();
   requestAnimationFrame(() => bd?.layout());
   if (fresh) intake.openFirst(() => chat.holdOpening(false), (files) => { void chat.addFiles(files); });
