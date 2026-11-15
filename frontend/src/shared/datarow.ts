@@ -102,9 +102,9 @@ export function dataRowCompact(r: Reading, srcText?: string, label?: string, ver
   return `<div class="drow drow--compact" data-reading="${esc(r.id)}">
     ${icon(readingIcon(r.id), 'drow__icon')}
     <div class="drow__label" title="${esc(pick(r.label))}">${esc(label ?? pick(r.label))}${glossBtn(termFor(r.id), pick(r.label))}</div>
-    <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}${provTag(r)}</div>
+    <div class="drow__value${r.key ? ' is-key' : ''}${v.isWord ? ' is-word' : ''}">${esc(v.text)}</div>
     ${verdict ? `<div class="drow__verdict drow__verdict--c">${esc(v.isWord ? '' : cleanVerdict(r))}</div>` : ''}
-    <div class="drow__src" title="${esc(sourceFull(r))}">${srcText ? esc(src) : sourceShort(r)} ${badge(r.badge)}</div>
+    <div class="drow__src" title="${esc(sourceFull(r))}">${srcText ? esc(src) : sourceShort(r)} ${badge(r.badge)}${provTag(r)}</div>
     ${sparkline(series, 52, 22)}
   </div>`;
 }

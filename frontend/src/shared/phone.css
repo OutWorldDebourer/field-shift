@@ -14,9 +14,6 @@ body { overflow-x: hidden; overflow-x: clip; }
   /* index: the dark header once the page scrolls */
   :root body.is-scrolled:not(.is-day) .top { background: rgba(3, 6, 12, 0.92); }
   :root body.is-day .top { background: rgba(244, 248, 250, 0.96); }
-  /* index hero phone mock: the provisional chip wraps under its value instead of pushing out of the card */
-  :root .phone .drow__value.is-key { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
-  :root .phone .drow__value .prov { margin-left: 0; }
 
   /* index: the globe's place labels sit behind the glass cards; on a phone the cards cover the labels fully */
   :root .how .step.glass, :root .how .how__stats.glass { background: rgba(6, 13, 22, 0.9); }

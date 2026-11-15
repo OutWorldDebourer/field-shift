@@ -11,7 +11,7 @@
 - `datarow.ts` — the data row (icon, label, value, verdict, source · date, badge, sparkline).
 - `evidence.ts` — reads the package without assuming which readings exist (key rows, normal period, short labels, derived headline).
 - `charts.ts` — SVG charts and the 12-month strip.
-- `phone.css` — phone fixes found on iPhone (WebKit) and Android (Chromium) profiles: no sideways drift (root overflow clip), opaque fixed headers, the phone mock's value and chip on two lines, opaque index cards over the globe labels, a two-line app footer, notch-safe padding in landscape.
+- `phone.css` — phone fixes found on iPhone (WebKit) and Android (Chromium) profiles: no sideways drift (root overflow clip), opaque fixed headers, opaque index cards over the globe labels, a two-line app footer, notch-safe padding in landscape.
 - `charthover.ts` — pointer and keyboard read-out for SVG charts: snaps to the nearest point, guide line, ring and a label with date and values; ←/→, Home/End, Esc; keyboard moves announced.
 - `backdrop.ts` — field-from-above plate (backend Sentinel-2 snapshot, else EOX tiles) with outline and reticle.
 - `phone.ts` — the hero's glass phone.
