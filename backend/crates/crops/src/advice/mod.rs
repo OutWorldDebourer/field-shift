@@ -23,6 +23,13 @@ pub struct FieldSignals {
     pub pest_name: Option<L10n>,
     /// True when NDVI shows bare-soil periods on the field (Sentinel-2/Landsat).
     pub bare_soil: Option<bool>,
+    /// The date windows of the readings above ("2026-10-12 – 2026-11-10"), shown next to each figure.
+    #[serde(default)]
+    pub heat_period: Option<String>,
+    #[serde(default)]
+    pub water_period: Option<String>,
+    #[serde(default)]
+    pub pest_period: Option<String>,
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -241,9 +248,11 @@ pub fn pest_thresholds(c: &CropRecord) -> Vec<PestThreshold> {
 /// Evidence line from a cited trait ("Pea Kc mid: 1.15 (FAO-56)"); None for a gap.
 pub(crate) fn trait_evidence(crop: &CropRecord, label_en: &str, label_es: &str, t: &Trait) -> Option<Evidence> {
     let v = t.display()?;
+    let v_es = t.display_es().unwrap_or_else(|| v.clone());
+    let (label_en, label_es) = if t.per_year() && label_en == "seasonal water need" { ("water need per year", "necesidad de agua por año") } else { (label_en, label_es) };
     Some(Evidence {
         kind: EvidenceKind::Trait,
-        text: L10n::new(format!("{} {label_en}: {v}", crop.name_en()), format!("{} {label_es}: {v}", crop.name_es())),
+        text: L10n::new(format!("{} {label_en}: {v}", crop.name_en()), format!("{} {label_es}: {v_es}", crop.name_es())),
         citation: t.citation().cloned(),
     })
 }
@@ -270,7 +279,7 @@ mod tests {
     use crate::seed;
 
     fn s() -> FieldSignals {
-        FieldSignals { heat_stress_days: Some(14.0), water_balance_mm: Some(-120.0), pest_generation_delta: Some(1.2), pest_name: Some(L10n::new("Pea aphid", "Pulgón de la arveja")), bare_soil: Some(true) }
+        FieldSignals { heat_stress_days: Some(14.0), water_balance_mm: Some(-120.0), pest_generation_delta: Some(1.2), pest_name: Some(L10n::new("Pea aphid", "Pulgón de la arveja")), bare_soil: Some(true), ..Default::default() }
     }
 
     fn all_text(a: &Advice) -> Vec<&L10n> {

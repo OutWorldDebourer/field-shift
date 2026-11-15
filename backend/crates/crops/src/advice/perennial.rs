@@ -90,7 +90,7 @@ pub fn practices(c: &CropRecord, s: &FieldSignals) -> Vec<Practice> {
                 guidance("Trichoderma in compost protects roots against soil-borne diseases.", "Trichoderma en el compost protege las raíces contra enfermedades del suelo.", refs::trichoderma_review()),
             ],
             gaps: vec![L10n::new("Local rules on residue burning and fruit-fly sanitation should be checked with SENASA.",
-                                 "Verifique con SENASA las normas locales sobre quema de residuos y saneamiento contra mosca de la fruta.")],
+                                 "Verifica con SENASA las normas locales sobre quema de residuos y saneamiento contra mosca de la fruta.")],
             risks: vec![L10n::new("Fresh residue incorporated near harvest can tie up nitrogen for a few weeks.",
                                   "Los residuos frescos incorporados cerca de la cosecha pueden inmovilizar nitrógeno unas semanas.")],
         },

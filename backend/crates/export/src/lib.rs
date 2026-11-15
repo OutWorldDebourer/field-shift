@@ -6,6 +6,7 @@ mod html;
 mod maps;
 mod routes;
 mod sheet;
+mod sheet_i4;
 
 pub use routes::routes;
 

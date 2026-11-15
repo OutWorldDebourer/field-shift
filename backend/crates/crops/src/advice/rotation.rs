@@ -37,10 +37,11 @@ fn rotation_note(c: &CropRecord) -> Option<Evidence> {
 
 fn signals_evidence(s: &FieldSignals) -> Vec<Evidence> {
     let mut v = vec![];
-    if let Some(d) = s.heat_stress_days { v.push(signal(format!("Heat-stress days this season: {d:.0}"), format!("Días de estrés por calor esta campaña: {d:.0}"))); }
-    if let Some(w) = s.water_balance_mm { v.push(signal(format!("Water balance: {w:.0} mm"), format!("Balance hídrico: {w:.0} mm"))); }
+    let w = |p: &Option<String>| p.as_deref().map(|d| format!(" ({d})")).unwrap_or_default();
+    if let Some(d) = s.heat_stress_days { v.push(signal(format!("Heat-stress days this season{}: {d:.0}", w(&s.heat_period)), format!("Días de estrés por calor esta campaña{}: {d:.0}", w(&s.heat_period)))); }
+    if let Some(b) = s.water_balance_mm { v.push(signal(format!("Water balance{}: {b:.0} mm", w(&s.water_period)), format!("Balance hídrico{}: {b:.0} mm", w(&s.water_period)))); }
     if let (Some(g), Some(n)) = (s.pest_generation_delta, s.pest_name.as_ref()) {
-        v.push(signal(format!("{} generations vs 40-year normal: {g:+.1}", n.en), format!("Generaciones de {} frente a la normal de 40 años: {g:+.1}", n.es.to_lowercase())));
+        v.push(signal(format!("{} generations vs 40-year normal{}: {g:+.1}", n.en, w(&s.pest_period)), format!("Generaciones de {} frente a la normal de 40 años{}: {g:+.1}", n.es.to_lowercase(), w(&s.pest_period))));
     }
     v
 }
@@ -67,7 +68,7 @@ fn pest_pressure(s: &FieldSignals) -> bool {
 
 fn income_gap() -> L10n {
     L10n::new("No local price or yield data: income is a relative estimate; check prices in your market.",
-              "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulte precios en su mercado.")
+              "Sin datos locales de precio o rendimiento: el ingreso es una estimación relativa; consulta precios en tu mercado.")
 }
 
 fn current_strategy(c: &CropRecord, previous: &[CropRecord], s: &FieldSignals, renewal: bool) -> Strategy {
@@ -149,7 +150,7 @@ fn different_family_strategy(c: &CropRecord, previous: &[CropRecord], s: &FieldS
         gaps.push(L10n::new(format!("{}: no pest data.", n.name_en()), format!("{}: sin datos de plagas.", n.name_es())));
     }
     gaps.push(L10n::new(format!("Check local seed, water turn and market for {} before choosing.", n.name_en()),
-                        format!("Verifique semilla, turno de riego y mercado local para {} antes de elegir.", n.name_es())));
+                        format!("Verifica semilla, turno de riego y mercado local para {} antes de elegir.", n.name_es())));
     Strategy {
         id: if renewal { "break-crop".into() } else { "different-family".into() },
         is_current: false,
@@ -256,6 +257,14 @@ pub fn proposal(c: &CropRecord, previous: &[CropRecord], p: &CropRecord, s: &Fie
     if p.is_legume() { evidence.extend(trait_evidence(p, "N fixation", "fijación de N", &p.traits.n_fixation.typical_range)); }
     evidence.extend(rotation_note(p));
     evidence.extend(signals_evidence(s));
+    // The current crop's Kc and its leading pest are the baseline, not facts about the proposal: say so.
+    for e in evidence.iter_mut() {
+        let current_kc = e.text.en.starts_with(&format!("{} Kc", c.name_en())) && c.key != p.key;
+        let current_pest = s.pest_name.as_ref().is_some_and(|n| e.text.en.starts_with(n.en.as_str()));
+        if current_kc || current_pest {
+            e.text = L10n::new(format!("{} — current crop, for comparison", e.text.en), format!("{} — cultivo actual, para comparar", e.text.es));
+        }
+    }
     if p.origin == Origin::AiResearched {
         gaps.push(L10n::new(format!("{}: crop data researched by AI from open sources, verify.", p.name_en()),
                             format!("{}: datos del cultivo investigados por IA en fuentes abiertas, verificar.", p.name_es())));
@@ -265,8 +274,15 @@ pub fn proposal(c: &CropRecord, previous: &[CropRecord], p: &CropRecord, s: &Fie
             "Una plantación perenne se mantiene por años: no se rota; las coberturas entre hileras, el mulch y el manejo de residuos protegen su suelo.", refs::sare_cover_crops()));
         // Reasoning, not a sourced figure: no citation is attached.
         evidence.push(Evidence { kind: EvidenceKind::Guidance, citation: None,
-            text: L10n::new("A perennial is irrigated all year round, not only during one crop season, so its water score is not taken from Kc alone.",
-                            "Un perenne se riega todo el año, no solo durante una campaña, así que su puntaje de agua no sale solo del Kc.") });
+            text: L10n::new(if s.water_balance_mm.is_some_and(|w| w < 0.0) {
+                    "A perennial is irrigated all year round, not only during one crop season: its water score starts at 2 and drops to 1 because this field is in water deficit. It does not come from Kc or from the wide published range."
+                } else {
+                    "A perennial is irrigated all year round, not only during one crop season: its water score is 2. It does not come from Kc or from the wide published range."
+                }, if s.water_balance_mm.is_some_and(|w| w < 0.0) {
+                    "Un perenne se riega todo el año, no solo durante una campaña: su puntaje de agua parte de 2 y baja a 1 porque este campo está en déficit hídrico. No sale del Kc ni del rango publicado, que es muy amplio."
+                } else {
+                    "Un perenne se riega todo el año, no solo durante una campaña: su puntaje de agua es 2. No sale del Kc ni del rango publicado, que es muy amplio."
+                }) });
         gaps.push(L10n::new(format!("Years to the first {} harvest, plant cost and local market are not in the data.", p.name_en()),
                             format!("Los años hasta la primera cosecha de {}, el costo de plantación y el mercado local no están en los datos.", p.name_es())));
         return Strategy {
@@ -301,7 +317,7 @@ pub fn proposal(c: &CropRecord, previous: &[CropRecord], p: &CropRecord, s: &Fie
                   format!("Cambia de familia ({} → {}) para cortar el ciclo de plagas y enfermedades{}.", c.family, p.family, if c.is_legume() { ", aprovechando el nitrógeno que dejó la leguminosa" } else { "" }))
     };
     let mut risks = vec![L10n::new(format!("Check seed, water turn and buyers for {} before choosing.", p.name_en()),
-                                   format!("Verifique semilla, turno de riego y compradores para {} antes de elegir.", p.name_es()))];
+                                   format!("Verifica semilla, turno de riego y compradores para {} antes de elegir.", p.name_es()))];
     if same_family {
         risks.push(L10n::new(format!("Same family ({}) again: pests and root diseases carry over.", p.family), format!("Misma familia ({}) otra vez: plagas y enfermedades de raíz se mantienen.", p.family)));
     }

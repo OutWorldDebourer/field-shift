@@ -35,7 +35,7 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
     let warmer = s.pest_generation_delta.is_some_and(|g| g > 0.0) || s.heat_stress_days.is_some_and(|d| d > 0.0);
     items.push(item(
         if warmer { "Monitor pests every week: with this season's heat, pests develop faster and populations grow sooner." } else { "Monitor pests every week, especially in warm spells: pests develop faster with heat." },
-        if warmer { "Monitoree las plagas cada semana: con el calor de esta campaña se desarrollan más rápido y las poblaciones crecen antes." } else { "Monitoree las plagas cada semana, sobre todo en épocas de calor: con más calor se desarrollan más rápido." },
+        if warmer { "Revisa las plagas cada semana: con el calor de esta campaña se desarrollan más rápido y las poblaciones crecen antes." } else { "Revisa las plagas cada semana, sobre todo en épocas de calor: con más calor se desarrollan más rápido." },
         vec![refs::temperature_pest_development()], true));
     if let (Some(g), Some(n)) = (s.pest_generation_delta.filter(|g| *g != 0.0), s.pest_name.as_ref()) {
         items.push(item(format!("{}: {g:+.1} generations this season versus the 40-year normal, from its published degree-day threshold (NASA POWER temperature, regional context).", n.en),
@@ -43,11 +43,11 @@ pub fn pest_care(c: &CropRecord, s: &FieldSignals) -> Block {
     }
     if c.crop_type == CropType::Annual {
         items.push(item("Rotate to a crop of another botanical family to break pest and disease cycles.",
-                        "Rote a un cultivo de otra familia botánica para cortar el ciclo de plagas y enfermedades.",
+                        "Rota a un cultivo de otra familia botánica para cortar el ciclo de plagas y enfermedades.",
                         vec![refs::sare_rotation()], true));
     }
     items.push(item("Incorporate or compost crop residues soon after harvest; do not pile them at the field edge, where they become a source of pests and diseases, and avoid burning.",
-                    "Incorpore o composte los residuos poco después de la cosecha; no los amontone en el borde del campo, donde se vuelven foco de plagas y enfermedades, y evite quemarlos.",
+                    "Incorpora o composta los residuos poco después de la cosecha; no los amontones en el borde del campo, donde se vuelven foco de plagas y enfermedades, y evita quemarlos.",
                     vec![refs::residue_incorporation()], true));
     for b in &c.traits.beneficials {
         items.push(item(format!("Biological control: {} ({}) against {}.", b.name.en, b.kind, b.controls.en),

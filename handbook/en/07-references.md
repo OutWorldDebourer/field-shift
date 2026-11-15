@@ -33,7 +33,8 @@ Every source used by the product, with its licence. Field Shift's own code is Ap
 - Whalon, M.E. & Smilowitz, Z. (1979). Temperature-dependent model for predicting field populations of green peach aphid. *The Canadian Entomologist* 111:1025–1032. DOI 10.4039/Ent1111025-9.
 - Bosco, D. & Caciagli, P. (1998). Bionomics and ecology of *Bemisia tabaci* in Italy. *European Journal of Entomology* 95(4):519–527.
 - du Plessis, H., Schlemmer, M.-L. & Van den Berg, J. (2020). The effect of temperature on the development of *Spodoptera frugiperda*. *Insects* 11(4):228. DOI 10.3390/insects11040228 (CC BY 4.0).
-- Crop knowledge base: 103 sources (FAO-56, FAO Ecocrop, UC IPM, SARE, INIA, SENASA, UNALM and others), each listed with its licence in `backend/crates/crops/data/README.md`.
+- Crop knowledge base: 103 sources (FAO-56, FAO Ecocrop, UC IPM, SARE, INIA, SENASA, UNALM and others), each listed with its licence in `backend/crates/crops/data/README.md`. Iteration 4 adds 41 sources for the five Huaral crops' pest conditions, micronutrients and biostimulants (AI-researched, verify), listed in the same file.
+- NASA GMAO GEOS-FP forecast (used by the Prevention lights): https://gmao.gsfc.nasa.gov/GMAO_products/NRT_products.php (NASA open data).
 - Agronomist interview: Ing. Cenia (2026), `Entrevista/Ing. Cenia.txt` (themes of the soil, pest care and nutrition advice).
 
 ## Software, fonts and design references

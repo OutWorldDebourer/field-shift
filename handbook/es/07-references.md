@@ -33,7 +33,8 @@ Todas las fuentes que usa el producto, con su licencia. El código propio de Fie
 - Whalon, M.E. y Smilowitz, Z. (1979). Modelo del pulgón verde del duraznero. *The Canadian Entomologist* 111:1025–1032. DOI 10.4039/Ent1111025-9.
 - Bosco, D. y Caciagli, P. (1998). Bionomía y ecología de *Bemisia tabaci* en Italia. *European Journal of Entomology* 95(4):519–527.
 - du Plessis, H., Schlemmer, M.-L. y Van den Berg, J. (2020). Efecto de la temperatura en el desarrollo de *Spodoptera frugiperda*. *Insects* 11(4):228. DOI 10.3390/insects11040228 (CC BY 4.0).
-- Base de conocimiento de cultivos: 103 fuentes (FAO-56, FAO Ecocrop, UC IPM, SARE, INIA, SENASA, UNALM y otras), cada una con su licencia en `backend/crates/crops/data/README.md`.
+- Base de conocimiento de cultivos: 103 fuentes (FAO-56, FAO Ecocrop, UC IPM, SARE, INIA, SENASA, UNALM y otras), cada una con su licencia en `backend/crates/crops/data/README.md`. La iteración 4 añade 41 fuentes para las condiciones de plagas, micronutrientes y bioestimulantes de los cinco cultivos de Huaral (investigadas por IA, verificar), listadas en el mismo archivo.
+- Pronóstico NASA GMAO GEOS-FP (usado por los semáforos de Prevención): https://gmao.gsfc.nasa.gov/GMAO_products/NRT_products.php (datos abiertos de la NASA).
 - Entrevista a la agrónoma Ing. Cenia (2026), `Entrevista/Ing. Cenia.txt` (temas de suelo, sanidad y nutrición).
 
 ## Software, tipografías y referencias de diseño

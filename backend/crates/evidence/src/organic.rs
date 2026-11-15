@@ -58,16 +58,23 @@ pub fn build(crop: &CropRecord, facts: Option<&Value>, ev: &Value) -> Value {
         let t = format!("{} {}", b.controls.en, b.controls.es).to_lowercase();
         !kws.is_empty() && kws.iter().any(|k| t.contains(k))
     };
+    // An ally from another crop's list is tagged "for your pest" only when it targets a pest listed for this crop
+    // (genus or common name); a "spotted alfalfa aphid" parasitoid is an aphid ally, not one for the pea aphid.
+    let own_targets: Vec<String> = crop.traits.pests.iter().flat_map(|p| {
+        let g = p.scientific_name.split_whitespace().next().unwrap_or("").to_lowercase();
+        [g, p.name.en.to_lowercase()]
+    }).filter(|s| s.len() > 3).collect();
+    let own = |b: &crops::model::Beneficial| { let t = b.controls.en.to_lowercase(); own_targets.iter().any(|o| t.contains(o.as_str())) };
     let mut seen = BTreeSet::new();
     let mut agents = vec![];
     // 1) This crop's own allies, 2) allies of the reported pests recorded on other crops.
     for b in &crop.traits.beneficials {
-        if seen.insert(format!("{}|{}", b.scientific_name, b.name.en)) { agents.push(agent(b, crop, matches(b))); }
+        if seen.insert(b.scientific_name.trim().to_lowercase()) { agents.push(agent(b, crop, matches(b))); }
     }
     for other in crops::seed::all() {
         for b in &other.traits.beneficials {
-            if matches(b) && agents.len() < 18 && seen.insert(format!("{}|{}", b.scientific_name, b.name.en)) {
-                agents.push(agent(b, other, true));
+            if matches(b) && agents.len() < 18 && seen.insert(b.scientific_name.trim().to_lowercase()) {
+                agents.push(agent(b, other, own(b)));
             }
         }
     }
@@ -103,23 +110,23 @@ pub fn build(crop: &CropRecord, facts: Option<&Value>, ev: &Value) -> Value {
                 let en = p["name_bi"]["en"].as_str().or(p["name"].as_str()).unwrap_or("");
                 let es = p["name_bi"]["es"].as_str().unwrap_or(en);
                 timing.push(json!({
-                    "en": format!("{en}: {:.1} generations this season vs {:.1} normally (NASA POWER degree-days). Check twice a week and protect or release its natural enemies early, while numbers are low.", now, norm),
-                    "es": format!("{es}: {:.1} generaciones esta campaña vs {:.1} lo normal (grados-día NASA POWER). Revisa dos veces por semana y protege o libera a sus enemigos naturales temprano, cuando aún son pocas.", now, norm) }));
+                    "en": format!("{en}: {:.1} generations this season vs {:.1} normally (NASA POWER degree-days). Protect or release its natural enemies early, while numbers are low; how often to check follows its risk level in Prevention.", now, norm),
+                    "es": format!("{es}: {:.1} generaciones esta campaña vs {:.1} lo normal (grados-día NASA POWER). Protege o libera a sus enemigos naturales temprano, cuando aún son pocas; cada cuánto revisar sigue su nivel de riesgo en Prevención.", now, norm) }));
             }
         }
     }
     if let Some(days) = ev["forecast"]["days"].as_array() {
         if let Some(hot) = days.iter().filter(|d| d["tmax"].as_f64().unwrap_or(0.0) >= 29.0).max_by(|a, b| a["tmax"].as_f64().partial_cmp(&b["tmax"].as_f64()).unwrap()) {
             timing.push(json!({
-                "en": format!("Warm days ahead (up to {:.0} °C on {}, NASA GEOS-FP forecast): pests develop faster in heat, so inspect leaf undersides more often.", hot["tmax"].as_f64().unwrap_or(0.0), hot["date"].as_str().unwrap_or("")),
-                "es": format!("Vienen días cálidos (hasta {:.0} °C el {}, pronóstico NASA GEOS-FP): con calor las plagas se desarrollan más rápido; revisa el envés de las hojas más seguido.", hot["tmax"].as_f64().unwrap_or(0.0), hot["date"].as_str().unwrap_or("")) }));
+                "en": format!("Warm days ahead (up to {:.1} °C on {}, NASA GEOS-FP forecast): pests develop faster in heat, so inspect leaf undersides more often.", hot["tmax"].as_f64().unwrap_or(0.0), hot["date"].as_str().unwrap_or("")),
+                "es": format!("Vienen días cálidos (hasta {:.1} °C el {}, pronóstico NASA GEOS-FP): con calor las plagas se desarrollan más rápido; revisa el envés de las hojas más seguido.", hot["tmax"].as_f64().unwrap_or(0.0), hot["date"].as_str().unwrap_or("")) }));
         }
     }
     if timing.is_empty() {
         timing.push(json!({ "en": "Inspect the crop every week, especially the underside of young leaves.", "es": "Revisa el cultivo cada semana, sobre todo el envés de las hojas tiernas." }));
     }
     let avoid = json!([
-        { "en": "Broad-spectrum insecticides also kill lady beetles, lacewings, parasitoid wasps and soil life; frequent sprays raise costs. Ask your agronomist for selective options first (agronomist interview).", "es": "Los insecticidas de amplio espectro también matan mariquitas, crisopas, avispitas parasitoides y la vida del suelo; aplicar seguido sube los costos. Pide primero a tu agrónomo opciones selectivas (entrevista a la agrónoma)." },
+        { "en": "Broad-spectrum insecticides also kill lady beetles, lacewings, parasitoid wasps and soil life; frequent sprays raise costs. Ask your agronomist for selective options first (agronomist interview).", "es": "Los insecticidas de amplio espectro también matan mariquitas, crisopas, avispitas parasitoides y la vida del suelo; aplicar seguido sube los costos. Pide primero a tu agrónomo opciones selectivas (según la agrónoma entrevistada)." },
         { "en": "Burning residues destroys organic matter and beneficial organisms.", "es": "Quemar los rastrojos destruye la materia orgánica y los organismos benéficos." },
     ]);
     let n_rep = agents.iter().filter(|a| a["for_reported_pest"] == true).count();
@@ -160,7 +167,7 @@ fn biostim(crop: &CropRecord, facts: Option<&Value>, ev: &Value) -> (Vec<Value>,
         };
         let (en, es) = element_name(&m.element);
         out.push(json!({ "kind": "micronutrient", "name": { "en": format!("{en} ({})", m.element), "es": format!("{es} ({})", m.element) },
-            "why": { "en": format!("{} Deficiency signs: {}", m.why.en, m.deficiency.en), "es": format!("{} Señales de deficiencia: {}", m.why.es, m.deficiency.es) },
+            "why": { "en": format!("{} Deficiency signs: {}", m.why.en, lower_first(&m.deficiency.en)), "es": format!("{} Señales de deficiencia: {}", m.why.es, lower_first(&m.deficiency.es)) },
             "signal": signal, "citation": { "title": m.citation.title, "url": m.citation.url }, "reviewed": reviewed }));
     }
     for b in &t.biostimulants {
@@ -179,3 +186,5 @@ fn element_name(sym: &str) -> (&'static str, &'static str) {
         _ => ("Micronutrient", "Micronutriente"),
     }
 }
+
+fn lower_first(s: &str) -> String { let mut c = s.chars(); c.next().map(|f| f.to_lowercase().collect::<String>() + c.as_str()).unwrap_or_default() }

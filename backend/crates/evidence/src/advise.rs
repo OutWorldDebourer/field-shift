@@ -32,6 +32,7 @@ pub async fn resolve_crops(state: &AppState, analysis_id: &str, current: &str, p
 
 fn signals(ev: &Value) -> FieldSignals {
     let reading = |id: &str| ev["readings"].as_array().and_then(|r| r.iter().find(|x| x["id"] == id)).and_then(|x| x["value"].as_f64());
+    let period = |id: &str| ev["readings"].as_array().and_then(|r| r.iter().find(|x| x["id"] == id)).and_then(|x| x["date"].as_str()).map(String::from);
     let rows = ev["pests"].as_array().cloned().unwrap_or_default();
     let lead = crate::pests::leading(&rows).filter(|p| p["reference"] != true);
     FieldSignals {
@@ -40,6 +41,9 @@ fn signals(ev: &Value) -> FieldSignals {
         pest_generation_delta: lead.and_then(|a| a["difference"].as_f64()),
         pest_name: lead.map(|a| crops::model::L10n::new(a["name"]["en"].as_str().unwrap_or(""), a["name"]["es"].as_str().unwrap_or(""))),
         bare_soil: ev["bare_soil"].as_array().map(|b| !b.is_empty()),
+        heat_period: period("heat_days"),
+        water_period: period("water_balance"),
+        pest_period: lead.and_then(|a| a["season"].as_str()).map(String::from),
     }
 }
 

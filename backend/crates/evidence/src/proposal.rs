@@ -35,6 +35,11 @@ pub async fn column(state: &AppState, facts: Option<&Value>, current: &CropRecor
     let s = serde_json::to_value(crops::advice::evaluate(current, previous, &cand, signals)).ok()?;
     let mut v = strategy_json(&s);
     v["proposal"] = json!(true);
+    if cand.traits.extras_reviewed.is_none() {
+        v["provisional"] = json!(["pest_break"]);
+        v["gaps_list"].as_array_mut().map(|g| g.push(json!({ "en": format!("{}'s own pests are not researched yet: the pest-cycle score is provisional.", { let n = cand.name_en(); let mut c = n.chars(); c.next().map(|f| f.to_uppercase().collect::<String>() + c.as_str()).unwrap_or_default() }),
+            "es": format!("Las plagas propias de {} aún no están investigadas: el puntaje de corte del ciclo de plagas es provisional.", cand.name_es()) })));
+    }
     v["crop"] = json!({ "key": cand.key, "name": cand.name(), "crop_type": cand.crop_type, "family": cand.family, "origin": cand.origin });
     Some(v)
 }

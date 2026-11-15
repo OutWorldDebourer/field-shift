@@ -61,8 +61,8 @@ async fn reply_raw(state: &AppState, st: &AnalysisState, input: &TurnInput) -> a
                 let need = step.needs.first().map(&pick).unwrap_or_default();
                 if es { format!("Siguiente tema: **{}** — ¿{}?", pick(&step.title), need) } else { format!("Next topic: **{}** — {}?", pick(&step.title), need) }
             }
-            None => t("We now have enough information. Your technical sheet is ready in the panel on the right; the dashboard shows the forecast and the 40-year comparison. This is a pre-diagnosis: confirm it with your agronomist.",
-                      "Ya tenemos suficiente información. Tu ficha técnica está lista en el panel de la derecha; el panel de datos muestra el pronóstico y la comparación con 40 años. Es un prediagnóstico: confírmalo con tu agrónomo."),
+            None => t("We now have enough information. Your technical sheet is ready in the panel on the right; the dashboard shows the forecast and the 40-year comparison, Prevention shows each pest's risk and Organic its natural allies. This is a pre-diagnosis: confirm it with your agronomist.",
+                      "Ya tenemos suficiente información. Tu ficha técnica está lista en el panel de la derecha; el panel de datos muestra el pronóstico y la comparación con 40 años, Prevención el riesgo de cada plaga y Orgánico sus aliados naturales. Es un prediagnóstico: confírmalo con tu agrónomo."),
         }
     };
     if st.crop_current.is_none() {

@@ -27,6 +27,8 @@ pub fn terms() -> Vec<Term> {
             short: b("Rain minus ET₀. A negative number is the water irrigation has to supply (irrigation itself is not modelled).", "Lluvia menos ET₀. Un número negativo es el agua que debe aportar el riego (el riego en sí no se modela)."), scale: None },
         Term { key: "gdd", term: b("Growing degree-days", "Grados-día de crecimiento"),
             short: b("Accumulated warmth above a base temperature. Crops and insects develop according to it: more degree-days, faster development.", "Calor acumulado por encima de una temperatura base. Los cultivos y los insectos se desarrollan según él: más grados-día, desarrollo más rápido."), scale: Some(b("°C·day", "°C·día")) },
+        Term { key: "kc", term: b("Crop coefficient (Kc)", "Coeficiente de cultivo (Kc)"),
+            short: b("How much water a crop uses compared with the reference crop (FAO-56). Kc 1.15 means 15 % more than the reference evapotranspiration.", "Cuánta agua usa un cultivo comparado con el cultivo de referencia (FAO-56). Kc 1,15 significa 15 % más que la evapotranspiración de referencia."), scale: None },
         Term { key: "pest_gen", term: b("Pest generations", "Generaciones de plaga"),
             short: b("How many life cycles a pest can complete with the season's warmth, from published lab thresholds. More generations than normal means more pressure.", "Cuántos ciclos de vida puede completar una plaga con el calor de la campaña, según umbrales publicados. Más generaciones que lo normal significa más presión."), scale: None },
         Term { key: "regional", term: b("Regional context vs field-level", "Contexto regional vs nivel de campo"),

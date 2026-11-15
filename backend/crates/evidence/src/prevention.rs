@@ -88,7 +88,7 @@ fn frequency(level: &str) -> (&'static str, &'static str) {
 
 /// Where to look, one cultural practice and when to bring in natural enemies, by kind of pest (general extension
 /// practice, no products or doses). Matched on the common and scientific names.
-fn actions(level: &str, name_en: &str, sci: &str) -> Value {
+fn actions(level: &str, name_en: &str, sci: &str, crop_key: &str) -> Value {
     let k = format!("{} {}", name_en.to_lowercase(), sci.to_lowercase());
     let has = |w: &[&str]| w.iter().any(|x| k.contains(x));
     let (look, practice): ((&str, &str), (&str, &str)) = if has(&["aphid", "myzus", "acyrthosiphon", "aphis"]) {
@@ -100,14 +100,18 @@ fn actions(level: &str, name_en: &str, sci: &str) -> Value {
     } else if has(&["whitefl", "bemisia", "mosca blanca"]) {
         (("the underside of leaves for tiny white adults and scale-like nymphs; yellow sticky traps", "el envés de las hojas, buscando adultos blancos diminutos y ninfas; trampas amarillas"),
          ("clear weeds and old crop plants that host it between seasons", "elimina malezas y plantas viejas que la hospedan entre campañas"))
-    } else if has(&["cutworm", "agrotis", "grub", "cyclocephala", "gusano de tierra"]) {
+    } else if has(&["grub", "cyclocephala", "ligyrus", "anomala", "phyllophaga", "gallina ciega"]) {
+        (("the soil, digging a 30 × 30 cm hole beside a few plants, for C-shaped white larvae and chewed roots", "el suelo, cavando un hoyo de 30 × 30 cm junto a algunas plantas, buscando larvas blancas en forma de C y raíces comidas"),
+         ("plough before planting to expose larvae to birds; avoid fresh manure, which attracts the adult beetles", "ara antes de plantar para exponer las larvas a las aves; evita el estiércol fresco, que atrae a los escarabajos adultos"))
+    } else if has(&["cutworm", "agrotis", "gusano de tierra"]) {
         (("the soil around the stem base at dusk, and plants cut at ground level", "el suelo alrededor del tallo al atardecer, y plantas cortadas a ras del suelo"),
          ("prepare the soil well before sowing and keep the field free of weeds before planting", "prepara bien el suelo antes de sembrar y mantén el campo sin malezas antes de plantar"))
     } else if has(&["weevil", "euscepes", "cylas", "tuber moth", "phthorimaea"]) {
         (("tubers or roots near the surface and cracks in the soil; damaged storage roots", "tubérculos o raíces cerca de la superficie y grietas del suelo; raíces dañadas"),
          ("hill up the soil and irrigate to close cracks; use clean planting material; harvest on time", "aporca e irriga para cerrar grietas; usa semilla limpia; cosecha a tiempo"))
     } else if has(&["armyworm", "spodoptera", "looper", "trichoplusia", "earworm", "helicoverpa", "borer", "diatraea", "caterpillar"]) {
-        (("leaves, whorls and ears for holes, fresh frass and young larvae", "hojas, cogollos y mazorcas, buscando agujeros, excremento fresco y larvas pequeñas"),
+        (if crop_key == "maize" { ("the whorl, the ears and the leaves for holes, fresh frass and young larvae", "el cogollo, las mazorcas y las hojas, buscando agujeros, excremento fresco y larvas pequeñas") }
+         else { ("the leaves, above and below, for holes, fresh frass and young larvae", "las hojas, por arriba y por debajo, buscando agujeros, excremento fresco y larvas pequeñas") },
          ("keep borders and weeds managed; plough in residues after harvest to expose pupae", "maneja bordes y malezas; incorpora los rastrojos tras la cosecha para exponer las pupas"))
     } else if has(&["mite", "tetranych", "oligonychus", "ácaro", "arañita"]) {
         (("the underside of leaves for fine stippling, bronzing and webbing", "el envés de las hojas, buscando punteado, bronceado y telarañas finas"),
@@ -130,6 +134,15 @@ fn actions(level: &str, name_en: &str, sci: &str) -> Value {
 
 /// A species' key across crops ("Liriomyza huidobrensis" on pea and on lettuce is the same pest).
 fn species_key(sci: &str) -> String { sci.split_whitespace().take(2).collect::<Vec<_>>().join(" ").to_lowercase().replace(['(', ')', ','], "") }
+
+fn cap_first(s: &str) -> String { let mut c = s.chars(); c.next().map(|f| f.to_uppercase().collect::<String>() + c.as_str()).unwrap_or_default() }
+
+/// The genus of a "Genus sp." / "Genus spp." name, else None.
+fn genus_only(key: &str) -> Option<&str> {
+    let mut w = key.split_whitespace();
+    let g = w.next()?;
+    matches!(w.next(), None | Some("sp." | "spp." | "sp" | "spp")).then_some(g)
+}
 
 /// Calendar: perennials all year (months), annuals by stage (no sowing date in the data: stages without dates).
 fn calendar(c: &CropRecord, watch: &[Value]) -> Value {
@@ -155,30 +168,47 @@ pub fn build(crops: &[(CropRecord, crate::pests::Role)], ev: &Value) -> Value {
     let mut out_crops = vec![];
     let mut counts = (0, 0, 0, 0);
     // One name and one set of researched conditions per species, taken from the first crop (current first) that has them.
+    // A species gets ONE level on this field, whichever crop lists it: the same name, conditions and degree-day row
+    // (current crop first). "Genus sp." joins a named species of that genus when one is listed.
+    let full: Vec<String> = crops.iter().flat_map(|(c, _)| c.traits.pests.iter().map(|p| species_key(&p.scientific_name))).filter(|k| genus_only(k).is_none()).collect();
+    let canon = |sci: &str| -> String {
+        let k = species_key(sci);
+        match genus_only(&k) { Some(g) => full.iter().find(|f| f.split_whitespace().next() == Some(g)).cloned().unwrap_or(k), None => k }
+    };
     let mut names: std::collections::HashMap<String, crops::model::L10n> = Default::default();
     let mut conds: std::collections::HashMap<String, crops::model::PestConditions> = Default::default();
     for (c, _) in crops {
         for p in &c.traits.pests {
-            let k = species_key(&p.scientific_name);
-            names.entry(k.clone()).or_insert_with(|| p.name.clone());
+            let k = canon(&p.scientific_name);
+            if genus_only(&species_key(&p.scientific_name)).is_none() { names.entry(k.clone()).or_insert_with(|| p.name.clone()); }
             if let Some(cd) = &p.conditions { conds.entry(k).or_insert_with(|| cd.clone()); }
         }
     }
     let mut seen_on: std::collections::HashMap<String, Vec<String>> = Default::default();
-    for (c, _) in crops { for p in &c.traits.pests { seen_on.entry(species_key(&p.scientific_name)).or_default().push(c.name_en().to_string()); } }
+    for (c, _) in crops { for p in &c.traits.pests { seen_on.entry(canon(&p.scientific_name)).or_default().push(c.name_en().to_string()); } }
+    let row_of = |key: &str| -> Value {
+        rows.iter().filter(|r| r["scientific"].as_str().is_some_and(|s| canon(s) == key))
+            .find(|r| r["generations_now"].is_number()).cloned().unwrap_or(Value::Null)
+    };
+    let mut lights: std::collections::HashMap<String, Value> = Default::default();
+    let mut counted: std::collections::HashSet<String> = Default::default();
     for (c, role) in crops {
         let mut pests = vec![];
         for p in &c.traits.pests {
-            let key = species_key(&p.scientific_name);
+            let key = canon(&p.scientific_name);
             let name = names.get(&key).cloned().unwrap_or_else(|| p.name.clone());
             let cond = conds.get(&key).or(p.conditions.as_ref());
             let also: Vec<String> = seen_on.get(&key).into_iter().flatten().filter(|n| n.as_str() != c.name_en()).cloned().collect();
-            let row = rows.iter().find(|r| r["scientific"].as_str() == Some(p.scientific_name.as_str()) && r["crop"]["key"].as_str() == Some(c.key.as_str())).cloned().unwrap_or(Value::Null);
-            let l = light(&row, cond, anomaly, fc.as_ref());
-            match l["level"].as_str() { Some("high") => counts.0 += 1, Some("medium") => counts.1 += 1, Some("low") => counts.2 += 1, _ => counts.3 += 1 }
-            let act = actions(l["level"].as_str().unwrap_or(""), &name.en, &p.scientific_name);
+            let row = row_of(&key);
+            let l = lights.entry(key.clone()).or_insert_with(|| light(&row, cond, anomaly, fc.as_ref())).clone();
+            if counted.insert(key.clone()) {
+                match l["level"].as_str() { Some("high") => counts.0 += 1, Some("medium") => counts.1 += 1, Some("low") => counts.2 += 1, _ => counts.3 += 1 }
+            }
+            let act = actions(l["level"].as_str().unwrap_or(""), &name.en, &p.scientific_name, &c.key);
+            // The species' one scientific name ("Bemisia tabaci" when a "Bemisia sp." joined it).
+            let sci = if genus_only(&species_key(&p.scientific_name)).is_some() && key.contains(' ') { cap_first(&key) } else { p.scientific_name.clone() };
             pests.push(json!({
-                "name": name, "scientific": p.scientific_name, "light": l,
+                "name": name, "scientific": sci, "light": l,
                 "generations_now": row["generations_now"], "generations_normal": row["generations_normal"], "season": row["season"],
                 "monitoring": act["look"], "practice": act["practice"], "release": act["release"],
                 "also_on": also,
@@ -192,20 +222,28 @@ pub fn build(crops: &[(CropRecord, crate::pests::Role)], ev: &Value) -> Value {
             "researched": c.traits.extras_reviewed.is_some(), "reviewed": c.traits.extras_reviewed == Some(true),
             "note": match role {
                 crate::pests::Role::Previous => bi("Grown before: its pests can survive on residues and volunteer plants, and some also attack your current crop.", "Cultivo anterior: sus plagas pueden sobrevivir en rastrojos y plantas voluntarias, y algunas también atacan tu cultivo actual."),
+                crate::pests::Role::Proposal if c.traits.extras_reviewed.is_none() => bi("Your proposal: pests to learn to watch. Their weather thresholds are not researched yet, so their risk is not estimated.", "Tu propuesta: plagas que conviene aprender a vigilar. Sus umbrales de clima aún no están investigados, así que su riesgo no se estima."),
                 crate::pests::Role::Proposal => bi("Your proposal: how its pests would fare under this season's weather.", "Tu propuesta: cómo les iría a sus plagas con el clima de esta campaña."),
                 crate::pests::Role::Next => bi("Planned next: what its pests would meet now.", "Próximo cultivo: lo que encontrarían sus plagas ahora."),
                 _ => Value::Null,
             },
         }));
     }
+    let fdays = ev["forecast"]["days"].as_array();
+    let temp_r = ev["readings"].as_array().and_then(|r| r.iter().find(|x| x["id"] == "temp_anomaly"));
+    let signals = json!({
+        "temp_anomaly": anomaly, "temp_period": temp_r.map(|r| r["date"].clone()), "provisional": temp_r.map(|r| r["provisional"] == true),
+        "season": rows.iter().find_map(|r| r["season"].as_str().map(String::from)),
+    });
     let fc_v = fc.as_ref().map(|f| json!({ "tmax": f.tmax, "tmax_date": f.tmax_date, "tmin": f.tmin, "rain_mm": (f.rain * 10.0).round() / 10.0, "days": f.days,
+        "from": fdays.and_then(|d| d.first()).map(|d| d["date"].clone()), "to": fdays.and_then(|d| d.last()).map(|d| d["date"].clone()),
         "source": ev["forecast"]["source"], "run": ev["forecast"]["run"], "badge": "regional context" }));
     json!({
         "title": bi("Prevention: pest risk on your field", "Prevención: riesgo de plagas en tu campo"),
-        "summary": bi(format!("{} high, {} medium, {} low and {} without data, from NASA degree-days, the 10-day forecast and the weather each pest likes.", counts.0, counts.1, counts.2, counts.3),
-                      format!("{} altos, {} medios, {} bajos y {} sin datos, según grados-día NASA, el pronóstico de 10 días y el clima que favorece a cada plaga.", counts.0, counts.1, counts.2, counts.3)),
+        "summary": bi(format!("{} high, {} medium, {} low and {} without data (each pest counted once), from NASA degree-days, the {}-day forecast and the weather each pest likes. A pest listed under several crops has one level: it is the same insect on the same field.", counts.0, counts.1, counts.2, counts.3, fc.as_ref().map_or(10, |f| f.days)),
+                      format!("{} altos, {} medios, {} bajos y {} sin datos (cada plaga contada una vez), según grados-día NASA, el pronóstico de {} días y el clima que favorece a cada plaga. Una plaga listada en varios cultivos tiene un solo nivel: es el mismo insecto en el mismo campo.", counts.0, counts.1, counts.2, counts.3, fc.as_ref().map_or(10, |f| f.days))),
         "counts": { "high": counts.0, "medium": counts.1, "low": counts.2, "unknown": counts.3 },
-        "crops": out_crops, "forecast": fc_v, "temp_anomaly": anomaly,
+        "crops": out_crops, "forecast": fc_v, "temp_anomaly": anomaly, "signals": signals,
         "notice": bi("A model of pest pressure, not a count of insects: confirm in the field and with your agronomist.", "Un modelo de presión de plagas, no un conteo de insectos: confírmalo en el campo y con tu agrónomo."),
         "sources": [
             { "name": bi("NASA POWER daily temperature (degree-days), regional ~50 km", "Temperatura diaria NASA POWER (grados-día), regional ~50 km"), "url": "https://power.larc.nasa.gov/" },
@@ -238,6 +276,12 @@ mod tests {
         let fc = Fc { tmax: 25.0, tmax_date: "d".into(), tmin: 15.0, rain: 5.0, days: 10, temps: vec![(15.0, 25.0); 10] };
         let l = light(&json!({ "generations_now": 5.0, "generations_normal": 5.0 }), Some(&cond(Some(6.5), Some(37.3), "any")), Some(0.0), Some(&fc));
         assert_eq!(l["level"], "low");
+    }
+
+    #[test]
+    fn genus_names_join_their_species() {
+        assert_eq!(genus_only("bemisia sp."), Some("bemisia"));
+        assert_eq!(genus_only("bemisia tabaci"), None);
     }
 
     #[test]

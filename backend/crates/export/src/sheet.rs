@@ -41,6 +41,19 @@ p{margin:6px 0 10px}
 .rh{font:400 12px "IBM Plex Mono",monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:0;padding-bottom:6px}
 .badge{display:inline-block;font:12px "IBM Plex Mono",monospace;padding:1px 7px;border-radius:9px;border:1px solid #9aa7b1;white-space:nowrap;margin-top:4px;color:var(--muted)}
 .badge.field{border-color:var(--ink);background:var(--ink);color:#fff}
+.pvt td,.pvt th{overflow-wrap:normal;word-break:normal;hyphens:auto}
+.pvt td:first-child{min-width:9em}
+.pvt .lvl{white-space:nowrap}
+.lvl{display:inline-block;font:12px "IBM Plex Mono",monospace;padding:1px 7px;border-radius:9px;border:1px solid var(--ink);white-space:nowrap}
+.lvl.high{font-weight:700;border-width:2px}
+.lvl.unknown{border-style:dashed}
+.kind{display:inline-block;font:11px "IBM Plex Mono",monospace;letter-spacing:.04em;color:var(--muted);margin-top:2px}
+.kind.mine{color:var(--ink);border:1px solid var(--ink);border-radius:9px;padding:0 6px}
+.pvt a{hyphens:manual}
+i{hyphens:none}
+.mono{font-size:.88em}
+.scores.prop{max-width:340px}
+@media (max-width:600px){.pvt thead{display:none}.pvt tr{display:block;padding:10px 0;border-bottom:1px solid #d6dde3}.pvt td{display:block;border:0;padding:2px 0}}
 .lic{font:13px/1.5 "IBM Plex Mono",monospace;color:var(--muted);margin-top:10px}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th{font:400 12px "IBM Plex Mono",monospace;text-align:left;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--ink);padding:6px}
@@ -59,7 +72,7 @@ td,.r>span,li,p{overflow-wrap:anywhere;min-width:0}
 .scores span:nth-child(even){font:14px "IBM Plex Mono",monospace;letter-spacing:1px}
 .strat ul,.gaps{margin:4px 0 8px 18px;padding:0}
 .strat li{font-size:14px;margin:2px 0}
-.actions{max-width:860px;margin:16px auto;display:flex;gap:10px;justify-content:flex-end;padding:0 4px}
+.actions{max-width:860px;margin:16px auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;padding:0 4px}
 .actions button,.actions a{font:600 15px "Source Sans 3",sans-serif;padding:11px 18px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;text-decoration:none;min-height:44px}
 .actions a{background:#fff;color:var(--ink)}
 .actions .back{background:transparent;border-color:transparent;padding-left:0}
@@ -273,15 +286,17 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode, ma
     let mut gaps: Vec<String> = ev["gaps"].as_array().into_iter().flatten().map(|g| bi(&g["text"], lang)).collect();
     for s in st.sections.iter().filter(|s| s.key != "sheet" && s.key != "field") {
         let Some(c) = &s.content else { continue };
+        // Iteration 4: Prevention as its own section (risk lights with reasons and sources).
+        if s.key == "prevention" { h.push_str(&crate::sheet_i4::prevention(c, lang)); continue; }
         if s.key == "organic" {
             h.push_str(&format!("<h2>{}</h2><p>{}</p>", esc(&bi(&c["title"], lang)), esc(&bi(&c["summary"], lang))));
-            h.push_str(&format!("<div class=\"scroll\"><table><thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>", t("Natural enemy or beneficial", "Enemigo natural o benéfico"), t("Controls", "Controla"), t("Source", "Fuente")));
+            h.push_str(&format!("<div class=\"scroll\"><table class=\"pvt\"><thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead><tbody>", t("Natural enemy or beneficial", "Enemigo natural o benéfico"), t("Controls", "Controla"), t("Source", "Fuente")));
             for a in c["agents"].as_array().into_iter().flatten() {
                 let kind = a["kind"].as_str().unwrap_or("");
                 let kind_l = match (kind, es) { ("insect", true) => "insecto", ("fungus", true) => "hongo", ("bacterium", true) => "bacteria", ("mite", true) => "ácaro", ("nematode", true) => "nematodo", (k, _) => k };
-                h.push_str(&format!("<tr><td>{} <i>{}</i> <span class=\"mono\">({}){}</span></td><td>{}</td><td class=\"cite\"><a href=\"{}\">{}</a></td></tr>",
+                h.push_str(&format!("<tr><td>{} <i>{}</i><br><span class=\"kind\">{}</span>{}</td><td>{}</td><td class=\"cite\"><a href=\"{}\">{}</a></td></tr>",
                     esc(&bi(&a["name"], lang)), esc(a["scientific"].as_str().unwrap_or("")), esc(kind_l),
-                    if a["for_reported_pest"] == true { t(" · for your pest", " · para su plaga") } else { String::new() },
+                    if a["for_reported_pest"] == true { format!(" <span class=\"kind mine\">{}</span>", t("for your pest", "para tu plaga")) } else { String::new() },
                     esc(&cap(&bi(&a["targets"], lang))), esc(a["citation"]["url"].as_str().unwrap_or("")), esc(a["citation"]["title"].as_str().unwrap_or(""))));
             }
             h.push_str("</tbody></table></div>");
@@ -291,6 +306,7 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode, ma
             }
             let list = |k: &str| c[k].as_array().into_iter().flatten().map(|x| format!("<li>{}</li>", esc(&bi(x, lang)))).collect::<String>();
             h.push_str(&format!("<h3>{}</h3><ul class=\"gaps\">{}</ul><h3>{}</h3><ul class=\"gaps\">{}</ul>", t("When to act", "Cuándo actuar"), list("timing"), t("What harms your allies", "Lo que daña a sus aliados"), list("avoid")));
+            h.push_str(&crate::sheet_i4::biostim(c, lang));
             for g in c["gaps"].as_array().into_iter().flatten() { gaps.push(bi(g, lang)); }
             continue;
         }
@@ -331,6 +347,8 @@ pub fn render_mode(st: &AnalysisState, lang: &str, csv_url: &str, mode: Mode, ma
             }
             h.push_str(&format!("</div><p class=\"cite\">{}</p>", t("Scores 1–5: more dots = better (for risk, more dots = lower risk).", "Puntajes 1–5: más puntos = mejor (en riesgo, más puntos = menor riesgo).")));
         }
+        // Iteration 4: the farmer's own proposal ("What if I grow…?"), scored by the same engine.
+        if s.key == "rotation" { h.push_str(&crate::sheet_i4::proposal(c, lang)); }
         // Items; consecutive biological-control items become one table
         let items = c["items"].as_array().cloned().unwrap_or_default();
         let is_bio = |it: &Value| { let ti = bi(&it["title"], "en").to_lowercase(); ti.starts_with("biological control") };

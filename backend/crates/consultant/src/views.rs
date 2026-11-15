@@ -65,6 +65,23 @@ fn organic(st: &AnalysisState, lang: &str) -> Value {
     })
 }
 
+/// The Prevention tab: per crop, each pest's light, reason and monitoring (no long texts, no citations list).
+fn prevention(c: &Value, lang: &str) -> Value {
+    json!({
+        "view": "prevention", "language": lang, "summary": l(&c["summary"], lang), "notice": l(&c["notice"], lang),
+        "forecast": c["forecast"], "temp_anomaly_c": c["temp_anomaly"],
+        "crops": c["crops"].as_array().into_iter().flatten().map(|b| json!({
+            "crop": l(&b["crop"]["name"], lang), "role": b["crop"]["role"], "crop_type": b["crop"]["crop_type"],
+            "ai_researched_unreviewed": b["researched"] == true && b["reviewed"] != true,
+            "pests": b["pests"].as_array().into_iter().flatten().map(|p| json!({
+                "name": l(&p["name"], lang), "risk": p["light"]["level"], "why": l(&p["light"]["reason"], lang),
+                "favoured_by": l(&p["light"]["favourable"], lang), "monitoring": l(&p["monitoring"], lang),
+                "generations_now": p["generations_now"], "generations_normal": p["generations_normal"],
+            })).collect::<Vec<_>>(),
+        })).collect::<Vec<_>>(),
+    })
+}
+
 /// The Dashboard tab: the reading tiles, pests, forecast and outlook, as the compact evidence package.
 fn dashboard(st: &AnalysisState, lang: &str) -> Value {
     let Some(ev) = st.evidence.as_ref() else { return json!({ "view": "dashboard", "available": false }) };
@@ -95,7 +112,7 @@ pub fn view(st: &AnalysisState, name: &str, lang: &str) -> Value {
         "dashboard" => dashboard(st, lang),
         "sheet" => sheet(st, lang),
         "prevention" => match section(st, "prevention") {
-            Some(c) => json!({ "view": "prevention", "language": lang, "content": deep(c, lang) }),
+            Some(c) => prevention(c, lang),
             None => json!({ "view": "prevention", "available": false, "note": "The Prevention tab is not built for this analysis yet." }),
         },
         other => json!({ "error": format!("unknown view {other}; use one of {}", VIEWS.join(", ")) }),
@@ -125,6 +142,23 @@ mod tests {
         assert_eq!(v["strategies"][1]["name"], "Seguir con maíz");
         assert_eq!(v["strategies"][1]["scores_1_to_5"]["low_risk"], 4);
         assert_eq!(view(&st(), "prevention", "en")["available"], false);
+    }
+
+    #[test]
+    fn prevention_view_is_compact_and_localized() {
+        let mut st = st();
+        st.sections.push(serde_json::from_value(json!({ "key": "prevention", "state": "ready", "content": {
+            "summary": { "en": "1 high", "es": "1 alto" }, "notice": { "en": "model", "es": "modelo" }, "forecast": null, "temp_anomaly": 5.0,
+            "sources": [{ "name": { "en": "NASA POWER", "es": "NASA POWER" }, "url": "https://power.larc.nasa.gov/" }],
+            "crops": [{ "crop": { "key": "pea", "name": { "en": "pea", "es": "arveja" }, "role": "current", "crop_type": "annual" }, "researched": true, "reviewed": false,
+              "pests": [{ "name": { "en": "Pea aphid", "es": "Pulgón" }, "light": { "level": "high", "reason": { "en": "Three agree", "es": "Tres coinciden" }, "favourable": { "en": "mild", "es": "templado" }, "citation": { "title": "t", "url": "https://x.org" } },
+                          "monitoring": { "en": "Check twice", "es": "Revisa dos veces" }, "generations_now": 13.4, "generations_normal": 10.4 }] }] } })).unwrap());
+        let v = view(&st, "prevention", "es");
+        assert_eq!(v["crops"][0]["crop"], "arveja");
+        assert_eq!(v["crops"][0]["pests"][0]["risk"], "high");
+        assert_eq!(v["crops"][0]["pests"][0]["why"], "Tres coinciden");
+        assert_eq!(v["crops"][0]["ai_researched_unreviewed"], true);
+        assert!(!v.to_string().contains("https://x.org"), "no citation lists for the model");
     }
 
     #[test]

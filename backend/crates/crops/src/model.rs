@@ -63,6 +63,17 @@ impl Trait {
         let unitless = unit.is_empty() || unit == "-" || matches!(value, Val::Bool(_)) || unit.eq_ignore_ascii_case("dimensionless");
         Some(if unitless { v } else { format!("{v} {unit}") })
     }
+
+    /// The same value with its unit words in Spanish ("mm/year" → "mm/año").
+    pub fn display_es(&self) -> Option<String> {
+        let s = self.display()?;
+        let mut out = s;
+        for (en, es) in [("/year", "/año"), ("/season", "/campaña"), (" years", " años"), (" year", " año"), (" days", " días"), (" weeks", " semanas")] { out = out.replace(en, es); }
+        Some(if out == "yes" { "sí".into() } else { out })
+    }
+
+    /// True when the unit is per year (a perennial's water need, for instance).
+    pub fn per_year(&self) -> bool { matches!(self, Trait::Value { unit, .. } if unit.contains("year")) }
 }
 
 fn fmt_num(n: f64) -> String {

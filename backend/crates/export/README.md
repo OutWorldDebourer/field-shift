@@ -3,6 +3,7 @@
 | File | What it does |
 |------|--------------|
 | `src/sheet.rs` | Technical sheet HTML (A4 print to PDF): readings with source, date, resolution, badge, licence; sections; gaps; notice |
+| `src/sheet_i4.rs` | Iteration 4 sheet sections: your proposal, prevention (risk lights with reasons and sources), biostimulants and micronutrients |
 | `src/csv.rs` | CSV of readings and every series |
 | `src/html.rs` | Escaping and bilingual helpers |
 | `src/routes.rs` | `GET /{id}/sheet`, `GET /{id}/series.csv`, `POST /{id}/share`, `GET /shared/{token}`, `GET /shared/{token}/sheet` |

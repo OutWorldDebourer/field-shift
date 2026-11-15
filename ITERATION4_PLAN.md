@@ -13,7 +13,7 @@ The standing rules of `BUILD_PLAN.md` apply to every step (EN default + ES, modu
 | B | The consultant knows every view | [x] |
 | C | Organic by categories; "What if I grow…?" | [x] |
 | D | Knowledge research (pest conditions, micronutrients, biostimulants); Prevention tab | [x] |
-| E | Technical sheet and consultant with everything above | [ ] |
+| E | Technical sheet and consultant with everything above | [x] |
 
 Tick a phase only when every acceptance check below it passed in the running app (desktop 1440 px and phone 390 px, EN and ES) and the commit is pushed. Add one line per finished phase to the Decision log in `BUILD_PLAN.md`.
 
@@ -100,8 +100,8 @@ Tick a phase only when every acceptance check below it passed in the running app
 ## Phase E · Technical sheet and consultant with everything
 
 **Tasks**
-- [ ] E.1 Sheet sections for "Your proposal", Prevention and Biostimulants & micronutrients, same summary + detail format, also in the ZIP.
-- [ ] E.2 Consultant tools for prevention (`get_view('prevention')`) and the final closing message pointing to them.
-- [ ] E.3 Handbook (EN + ES): how it works, references (new sources), AI use. `AI_USE.md` updated. Rebuild with `node handbook/build.mjs`.
+- [x] E.1 Sheet sections for "Your proposal", Prevention and Biostimulants & micronutrients, same summary + detail format, also in the ZIP.
+- [x] E.2 Consultant tools for prevention (`get_view('prevention')`) and the final closing message pointing to them.
+- [x] E.3 Handbook (EN + ES): how it works, references (new sources), AI use. `AI_USE.md` updated. Rebuild with `node handbook/build.mjs`.
 
 **Acceptance:** sheet and ZIP show the new sections with sources; handbook rebuilt; final audit of the sheet.
