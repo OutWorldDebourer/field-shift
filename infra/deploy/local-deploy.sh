@@ -9,6 +9,8 @@
 set -euo pipefail
 HOST="${1:?usage: local-deploy.sh <server IP> [site address]}"
 DOMAIN="${2:-${HOST//./-}.sslip.io}"
+# With a real domain, the temporary sslip.io address keeps working as a redirect to it.
+REDIRECTS=""; [ "$DOMAIN" != "${HOST//./-}.sslip.io" ] && REDIRECTS="${HOST//./-}.sslip.io"
 KEY="${FS_DEPLOY_KEY:-$HOME/.ssh/fieldshift_deploy}"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
@@ -38,7 +40,7 @@ SSH=(ssh -i "$KEY" -o StrictHostKeyChecking=accept-new)
 D=/tmp/fieldshift-deploy
 "${SSH[@]}" deploy@"$HOST" "rm -rf $D && mkdir -p $D"
 scp -q -i "$KEY" -o StrictHostKeyChecking=accept-new infra/deploy/* "$OUT/release.tar.gz" env.txt deploy@"$HOST":$D/
-"${SSH[@]}" deploy@"$HOST" "sudo FS_DOMAIN='$DOMAIN' bash $D/bootstrap.sh $D && sudo /opt/fieldshift/bin/deploy.sh $D/release.tar.gz $D/env.txt; s=\$?; rm -rf $D; exit \$s"
+"${SSH[@]}" deploy@"$HOST" "sudo FS_DOMAIN='$DOMAIN' FS_REDIRECTS='$REDIRECTS' bash $D/bootstrap.sh $D && sudo /opt/fieldshift/bin/deploy.sh $D/release.tar.gz $D/env.txt; s=\$?; rm -rf $D; exit \$s"
 
 echo "== public check"
 for _ in $(seq 1 20); do

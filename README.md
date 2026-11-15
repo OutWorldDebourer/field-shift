@@ -1,6 +1,7 @@
 # Field Shift (team InnoHuando)
 
 NASA Space Apps Challenge 2026, challenge "Field Shift: Adapting Farms with NASA Data".
+**Live: https://fieldshift.earth** (app: https://fieldshift.earth/app.html, demo: https://fieldshift.earth/app.html?demo=1).
 English is the default language everywhere; Spanish is an opt-in switch.
 
 | Path | What it is |

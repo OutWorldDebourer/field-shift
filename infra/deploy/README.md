@@ -9,6 +9,20 @@ visitor ──HTTPS──▶ Caddy :443 ──▶ fieldshift 127.0.0.1:8787 ─�
                    (Let's Encrypt)   (systemd, /opt/fieldshift/current)
 ```
 
+## Live
+
+| | |
+|---|---|
+| Site | https://fieldshift.earth (www and the old `35-211-214-196.sslip.io` redirect to it; HTTP → HTTPS) |
+| Server | Google Cloud project `field-shift-514807`, VM `fieldshift`, e2-micro, `us-east1-b`, Debian 13, IP `35.211.214.196` (ephemeral) |
+| Domain | `fieldshift.earth` at Porkbun (free first year via the Space Apps code; renews at about US$16/year), DNS: `A @ → 35.211.214.196`, `CNAME www → fieldshift.earth` |
+| Certificate | Let's Encrypt, issued and renewed by Caddy |
+| GitHub | repository secrets `DEPLOY_HOST`, `DEPLOY_SSH_KEY`, `FIELDSHIFT_ENV_TXT`; variable `FIELDSHIFT_DOMAIN=fieldshift.earth`; repository website set |
+
+Deploy now: `bash infra/deploy/local-deploy.sh 35.211.214.196 fieldshift.earth` (or `gh workflow run Deploy` once
+GitHub Actions billing is fixed). If the VM is ever stopped and started, its IP changes: update the Porkbun `A`
+record and `DEPLOY_HOST`.
+
 ## Files
 
 | File | What it does | Who runs it |

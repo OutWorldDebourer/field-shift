@@ -2,7 +2,7 @@
 # Server configuration for Field Shift on Debian 12/13. Idempotent: the deploy workflow runs it on every deploy,
 # so the server's setup lives in this repository and changes here reach the VM with the next deploy.
 #
-#   sudo FS_DOMAIN=<site address> bash bootstrap.sh <dir with the infra/deploy files>
+#   sudo FS_DOMAIN=<site address> [FS_REDIRECTS="<other hosts>"] bash bootstrap.sh <dir with the infra/deploy files>
 #
 # Installs MariaDB (local only, small), Caddy (HTTPS), a 2 GB swap file, unattended security upgrades; creates the
 # fieldshift user, /opt/fieldshift/{releases,shared,backups}, the database and its password (generated here, never
@@ -85,6 +85,14 @@ systemctl enable fieldshift >/dev/null 2>&1 || true
 # --- Caddy site
 TMP="$(mktemp)"
 sed "s/__DOMAIN__/$DOMAIN/g" "$SRC/Caddyfile.tmpl" > "$TMP"
+# Other names that should land on the site: www.<domain> for a real domain, plus FS_REDIRECTS (e.g. the old
+# <ip>.sslip.io address), each a permanent redirect to the main address with its own certificate.
+REDIRECTS="${FS_REDIRECTS:-}"
+case "$DOMAIN" in :*|*.sslip.io) ;; *) REDIRECTS="www.$DOMAIN $REDIRECTS" ;; esac
+for host in $REDIRECTS; do
+  [ "$host" = "$DOMAIN" ] && continue
+  printf '\n%s {\n\tredir https://%s{uri} permanent\n}\n' "$host" "$DOMAIN" >> "$TMP"
+done
 if changed "$TMP" /etc/caddy/Caddyfile; then
   caddy validate --config "$TMP" --adapter caddyfile >/dev/null
   install -m 644 "$TMP" /etc/caddy/Caddyfile

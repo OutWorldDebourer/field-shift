@@ -94,13 +94,14 @@ jobs:
           DOMAIN_VAR: ${{ vars.FIELDSHIFT_DOMAIN }}
         run: |
           DOMAIN="${DOMAIN_VAR:-${HOST//./-}.sslip.io}"
+          REDIRECTS=""; [ "$DOMAIN" != "${HOST//./-}.sslip.io" ] && REDIRECTS="${HOST//./-}.sslip.io"
           echo "site: $DOMAIN"
           umask 077; printf '%s\n' "$ENVTXT" > env.txt
           D=/tmp/fieldshift-deploy
           ssh deploy@"$HOST" "rm -rf $D && mkdir -p $D"
           scp -q infra/deploy/* release.tar.gz env.txt deploy@"$HOST":$D/
           rm -f env.txt
-          ssh deploy@"$HOST" "sudo FS_DOMAIN='$DOMAIN' bash $D/bootstrap.sh $D && sudo /opt/fieldshift/bin/deploy.sh $D/release.tar.gz $D/env.txt; s=\$?; rm -rf $D; exit \$s"
+          ssh deploy@"$HOST" "sudo FS_DOMAIN='$DOMAIN' FS_REDIRECTS='$REDIRECTS' bash $D/bootstrap.sh $D && sudo /opt/fieldshift/bin/deploy.sh $D/release.tar.gz $D/env.txt; s=\$?; rm -rf $D; exit \$s"
           echo "DOMAIN=$DOMAIN" >> "$GITHUB_ENV"
       - name: Public check
         run: |
