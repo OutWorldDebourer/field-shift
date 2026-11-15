@@ -46,7 +46,8 @@ export function streetLayer(L: typeof Leaflet): Leaflet.TileLayer {
 /** Adds the dated Sentinel-2 snapshot (backend) around a point; resolves with its credit or null. */
 export async function addSnapshot(L: typeof Leaflet, map: Leaflet.Map, lat: number, lon: number, sizeM = 1500): Promise<SnapshotMeta | null> {
   const meta = await snapshotMeta(lat, lon, sizeM);
-  if (!meta) return null;
+  // The map may have been removed (view re-rendered) while the snapshot metadata loaded.
+  if (!meta || !map.getPane('overlayPane')) return null;
   const b = meta.bbox ?? bboxAround(lat, lon, sizeM);
   const overlay = L.imageOverlay(snapshotUrl(lat, lon, sizeM), [[b[1], b[0]], [b[3], b[2]]], { opacity: 1, pane: map.getPane('snapshot') ? 'snapshot' : 'overlayPane', attribution: `${meta.source ?? 'Sentinel-2 L2A'} ${meta.date ?? ''} · ${meta.credit ?? t('snap_credit_fallback')}` });
   overlay.addTo(map);

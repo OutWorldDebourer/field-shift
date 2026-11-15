@@ -11,6 +11,7 @@
 - `datarow.ts` — the data row (icon, label, value, verdict, source · date, badge, sparkline).
 - `evidence.ts` — reads the package without assuming which readings exist (key rows, normal period, short labels, derived headline).
 - `charts.ts` — SVG charts and the 12-month strip.
+- `charthover.ts` — pointer and keyboard read-out for SVG charts: snaps to the nearest point, guide line, ring and a label with date and values; ←/→, Home/End, Esc; keyboard moves announced.
 - `backdrop.ts` — field-from-above plate (backend Sentinel-2 snapshot, else EOX tiles) with outline and reticle.
 - `phone.ts` — the hero's glass phone.
 - `geo.ts` — area in ha, centroid, bbox helpers.

@@ -20,7 +20,7 @@
 - `dictation.ts` — voice to text in the box, never sends: Gemini (MediaRecorder → /api/consultant/transcribe, ≤ 120 s) or Browser (Web Speech); Gemini failure falls back to Browser.
 - `sections.ts` — section column (states follow the steps; done cards show the step summary), phone round buttons, section bodies, progress rings.
 - `dashboard.ts` — dashboard markup, the live map with the honest-scale layer switch, and the season card wiring.
-- `forecast.ts`, `forecast-chart.ts` — forecast horizon 3/5/7/10 d (GEOS-FP), outlook 0–6 months (estimate, two scenarios), 2031–2050 projection toggle; composite chart, source lines, day-by-day table.
+- `forecast.ts`, `forecast-chart.ts` — forecast horizon 3/5/7/10 d (GEOS-FP), outlook 0–6 months (estimate, two scenarios), 2031–2050 projection toggle; composite chart (hover or arrow keys read each month, forecast day, estimate month and the projection), source lines, day-by-day table.
 - `topics.ts` — recommended topics under the alerts (pre-fill the chat, switch to Chat, never send).
 - `alerts.ts` — alerts from the evidence (or derived from readings).
 - `rotation.ts` — pre-diagnosis card and strategy comparison (practices for perennials).

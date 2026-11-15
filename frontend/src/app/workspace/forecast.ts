@@ -7,6 +7,7 @@ import { esc } from '../../shared/dom';
 import { loadbarHtml, startLoadbar, type Loadbar } from '../../shared/loadbar';
 import { fmt, t } from '../../shared/i18n';
 import { normalPeriod } from '../../shared/evidence';
+import { installChartHover } from '../../shared/charthover';
 import { d2, seasonPlusChart, type Proj } from './forecast-chart';
 
 export type EvidenceX = EvidencePackage & { forecast?: Forecast | null; outlook?: Outlook | null };
@@ -106,6 +107,7 @@ export function legendHtml(a: ClientAnalysis, f: Forecast | null | undefined, o:
 export function chartHtml(a: ClientAnalysis, wide: number, h: number): string {
   const ev = a.evidence!;
   const f = forecastNow(a), o = outlookNow(a);
+  installChartHover();
   return seasonPlusChart({
     rows: ev.climate_monthly, forecast: f ?? null, outlook: o ?? null,
     projection: fc.proj ? (ev.projection as Proj | null) : null,

@@ -3,6 +3,7 @@
 // lines: "if it stays this warm" dashed, "back to normal" solid, over the normal band) and the 2031–2050 projection
 // as a bracket (median and model range) at the far right. Pure markup.
 import type { EvidencePackage, Forecast, Outlook } from '../../shared/contract';
+import { hitsHtml, type Hit } from '../../shared/charthover';
 import { esc } from '../../shared/dom';
 import { fmt, monthShort, t } from '../../shared/i18n';
 
@@ -54,6 +55,17 @@ export function seasonPlusChart(o: SeasonPlus): string {
     return i % (rows.length > 8 ? 2 : 1) === 0 || i === rows.length - 1 ? `<text x="${x(i)}" y="${H - 8}" text-anchor="middle">${esc(monthShort(m))}</text>` : '';
   }).join('');
 
+  // hover/keyboard read-out: one point per date with its values (charthover.ts)
+  const hits: Hit[] = [];
+  const mLabel = (ym: string) => `${monthShort(+ym.slice(5, 7) - 1)} ${ym.slice(0, 4)}`;
+  const sgn = (v: number) => `${v > 0 ? '+' : ''}${fmt(v, 1)}`;
+  rows.forEach((r, i) => {
+    const v: string[] = [];
+    if (r.t_mean != null) v.push(t('hv_this', { v: fmt(r.t_mean, 1) }) + (r === lastRow && o.provisional ? ` · ${t('prov')}` : ''));
+    v.push(t('hv_normal', { v: fmt(r.normal_mean, 1), lo: fmt(r.normal_lo, 1), hi: fmt(r.normal_hi, 1) }));
+    hits.push({ x: x(i), y: y(r.t_mean ?? r.normal_mean), k: mLabel(r.month), v });
+  });
+
   let cur = pastEnd, zones = '', marks = '';
   const zoneHead = (x0: number, w: number, label: string) => `<line class="zone__sep" x1="${x0 - GAP / 2}" x2="${x0 - GAP / 2}" y1="${T - 14}" y2="${H - B}"/><text class="zone__t" x="${x0 + w / 2}" y="${T - 12}" text-anchor="middle">${esc(label)}</text>`;
 
@@ -64,7 +76,9 @@ export function seasonPlusChart(o: SeasonPlus): string {
     zones += zoneHead(x0, wFc, t('fc_days_long', { n }));
     const link = last ? `<path class="fc__link" d="M${last[0].toFixed(1)} ${last[1].toFixed(1)}L${fx(0).toFixed(1)} ${y(fc[0].tmean).toFixed(1)}"/>` : '';
     marks += `${link}<path class="fc__line" d="${path(fc.map((d, i) => [fx(i), y(d.tmean)]))}"/>` +
-      fc.map((d, i) => `<circle class="fc__dot" cx="${fx(i).toFixed(1)}" cy="${y(d.tmean).toFixed(1)}" r="2.4"><title>${esc(d.date)} · ${fmt(d.tmean, 1)} °C</title></circle>`).join('');
+      fc.map((d, i) => `<circle class="fc__dot" cx="${fx(i).toFixed(1)}" cy="${y(d.tmean).toFixed(1)}" r="2.4"/>`).join('');
+    fc.forEach((d, i) => hits.push({ x: fx(i), y: y(d.tmean), k: `${d2(d.date)} ${d.date.slice(0, 4)} · ${t('fc_label')}`,
+      v: [t('hv_fc', { m: fmt(d.tmean, 1), x: fmt(d.tmax, 1), n: fmt(d.tmin, 1) }), t('hv_rain', { r: fmt(d.rain_mm, 1) })] }));
     cur = x0 + wFc;
   }
   // outlook: per month, normal band continues; two thin white lines
@@ -77,8 +91,10 @@ export function seasonPlusChart(o: SeasonPlus): string {
     marks += `${n > 1 ? `<path class="band band--ol" d="${ob}"/>` : `<rect class="band band--ol" x="${ox(0) - 8}" y="${y(ol[0].normal_hi)}" width="16" height="${Math.max(2, y(ol[0].normal_lo) - y(ol[0].normal_hi))}"/>`}
       <path class="ol__normal" d="${path(ol.map((m, i) => [ox(i), y(m.normal_mean)]))}"/>
       <path class="ol__persist" d="${path(ol.map((m, i) => [ox(i), y(m.persist_mean)]))}"/>
-      ${ol.map((m, i) => `<circle class="ol__dot" cx="${ox(i).toFixed(1)}" cy="${y(m.persist_mean).toFixed(1)}" r="2.6"><title>${esc(m.month)} · ${esc(t('fc_persist'))} ${fmt(m.persist_mean, 1)} °C · ${esc(t('fc_backnormal'))} ${fmt(m.normal_mean, 1)} °C</title></circle>
+      ${ol.map((m, i) => `<circle class="ol__dot" cx="${ox(i).toFixed(1)}" cy="${y(m.persist_mean).toFixed(1)}" r="2.6"/>
         <text x="${ox(i).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(monthShort(+m.month.slice(5, 7) - 1))}</text>`).join('')}`;
+    ol.forEach((m, i) => hits.push({ x: ox(i), y: y(m.persist_mean), k: `${mLabel(m.month)} · ${t('hv_est')}`,
+      v: [`${t('fc_persist')}: ${fmt(m.persist_mean, 1)} °C`, `${t('fc_backnormal')}: ${fmt(m.normal_mean, 1)} °C`] }));
     cur = x0 + wOl;
   }
   // projection: bracket for the model range, tick for the median
@@ -90,10 +106,12 @@ export function seasonPlusChart(o: SeasonPlus): string {
     marks += `<path class="pj__br" d="M${cx - 9} ${r[0]}H${cx}V${r[1]}H${cx - 9}"/><line class="pj__med" x1="${cx - 14}" x2="${cx + 8}" y1="${med}" y2="${med}"/>
       <text class="pj__v" x="${cx + 12}" y="${med + 4}">${pj.d_temp_c! > 0 ? '+' : ''}${fmt(pj.d_temp_c!, 1)}°</text>
       <line class="pj__base" x1="${x0}" x2="${x0 + wPj}" y1="${y(base)}" y2="${y(base)}"/>`;
+    const rg = pj.d_temp_range?.length === 2 ? pj.d_temp_range : [pj.d_temp_c!, pj.d_temp_c!];
+    hits.push({ x: cx, y: med, k: t('hv_proj_k'), v: [t('hv_proj', { d: sgn(pj.d_temp_c!), a: sgn(rg[0]), b: sgn(rg[1]) }), t('db_proj_label')] });
   }
 
   const label = lastRow ? fmt(lastRow.t_mean!, 1) : '';
-  return `<svg class="chart chart--season chart--plus" style="--w:${Math.round(W)}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('fc_chart_desc'))}">
+  return `<svg class="chart chart--season chart--plus" style="--w:${Math.round(W)}" viewBox="0 0 ${W} ${H}" role="img" tabindex="0" data-hover aria-label="${esc(t('fc_chart_desc') + ' ' + t('hv_kbd'))}">
     <g class="grid">${ticks.join('')}</g>
     <path class="band" d="${band}"/><path class="mean" d="${mean}"/>
     <g class="zones">${zones}</g>
@@ -101,6 +119,7 @@ export function seasonPlusChart(o: SeasonPlus): string {
     ${last ? `<circle class="dot" cx="${last[0]}" cy="${last[1]}" r="4.5"/><text class="last" x="${last[0] - 8}" y="${last[1] - 12}" text-anchor="end">${esc(label)} °C${o.provisional ? ' · ' + esc(t('prov')) : ''}</text>` : ''}
     <g class="plus">${marks}</g>
     <g class="axis">${months}</g>
+    ${hitsHtml(hits)}
   </svg>`;
 }
 
