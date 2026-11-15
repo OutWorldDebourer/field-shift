@@ -58,8 +58,10 @@ if [ ! -s "$ENVF" ]; then
   printf 'DB_NAME=fieldshift\nDB_USER=fieldshift\nDB_PASSWORD=%s\n' "$PW" > "$ENVF"
   chown root:fieldshift "$ENVF"; chmod 640 "$ENVF"
 fi
+set -a
 # shellcheck source=/dev/null
-set -a; . "$ENVF"; set +a
+. "$ENVF"
+set +a
 mariadb -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
   CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
   ALTER USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';
