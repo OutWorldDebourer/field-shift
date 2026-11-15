@@ -79,12 +79,12 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
       <div class="fs__tools" role="toolbar" aria-label="${esc(t('fs_draw'))}">
         <button type="button" class="tool" data-tool="point" aria-pressed="false">${icon('point')}<span data-i18n="fs_point">${esc(t('fs_point'))}</span></button>
         <button type="button" class="tool" data-tool="draw" aria-pressed="false">${icon('polygon')}<span data-i18n="fs_draw">${esc(t('fs_draw'))}</span></button>
-        <button type="button" class="tool tool--quiet" id="fs-clear">${icon('trash')}<span data-i18n="fs_clear">${esc(t('fs_clear'))}</span></button>
       </div>
       <button type="button" class="btn btn--glass btn--sm fs__finish" id="fs-finish" hidden>${icon('polygon')}<span data-i18n="fs_finish">${esc(t('fs_finish'))}</span></button>
       <p class="fs__hint" id="fs-hint" aria-live="polite"></p>
-      <div class="fs__readout" id="fs-readout" aria-live="polite"></div>
-      <div class="fs__actions"><p class="fs__why" id="fs-why" data-i18n="fs_why">${esc(t('fs_why'))}</p>
+      <div class="fs__got"><div class="fs__readout" id="fs-readout" aria-live="polite"></div>
+        <button type="button" class="tool tool--quiet fs__clear" id="fs-clear">${icon('trash')}<span class="fs__clear-t">${esc(t('fs_clear'))}</span></button></div>
+      <div class="fs__actions"><p class="fs__why" id="fs-why">${esc(t('fs_why'))}</p>
         <button type="button" class="btn btn--solid fs__use" id="fs-use" aria-disabled="true" aria-describedby="fs-why"><span class="fs__use-t">${esc(t('fs_use'))}</span>${icon('arrow')}</button>
         <p class="sr-only" id="fs-live" aria-live="polite"></p>
 </div>
@@ -119,23 +119,35 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
   function renderTools() {
     host.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tool === tool)));
     finishBtn.hidden = tool !== 'draw';
-    $('#fs-clear', host).hidden = !(ring.length || draft.length || point);
+    $('#fs-why', host).textContent = t(tool === 'draw' ? 'fs_why_draw' : 'fs_why');
+    host.querySelector('.fs__panel')?.classList.toggle('is-drawing', tool === 'draw');
+    // while drawing, Clear only restarts the draft (the earlier field is not on the map, so it is not touched)
+    $('#fs-clear', host).hidden = tool === 'draw' ? !draft.length : !(ring.length || draft.length || point);
+    $('.fs__clear-t', host).textContent = t(tool === 'draw' ? 'fs_restart' : 'fs_clear');
     finishBtn.disabled = draft.length < 3;
-    hint.textContent = tool === 'point' ? t('fs_hint_point') : tool === 'draw' ? (draft.length && draft.length < 3 ? t('fs_hint_need3') : t('fs_hint_draw')) : '';
+    // with 3+ corners, finishing the outline is the next step: it takes the primary look
+    finishBtn.classList.toggle('btn--solid', draft.length >= 3); finishBtn.classList.toggle('btn--glass', draft.length < 3);
+    const fine = matchMedia('(pointer: fine)').matches;
+    hint.textContent = tool === 'point' ? t('fs_hint_point') : tool === 'draw' ? (draft.length && draft.length < 3 ? `${t('fs_hint_need3')} ${t('fs_hint_corners', { n: draft.length })}` : t(fine ? 'fs_hint_draw_click' : 'fs_hint_draw')) : '';
     map?.getContainer().classList.toggle('is-picking', tool !== 'none');
   }
-  function currentRing(): [number, number][] { return tool === 'draw' && draft.length >= 3 ? draft : ring; }
+  // While drawing, the old outline is not on the map, so nothing reads or sends it: only the draft counts.
+  function currentRing(): [number, number][] { return tool === 'draw' ? draft : ring; }
   function renderReadout() {
     const r = currentRing();
     const area = ringAreaHa(r);
-    const c = r.length >= 3 ? ringCenter(r) : point;
-    if (!c) { readout.innerHTML = ''; setUsable(false); areaTag.hidden = true; return; }
+    // drawing: only the draft is real (no fallback to an earlier point); 1–2 corners read as progress
+    const c = r.length >= 3 ? ringCenter(r) : tool === 'draw' ? null : point;
+    if (!c) {
+      readout.innerHTML = tool === 'draw' && draft.length ? `<span class="mono fs__k">${esc(t('fs_corners', { n: draft.length }))}</span>` : '';
+      setUsable(false); areaTag.hidden = true; placeReticle(); return;
+    }
     readout.innerHTML = r.length >= 3
-      ? `<span class="mono fs__k">${esc(t('fs_area'))}</span><b class="fs__area num">${fmt(area, area < 10 ? 1 : 0)} ha</b><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`
+      ? `<span class="mono fs__k">${esc(t(tool === 'draw' ? 'fs_area_draft' : 'fs_area'))}</span><b class="fs__area num${tool === 'draw' ? ' is-draft' : ''}">${fmt(area, area < 10 ? 1 : 0)} ha</b><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`
       : `<span class="mono fs__k">${esc(t('fs_point_only'))}</span><span class="mono fs__c">${fmtCoord(c.lat, c.lon)}</span>`;
     const wasOff = !usable();
     if (busy) return void placeReticle();
-    setUsable(!!(ring.length >= 3 || (point && tool !== 'draw')));
+    setUsable(tool !== 'draw' && !!(ring.length >= 3 || point));
     // The moment a field is chosen, the button lights up once and says so ("you can start"); field.css keeps it lit.
     if (wasOff && usable()) {
       useBtn.classList.remove('is-arming'); void useBtn.offsetWidth; useBtn.classList.add('is-arming');
@@ -149,7 +161,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     const r = currentRing();
     let b: Leaflet.LatLngBounds | null = null;
     if (r.length >= 3) b = L.latLngBounds(r.map(([lo, la]) => [la, lo] as [number, number]));
-    else if (point) b = L.latLng(point.lat, point.lon).toBounds(120);
+    else if (point && tool !== 'draw') b = L.latLng(point.lat, point.lon).toBounds(120);
     if (!b) { reticle.hidden = true; areaTag.hidden = true; return; }
     const mapRect = map.getContainer().getBoundingClientRect(), hostRect = host.getBoundingClientRect();
     const nw = map.latLngToContainerPoint(b.getNorthWest()), se = map.latLngToContainerPoint(b.getSouthEast());
@@ -324,7 +336,10 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     if (mode === 'gps') { exampleId = null; renderExamples(); locate(); }
   }));
   host.querySelectorAll<HTMLButtonElement>('[data-tool]').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool as Tool)));
-  $('#fs-clear', host).addEventListener('click', clearAll);
+  $('#fs-clear', host).addEventListener('click', () => {
+    if (tool === 'draw') { draft = []; renderTools(); drawLayers(); return; }
+    clearAll();
+  });
   $('#fs-full', host).addEventListener('click', (e) => {
     const b = e.currentTarget as HTMLElement;
     const on = !host.classList.contains('is-full');

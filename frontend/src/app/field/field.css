@@ -106,7 +106,7 @@
   .fs .leaflet-bottom.leaflet-left { left: 0; }
   .fs__full { display: inline-flex; }
   .fs.is-full .fs__map, .is-full .fs__map { height: calc(100vh - 60px - 84px); }
-  .is-full .fs__panel > :not(.fs__tools):not(.fs__finish):not(.fs__hint):not(.fs__readout):not(.fs__actions) { display: none; }
+  .is-full .fs__panel > :not(.fs__tools):not(.fs__finish):not(.fs__hint):not(.fs__got):not(.fs__actions) { display: none; }
   .fs__panel { padding-bottom: 100px; }
   .fs__actions { position: fixed; z-index: 950; left: 0; right: 0; bottom: 0; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: #0b1622; border-top: 1px solid rgba(255, 255, 255, 0.25); }
   .fs__use { position: static; }
@@ -130,7 +130,7 @@
   .fs__title { order: -6; }
   .fs__tools { order: -5; }
   .fs__finish, .fs__hint { order: -4; }
-  .fs__readout { order: -3; border-top: 0; padding-top: 0; }
+  .fs__got { order: -3; border-top: 0; padding-top: 0; }
   .fs__lede { order: -2; }
 }
 
@@ -147,7 +147,7 @@
   .fs__search { order: -5; }
   .fs__tools { order: -4; }
   .fs__finish, .fs__hint { order: -3; }
-  .fs__readout { order: -2; }
+  .fs__got { order: -2; }
   .ex { padding: 8px 12px; }
   .fs__panel { padding-bottom: 110px; }
 }
@@ -200,3 +200,56 @@
   .fs__use[aria-disabled='false']::after { animation: none; display: none; }
   .fs__use[aria-disabled='false'] svg, .fs__use.is-arming[aria-disabled='false'] { animation: none; }
 }
+
+/* Fit without a scrollbar (owner's request). The panel used to need ~820 px and scrolled on 768–900 px laptops.
+   1) "Clear" moved next to the field readout (it only acts on a chosen field), freeing a whole row;
+   2) the title fits one line; tighter rhythm;
+   3) shorter screens step down spacing and type; only below ~640 px tall does the panel scroll (thin bar). */
+.fs__got { display: flex; align-items: center; gap: 12px; padding: 12px 0 0; border-top: 1px solid var(--rule); }
+.fs__got .fs__readout { flex: 1; min-width: 0; padding: 0; border-top: 0; }
+.fs__got:has(.fs__readout:empty):has(.fs__clear[hidden]) { display: none; }
+.fs__clear { flex: none; min-height: 44px; padding: 0 10px; border: 0; background: none; text-decoration: underline; text-underline-offset: 4px; font-size: 0.9375rem; }
+.fs__tools { grid-template-columns: 1fr 1fr; }
+@media (min-width: 761px) {
+  .fs__panel { gap: 12px; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.3) transparent; }
+  .fs__title { font-size: 2rem; }
+  .fs__area { font-size: 1.75rem; }
+}
+@media (min-width: 761px) and (max-height: 820px) {
+  .fs__panel { top: 76px; max-height: calc(100% - 90px); padding: 20px 22px 18px; gap: 10px; }
+  .fs__title { font-size: 1.75rem; }
+  .fs__lede { font-size: 0.9375rem; line-height: 1.4; }
+  .seg button, .tool { min-height: 42px; }
+  .fs__qwrap input, .fs__qrow .btn { min-height: 44px; }
+  .ex { padding: 9px 12px; }
+}
+@media (min-width: 761px) and (max-height: 660px) {
+  .fs__lede { display: none; }
+  .fs__qhint { font-size: 0.75rem; margin-top: 4px; }
+}
+/* drawing an outline on a short screen: the search and the lede step aside so the Finish button and hint fit */
+@media (min-width: 761px) and (max-height: 900px) { .fs__panel.is-drawing .fs__search { display: none; } }
+@media (min-width: 761px) and (max-height: 760px) { .fs__panel.is-drawing .fs__lede { display: none; } }
+@media (min-width: 761px) and (max-height: 660px) { .fs__panel.is-drawing .fs__pane { display: none; } }
+/* data and hints a farmer reads on a laptop: no smaller than 13–14 px */
+.fs__qhint { font-size: 0.8125rem; }
+.fs__c { font-size: 0.875rem; }
+.fs__k { font-size: 0.8125rem; }
+@media (max-width: 760px) {
+  /* ALT moves next to the scale bar so the base-map switch no longer hides it */
+  .fs__alt { right: auto; left: 12px; top: auto; bottom: calc(100% - 44vh + 52px); }
+}
+/* the panel never squeezes its rows (a squeezed hint used to overprint the readout instead of overflowing) */
+.fs__panel > * { flex-shrink: 0; }
+/* a pressed tool is outlined, not solid: solid white stays for the next step (e.g. Finish outline) */
+.tool[aria-pressed='true'] { background: rgba(255, 255, 255, 0.16); color: var(--ink); border: 2px solid #fff; font-weight: 600; }
+.ex__meta { font-size: 0.8125rem; }
+/* map instruments keep a night-glass backing so place labels and roads never cross them */
+.fs__alt, .fs__credit .mono { background: rgba(8, 16, 26, 0.6); padding: 2px 6px; border-radius: 6px; }
+/* one solid white per panel: the selected mode is outlined like a pressed tool */
+.seg button[aria-checked='true'] { background: rgba(255, 255, 255, 0.16); color: var(--ink); box-shadow: inset 0 0 0 2px #fff; font-weight: 600; }
+/* the selected example is marked by its border and tint, no side stripe */
+.ex[aria-pressed='true'] { box-shadow: none; }
+/* an unfinished outline's area is a draft: neutral, not the confirmed amber */
+.fs__area.is-draft { color: var(--ink); }
+
