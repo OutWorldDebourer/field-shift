@@ -3,6 +3,7 @@ import '../shared/tokens.css';
 import '../shared/components.css';
 import '../shared/charts.css';
 import './app.css';
+import '../shared/phone.css';
 import { getAnalysis, getShared, type ClientAnalysis } from '../shared/api';
 import { $, esc } from '../shared/dom';
 import { applyI18n, lang, onLang, t } from '../shared/i18n';

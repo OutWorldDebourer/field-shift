@@ -3,6 +3,7 @@ import '../shared/tokens.css';
 import '../shared/components.css';
 import '../shared/charts.css';
 import './index.css';
+import '../shared/phone.css';
 import { mountBackdrop } from '../shared/backdrop';
 import { HUARAL_FIELD } from '../shared/demo/huaral';
 import { $, $$, esc } from '../shared/dom';

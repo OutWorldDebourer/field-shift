@@ -1,0 +1,39 @@
+/* Phone fixes (iPhone Safari and Android Chrome), found with tools/phones.mjs on real device profiles.
+   1. No sideways drift: iOS Safari still pans the page sideways when one child is wider than the screen even if
+      body has overflow-x: hidden; clipping on the root stops it (clip keeps position: sticky working).
+   2. Fixed headers are opaque enough on phones that text scrolling under them never reads through the logo
+      (backdrop blur is not guaranteed on every phone browser).
+   3. In the app, the footer under each view is one quiet line (notice) plus one line of credit (full text in its
+      tooltip), so a small phone keeps its height for the content.
+   Rules use :root for specificity, because the app's view styles load later (lazy chunks).
+   4. Respect the notch / rounded corners in landscape (viewport-fit=cover is set in the HTML). */
+html { overflow-x: hidden; overflow-x: clip; }
+body { overflow-x: hidden; overflow-x: clip; }
+
+@media (max-width: 899px) {
+  /* index: the dark header once the page scrolls */
+  :root body.is-scrolled:not(.is-day) .top { background: rgba(3, 6, 12, 0.92); }
+  :root body.is-day .top { background: rgba(244, 248, 250, 0.96); }
+  /* index hero phone mock: the provisional chip wraps under its value instead of pushing out of the card */
+  :root .phone .drow__value.is-key { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
+  :root .phone .drow__value .prov { margin-left: 0; }
+
+  /* index: the globe's place labels sit behind the glass cards; on a phone the cards cover the labels fully */
+  :root .how .step.glass, :root .how .how__stats.glass { background: rgba(6, 13, 22, 0.9); }
+
+  /* app workspace footer */
+  :root .ws .ws__foot { gap: 0 8px; padding: 2px 10px 4px; }
+  :root .ws .ws__notice { font-size: 0.8125rem; line-height: 1.3; }
+  :root .ws .ws__credit { flex: 1 1 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.75rem; opacity: 0.9; }
+  :root .ws .ws__credit .cr-gloss { display: none; }
+}
+
+@media (max-width: 760px) {
+  /* field picker: the sticky top bar */
+  :root .fsel .bar--fs { background: rgba(8, 18, 28, 0.95); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+}
+
+/* landscape phones: keep content off the notch */
+@media (max-width: 899px) and (orientation: landscape) {
+  :root .ws .bar, :root .ws .ws__foot, :root .top { padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+}

@@ -1,0 +1,406 @@
+{
+ "iPhone 15": {
+  "index": {
+   "W": 393,
+   "scrollW": 393,
+   "bodyScrollW": 393,
+   "offenders": [
+    {
+     "d": "div.backdrop__plate",
+     "l": -149,
+     "r": 542
+    },
+    {
+     "d": "svg.chart.chart--season.chart--plus",
+     "l": 46,
+     "r": 677
+    },
+    {
+     "d": "table",
+     "l": 46,
+     "r": 696
+    }
+   ],
+   "errors": []
+  },
+  "picker": {
+   "W": 393,
+   "scrollW": 393,
+   "bodyScrollW": 393,
+   "offenders": [
+    {
+     "d": "div.leaflet-tile-container.leaflet-zoom-animated",
+     "l": 0,
+     "r": 1600
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -39,
+     "r": 433
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 472
+    }
+   ],
+   "errors": []
+  },
+  "picker-chosen": {
+   "W": 393,
+   "scrollW": 393,
+   "bodyScrollW": 393,
+   "offenders": [
+    {
+     "d": "div.leaflet-tile-container.leaflet-zoom-animated",
+     "l": 0,
+     "r": 1600
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -39,
+     "r": 433
+    },
+    {
+     "d": "img.leaflet-image-layer.leaflet-zoom-animated",
+     "l": -330,
+     "r": 737
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 472
+    },
+    {
+     "d": "div#fs-area-tag.fs__area-tag.ground-label.is-flip",
+     "l": -5,
+     "r": 145
+    }
+   ],
+   "errors": []
+  }
+ },
+ "iPhone SE (3rd gen)": {
+  "index": {
+   "W": 375,
+   "scrollW": 375,
+   "bodyScrollW": 375,
+   "offenders": [
+    {
+     "d": "div.backdrop__plate",
+     "l": -163,
+     "r": 538
+    },
+    {
+     "d": "svg.chart.chart--season.chart--plus",
+     "l": 46,
+     "r": 677
+    },
+    {
+     "d": "table",
+     "l": 46,
+     "r": 696
+    }
+   ],
+   "errors": []
+  },
+  "picker": {
+   "W": 375,
+   "scrollW": 375,
+   "bodyScrollW": 375,
+   "offenders": [
+    {
+     "d": "div.leaflet-tile-container.leaflet-zoom-animated",
+     "l": 0,
+     "r": 1600
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -37,
+     "r": 413
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 450
+    }
+   ],
+   "errors": []
+  },
+  "picker-chosen": {
+   "W": 375,
+   "scrollW": 375,
+   "bodyScrollW": 375,
+   "offenders": [
+    {
+     "d": "div.leaflet-tile-container.leaflet-zoom-animated",
+     "l": 0,
+     "r": 1600
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -37,
+     "r": 413
+    },
+    {
+     "d": "img.leaflet-image-layer.leaflet-zoom-animated",
+     "l": -339,
+     "r": 728
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 450
+    },
+    {
+     "d": "div#fs-area-tag.fs__area-tag.ground-label.is-flip",
+     "l": -14,
+     "r": 136
+    }
+   ],
+   "errors": []
+  }
+ },
+ "Pixel 7": {
+  "index": {
+   "W": 412,
+   "scrollW": 412,
+   "bodyScrollW": 412,
+   "offenders": [
+    {
+     "d": "div.backdrop__plate",
+     "l": -234,
+     "r": 646
+    },
+    {
+     "d": "svg.chart.chart--season.chart--plus",
+     "l": 46,
+     "r": 678
+    },
+    {
+     "d": "table",
+     "l": 46,
+     "r": 696
+    }
+   ],
+   "errors": []
+  },
+  "picker": {
+   "W": 412,
+   "scrollW": 412,
+   "bodyScrollW": 412,
+   "offenders": [
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -61,
+     "r": 195
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 195,
+     "r": 451
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -61,
+     "r": 195
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 195,
+     "r": 451
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -41,
+     "r": 453
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 494
+    }
+   ],
+   "errors": []
+  },
+  "picker-chosen": {
+   "W": 412,
+   "scrollW": 412,
+   "bodyScrollW": 412,
+   "offenders": [
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -179,
+     "r": 77
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 333,
+     "r": 589
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -179,
+     "r": 77
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 333,
+     "r": 589
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -179,
+     "r": 77
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 333,
+     "r": 589
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -41,
+     "r": 453
+    },
+    {
+     "d": "img.leaflet-image-layer.leaflet-zoom-animated",
+     "l": -321,
+     "r": 746
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 494
+    }
+   ],
+   "errors": []
+  }
+ },
+ "Galaxy A55": {
+  "index": {
+   "W": 480,
+   "scrollW": 480,
+   "bodyScrollW": 480,
+   "offenders": [
+    {
+     "d": "div.backdrop__plate",
+     "l": -306,
+     "r": 786
+    },
+    {
+     "d": "svg.chart.chart--season.chart--plus",
+     "l": 49,
+     "r": 680
+    },
+    {
+     "d": "table",
+     "l": 49,
+     "r": 699
+    }
+   ],
+   "errors": []
+  },
+  "picker": {
+   "W": 480,
+   "scrollW": 480,
+   "bodyScrollW": 480,
+   "offenders": [
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -27,
+     "r": 229
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 229,
+     "r": 485
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -27,
+     "r": 229
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 229,
+     "r": 485
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -27,
+     "r": 229
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 229,
+     "r": 485
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -48,
+     "r": 528
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 576
+    }
+   ],
+   "errors": []
+  },
+  "picker-chosen": {
+   "W": 480,
+   "scrollW": 480,
+   "bodyScrollW": 480,
+   "offenders": [
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -145,
+     "r": 111
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 367,
+     "r": 623
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -145,
+     "r": 111
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 367,
+     "r": 623
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": -145,
+     "r": 111
+    },
+    {
+     "d": "img.leaflet-tile.leaflet-tile-loaded",
+     "l": 367,
+     "r": 623
+    },
+    {
+     "d": "svg.leaflet-zoom-animated",
+     "l": -48,
+     "r": 528
+    },
+    {
+     "d": "img.leaflet-image-layer.leaflet-zoom-animated",
+     "l": -287,
+     "r": 780
+    },
+    {
+     "d": "div.leaflet-pane.leaflet-hybrid-pane",
+     "l": 0,
+     "r": 576
+    }
+   ],
+   "errors": []
+  }
+ }
+}

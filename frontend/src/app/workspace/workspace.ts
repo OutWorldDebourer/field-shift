@@ -150,6 +150,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     $$<HTMLButtonElement>('[data-tab]', host).forEach((b) => { const on = b.dataset.tab === state.view; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
     const credit = state.snapshotCredit;
     const gloss = copernicusGloss(credit);
+    $('#ws-credit').title = gloss ? `${credit} (${gloss})` : credit;
     $('#ws-credit').innerHTML = `<span class="cr-long">${esc(credit)}${gloss ? `<span class="cr-gloss" lang="es"> ${esc(gloss)}</span>` : ''}</span><span class="cr-short">${esc(shortCredit || credit)}${gloss ? `<span class="cr-gloss" lang="es"> ${esc(copernicusGloss(shortCredit || credit))}</span>` : ''}</span>`;
     $('#ws-notice').dataset.short = t('foot_short');
   }

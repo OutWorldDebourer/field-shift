@@ -82,7 +82,7 @@ td,.r>span,li,p{overflow-wrap:anywhere;min-width:0}
 footer{margin-top:28px;font-size:14px;color:var(--muted)}
 @media (max-width:640px){
  .page{padding:20px 18px;margin:0}
- .actions{padding:0 18px;justify-content:stretch}.actions>*{flex:1;text-align:center}
+ .actions{padding:0 18px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions>*{text-align:center}.actions .back{grid-column:1/-1;text-align:left;padding:0;min-height:40px}.actions span[style]{display:none}.actions button{grid-column:1/-1}
  .head{grid-template-columns:1fr 84px}.tile{width:84px;height:84px}
  h1{font-size:30px}
  .meta{grid-template-columns:1fr 1fr}
