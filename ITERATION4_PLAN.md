@@ -11,7 +11,7 @@ The standing rules of `BUILD_PLAN.md` apply to every step (EN default + ES, modu
 | 0 | Honest pests, clean start, one intake, lean API calls | [x] |
 | A | Compact chat and floating chat bubble | [x] |
 | B | The consultant knows every view | [x] |
-| C | Organic by categories; "What if I grow…?" | [ ] |
+| C | Organic by categories; "What if I grow…?" | [x] |
 | D | Knowledge research (pest conditions, micronutrients, biostimulants); Prevention tab | [ ] |
 | E | Technical sheet and consultant with everything above | [ ] |
 
@@ -71,10 +71,10 @@ Tick a phase only when every acceptance check below it passed in the running app
 ## Phase C · Organic by categories; "What if I grow…?"
 
 **Tasks**
-- [ ] C.1 Organic view redesign: a three-line "this week" summary, then category cards, each with an icon, one plain sentence and a count, and a disclosure with the technical core (scientific names, how it acts, citation, data source):
+- [x] C.1 Organic view redesign: a three-line "this week" summary, then category cards, each with an icon, one plain sentence and a count, and a disclosure with the technical core (scientific names, how it acts, citation, data source):
   natural enemies grouped by pest ("For the aphid: 3 allies"); beneficial fungi and bacteria (Trichoderma, Beauveria, Bacillus…); biostimulants and micronutrients (filled in Phase D); practices; when to act (NASA data); what to avoid.
-- [ ] C.2 "Evaluate your idea" in Rotation: a field to type any crop; a fourth column "Your proposal" scored with the same engine (soil health, water use against the NASA water balance, pest-cycle break by botanical family, income, risk) with why / evidence / gaps. Endpoint `POST /api/analyses/{id}/rotation/evaluate {crop}` (crop resolved from the knowledge base, AI research only for unknown crops).
-- [ ] C.3 Consultant tool `evaluate_crop` so "what do you think of growing avocado?" in the chat runs the same evaluation and adds the card.
+- [x] C.2 "Evaluate your idea" in Rotation: a field to type any crop; a fourth column "Your proposal" scored with the same engine (soil health, water use against the NASA water balance, pest-cycle break by botanical family, income, risk) with why / evidence / gaps. Endpoint `POST /api/analyses/{id}/rotation/evaluate {crop}` (crop resolved from the knowledge base, AI research only for unknown crops).
+- [x] C.3 Consultant tool `evaluate_crop` so "what do you think of growing avocado?" in the chat runs the same evaluation and adds the card.
 
 **Acceptance:** Organic reads clearly at first glance, details one click away (audit round); a proposed crop appears as a fourth scored column, from the form and from the chat; perennials are evaluated as perennials (no "rotate the main crop").
 

@@ -13,3 +13,5 @@ Analyst stage: one fixed, cited evidence package per analysis (the consultant ma
 | `src/advise.rs` | Any crop → crop records (crops crate); cited advice → Soil, Pest care, Nutrition, Rotation / perennial system sections |
 | `src/intake.rs` | "Load information": structured answers complete the topics they cover, build evidence and advice (`POST /api/analyses/{id}/intake`) |
 | `src/organic.rs` | Organic section: cited natural enemies and beneficial microorganisms (this crop + matches for reported pests across the knowledge base), practices, timing from NASA data, what harms them |
+| `src/proposal.rs` | "What if I grow…?": the farmer's proposed crop as a fourth rotation column, scored by the same engine; remembered as `facts.proposal_crop` (`POST /api/analyses/{id}/rotation/evaluate`) |
+| `src/prevention.rs` | Prevention section: a risk light per pest of every crop in the conversation (degree-days vs normal, GEOS-FP forecast, researched favourable weather), monitoring, calendar |

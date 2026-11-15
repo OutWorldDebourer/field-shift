@@ -1,6 +1,6 @@
 /* "Ask about this" on cards (iteration 4, phase B): quiet until hovered or focused, 36 px tall for outdoor taps. */
 .askbtn { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; margin-top: 8px; padding: 0 12px; border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(5, 12, 20, 0.3); color: var(--ink); font-size: 0.8125rem; cursor: pointer; }
+  border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(5, 12, 20, 0.3); color: var(--ink); font-size: 0.875rem; cursor: pointer; }
 .askbtn:hover, .askbtn:focus-visible { background: rgba(255, 255, 255, 0.14); border-color: #fff; }
 .askbtn svg { width: 15px; height: 15px; }
 .pests .askbtn { margin: 4px 0 0 8px; min-height: 32px; padding: 0 10px; }

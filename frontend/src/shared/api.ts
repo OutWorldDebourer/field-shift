@@ -105,6 +105,11 @@ export async function submitIntake(a: ClientAnalysis, form: IntakeForm): Promise
   return req<AnalysisState>(`/api/analyses/${encodeURIComponent(a.id)}/intake${q}`, { ...json(form), timeout: 240000 });
 }
 
+/** "Evaluate your idea": score any crop as a fourth rotation column; returns the analysis. */
+export async function evaluateCrop(a: ClientAnalysis, crop: string): Promise<ClientAnalysis> {
+  return req<AnalysisState>(`/api/analyses/${encodeURIComponent(a.id)}/rotation/evaluate`, { ...json({ crop }), timeout: 240000 });
+}
+
 /** Example answers for an example site: the backend's `intake_example`, else the bundled labelled sample. */
 export async function exampleIntake(site: string | null, l: Lang): Promise<IntakeForm | null> {
   const { list } = await examples();

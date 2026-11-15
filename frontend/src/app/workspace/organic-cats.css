@@ -1,0 +1,42 @@
+/* Organic by categories (iteration 4): "this week" card + category cards with a technical disclosure. */
+.og--cats { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.og-week { padding: 20px 22px; border-radius: 22px; display: grid; gap: 12px; position: sticky; top: 0; }
+.og-week__l { display: grid; gap: 10px; padding-left: 0; list-style: none; counter-reset: wk; }
+.og-week__l li { counter-increment: wk; display: grid; grid-template-columns: 26px 1fr; gap: 8px; font-size: 1.0625rem; line-height: 1.4; }
+.og-week__l li::before { content: counter(wk); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: var(--night); font-weight: 700; font-size: 0.875rem; }
+.og-gaps { display: flex; gap: 6px; font-size: 0.875rem; color: var(--ink-2); }
+.og-gaps svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+.og-cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; align-items: start; }
+.og-cat { padding: 16px 18px; border-radius: 20px; display: grid; gap: 8px; }
+/* The one accent: amber marks the allies of a pest the farmer reported. */
+.og-cat.is-match { border-color: rgba(255, 190, 85, 0.75); }
+.og--cats .og-match { background: rgba(255, 190, 85, 0.16); color: #ffd58f; border-color: rgba(255, 190, 85, 0.6); }
+.og-readout { display: block; margin-top: 6px; font-size: 0.8125rem; line-height: 1.5; color: var(--ink-2); }
+.og-cat__n { font-family: var(--sans, inherit); font-weight: 600; }
+.og-cat__gap { padding: 2px 8px; border-radius: 10px; border: 1px dashed rgba(255, 255, 255, 0.55); font-size: 0.8125rem; color: var(--ink); }
+.og-cat__more summary { list-style: none; gap: 8px; }
+.og-cat__more summary::-webkit-details-marker { display: none; }
+.og-cat__more summary::before { content: ''; width: 9px; height: 9px; border-right: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); transition: transform 0.2s; margin-right: 4px; }
+.og-cat__more[open] summary::before { transform: rotate(45deg); }
+.og-cat__h { display: grid; grid-template-columns: 36px 1fr auto; gap: 10px; align-items: center; }
+.og-cat__h h3 { font-size: 1.1875rem; line-height: 1.2; }
+.og-cat__ico { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.9); color: var(--night); }
+.og-cat__ico svg { width: 20px; height: 20px; }
+.og-cat__n { min-width: 30px; height: 30px; padding: 0 8px; border-radius: 15px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, 0.5); font-size: 0.9375rem; color: var(--ink); }
+.og-cat__line { font-size: 1rem; line-height: 1.45; color: var(--ink); }
+.og-cat__more summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-size: 0.9375rem; font-weight: 600; }
+.og-rows { display: grid; gap: 10px; padding: 4px 0 0; list-style: none; }
+.og-rows li { display: grid; gap: 3px; font-size: 0.9375rem; line-height: 1.4; }
+.og-row__how { color: var(--ink-2); }
+.og-row__sig { display: inline-flex; align-items: center; gap: 6px; font-size: 0.875rem; color: var(--ink); }
+.og-row__sig svg { width: 14px; height: 14px; }
+.og-row__note { font-size: 0.8125rem; color: var(--ink-2); margin-top: 6px; }
+.og-row__names { font-size: 0.9375rem; color: var(--ink); margin-bottom: 6px; }
+.og-rows .og-row__how { color: var(--ink); opacity: 0.85; }
+.og-cat .og-cite { font-size: 0.8125rem; text-decoration: underline; text-underline-offset: 3px; }
+.og-cat > .askbtn, .og-cat > .og-nasa { justify-self: start; }
+@media (max-width: 899px) {
+  .og--cats { grid-template-columns: 1fr; }
+  .og-week { position: static; }
+  .og-cats { grid-template-columns: 1fr; }
+}

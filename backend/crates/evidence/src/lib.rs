@@ -8,6 +8,8 @@ mod from_imagery;
 mod from_power;
 mod organic;
 pub mod pests;
+pub mod proposal;
+pub mod prevention;
 pub mod reading;
 
 use axum::Router;

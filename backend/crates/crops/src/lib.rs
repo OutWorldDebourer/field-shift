@@ -5,6 +5,7 @@ pub mod advice;
 pub mod model;
 pub mod normalize;
 pub mod research;
+pub mod research_extras;
 pub mod seed;
 pub mod store;
 

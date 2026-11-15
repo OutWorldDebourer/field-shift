@@ -61,12 +61,6 @@ fn item_from(it: &Value) -> Value {
     json!({ "title": { "en": te, "es": ts }, "body": { "en": be, "es": bs }, "citations": cites(&it["citations"]), "basis": it["basis"] })
 }
 
-fn join(list: &Value, lang: &str) -> String {
-    list.as_array().into_iter().flatten().filter_map(|x| x[lang].as_str().or_else(|| x["text"][lang].as_str())).collect::<Vec<_>>().join(" ")
-}
-
-fn bi_join(list: &Value) -> Value { json!({ "en": join(list, "en"), "es": join(list, "es") }) }
-
 /// Summary = the key actions (item titles), so a one-line view says what to do, not only the disclaimer.
 fn block_content(b: &Value, _note: Value) -> Value {
     let items: Vec<Value> = b["items"].as_array().into_iter().flatten().map(item_from).collect();
@@ -92,7 +86,8 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     let rows = crate::pests::rows(state, lat, lon, &crops_all, None).await;
     crate::pests::apply(state, lat, lon, &mut ev, rows).await;
     store::save_evidence(&state.db, analysis_id, &ev).await.map_err(|e| anyhow::anyhow!("{e}"))?;
-    let adv = serde_json::to_value(crops::advice(&cur_rec, &prev, &signals(&ev)))?;
+    let sig = signals(&ev);
+    let adv = serde_json::to_value(crops::advice(&cur_rec, &prev, &sig))?;
     let notice = adv["notice"].clone();
 
     // Soil and nutrition
@@ -129,23 +124,14 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
     // Organic / biological management: ready together with the pest-care topic.
     let organic = crate::organic::build(&cur_rec, st.facts.as_ref(), &ev);
     store::set_section(&state.db, analysis_id, "organic", st_of("pests"), None, Some(&organic)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
+    // Prevention: risk lights for every crop in the conversation (pests of crops_all, forecast and conditions).
+    let prevention = crate::prevention::build(&crops_all, &ev);
+    store::set_section(&state.db, analysis_id, "prevention", "ready", None, Some(&prevention)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
     store::set_section(&state.db, analysis_id, "pests", st_of("pests"), None, Some(&pests)).await.map_err(|e| anyhow::anyhow!("{e}"))?;
 
     // Rotation (annual, semi-perennial) or the perennial system
     let mode = adv["mode"].as_str().unwrap_or("rotation");
-    let strategies: Vec<Value> = adv["strategies"].as_array().into_iter().flatten().map(|s| {
-        let sc = &s["scores"];
-        json!({
-            "name": s["title"], "current": s["is_current"],
-            "timeline": s["sequence"].as_array().into_iter().flatten().filter_map(|x| x["en"].as_str()).collect::<Vec<_>>(),
-            "timeline_es": s["sequence"].as_array().into_iter().flatten().filter_map(|x| x["es"].as_str()).collect::<Vec<_>>(),
-            "scores": { "soil": sc["soil"], "water": sc["water"], "pest_break": sc["pest_break"], "income": sc["income"], "risk": sc["risk"] },
-            "why": s["why"], "evidence": bi_join(&s["evidence"]), "gaps": bi_join(&s["gaps"]), "risks": bi_join(&s["risks"]),
-            "evidence_list": s["evidence"].as_array().into_iter().flatten().map(|e| e["text"].clone()).collect::<Vec<_>>(),
-            "gaps_list": s["gaps"].clone(), "risks_list": s["risks"].clone(),
-            "citations": s["evidence"].as_array().into_iter().flatten().filter_map(|e| e.get("citation").filter(|c| !c.is_null()).map(|c| json!({ "title": c["title"], "url": c["url"] }))).collect::<Vec<_>>(),
-        })
-    }).collect();
+    let strategies: Vec<Value> = adv["strategies"].as_array().into_iter().flatten().map(crate::proposal::strategy_json).collect();
     let mut items: Vec<Value> = adv["practices"].as_array().into_iter().flatten().map(|p| {
         let actions = |l: &str| p["actions"].as_array().into_iter().flatten().filter_map(|a| a[l].as_str()).collect::<Vec<_>>().join(" · ");
         json!({ "title": p["title"],
@@ -172,7 +158,9 @@ pub async fn advise(state: &AppState, analysis_id: &str) -> anyhow::Result<Value
             .iter().map(|(k, en, es)| ((*k, *en, *es), sc[*k].as_u64().unwrap_or(0))).max_by_key(|(_, v)| *v).unwrap();
         strategies[bi_]["best_for"] = json!({ "en": format!("Best fit: {}", k.1), "es": format!("Mejor opción: {}", k.2) });
     }
-    let rotation = json!({ "title": title, "summary": summary, "mode": mode, "strategies": strategies, "items": items, "gaps": adv["gaps"], "prediagnosis": prediagnosis(&ev) });
+    // The farmer's own proposal ("What if I grow …?"), scored by the same engine, as a fourth column.
+    let proposal = crate::proposal::column(state, st.facts.as_ref(), &cur_rec, &prev, &sig).await;
+    let rotation = json!({ "title": title, "summary": summary, "mode": mode, "strategies": strategies, "items": items, "gaps": adv["gaps"], "prediagnosis": prediagnosis(&ev), "proposal": proposal });
     let rot_state = if !done("rotation") { "progress" } else if adv["gaps"].as_array().map(|g| g.is_empty()).unwrap_or(true) { "ready" } else { "gaps" };
     let note = (rot_state == "gaps").then(|| SBi::new("some information gaps", "algunos vacíos de información"));
     store::set_section(&state.db, analysis_id, "rotation", rot_state, note.as_ref(), Some(&rotation)).await.map_err(|e| anyhow::anyhow!("{e}"))?;

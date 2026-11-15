@@ -137,6 +137,53 @@ pub struct Pest {
     pub degree_days_per_generation: Trait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub note: Option<String>,
+    /// Weather that favours this pest (iteration 4, phase D), cited; None when not researched or not found.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub conditions: Option<PestConditions>,
+}
+
+/// Conditions that favour a pest, as the source states them (e.g. spider mite: hot, dry weather).
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct PestConditions {
+    /// Plain words for the farmer.
+    pub favourable: L10n,
+    /// Temperature range that favours it, °C, only where the source gives numbers.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub temp_min_c: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub temp_max_c: Option<f64>,
+    /// dry | humid | any
+    #[serde(default = "any_humidity")]
+    pub humidity: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub season: Option<L10n>,
+    pub citation: Citation,
+}
+
+fn any_humidity() -> String { "any".into() }
+
+/// A micronutrient that matters for the crop, with its deficiency symptoms (no doses).
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct Micronutrient {
+    /// Element symbol: Zn, B, Fe, Mn, Mo, Cu…
+    pub element: String,
+    pub why: L10n,
+    pub deficiency: L10n,
+    pub citation: Citation,
+}
+
+/// A biostimulant category with published evidence for the crop (no product names or doses).
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+pub struct Biostimulant {
+    /// amino-acids | seaweed-extract | humic-fulvic | protein-hydrolysate | microbial | other
+    pub category: String,
+    pub name: L10n,
+    /// What the evidence says, in plain words.
+    pub evidence: L10n,
+    /// Stress it helps with (heat, salinity, drought…), when stated.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stress: Option<L10n>,
+    pub citation: Citation,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
@@ -170,6 +217,17 @@ pub struct Traits {
     #[serde(default)]
     pub beneficials: Vec<Beneficial>,
     pub rotation_notes: RotationNotes,
+    /// Iteration 4, phase D: critical micronutrients and biostimulant categories, each cited.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub micronutrients: Vec<Micronutrient>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub biostimulants: Vec<Biostimulant>,
+    /// Who checked the phase-D data: None = not researched, Some(false) = AI-researched (verify), Some(true) = reviewed.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub extras_reviewed: Option<bool>,
+    /// Phase-D topics the research could not cite (shown as information gaps).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub extras_gaps: Vec<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]

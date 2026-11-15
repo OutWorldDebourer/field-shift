@@ -43,6 +43,7 @@ pub fn app(state: AppState) -> Router {
         .nest("/crops", crops::routes())
         .route("/analyses/{id}/evidence", post(build_evidence))
         .route("/analyses/{id}/intake", post(intake))
+        .route("/analyses/{id}/rotation/evaluate", post(evaluate_crop))
         .nest("/analyses", analyses::routes())
         .nest("/consultant", consultant::routes())
         .nest("/export", export::routes());
@@ -63,6 +64,14 @@ pub fn app(state: AppState) -> Router {
 async fn intake(State(s): State<AppState>, Path(id): Path<String>, Json(form): Json<evidence::intake::IntakeForm>) -> common::ApiResult<Json<analyses::AnalysisState>> {
     let lang = analyses::store::load(&s.db, &id).await?.lang;
     evidence::intake::apply(&s, &id, &form, &lang).await.map_err(common::ApiError::Other)?;
+    Ok(Json(analyses::store::load(&s.db, &id).await?))
+}
+
+/// POST /api/analyses/{id}/rotation/evaluate {crop} → the analysis with the "Your proposal" column in Rotation.
+async fn evaluate_crop(State(s): State<AppState>, Path(id): Path<String>, Json(b): Json<serde_json::Value>) -> common::ApiResult<Json<analyses::AnalysisState>> {
+    let crop = b["crop"].as_str().unwrap_or("").trim();
+    if crop.is_empty() || crop.chars().count() > 80 { return Err(common::ApiError::BadRequest("type a crop name (1-80 characters)".into())); }
+    evidence::proposal::evaluate(&s, &id, crop).await.map_err(|e| common::ApiError::BadRequest(e.to_string()))?;
     Ok(Json(analyses::store::load(&s.db, &id).await?))
 }
 

@@ -8,6 +8,7 @@
 .cbub__ico svg { width: 30px; height: 30px; stroke-width: 1.6; }
 /* Views keep their last row clear of the bubble. */
 .ws:not([data-view='chat']) .view { padding-bottom: 96px; }
+
 .cmini__notice { display: flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 0.8125rem; color: var(--ink); border-bottom: 1px solid var(--rule); }
 .cmini__notice svg { width: 15px; height: 15px; flex: none; }
 .cbub__dot { position: absolute; top: 6px; right: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--amber); border: 2px solid #fff; }
@@ -40,8 +41,10 @@
 .cmini .chat { flex: 1; height: auto; min-height: 0; border: 0; border-radius: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 @media (max-width: 899px) {
-  .cbub { right: 16px; bottom: calc(136px + env(safe-area-inset-bottom)); width: 56px; height: 56px; }
-  .cbub__peek { right: 84px; left: 16px; max-width: none; bottom: calc(136px + env(safe-area-inset-bottom)); max-height: 56px; overflow: hidden; padding: 6px 12px; font-size: 0.875rem;
+  .cbub { right: 10px; bottom: calc(80px + env(safe-area-inset-bottom)); width: 48px; height: 48px; }
+  .cbub__ico svg { width: 24px; height: 24px; }
+  .ws:not([data-view='chat']) .ws__foot { padding-right: 66px; }
+  .cbub__peek { right: 66px; left: 10px; max-width: none; bottom: calc(80px + env(safe-area-inset-bottom)); max-height: 56px; overflow: hidden; padding: 6px 12px; font-size: 0.875rem;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   .cbub__peek[hidden] { display: none; }
   .cmini__grab { display: block; width: 44px; height: 5px; margin: 8px auto 0; border-radius: 3px; background: rgba(255, 255, 255, 0.5); }

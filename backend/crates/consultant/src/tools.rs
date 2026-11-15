@@ -37,6 +37,9 @@ pub fn definitions() -> Value {
           "strict": true,
           "input_schema": { "type": "object", "additionalProperties": false, "required": ["view"],
             "properties": { "view": { "type": "string", "enum": ["dashboard", "rotation", "organic", "prevention", "sheet"] } } } },
+        { "name": "evaluate_crop", "description": "Score a crop the farmer is thinking of growing ('what do you think of growing avocado?') with the same rotation engine and this field's NASA signals: soil, water, pest-cycle break by botanical family, income, risk, with why, gaps and risks. Adds a 'Your proposal' column to the Rotation tab. Any crop name, any language. Perennials are evaluated as plantations, never as a rotation.",
+          "strict": true,
+          "input_schema": { "type": "object", "additionalProperties": false, "required": ["crop"], "properties": { "crop": { "type": "string" } } } },
         { "name": "get_sheet", "description": "Read the technical sheet as it stands: each section's state, summary and item titles, the guided topics and the information gaps. Use it to point the farmer to what the sheet already says and to give the closing recommendations.",
           "input_schema": { "type": "object", "additionalProperties": false, "properties": {} } },
         { "name": "record_facts", "description": "Record what the farmer told you (or what an attached document says) as short plain answers. Use only the fields you learned; they appear on the technical sheet as 'What the farmer told us'.",
@@ -108,6 +111,13 @@ pub async fn execute(state: &AppState, id: &str, name: &str, input: &Value, fx: 
         "record_facts" => {
             let merged = store::merge_facts(&state.db, id, input).await.map_err(|e| e.to_string())?;
             Ok(json!({ "ok": true, "facts": merged }))
+        }
+        "evaluate_crop" => {
+            let p = evidence::proposal::evaluate(state, id, &s("crop")).await.map_err(|e| e.to_string())?;
+            let st_lang = store::load(&state.db, id).await.map(|x| x.lang).unwrap_or_default();
+            Ok(crate::views::deep(&json!({ "proposal": { "name": p["name"], "crop": p["crop"], "sequence": if st_lang == "es" { p["timeline_es"].clone() } else { p["timeline"].clone() },
+                "scores_1_to_5": p["scores"], "why": p["why"], "gaps": p["gaps_list"], "risks": p["risks_list"] },
+                "note": "Shown as the 'Your proposal' column in the Rotation tab; compare it with get_view('rotation')." }), lang(&st_lang)))
         }
         "get_view" => {
             let st = store::load(&state.db, id).await.map_err(|e| e.to_string())?;

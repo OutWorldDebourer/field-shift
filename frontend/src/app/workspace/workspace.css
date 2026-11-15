@@ -174,6 +174,27 @@
 .strats { grid-template-rows: repeat(6, auto); row-gap: 0; }
 .strat { grid-row: span 6; grid-template-rows: subgrid; row-gap: 12px; }
 .strat > .askbtn { justify-self: start; align-self: end; margin-top: 0; }
+/* Iteration 4: the farmer's proposal as a fourth column (dashed: an idea, not a recommendation). */
+.strats--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.strats--1 { grid-template-columns: minmax(0, 420px); margin-top: 12px; }
+.rot__eval { margin: 0 0 12px; }
+.strat__plant { display: grid; grid-template-columns: auto 1fr; gap: 6px 8px; align-items: center; }
+.strat__plant-now { padding: 3px 10px; border-radius: 6px; background: var(--plan); color: #fff; font-weight: 600; font-size: 0.875rem; }
+.strat__plant-bar { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--plan), rgba(74, 144, 226, 0.25)); }
+.strat__plant-t { grid-column: 1 / -1; font-size: 0.875rem; color: var(--ink); }
+.strat.is-proposal { border-style: dashed; border-color: rgba(255, 255, 255, 0.7); }
+.strat .strat__tag--prop { font-family: inherit; font-size: 0.875rem; background: none; color: #cfe3ff; border: 1px dashed var(--plan-light); }
+.strat__src { font-size: 0.8125rem; line-height: 1.45; color: var(--ink); }
+.strat__ev { display: grid; gap: 4px; padding-left: 16px; margin: 0; }
+.strat__ev li { font-size: 0.9375rem; line-height: 1.4; }
+.strats--4 .strat__scores dt { font-size: 0.875rem; }
+.rot__eval { padding: 14px 16px; border-radius: 18px; display: grid; gap: 6px; }
+.rot__eval-t { font-size: 1.25rem; font-style: italic; }
+.rot__eval-h { font-size: 0.9375rem; color: var(--ink-2); }
+.rot__eval-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.rot__eval-row input { flex: 1 1 220px; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(5, 12, 20, 0.4); font-size: 1rem; }
+.rot__eval-s { font-size: 0.8125rem; color: var(--ink); min-height: 1em; }
+@media (max-width: 1240px) { .strats--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .strat__head { display: grid; gap: 8px; justify-items: start; align-content: start; }
 .strat__head h3 { font-size: 1.375rem; line-height: 1.12; }
 .strat__tag { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.6); }
@@ -256,7 +277,7 @@
 .peek { display: none; }
 .crops { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .crop input { width: 100%; min-width: 0; }
-.ws[data-view='rotation'] .ws__notice { visibility: hidden; }
+/* Iteration 4: the pinned pre-diagnosis notice stays on every tab. */
 @media (max-width: 899px) {
   .strats { grid-template-rows: none; row-gap: 12px; }
   .strat { grid-row: auto; grid-template-rows: auto; }
@@ -265,7 +286,7 @@
   .bar__flags { margin-left: auto; }
   .ws__foot { flex-direction: column; align-items: stretch; gap: 3px; }
   .ws__credit { display: block; max-width: none; text-align: left; font-size: 0.8125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; }
-  .ws[data-view='rotation'] .ws__notice { display: none; }
+
   .view--dashboard, .view--rotation { padding-bottom: 16px; }
   .chat.has-crops .crops__sum { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 10px; border: 0; background: none; padding: 0 2px; font-size: 1rem; text-align: left; }
   .crops__sum u { font-size: 0.9375rem; text-underline-offset: 4px; flex: none; }

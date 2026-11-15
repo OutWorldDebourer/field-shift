@@ -46,18 +46,19 @@ Otherwise reply with one JSON object in exactly this shape. Each TRAIT is either
 Guidance: Kc from FAO-56 Table 12 or a published crop-coefficient study; temperature thresholds in °C; 2-4 main pests (lower developmental threshold in °C and degree-days per generation ONLY where a paper or extension model publishes them, otherwise gaps); 2-4 biological control agents (e.g. Trichoderma, Beauveria bassiana, Bacillus thuringiensis, Chrysoperla, parasitoid wasps) that are documented for this crop or its pests. Use at most {MAX_SEARCHES} searches; prefer sources covering several traits."#)
 }
 
-/// Researches `query` with Claude and returns a validated record (origin ai-researched, labelled "AI-researched, verify").
-/// `db`, when given, receives the token usage of every call (`api_usage`, kind "research").
-pub async fn research(http: &reqwest::Client, api_key: &str, query: &str, db: Option<&sqlx::MySqlPool>) -> anyhow::Result<CropRecord> {
+/// One research conversation with server-side web search: returns the final text and every URL the model actually
+/// retrieved (citations are validated against these). Usage goes to `api_usage` (kind "research") when `db` is given.
+pub(crate) async fn search_conversation(http: &reqwest::Client, api_key: &str, system: &str, prompt: String, tag: &str, max_tokens: u32, db: Option<&sqlx::MySqlPool>)
+    -> anyhow::Result<(String, HashSet<String>)> {
     let tools = json!([{ "type": "web_search_20260209", "name": "web_search", "max_uses": MAX_SEARCHES }]);
-    let mut messages = vec![json!({ "role": "user", "content": user_prompt(query) })];
+    let mut messages = vec![json!({ "role": "user", "content": prompt })];
     let mut seen_urls: HashSet<String> = HashSet::new();
     let mut final_text = String::new();
     for attempt in 0..=MAX_CONTINUATIONS {
         let body = json!({
             "model": MODEL,
-            "max_tokens": MAX_TOKENS,
-            "system": SYSTEM,
+            "max_tokens": max_tokens,
+            "system": system,
             "output_config": { "effort": "medium" },
             "fallbacks": "default",
             "tools": tools,
@@ -76,7 +77,7 @@ pub async fn research(http: &reqwest::Client, api_key: &str, query: &str, db: Op
         let status = resp.status();
         let msg: Value = resp.json().await.map_err(|e| anyhow!("anthropic response unreadable: {}", e.without_url()))?;
         if let Some(db) = db {
-            let call = common::usage::Call { analysis_id: None, kind: "research", turn_key: Some(query), round: attempt as u32 + 1, model: MODEL };
+            let call = common::usage::Call { analysis_id: None, kind: "research", turn_key: Some(tag), round: attempt as u32 + 1, model: MODEL };
             common::usage::record(db, &call, common::usage::Usage::of(&msg)).await;
         }
         if !status.is_success() {
@@ -96,6 +97,13 @@ pub async fn research(http: &reqwest::Client, api_key: &str, query: &str, db: Op
             _ => break,
         }
     }
+    Ok((final_text, seen_urls))
+}
+
+/// Researches `query` with Claude and returns a validated record (origin ai-researched, labelled "AI-researched, verify").
+/// `db`, when given, receives the token usage of every call (`api_usage`, kind "research").
+pub async fn research(http: &reqwest::Client, api_key: &str, query: &str, db: Option<&sqlx::MySqlPool>) -> anyhow::Result<CropRecord> {
+    let (final_text, seen_urls) = search_conversation(http, api_key, SYSTEM, user_prompt(query), query, MAX_TOKENS, db).await?;
     let v = extract_json(&final_text).context("research reply held no JSON object")?;
     if v.get("not_a_crop").and_then(Value::as_bool) == Some(true) {
         bail!("not recognized as a crop: {}", v.get("reason").and_then(Value::as_str).unwrap_or(""));
@@ -243,6 +251,7 @@ pub(crate) fn validate(v: &Value, query: &str, seen: &HashSet<String>) -> anyhow
             lower_threshold: cx.trait_(p.get("lower_threshold"), &format!("{path}.lower_threshold")),
             degree_days_per_generation: cx.trait_(p.get("degree_days_per_generation"), &format!("{path}.degree_days_per_generation")),
             note: str_of(p.get("note")),
+            conditions: None,
         });
     }
     let mut beneficials = vec![];
@@ -286,6 +295,7 @@ pub(crate) fn validate(v: &Value, query: &str, seen: &HashSet<String>) -> anyhow
         pests,
         beneficials,
         rotation_notes,
+        micronutrients: vec![], biostimulants: vec![], extras_reviewed: None, extras_gaps: vec![],
     };
     let q = query.trim().to_lowercase();
     let aliases = if en.contains(&q) || es.contains(&q) { vec![] } else { vec![q] };

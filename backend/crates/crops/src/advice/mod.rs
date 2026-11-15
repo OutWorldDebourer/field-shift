@@ -218,6 +218,11 @@ pub fn advice(current: &CropRecord, previous: &[CropRecord], signals: &FieldSign
     }
 }
 
+/// The farmer's own proposed crop as a fourth strategy, scored with the same engine ("What if I grow …?").
+pub fn evaluate(current: &CropRecord, previous: &[CropRecord], candidate: &CropRecord, signals: &FieldSignals) -> Strategy {
+    rotation::proposal(current, previous, candidate, signals)
+}
+
 pub fn pest_thresholds(c: &CropRecord) -> Vec<PestThreshold> {
     c.traits.pests.iter().filter_map(|p| {
         let (Trait::Value { citation: tc, .. }, Trait::Value { citation: dc, note, .. }) = (&p.lower_threshold, &p.degree_days_per_generation) else { return None };
@@ -367,5 +372,22 @@ mod tests {
         }
         let n_full = pea.traits.pests.iter().filter(|p| p.lower_threshold.num().is_some() && p.degree_days_per_generation.num().is_some()).count();
         assert_eq!(pest_thresholds(pea).len(), n_full);
+    }
+
+    #[test]
+    fn proposals_use_the_same_engine() {
+        let pea = crate::seed::get("pea").unwrap();
+        let lettuce = crate::seed::get("lettuce").unwrap().clone();
+        // A perennial is a plantation, never "rotate the main crop".
+        let avo = evaluate(pea, &[lettuce.clone()], crate::seed::get("avocado").unwrap(), &s());
+        assert!(avo.title.en.contains("perennial") && avo.id == "proposal");
+        assert!(!avo.why.en.to_lowercase().contains("rotate"));
+        assert!(avo.scores.water <= 2, "a perennial is irrigated all year");
+        // Same botanical family as the current crop: no pest-cycle break.
+        let bean = evaluate(pea, &[lettuce.clone()], crate::seed::get("common_bean").unwrap(), &s());
+        assert_eq!(bean.scores.pest_break, 1);
+        // Another family breaks the cycle.
+        let maize = evaluate(pea, &[lettuce], crate::seed::get("maize").unwrap(), &s());
+        assert!(maize.scores.pest_break >= 4);
     }
 }

@@ -23,12 +23,21 @@ const FILES: &[(&str, &str)] = &[
     ("pineapple", include_str!("../data/pineapple.json")),
 ];
 
+/// Phase-D research sidecars (`data/extras/<key>.json`): pest conditions, micronutrients, biostimulants.
+const EXTRAS: &[(&str, &str)] = &[
+];
+
 /// All seed records (parsed once; a malformed file is a build-time bug caught by the tests).
 pub fn all() -> &'static [CropRecord] {
     static SEED: OnceLock<Vec<CropRecord>> = OnceLock::new();
     SEED.get_or_init(|| {
         FILES.iter().map(|(name, text)| {
-            serde_json::from_str::<CropRecord>(text).unwrap_or_else(|e| panic!("seed file {name}.json: {e}"))
+            let mut r = serde_json::from_str::<CropRecord>(text).unwrap_or_else(|e| panic!("seed file {name}.json: {e}"));
+            if let Some((_, x)) = EXTRAS.iter().find(|(k, _)| k == name) {
+                let x: crate::research_extras::Extras = serde_json::from_str(x).unwrap_or_else(|e| panic!("extras file {name}.json: {e}"));
+                crate::research_extras::apply(&mut r, &x);
+            }
+            r
         }).collect()
     })
 }

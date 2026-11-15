@@ -239,3 +239,83 @@ pub fn interim_cover(c: &CropRecord) -> Block {
         ],
     }
 }
+
+/// "What if I grow …?": the farmer's own proposal, scored with the same engine and the same field signals.
+/// A perennial proposal is a long-term plantation (never "rotate the main crop"); an annual or semi-perennial one
+/// is the next season after the current crop.
+pub fn proposal(c: &CropRecord, previous: &[CropRecord], p: &CropRecord, s: &FieldSignals) -> Strategy {
+    let same_family = p.family == c.family;
+    let in_prev = previous.iter().any(|x| x.family == p.family);
+    let mut gaps = vec![income_gap()];
+    let water = water_score(c, Some(p), s, &mut gaps);
+    let mut evidence: Vec<Evidence> = [
+        trait_evidence(c, "Kc mid", "Kc medio", &c.traits.kc.mid),
+        trait_evidence(p, "Kc mid", "Kc medio", &p.traits.kc.mid),
+        trait_evidence(p, "seasonal water need", "necesidad de agua por campaña", &p.traits.seasonal_water_need),
+    ].into_iter().flatten().collect();
+    if p.is_legume() { evidence.extend(trait_evidence(p, "N fixation", "fijación de N", &p.traits.n_fixation.typical_range)); }
+    evidence.extend(rotation_note(p));
+    evidence.extend(signals_evidence(s));
+    if p.origin == Origin::AiResearched {
+        gaps.push(L10n::new(format!("{}: crop data researched by AI from open sources, verify.", p.name_en()),
+                            format!("{}: datos del cultivo investigados por IA en fuentes abiertas, verificar.", p.name_es())));
+    }
+    if p.crop_type == CropType::Perennial {
+        evidence.push(guidance("A perennial plantation is kept for years: it is not rotated; inter-row covers, mulch and residue management protect its soil.",
+            "Una plantación perenne se mantiene por años: no se rota; las coberturas entre hileras, el mulch y el manejo de residuos protegen su suelo.", refs::sare_cover_crops()));
+        // Reasoning, not a sourced figure: no citation is attached.
+        evidence.push(Evidence { kind: EvidenceKind::Guidance, citation: None,
+            text: L10n::new("A perennial is irrigated all year round, not only during one crop season, so its water score is not taken from Kc alone.",
+                            "Un perenne se riega todo el año, no solo durante una campaña, así que su puntaje de agua no sale solo del Kc.") });
+        gaps.push(L10n::new(format!("Years to the first {} harvest, plant cost and local market are not in the data.", p.name_en()),
+                            format!("Los años hasta la primera cosecha de {}, el costo de plantación y el mercado local no están en los datos.", p.name_es())));
+        return Strategy {
+            id: "proposal".into(), is_current: false,
+            title: L10n::new(format!("Your proposal: plant {} (perennial)", p.name_en()), format!("Tu propuesta: plantar {} (perenne)", p.name_es())),
+            sequence: seq(previous, vec![c.name(), L10n::new(format!("{} (plantation, years)", p.name_en()), format!("{} (plantación, años)", p.name_es()))]),
+            scores: Scores {
+                soil: clamp(3 + i32::from(s.bare_soil == Some(true))),
+                // Kc alone flatters a perennial: it is irrigated all year, not for one season.
+                water: clamp(2 - i32::from(s.water_balance_mm.is_some_and(|w| w < 0.0))),
+                // A different family ends the current crop's pests, but a perennial hosts its own pests for years.
+                pest_break: clamp(if same_family { 1 } else { 3 }),
+                income: 2,
+                risk: clamp(2 - i32::from(s.water_balance_mm.is_some_and(|w| w < -50.0) && water <= 2)),
+            },
+            why: L10n::new(format!("{} is a perennial: planted once and kept for years, with covers between the rows instead of rotation. It changes the farm for a long time.", p.name_en()),
+                           format!("{} es perenne: se planta una vez y se mantiene por años, con coberturas entre hileras en vez de rotación. Cambia el campo por mucho tiempo.", p.name_es())),
+            evidence, gaps,
+            risks: vec![L10n::new("Years without a harvest while the plants grow; a long-term commitment of land and water.",
+                                  "Años sin cosecha mientras crecen las plantas; un compromiso largo de tierra y agua.")],
+        };
+    }
+    let legume_link = p.is_legume() || c.is_legume();
+    let why = if same_family {
+        L10n::new(format!("{} is in the same family as {} ({}): it shares their pests and soil diseases, so it does not break the cycle.", p.name_en(), c.name_en(), c.family),
+                  format!("{} es de la misma familia que {} ({}): comparte sus plagas y enfermedades del suelo, así que no corta el ciclo.", p.name_es(), c.name_es(), c.family))
+    } else if p.is_legume() {
+        L10n::new(format!("A legume ({}) after {}: another family that fixes nitrogen and breaks the pest cycle.", p.family, c.name_en()),
+                  format!("Una leguminosa ({}) después de {}: otra familia que fija nitrógeno y corta el ciclo de plagas.", p.family, c.name_es()))
+    } else {
+        L10n::new(format!("Changes family ({} → {}) to break pest and disease cycles{}.", c.family, p.family, if c.is_legume() { ", using the nitrogen the legume left" } else { "" }),
+                  format!("Cambia de familia ({} → {}) para cortar el ciclo de plagas y enfermedades{}.", c.family, p.family, if c.is_legume() { ", aprovechando el nitrógeno que dejó la leguminosa" } else { "" }))
+    };
+    let mut risks = vec![L10n::new(format!("Check seed, water turn and buyers for {} before choosing.", p.name_en()),
+                                   format!("Verifique semilla, turno de riego y compradores para {} antes de elegir.", p.name_es()))];
+    if same_family {
+        risks.push(L10n::new(format!("Same family ({}) again: pests and root diseases carry over.", p.family), format!("Misma familia ({}) otra vez: plagas y enfermedades de raíz se mantienen.", p.family)));
+    }
+    Strategy {
+        id: "proposal".into(), is_current: false,
+        title: L10n::new(format!("Your proposal: {} next", p.name_en()), format!("Tu propuesta: {} después", p.name_es())),
+        sequence: seq(previous, vec![c.name(), p.name()]),
+        scores: Scores {
+            soil: clamp(3 + i32::from(legume_link) - i32::from(same_family)),
+            water,
+            pest_break: clamp(if same_family { 1 } else if in_prev { 3 } else { 4 } + i32::from(pest_pressure(s) && !same_family && !in_prev)),
+            income: 3,
+            risk: clamp(3 - i32::from(same_family) - i32::from(pest_pressure(s) && same_family)),
+        },
+        why, evidence, gaps, risks,
+    }
+}

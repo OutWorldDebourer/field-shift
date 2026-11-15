@@ -4,7 +4,7 @@ use common::geo::Field;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-pub const SECTION_KEYS: [&str; 7] = ["field", "soil", "pests", "nutrition", "rotation", "sheet", "organic"];
+pub const SECTION_KEYS: [&str; 8] = ["field", "soil", "pests", "nutrition", "rotation", "sheet", "organic", "prevention"];
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Bi {

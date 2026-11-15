@@ -4,7 +4,7 @@
 |------|--------------|
 | `src/anthropic.rs` | Messages API client (claude-opus-5-5, refusal fallback); key never logged |
 | `src/prompt.rs` | Cached system prompt (missing information asked as one checklist) and the per-turn context note |
-| `src/tools.rs` | Tools: set_crops, get_evidence, get_advice, update_section, tag_photo, complete_step, get_sheet, record_facts, record_gap |
+| `src/tools.rs` | Tools: set_crops, get_evidence, get_advice, get_view, evaluate_crop, update_section, tag_photo, complete_step, get_sheet, record_facts, record_gap |
 | `src/views.rs` | `get_view(view)`: what the dashboard, rotation, organic, prevention and sheet tabs show, numbered as on screen, in the conversation language |
 | `src/compact.rs` | What the model reads: the stored evidence package and the advice summary compacted, in the conversation language |
 | `src/probe.rs` | Development token probe: replays one scripted turn and counts each request with the free `count_tokens` endpoint |

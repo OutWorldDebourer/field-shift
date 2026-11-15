@@ -77,6 +77,13 @@ export interface SectionContent {
     scores: { soil: number; water: number; pest_break: number; income: number; risk: number };
     why: Bi; evidence: Bi; gaps: Bi; risks: Bi;
   }[];
+  /** Iteration 4: the farmer's own proposal ("What if I grow …?"), scored by the same engine. */
+  proposal?: {
+    name: Bi; timeline: string[]; timeline_es?: string[]; proposal?: boolean;
+    scores: { soil: number; water: number; pest_break: number; income: number; risk: number };
+    why: Bi; evidence: Bi; gaps: Bi; risks: Bi;
+    crop?: { key: string; name: Bi; crop_type: string; family: string; origin: string };
+  } | null;
 }
 
 export interface Section { key: SectionKey; state: SectionState; note?: Bi; content?: SectionContent }

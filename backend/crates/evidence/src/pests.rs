@@ -11,10 +11,10 @@ use std::collections::HashSet;
 
 /// Role of a crop in this analysis.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Role { Current, Previous, Next }
+pub enum Role { Current, Previous, Next, Proposal }
 
 impl Role {
-    fn as_str(self) -> &'static str { match self { Role::Current => "current", Role::Previous => "previous", Role::Next => "next" } }
+    fn as_str(self) -> &'static str { match self { Role::Current => "current", Role::Previous => "previous", Role::Next => "next", Role::Proposal => "proposal" } }
 }
 
 /// The crops of the analysis: current, previous (as stored) and the planned next crop when it is in the seed
@@ -32,6 +32,9 @@ pub async fn crops_of(state: &AppState, st: &AnalysisState) -> Vec<(CropRecord, 
         if let Some(m) = crops::normalize::best(n, crops::seed::all()) {
             if let Some(r) = crops::seed::get(&m.key) { push(r.clone(), Role::Next, &mut out); }
         }
+    }
+    if let Some(k) = st.facts.as_ref().and_then(|f| f["proposal_crop"].as_str()) {
+        if let Ok(r) = crops::resolve(state, k).await { push(r, Role::Proposal, &mut out); }
     }
     out
 }

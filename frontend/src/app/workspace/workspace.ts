@@ -23,6 +23,7 @@ import { flipLine } from './rail';
 import { copernicusGloss } from './credit';
 import { isFresh, mountIntake } from './intake';
 import { mountBubble } from './bubble';
+import { wireEvaluate } from './evaluate';
 import { setViewContext } from '../../shared/viewctx';
 import { organicHtml } from './organic';
 import './workspace.css';
@@ -150,6 +151,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       void mountDashboardMap($('#view-dashboard'), a).then((c) => { dashCleanup = c; });
     } else if (state.view === 'rotation') {
       $('#view-rotation').innerHTML = rotationHtml(a);
+      wireEvaluate($('#view-rotation'), () => state.analysis!, (next) => { const cur = state.analysis!; set({ analysis: { ...cur, ...next, offline: cur.offline, readOnly: cur.readOnly, shareToken: cur.shareToken } }); });
     } else if (state.view === 'organic') {
       $('#view-organic').innerHTML = organicHtml(a);
     }
