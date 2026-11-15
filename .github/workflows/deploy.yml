@@ -1,0 +1,111 @@
+# Publishes Field Shift to the server. Runs only when asked: the "Run workflow" button (Actions → Deploy), or a
+# pushed tag v*. It builds a Linux release (binary + frontend + data), uploads it with the server's setup files,
+# runs infra/deploy/bootstrap.sh (idempotent server configuration) and infra/deploy/deploy.sh (atomic switch,
+# health check, automatic rollback), then checks the public address.
+#
+# Repository settings it needs (infra/deploy/README.md, infra/deploy/github-setup.ps1):
+#   secrets  DEPLOY_HOST          server IP
+#            DEPLOY_SSH_KEY       private key of the "deploy" user (its public key was given to the VM)
+#            FIELDSHIFT_ENV_TXT   contents of env.txt (API keys); installed on the server, never logged
+#   variable FIELDSHIFT_DOMAIN    site address; empty → <ip-with-dashes>.sslip.io (HTTPS without a domain)
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Ubuntu 22.04 (glibc 2.35) so the binary also runs on Debian 12 and 13.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: backend
+      - name: Backend (release binary)
+        working-directory: backend
+        run: cargo build --release --locked -p api --bin fieldshift
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Frontend
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npx tsc --noEmit -p .
+          npx vite build
+      - name: Assemble the release
+        run: |
+          mkdir -p rel/frontend rel/backend
+          cp backend/target/release/fieldshift rel/
+          cp -r frontend/dist rel/frontend/dist
+          cp -r backend/data rel/backend/data
+          echo "$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" > rel/VERSION
+          tar -czf release.tar.gz -C rel .
+          echo "release $(cat rel/VERSION), $(du -h release.tar.gz | cut -f1)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: release.tar.gz
+          retention-days: 14
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Settings present
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          ENVTXT: ${{ secrets.FIELDSHIFT_ENV_TXT }}
+        run: |
+          missing=""
+          [ -n "$HOST" ] || missing="$missing DEPLOY_HOST"
+          [ -n "$KEY" ] || missing="$missing DEPLOY_SSH_KEY"
+          [ -n "$ENVTXT" ] || missing="$missing FIELDSHIFT_ENV_TXT"
+          if [ -n "$missing" ]; then echo "::error::Missing repository secrets:$missing (see infra/deploy/README.md)"; exit 1; fi
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: infra/deploy
+      - uses: actions/download-artifact@v4
+        with:
+          name: release
+      - name: SSH
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -T 15 -t ed25519 "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+      - name: Upload and install
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          ENVTXT: ${{ secrets.FIELDSHIFT_ENV_TXT }}
+          DOMAIN_VAR: ${{ vars.FIELDSHIFT_DOMAIN }}
+        run: |
+          DOMAIN="${DOMAIN_VAR:-${HOST//./-}.sslip.io}"
+          echo "site: $DOMAIN"
+          umask 077; printf '%s\n' "$ENVTXT" > env.txt
+          D=/tmp/fieldshift-deploy
+          ssh deploy@"$HOST" "rm -rf $D && mkdir -p $D"
+          scp -q infra/deploy/* release.tar.gz env.txt deploy@"$HOST":$D/
+          rm -f env.txt
+          ssh deploy@"$HOST" "sudo FS_DOMAIN='$DOMAIN' bash $D/bootstrap.sh $D && sudo /opt/fieldshift/bin/deploy.sh $D/release.tar.gz $D/env.txt; s=\$?; rm -rf $D; exit \$s"
+          echo "DOMAIN=$DOMAIN" >> "$GITHUB_ENV"
+      - name: Public check
+        run: |
+          for _ in $(seq 1 20); do
+            if curl -fsS -m 10 "https://$DOMAIN/api/health" >/dev/null; then echo "live: https://$DOMAIN"; exit 0; fi
+            sleep 6
+          done
+          echo "::error::https://$DOMAIN/api/health did not answer (DNS not pointing at the server yet, or the certificate is still being issued)"; exit 1
