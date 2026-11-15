@@ -18,7 +18,8 @@ import { rotationHtml } from './rotation';
 import { peekHtml, peekSection, sectionsColumn, sectionsRow, sheetHtml } from './sections';
 import { enableGlossary } from '../../shared/glosspanel';
 import { chime } from './chime';
-import { newlyDone, stepsOf } from './progress';
+import { allDone, newlyDone, stepsOf } from './progress';
+import { exported, markExported, markSeen, seenViews } from './readylight';
 import { flipLine } from './rail';
 import { copernicusGloss } from './credit';
 import { isFresh, mountIntake } from './intake';
@@ -29,6 +30,7 @@ import { organicHtml } from './organic';
 import { preventionHtml, wirePrevention } from './prevention';
 import './workspace.css';
 import './guided.css';
+import './complete.css';
 
 const TABS: { v: View; label: 'ap_tab_chat' | 'ap_tab_dash' | 'ap_tab_rot' | 'ap_tab_prev' | 'ap_tab_org'; icon: 'chat' | 'dashboard' | 'rotation' | 'alert' | 'ladybug' }[] = [
   { v: 'chat', label: 'ap_tab_chat', icon: 'chat' }, { v: 'dashboard', label: 'ap_tab_dash', icon: 'dashboard' }, { v: 'rotation', label: 'ap_tab_rot', icon: 'rotation' },
@@ -44,7 +46,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
       <a class="bar__brand serif" href="index.html" aria-label="${esc(t('ap_home'))}" data-i18n-attr="aria-label:ap_home">Field Shift</a>
       <button type="button" class="pill bar__chip" id="chip"></button>
       <nav class="tabs" role="tablist" aria-label="${esc(t('ap_views'))}" data-i18n-attr="aria-label:ap_views">
-        ${TABS.map((x) => `<button type="button" role="tab" id="tab-${x.v}" aria-controls="view-${x.v}" data-tab="${x.v}">${icon(x.icon)}<span data-i18n="${x.label}">${esc(t(x.label))}</span></button>`).join('')}
+        ${TABS.map((x) => `<button type="button" role="tab" id="tab-${x.v}" aria-controls="view-${x.v}" data-tab="${x.v}">${icon(x.icon)}<span data-i18n="${x.label}">${esc(t(x.label))}</span><span class="sr-only tab__new"></span></button>`).join('')}
       </nav>
       ${downloadMenuHtml()}
       <span class="bar__flags" id="flags"></span>
@@ -103,6 +105,12 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
   const bubble = mountBubble(ws, $('#chat'), chat);
   wireExports(ws, () => state.analysis);
   wireDownloadMenu(ws, () => state.analysis);
+  // The first export puts out the Download light.
+  ws.addEventListener('click', (e) => {
+    const a = state.analysis;
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-export=sheet], [data-export=zip]');
+    if (a && b && !a.offline) { markExported(a.id); ws.classList.add('is-exported'); }
+  });
   const intake = mountIntake(ws, () => state.analysis!, (next) => {
     const cur = state.analysis!;
     set({ analysis: { ...cur, ...next, offline: cur.offline, readOnly: cur.readOnly, shareToken: cur.shareToken, evidence: next.evidence ?? cur.evidence } });
@@ -123,6 +131,22 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     if (a.readOnly) flags.push(`<span class="pill">${esc(t('ws_read_only'))}</span>`);
     $('#flags').innerHTML = flags.join('');
     $('#si-tag').hidden = !a.messages.some((m) => m.photos?.some((p) => p.url.startsWith('/img/')));
+    // Every topic done: the views not opened yet and the Download button light up ("you can go on"); each goes out
+    // once it has been used (readylight.ts), so the call never keeps shouting.
+    const complete = allDone(stepsOf(a)) && !a.readOnly;
+    if (complete) markSeen(a.id, state.view);
+    const seen = seenViews(a.id);
+    let anyNew = false;
+    $$<HTMLButtonElement>('[data-tab]', host).forEach((b) => {
+      const isNew = complete && b.dataset.tab !== 'chat' && !seen.has(b.dataset.tab ?? '');
+      anyNew ||= isNew;
+      b.classList.toggle('is-new', isNew);
+      const sr = b.querySelector('.tab__new'); if (sr) sr.textContent = isNew ? t('ap_tab_new') : '';
+    });
+    ws.classList.toggle('is-complete', complete);
+    ws.classList.toggle('has-new', anyNew);
+    ws.classList.toggle('is-exported', exported(a.id));
+    const next = $('#dlm-btn').querySelector('.dlm__next'); if (next) next.textContent = complete && !exported(a.id) ? t('dl_next') : '';
     $$<HTMLButtonElement>('[data-tab]', host).forEach((b) => { const on = b.dataset.tab === state.view; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
     const credit = state.snapshotCredit;
     const gloss = copernicusGloss(credit);
@@ -261,10 +285,12 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     if ('open' in ch) renderSections();
     if ('analysis' in ch) {
       const steps = stepsOf(state.analysis!);
+      const finished = allDone(steps) && !allDone(prevSteps);
       just = newlyDone(prevSteps, steps);
       prevSteps = steps;
       if (just.length) { chime(); $('#flip-live').textContent = just.map((k) => flipLine(steps, k)).join(' '); }
       renderBar(); renderSections(); chat.render(state.analysis!, just);
+      if (finished) { ws.classList.add('is-completing'); setTimeout(() => ws.classList.remove('is-completing'), 2000); }
       just = [];
       if (state.view !== 'chat') renderView();
       const k = $('#sheet').dataset.key as SectionKey | undefined;

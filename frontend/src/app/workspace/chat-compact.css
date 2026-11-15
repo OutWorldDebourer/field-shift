@@ -35,8 +35,8 @@
 .rail__toggle[aria-expanded='true'] > svg { transform: rotate(180deg); }
 .rail__dots { flex: none; display: inline-flex; align-items: center; gap: 5px; }
 .rail__dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.8); }
-.rail__dot.is-done { background: #fff; border-color: #fff; }
-.rail__dot.is-active { width: 18px; border-radius: 4px; background: var(--amber); border-color: var(--amber); }
+.rail__dot.is-done { background: #b8f5d4; border-color: #b8f5d4; }
+.rail__dot.is-active { width: 18px; border-radius: 4px; background: #fff; border-color: #fff; }
 .rail__dot.is-just { animation: fs-pop 0.6s var(--ease) 1; }
 .rail__now { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rail__now b { color: var(--ink); font-weight: 600; }

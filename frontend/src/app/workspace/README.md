@@ -11,7 +11,8 @@
 - `evaluate.ts` — "What if I grow…?" form in Rotation (POST …/rotation/evaluate); the fourth "Your proposal" column is drawn by `rotation.ts`.
 - `photos.ts` — originals kept unless > 12 MB or > 4096 px (then JPEG quality 0.92, ≤ 4096 px); size text.
 - `progress.ts` — guided steps (field → soil → pests → nutrition → rotation → sheet): backend `steps`, or derived from sections; display states; newly-done detection.
-- `rail.ts` — thin progress bar (six dots, "n/6 done · topic"), expanding to the named topic chips and the "Next topic … I need …" line; chime toggle; the "We have enough information" card.
+- `rail.ts` — thin progress bar (six dots, "n/6 done · topic"), expanding to the named topic chips and the "Next topic … I need …" line; chime toggle; the "We have enough information" card (closable, remembered per analysis).
+- `complete.css`, `readylight.ts` — the "ready" light: covered topics get an aurora tint and a one-time sweep, the "6 of 6 covered" pill lights up; once every topic is done, the views not opened yet and Download get a thin neon ring (three slow drifts, then at rest) that goes out per view once opened and after the first export (remembered per analysis in this browser).
 - `chat-compact.css` — iteration 4 compact chat: one-line crop header, thin rail, lighter messages, quick replies, one-row composer with the voice menu, narrower column; on phone the rail is the only progress control.
 - `quickreplies.ts` — two or three suggestions under the consultant's last message (draft answers for the active topic, "I don't know"; follow-ups once all topics are done); they fill the box, never send.
 - `bubble.ts`, `bubble.css` — floating chat bubble off the Chat tab (unread dot, preview on hover/focus or for 6 s on a new reply) and the mini chat (same chat element moved in the DOM; "Asking about: view · card"; Esc / scrim close; bottom sheet on phone).

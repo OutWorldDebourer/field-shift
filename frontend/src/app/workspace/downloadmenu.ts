@@ -9,7 +9,7 @@ import './downloadmenu.css';
 export function downloadMenuHtml(): string {
   return `<div class="dlm" id="dlm">
     <button type="button" class="pill dlm__btn" id="dlm-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="dlm-list">
-      ${icon('download')}<span data-i18n="dl_menu">${esc(t('dl_menu'))}</span></button>
+      ${icon('download')}<span data-i18n="dl_menu">${esc(t('dl_menu'))}</span><span class="sr-only dlm__next"></span></button>
     <div class="dlm__list glass" id="dlm-list" role="menu" aria-labelledby="dlm-btn" hidden></div>
   </div>`;
 }

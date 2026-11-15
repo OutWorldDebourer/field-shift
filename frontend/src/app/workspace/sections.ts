@@ -11,7 +11,7 @@ import { icon, type IconName } from '../../shared/icons';
 import type { StrKey } from '../../shared/strings';
 import { exportButtons } from './export';
 import { keyReadings, shortLabel } from '../../shared/evidence';
-import { displayState, getSection, ORDER, SHORT, stepsOf, TITLE } from './progress';
+import { allDone, displayState, getSection, ORDER, SHORT, stepsOf, TITLE } from './progress';
 import { SEC_ICON } from './rail';
 import { factsHtml } from './facts';
 import { organicBody, organicState } from './organic';
@@ -92,7 +92,7 @@ function gapsList(g: Bi[]): string {
 /** Organic card: below Pest care, outside the six guided topics; state ready / in progress / not started. */
 function organicCard(a: ClientAnalysis, isOpen: boolean): string {
   const st = organicState(a);
-  const label = t(st === 'ready' ? 'st_ready' : st === 'gaps' ? 'st_gaps' : st === 'progress' ? 'st_progress' : 'og_waiting');
+  const label = t(st === 'ready' ? 'og_available' : st === 'gaps' ? 'st_gaps' : st === 'progress' ? 'st_progress' : 'og_waiting');
   return `<li class="sec sec--${st} sec--org${isOpen ? ' is-open' : ''}" data-seckey="organic">
     <button type="button" class="sec__head" aria-expanded="${isOpen}" aria-controls="sec-organic" data-sec="organic">
       ${ring(st, 40, 'ladybug')}
@@ -114,7 +114,7 @@ export function sectionsColumn(a: ClientAnalysis, open: SectionKey | 'organic' |
     return pickR.length ? `<div class="sec__peek">${pickR.map((r) => dataRowCompact(r, undefined, shortLabel(r), true)).join('')}</div>` : '';
   };
   return `<header class="secs__head"><h2 class="serif">${esc(t('ws_sections'))}</h2>
-      <span class="secs__count mono">${esc(gaps ? t('ws_progress_g', { done: done - gaps, total: views.length, g: gaps }) : t('ws_progress', { done, total: views.length }))}</span></header>
+      <span class="secs__count mono${allDone(steps) ? ' is-all' : ''}">${allDone(steps) ? icon('check') : ''}${esc(gaps ? t('ws_progress_g', { done: done - gaps, total: views.length, g: gaps }) : t('ws_progress', { done, total: views.length }))}</span></header>
     <ul class="secs__list" data-secs-list>${views.map(({ s, st, step, text }) => {
       const isOpen = open === s.key;
       const stepCls = step ? ` is-step-${step.state}` : '';
