@@ -9,6 +9,7 @@ Demo films (Lemo-Opuscar workflow: Satellite Briefing opening + Mascot Screencas
 | `field-shift-demo-en.srt`, `field-shift-demo-es.srt` | Subtitles as text |
 | `loop/hero-loop.mp4`, `loop/hero-loop.webm`, `loop/hero-loop.jpg` | Silent 8.6 s seamless loop of the orbit → field dive (for a page hero), and its still fallback |
 | `poster.jpg` | Poster frame (end card over the climb back to orbit) |
+| `tutorial/` | The how-to film (~2:20) for fieldshift.earth and YouTube: its own treatment, sources, credits and build (`tutorial/README.md`) |
 | `TREATMENT.md` | Structures considered, shot list, narration, sound, titles |
 | `CREDITS.md` | Every asset in the films with its source and licence |
 | `FACTS.md` | Every on-screen claim and number with its source |

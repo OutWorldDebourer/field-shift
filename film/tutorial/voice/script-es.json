@@ -1,0 +1,43 @@
+{
+ "g1": [
+  "Cada año, las plagas destruyen hasta el cuarenta por ciento de los cultivos del mundo.",
+  "Y con un clima más cálido, muchas se reproducen más rápido.",
+  "Así, los agricultores fumigan más seguido, gastan más, y su suelo se empobrece."
+ ],
+ "g2": [
+  "Con Field Shift, la mirada de la NASA sobre la Tierra se convierte en consejos para un campo.",
+  "Así funciona, en un campo de arveja del valle de Huaral, en Perú."
+ ],
+ "g3": [
+  "Empieza por tu campo. Usa tu GPS, busca un lugar, o abre el sitio de ejemplo.",
+  "Marca un punto, o dibuja el contorno. Field Shift mide el área por ti."
+ ],
+ "g4": [
+  "Luego, cuéntale lo que le dirías a tu agrónomo.",
+  "Qué siembras ahora, qué sembraste antes, cómo riegas. Si no sabes, dilo.",
+  "Envía fotos a resolución completa, o simplemente habla. Te pide lo que falta, como ver de cerca el envés de una hoja."
+ ],
+ "g5a": [
+  "Mientras tanto, los datos de la NASA leen tu campo.",
+  "Cuarenta años de clima de NASA POWER muestran estas semanas cinco grados más cálidas de lo normal.",
+  "El satélite SMAP de la NASA mide la humedad del suelo. Sentinel-2 mapea el vigor del cultivo, diez metros por píxel.",
+  "Cada lectura muestra su fuente, su fecha, y si describe tu campo o toda la región."
+ ],
+ "g5b": [
+  "Con la temperatura, los grados-día cuentan generaciones de plagas: aquí los pulgones completan unas tres generaciones más de lo normal."
+ ],
+ "g6": [
+  "Luego, las lecturas se vuelven un plan.",
+  "Prevención ordena las plagas probables en tu campo, con el pronóstico GEOS-FP de la NASA.",
+  "Control orgánico nombra a los enemigos naturales que debes proteger, como mariquitas y avispas parasitoides, y hongos benéficos como Trichoderma.",
+  "Rotación compara tu rotación actual con dos alternativas, por salud del suelo, agua y ciclos de plagas.",
+  "Y puedes preguntar: ¿y si siembro palta? Se evalúa igual."
+ ],
+ "g7": [
+  "Todo termina en un prediagnóstico, no un diagnóstico.",
+  "Descarga la ficha técnica, con cada número citado, y confírmala con tu agrónomo."
+ ],
+ "g8": [
+  "La NASA observa todo el planeta. Field Shift te ayuda a leer tu propio campo."
+ ]
+}

@@ -1,0 +1,43 @@
+/* The how-to film: links, the index card with chapters, and the dialog with the player (tour.ts). */
+.tour-link { display: inline-flex; align-items: center; gap: 8px; border: 0; background: none; color: var(--ink-2); font: 600 15px/1.2 var(--sans); cursor: pointer; padding: 6px 2px; }
+.tour-link .ico { width: 18px; height: 18px; flex: none; }
+.tour-link:hover, .tour-link:focus-visible { color: var(--ink); }
+.tour-link:hover span, .tour-link:focus-visible span { text-decoration: underline; text-underline-offset: 3px; }
+.tour-link--hero { margin-top: 14px; font-size: 16px; }
+.tour-link--hero .ico { width: 30px; height: 30px; padding: 7px; border-radius: 50%; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.08); }
+.tour-link--line { font-size: 14px; color: var(--ink-3); padding: 2px 0; margin-top: 4px; }
+.tour-link--chip { width: 34px; height: 34px; padding: 0; justify-content: center; flex: none; border-radius: 50%; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.08); color: var(--ink); }
+.tour-link--chip span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tour-link--chip:hover { background: rgba(255, 255, 255, 0.16); }
+.tour-link--chip .ico { width: 14px; height: 14px; }
+
+.tour-card { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 24px; align-items: center; padding: 18px; margin: 28px 0 8px; }
+.tour-card__poster { position: relative; display: block; padding: 0; border: 0; border-radius: var(--r-md); overflow: hidden; cursor: pointer; background: #03060c; aspect-ratio: 16 / 9; }
+.tour-card__poster img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+.tour-card__poster:hover img { transform: scale(1.02); }
+.tour-card__play { position: absolute; left: 50%; top: 50%; width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(3, 6, 12, .62); border: 1.5px solid rgba(255, 255, 255, .85); color: #fff; }
+.tour-card__play .ico { width: 30px; height: 30px; margin-left: 4px; }
+.tour-card__poster:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.tour-card__t { font-size: 26px; margin: 0 0 6px; }
+.tour-card__d { margin: 0 0 14px; color: var(--ink-2); line-height: 1.5; }
+.tour-card__ch { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.tour-ch { width: 100%; display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; text-align: left; padding: 9px 12px;
+  border-radius: var(--r-sm); border: 1px solid var(--rule); background: rgba(255, 255, 255, 0.05); color: var(--ink); font: 600 15px/1.3 var(--sans); cursor: pointer; }
+.tour-ch .mono { color: var(--amber); font-size: 13px; }
+.tour-ch .tour-ch__t { color: var(--ink-3); }
+.tour-ch:hover, .tour-ch:focus-visible { background: rgba(255, 255, 255, 0.12); }
+@media (max-width: 860px) { .tour-card { grid-template-columns: 1fr; } }
+
+.tour-dlg { width: min(1200px, 94vw); max-width: none; padding: 0; border: 1px solid var(--glass-border); border-radius: var(--r-md); background: #070d15; color: var(--ink); box-shadow: var(--shadow); }
+.tour-dlg::backdrop { background: rgba(2, 6, 12, .78); backdrop-filter: blur(6px); }
+.tour-dlg__bar { display: flex; align-items: center; gap: 14px; padding: 10px 10px 10px 18px; border-bottom: 1px solid var(--rule); }
+.tour-dlg__bar p { margin: 0; flex: 1; font-size: 20px; }
+.tour-dlg__yt { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; text-decoration: none; }
+.tour-dlg__yt .ico { width: 14px; height: 14px; }
+.tour-dlg__yt:hover { color: var(--ink); text-decoration: underline; }
+.tour-dlg__x { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--rule); background: none; color: var(--ink); cursor: pointer; }
+.tour-dlg__x .ico { width: 18px; height: 18px; }
+.tour-dlg__frame { aspect-ratio: 16 / 9; background: #000; }
+.tour-dlg__frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+@media (max-width: 600px) { .tour-dlg__yt span { display: none; } }

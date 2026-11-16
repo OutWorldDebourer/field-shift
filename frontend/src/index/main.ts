@@ -13,11 +13,13 @@ import { glassPhoneHtml } from '../shared/phone';
 import { renderPreview } from './preview';
 import { mountReveal } from './reveal';
 import { anomalyItem, page } from './sections';
+import { initTour } from '../shared/tour';
 import { mountSky } from './sky';
 
 const root = $('#root');
 root.innerHTML = page();
 applyI18n(document);
+initTour();
 wireLangSwitch(root);
 
 const sky = mountSky();

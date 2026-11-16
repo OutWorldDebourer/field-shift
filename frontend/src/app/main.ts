@@ -11,6 +11,8 @@ import { icon } from '../shared/icons';
 import { langSwitchHtml, wireLangSwitch } from '../shared/langswitch';
 import { DEMO_ID } from '../shared/demo/huaral';
 import { isView, set, state } from './state';
+import { initTour } from '../shared/tour';
+initTour();
 
 const root = $('#root');
 const q = new URLSearchParams(location.search);

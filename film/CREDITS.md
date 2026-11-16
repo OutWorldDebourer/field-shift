@@ -13,7 +13,7 @@ Team InnoHuando, NASA Space Apps Challenge 2026. No NASA logos or insignia are u
 | Landsat WELD annual composite (small patch over Lima in the Blue Marble plates) | NASA/USGS via GIBS | Public domain |
 | Sentinel-2 L2A plates of the Huaral valley (2026-10-06) and the app's field imagery (2026-11-13) | Copernicus Sentinel-2 via Microsoft Planetary Computer | Free, full and open; "Contains modified Copernicus Sentinel data 2026" (on screen) |
 | EOX Sentinel-2 cloudless 2016 (map base outside the field, in the app's map) | EOX IT Services | CC BY 4.0 (2016 edition only); credited in the app's map attribution |
-| App screens (field selection, chat, dashboard, rotation) | Screenshots of the real Field Shift app (`frontend/dist` served by the backend), analysis `3dc1e154-689b-4044-9765-108361cc8a93` and the app's bundled example `demo-huaral` (chat with photos) | Team's work |
+| App screens (field selection, chat, dashboard, rotation) | Screenshots of the live Field Shift app (fieldshift.earth), bundled example analysis `demo-huaral`, re-captured 2026-11-15 (`src/capture-app.mjs`) | Team's work |
 | Pea photos in the chat (`frontend/public/img/pea-*.jpg`) | Crops of AI-assisted design frames made by the team | AI-assisted visuals: the film carries the "SI-assisted visuals" mark on every frame |
 | Leaflet map library (inside the app screens) | leafletjs.com | BSD-2-Clause |
 | Fonts: IBM Plex Mono, Source Sans 3, Source Serif 4 | Google Fonts / Adobe, self-hosted from `frontend/public/fonts/` | SIL Open Font License 1.1 |

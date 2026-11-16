@@ -2,6 +2,7 @@
 // EN | ES), chat + section column, dashboard, rotation and organic views, pre-diagnosis notice always visible, phone
 // bottom sheet, and the "Load information" side sheet (auto-opened once for example sites).
 import { buildEvidence } from '../../shared/api';
+import { tourLinkHtml } from '../../shared/tour';
 import { loadbarHtml, NASA_SOURCES, startLoadbar, type Loadbar } from '../../shared/loadbar';
 import { mountBackdrop, type Backdrop } from '../../shared/backdrop';
 import type { SectionKey, Step } from '../../shared/contract';
@@ -129,6 +130,7 @@ export function mountWorkspace(host: HTMLElement, onChangeField: () => void): vo
     if (a.offline) flags.push(`<span class="demo-flag" title="${esc(t('demo_data_long'))}">${esc(t('demo_data'))}</span>`);
     else if (a.demo_mode) flags.push(`<span class="demo-flag demo-flag--soft" title="${esc(t('demo_mode_long'))}"><span class="df-long">${esc(t('demo_mode'))}</span><span class="df-short">Demo</span></span>`);
     if (a.readOnly) flags.push(`<span class="pill">${esc(t('ws_read_only'))}</span>`);
+    flags.push(tourLinkHtml('chip'));
     $('#flags').innerHTML = flags.join('');
     $('#si-tag').hidden = !a.messages.some((m) => m.photos?.some((p) => p.url.startsWith('/img/')));
     // Every topic done: the views not opened yet and the Download button light up ("you can go on"); each goes out

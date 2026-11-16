@@ -8,7 +8,8 @@ English is the default language everywhere; Spanish is an opt-in switch.
 |------|------------|
 | `backend/` | Rust API (axum + MariaDB): NASA data services, evidence package, crop knowledge, consultant, export. Serves the built app. |
 | `frontend/` | TypeScript + Vite web app: index with the Three.js globe, and the app (field, chat, sections, dashboard, rotation). EN \| ES. |
-| `film/` | Demo films (English submitted, Spanish for the owner), treatment, narration. |
+| `film/` | Demo films: the 30 s film (English submitted, Spanish for the team) and `film/tutorial/` the 2:21 how-to film, all also on YouTube. |
+| `SUBMISSION.md` | The text entered on the Space Apps project page (summary, details, NASA data, references). |
 | `handbook/` | Curated bilingual documentation. Open `handbook/index.html`. |
 | `research/` | Raw research notes and live API tests (English) that feed the handbook. |
 | `assets/` | Project media (voice samples, own crop photos). |

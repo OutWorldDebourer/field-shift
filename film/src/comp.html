@@ -29,6 +29,8 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 #content img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; }
 #appBlur { filter: blur(5px) brightness(.8); }
 #ovl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+#lab { position: absolute; display: none; padding: 5px 10px 6px; border-radius: 6px; background: rgba(3,6,12,.82); border: 1px solid rgba(244,247,248,.28); font: 500 21px/1 'Plex'; color: #f4f7f8; white-space: nowrap; }
+#lab.amber { color: #ffbe55; border-color: rgba(255,190,85,.55); }
 #vign { position: absolute; inset: 0; pointer-events: none; opacity: 0;
   background: radial-gradient(ellipse 52% 50% at 50% 47%, rgba(0,0,0,0) 55%, rgba(4,8,14,.78) 100%); }
 .pill { position: absolute; color: #f4f7f8; background: rgba(16,21,28,.74); border: 1px solid rgba(244,247,248,.22);
@@ -62,6 +64,7 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
   </div>
 </div>
 <div id="vign"></div>
+<div id="lab"></div>
 <div id="title">Field Shift</div>
 <div id="strip"></div>
 <div id="chap" class="pill"></div>
@@ -121,8 +124,8 @@ function build() {
   RET = [
     [7.55, GLOBE_RET], [8.45, GLOBE_RET], [8.46, null],
     [9.45, AR(fld.ret, 4)], [10.3, null],
-    [11.4, AR(ch.photo3, 5)], [12.25, AR(ch.temp, 6)], [13.3, null],
-    [14.35, AR(d.temp, 6)], [16.3, AR(d.chart, 6)], [17.95, AR(d.aphid, 6)], [19.6, null],
+    [11.4, AR(ch.photo3, 5)], [12.25, AR(ch.temp, 6), 'POWER · ~50 km'], [13.3, null],
+    [14.35, AR(d.temp, 6), 'POWER · ~50 km', 1], [16.3, AR(d.chart, 6)], [17.95, AR(d.aphid, 6), 'Degree-days · NASA POWER'], [19.6, null],
     [21.0, AR(r.strats, 8)], [21.95, AR(r.cites, 8)], [22.9, null],
     [23.95, AR(r.confirm, 8)], [25.45, null],
     [CLOSE[1], GLOBE_RET], [27.1, { x: 930, y: 512, w: 60, h: 58 }], [28.4, null],
@@ -143,7 +146,7 @@ function build() {
     ...CLICKS.map((t) => ({ t, type: 'click' })), { t: 10.95, type: 'photos' },
     ...CUTS.map((t) => ({ t, type: 'whip' })), ...RET.filter(([t, r], i) => r && i > 1).map(([t]) => ({ t, type: 'snap' })),
     { t: 14.35, type: 'amber' }, { t: 13.85, type: 'suck' }, { t: 23.3, type: 'promise' },
-    { t: CLOSE[0], type: 'close' }, { t: CLOSE[1] - 0.05, type: 'lock' }, { t: 26.0, type: 'end' },
+    { t: CLOSE[0], type: 'close' }, { t: CLOSE[1] - 0.05, type: 'lock' }, { t: 26.0, type: 'end' }, { t: 1.3, type: 'snap' }, { t: 4.0, type: 'snap' }, { t: 6.3, type: 'snap' },
   ].sort((a, b) => a.t - b.t);
   window.EV = EV;
 }
@@ -171,14 +174,15 @@ function camAt(t) {
 function retAt(t) {
   let i = -1; for (let k = 0; k < RET.length; k++) if (t >= RET[k][0]) i = k;
   if (i < 0) return null;
-  const [t1, r1] = RET[i]; if (!r1) return null;
+  const [t1, r1, label, amber] = RET[i]; if (!r1) return null;
+  const lab = label ? { text: label, amber: !!amber, a: ss(seg(t, t1 + .1, t1 + .3)) } : null;
   let r0 = null; for (let k = i - 1; k >= 0; k--) { if (RET[k][1]) { r0 = RET[k][1]; break; } if (!RET[k][1]) break; }
   const u = seg(t, t1, t1 + 0.42), e = back(u, 1.9);
   if (!r0) {   // appear: snap in from 1.5x with overshoot
     const k = lerp(1.5, 1, e), [cx, cy] = C(r1);
-    return { x: cx - r1.w * k / 2, y: cy - r1.h * k / 2, w: r1.w * k, h: r1.h * k, a: clamp(u * 3) };
+    return { x: cx - r1.w * k / 2, y: cy - r1.h * k / 2, w: r1.w * k, h: r1.h * k, a: clamp(u * 3), lab };
   }
-  return { x: lerp(r0.x, r1.x, e), y: lerp(r0.y, r1.y, e), w: lerp(r0.w, r1.w, e), h: lerp(r0.h, r1.h, e), a: 1 };
+  return { x: lerp(r0.x, r1.x, e), y: lerp(r0.y, r1.y, e), w: lerp(r0.w, r1.w, e), h: lerp(r0.h, r1.h, e), a: 1, lab };
 }
 function curAt(t) {
   if (t < CUR[0][0] || t > CLOSE[0]) return null;
@@ -261,7 +265,13 @@ window.render = async (t) => {
   const r = retAt(t);
   if (r && !frame) {
     const pulse = t < 8.45 ? 0 : 0;
-    svg += brackets(r, Math.max(2.4, sw * 1.15) + pulse, r.a);
+    svg += brackets(r, Math.max(2.4, sw * 1.15) + pulse, r.a, r.lab && r.lab.amber ? '#ffbe55' : '#f2f5f6');
+    if (r.lab && r.lab.a > 0.01) {   // the instrument label, in screen space above the reticle
+      const lab = $('lab'), sx = 960 + (r.x - c.fx) * c.s + wx, sy = 540 + (r.y - c.fy) * c.s;
+      lab.style.display = 'block'; lab.textContent = r.lab.text; lab.className = r.lab.amber ? 'amber' : '';
+      const w = lab.offsetWidth, y = sy - 44 < 84 ? 540 + (r.y + r.h - c.fy) * c.s + 10 : sy - 44;
+      lab.style.left = clamp(sx, 24, 1896 - w) + 'px'; lab.style.top = y + 'px'; lab.style.opacity = (r.lab.a * r.a).toFixed(3);
+    }
   }
   const cp = curAt(t);
   if (cp) {
@@ -273,6 +283,8 @@ window.render = async (t) => {
     const vis = ss(seg(t, CUR[0][0], CUR[0][0] + .2));
     svg += ring + `<g opacity="${vis}">${cursorSvg(cp[0], cp[1], c.s, press)}</g>`;
   }
+  if (!(r && r.lab && !frame)) $('lab').style.display = 'none';
+  if (t < OPEN[0]) svg += ladderSvg(t);
   $('ovl').innerHTML = svg;
 
   // the one promise: push-in with a vignette
@@ -299,6 +311,32 @@ window.render = async (t) => {
   const e = $('end'); const ek = ss(seg(t, 25.95, 26.3));
   e.style.display = ek > 0 ? 'block' : 'none'; e.style.opacity = ek.toFixed(3);
 };
+let GCAM = null;
+const LAD = { en: ['NASA POWER · ~50 km cell', 'NASA SMAP · 9 km', 'Sentinel-2 · 10 m pixels'], es: ['NASA POWER · celda ~50 km', 'NASA SMAP · 9 km', 'Sentinel-2 · píxeles de 10 m'] }[LANG];
+function ladTag(x, y, s, a, col) {
+  const w = s.length * 12.4 + 20;
+  return `<rect x="${(x - 10).toFixed(1)}" y="${(y - 23).toFixed(1)}" width="${w.toFixed(1)}" height="32" rx="6" fill="rgba(3,6,12,${(0.8 * a).toFixed(3)})" stroke="rgba(244,247,248,${(0.25 * a).toFixed(3)})"/>` +
+    `<text x="${x}" y="${y}" font-family="Plex" font-size="20" font-weight="500" fill="${col}" opacity="${a.toFixed(3)}">${s}</text>`;
+}
+function ladderSvg(t) {
+  if (!GCAM || t < 1.1) return '';
+  const c = GCAM[Math.min(GCAM.length - 1, Math.round(t * 30))].cam; if (!c) return '';
+  const ppm = c.scaleBarPx / c.scaleBarMeters, cx = c.targetScreen.x, cy = c.targetScreen.y;
+  const box = (wm, hm, label, a0, a1, col) => {
+    const w = wm * ppm, h = hm * ppm, a = ss(seg(t, a0, a0 + .3)) * (1 - ss(seg(t, a1 - .3, a1))) * clamp((1900 - w) / 500);
+    if (a <= 0.01 || w < 24) return '';
+    return brackets({ x: cx - w / 2, y: cy - h / 2, w, h }, 2.4, a, col) + ladTag(Math.max(30, cx - w / 2), Math.max(150, cy - h / 2 - 14), label, a, col);
+  };
+  let o = box(68200, 55600, LAD[0], 1.3, 4.4, '#ffbe55') + box(9000, 9000, LAD[1], 4.0, 5.4, '#9fd3ff');
+  const g = 10 * ppm, ga = ss(seg(t, 6.3, 6.7)) * (1 - ss(seg(t, 7.35, 7.55)));
+  if (g >= 3.5 && ga > 0.01) {
+    const half = 90; let d = '';
+    for (let x = -half; x <= half + 0.1; x += g) d += `M${(cx + x).toFixed(1)},${cy - half} L${(cx + x).toFixed(1)},${cy + half} `;
+    for (let y = -half; y <= half + 0.1; y += g) d += `M${cx - half},${(cy + y).toFixed(1)} L${cx + half},${(cy + y).toFixed(1)} `;
+    o += `<path d="${d}" stroke="rgba(244,247,248,${(0.45 * ga).toFixed(3)})" stroke-width="1" fill="none"/>` + ladTag(cx - half, cy + half + 34, LAD[2], ga, '#f4f7f8');
+  }
+  return o;
+}
 function lerpRect(a, b, e) { return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), w: lerp(a.w, b.w, e), h: lerp(a.h, b.h, e) }; }
 
 // every text on screen, for readcheck (computed from t: render(t) is async and readcheck does not await it)
@@ -314,7 +352,7 @@ window.TEXTS = (t) => {
 };
 
 (async () => {
-  [B, TL] = await Promise.all([fetch('app/boxes.json').then((r) => r.json()), fetch('timeline.json').then((r) => r.json())]);
+  [B, TL, GCAM] = await Promise.all([fetch('app/boxes.json').then((r) => r.json()), fetch('timeline.json').then((r) => r.json()), fetch('globe-dive/cams.json').then((r) => r.json())]);
   build();
   for (const n of ['field', 'chatA', 'chat', 'dash', 'rot']) imgs[n] = await load(`app/${n}.jpg`);
   await document.fonts.ready;

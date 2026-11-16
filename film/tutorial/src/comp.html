@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Field Shift tutorial film</title>
+<!-- The film's page (Lemo-Opuscar contract: window.render(t), DUR, READY, EV, TEXTS).
+     Picture = the product's own globe (frames rendered from frontend/globe.html) + screenshots of the live app,
+     composed with a recording-software camera, the farmer's cursor and the software's lock-on reticle with instrument labels.
+     Served from film/tutorial/work/ (build.sh copies this file to work/index.html). ?lang=en|es picks timeline-<lang>.json. -->
+<style>
+@font-face { font-family: 'Plex'; font-weight: 400; src: url('fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Plex'; font-weight: 500; src: url('fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Sans'; font-weight: 400; src: url('fonts/source-sans-3-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Sans'; font-weight: 600; src: url('fonts/source-sans-3-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Serif'; font-style: italic; font-weight: 400; src: url('fonts/source-serif-4-latin-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Serif'; font-style: italic; font-weight: 500; src: url('fonts/source-serif-4-latin-500-italic.woff2') format('woff2'); }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #03060c; }
+* { box-sizing: border-box; }
+#whip { position: absolute; inset: 0; }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+#bg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 50% 50%; }
+#dawn { position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(180deg, rgba(196,222,240,.72) 0%, rgba(214,226,236,.55) 38%, rgba(246,206,170,.62) 78%, rgba(255,180,120,.7) 100%); }
+#win { position: absolute; border-radius: 14px; overflow: hidden; background: #0d1117;
+  box-shadow: 0 40px 90px rgba(10,20,40,.45), 0 8px 24px rgba(10,20,40,.3); }
+#tb { position: absolute; left: 0; top: 0; right: 0; height: 30px; background: #161b22; border-bottom: 1px solid #262c35; }
+#tb i { position: absolute; top: 10px; width: 11px; height: 11px; border-radius: 50%; background: #3a414b; }
+#tb span { position: absolute; left: 0; right: 0; top: 0; text-align: center; font: 400 15px/30px 'Plex'; color: #8b949e; }
+#content { position: absolute; left: 0; top: 30px; width: 1440px; height: 900px; transform-origin: 0 0; overflow: hidden; }
+#content img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; }
+#ovl { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+#vign { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+.pill { position: absolute; color: #f4f7f8; background: rgba(16,21,28,.78); border: 1px solid rgba(244,247,248,.22);
+  border-radius: 999px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,.22); }
+#chap { left: 36px; top: 24px; height: 46px; padding: 0 22px 0 16px; font: 600 24px/44px 'Sans'; }
+#chap b { font: 500 21px/44px 'Plex'; color: #ffbe55; margin-right: 12px; font-weight: 500; }
+#cap { left: 50%; top: 966px; padding: 9px 30px 11px; font: 600 34px/1.25 'Sans'; transform: translateX(-50%); }
+#strip { position: absolute; left: 40px; top: 896px; padding: 10px 140px 12px 18px; font: 600 36px/1.2 'Sans'; color: #f4f7f8; white-space: nowrap;
+  background: linear-gradient(90deg, rgba(3,6,12,.72), rgba(3,6,12,.5) 60%, rgba(3,6,12,0)); }
+#strip::before { content: ''; position: absolute; left: 0; top: 0; width: 120px; height: 2px; background: #f2f5f6; }
+#lab { position: absolute; padding: 5px 10px 6px; border-radius: 6px; background: rgba(3,6,12,.82); border: 1px solid rgba(244,247,248,.28);
+  font: 500 21px/1 'Plex'; color: #f4f7f8; white-space: nowrap; }
+#lab.amber { color: #ffbe55; border-color: rgba(255,190,85,.55); }
+#si { position: absolute; right: 24px; top: 16px; padding: 6px 10px; border-radius: 6px; background: rgba(3,6,12,.5); font: 400 20px/1 'Plex'; color: #f4f7f8; text-shadow: 0 0 6px rgba(3,6,12,.9), 0 0 2px rgba(3,6,12,.9); }
+#title { position: absolute; left: 0; right: 0; top: 34px; text-align: center; font: italic 500 70px/1 'Serif'; color: #f4f7f8; text-shadow: 0 2px 18px rgba(3,6,12,.6); }
+#sub { position: absolute; left: 0; right: 0; top: 116px; text-align: center; font: 500 22px/1 'Plex'; color: #f4f7f8; letter-spacing: .08em; text-shadow: 0 1px 10px rgba(3,6,12,.8); }
+#end { position: absolute; left: 0; right: 0; top: 0; height: 1080px; text-align: center; color: #f4f7f8; }
+#end .shade { position: absolute; left: 0; right: 0; top: 0; height: 520px; background: linear-gradient(180deg, rgba(3,6,12,.72), rgba(3,6,12,.35) 65%, rgba(3,6,12,0)); }
+#end h1 { position: absolute; left: 0; right: 0; top: 92px; margin: 0; font: italic 500 92px/1 'Serif'; text-shadow: 0 2px 20px rgba(3,6,12,.6); }
+#end h2 { position: absolute; left: 0; right: 0; top: 206px; margin: 0; font: 600 38px/1.2 'Sans'; text-shadow: 0 1px 10px rgba(3,6,12,.8); }
+#end h3 { position: absolute; left: 0; right: 0; top: 256px; margin: 0; font: 400 32px/1.2 'Sans'; text-shadow: 0 1px 10px rgba(3,6,12,.8); }
+#end h4 { position: absolute; left: 0; right: 0; top: 330px; margin: 0; font: 500 34px/1.2 'Plex'; color: #ffbe55; text-shadow: 0 1px 10px rgba(3,6,12,.9); }
+#end .cr { position: absolute; left: 0; right: 0; top: 836px; font: 400 20px/1.55 'Plex'; text-shadow: 0 0 6px rgba(3,6,12,.95), 0 0 2px rgba(3,6,12,.95); }
+#end .crbg { position: absolute; left: 250px; right: 250px; top: 822px; height: 84px; border-radius: 12px; background: rgba(3,6,12,.6); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><filter id="hb" x="-5%" y="0" width="110%" height="100%"><feGaussianBlur id="hbs" stdDeviation="0 0"/></filter></svg>
+<div id="whip">
+  <div id="stage">
+    <img id="bg" alt="">
+    <div id="dawn"></div>
+    <div id="win"><div id="tb"><i style="left:14px"></i><i style="left:32px"></i><i style="left:50px"></i><span>fieldshift.earth</span></div>
+      <div id="content"><img id="app2" alt=""><img id="app" alt=""></div></div>
+    <svg id="ovl" viewBox="0 0 1920 1080"></svg>
+  </div>
+</div>
+<div id="vign"></div>
+<div id="lab"></div>
+<div id="title">Field Shift</div>
+<div id="sub">A how-to film</div>
+<div id="strip"></div>
+<div id="chap" class="pill"></div>
+<div id="cap" class="pill"></div>
+<div id="end"><div class="shade"></div><h1>Field Shift</h1><h2>Team InnoHuando</h2><h3>NASA Space Apps Challenge 2026</h3><h4>fieldshift.earth</h4>
+  <div class="crbg"></div>
+  <div class="cr">Imagery: NASA Blue Marble, VIIRS (NASA GIBS) · Contains modified Copernicus Sentinel data 2026<br>Narration: AI voice (Gemini TTS) · Original music, CC0 samples · Real Field Shift app screens</div></div>
+<div id="si">SI-assisted visuals</div>
+<script>
+const Q = new URLSearchParams(location.search), LANG = Q.get('lang') === 'es' ? 'es' : 'en';
+const $ = (id) => document.getElementById(id);
+const TXT = {
+  en: { sub: 'A how-to film', si: 'SI-assisted visuals', c1: 'Your field', c2: 'Tell it what you know', c3: 'NASA reads your field', c4: 'A plan to act', c5: 'Why trust it',
+    area: '5.1 ha · measured', gens: 'Degree-days · NASA POWER', fc: 'GEOS-FP · 9 days', allies: 'Allies against aphids', same: 'Scored the same way', cited: 'Every number cited',
+    yours: 'your field', region: 'regional context',
+    cr: 'Imagery: NASA Blue Marble, VIIRS (NASA GIBS) · Contains modified Copernicus Sentinel data 2026<br>Narration: AI voice (Gemini TTS) · Original music, CC0 samples · Real Field Shift app screens' },
+  es: { sub: 'Cómo funciona', si: 'Visuales asistidos por IA', c1: 'Tu campo', c2: 'Cuéntale lo que sabes', c3: 'La NASA lee tu campo', c4: 'Un plan para actuar', c5: 'Por qué confiar',
+    area: '5.1 ha · medida', gens: 'Grados-día · NASA POWER', fc: 'GEOS-FP · 9 días', allies: 'Aliados vs. pulgones', same: 'Se evalúa igual', cited: 'Cada número citado',
+    yours: 'tu campo', region: 'la región',
+    cr: 'Imágenes: NASA Blue Marble, VIIRS (NASA GIBS) · Contiene datos Copernicus Sentinel modificados 2026<br>Narración: voz de IA (Gemini TTS) · Música original, muestras CC0 · Pantallas reales de Field Shift' },
+}[LANG];
+const APP = LANG === 'es' ? 'app-es' : 'app';
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const ss = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
+const eio = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const back = (x, s = 1.6) => { x = clamp(x); const c = s + 1; return 1 + c * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2); };
+
+// ---------------------------------------------------------------- geometry
+// The app is recorded at 1440x900 CSS px; the window shows it at K, its content's top-left at (WX, WY + TB) on the stage.
+const K = 0.94, WX = Math.round((1920 - 1440 * K) / 2), WY = 56, TB = 30;
+const WIN = { x: WX, y: WY, w: 1440 * K, h: 900 * K + TB };
+const A = (x, y) => [WX + x * K, WY + TB + y * K];
+const AR = (b, pad = 0) => b && { x: WX + (b.x - pad) * K, y: WY + TB + (b.y - pad) * K, w: (b.w + 2 * pad) * K, h: (b.h + 2 * pad) * K };
+const C = (r) => [r.x + r.w / 2, r.y + r.h / 2];
+const GLOBE_RET = { x: 845, y: 430, w: 232, h: 226 };       // the globe's lock-on brackets at the end of the dive
+const ORBIT_END = 23.5, CLIMB0 = 126.4;                     // orbit/dive frames 0..ORBIT_END; climb frames from CLIMB0
+
+let B = null, TL = null, DUR = 141.5;
+let END_AT = 134.2, TAKES = [], TRANS = [], CAM = [], RET = [], CUR = [], CLICKS = [], CHAPTERS = [], EV = [], OPEN, CLOSE, AMBER, PROMISE;
+
+function build() {
+  const Lt = (id, f = 0) => { const l = TL.lines[id]; return l[0] + f * (l[1] - l[0]); };
+  const b = B, mid = [960, 540];
+  const cen = (box, pad = 0) => C(AR(box, pad));
+  const P = (box, fx = .5, fy = .5) => A(box.x + box.w * fx, box.y + box.h * fy);
+  const R = (box, pad = 6) => AR(box, pad);
+  OPEN = [23.3, 24.0]; CLOSE = [126.4, 127.05];
+  // which screenshot is on screen, and how it arrives (whip = chapter seam, cut, dissolve, scroll)
+  TAKES = [[OPEN[0], 'pick0'], [29.75, 'pick1'], [37.6, 'intake'], [46.9, 'chat'], [55.9, 'dash'], [59.7, 'dashChart'], [62.4, 'dash'],
+    [65.5, 'dashSm'], [68.45, 'dash'], [87.0, 'prev'], [95.6, 'org'], [104.5, 'rot'], [121.35, 'dl']];
+  TRANS = { 37.6: 'whip', 46.9: 'whip', 55.9: 'whip', 87.0: 'whip', 95.6: 'whip', 104.5: 'whip', 59.7: 'scrollUp', 62.4: 'scrollDown', 65.5: 'dissolve', 68.45: 'dissolve' };
+  const p0 = b.pick0, p1 = b.pick1, it = b.intake, ch = b.chat, d = b.dash, dc = b.dashChart, ds = b.dashSm, pv = b.prev, og = b.org, r = b.rot, dl = b.dl;
+  const row = (y) => ({ x: 896, y, w: 500, h: 82 });          // an intake row: its label and its field
+  CAM = [
+    [0, 1, ...mid], [24.4, 1, ...mid],
+    [26.4, 1.32, ...cen(p0.card, 40)], [29.6, 1.32, ...cen(p0.card, 40)], [30.4, 1.12, 700, 520],
+    [33.4, 1.12, 700, 520], [34.6, 1.45, ...cen(p1.ret, 30)], [35.9, 1.45, ...cen(p1.ret, 30)], [36.6, 1.15, 640, 600], [37.5, 1.15, 640, 600],
+    [37.7, 1, ...mid], [39.4, 1.42, ...cen({ x: 868, y: 200, w: 560, h: 420 })], [45.8, 1.42, ...cen({ x: 868, y: 200, w: 560, h: 420 })], [46.8, 1.3, ...cen(it.panel)],
+    [47.0, 1, ...mid], [48.0, 1.45, ...cen(ch.tiles, 40)], [49.6, 1.45, ...cen(ch.tiles, 40)], [50.6, 1.4, ...cen(ch.blurry, 30)], [53.8, 1.4, ...cen(ch.blurry, 30)], [54.8, 1, ...mid],
+    [56.0, 1, ...mid], [58.6, 1, ...mid], [60.2, 1.3, ...cen(dc.chart, 10)], [62.2, 1.3, ...cen(dc.chart, 10)],
+    [62.5, 1.0, ...mid], [63.2, 1.6, ...cen(d.temp)], [64.9, 1.6, ...cen(d.temp)],
+    [65.6, 1.0, ...mid], [66.2, 1.3, ...cen(ds.map)], [68.3, 1.3, ...cen(ds.map)], [68.55, 1.0, ...mid], [69.1, 1.35, ...cen(d.map)], [70.4, 1.35, ...cen(d.map)],
+    [71.2, 1.45, ...cen(d.vigor)], [72.4, 1.45, ...cen(d.vigor)], [73.2, 1.12, ...cen({ x: 589, y: 138, w: 823, h: 585 })], [78.6, 1.12, ...cen({ x: 589, y: 138, w: 823, h: 585 })],
+    [80.0, 1.6, ...cen(d.aphid)], [86.4, 1.6, ...cen(d.aphid)], [86.9, 1, ...mid],
+    [87.1, 1, ...mid], [89.6, 1.35, ...cen(pv.sum)], [91.6, 1.35, ...cen(pv.sum)], [92.5, 1.4, ...cen(pv.fc, 60)], [95.5, 1.4, ...cen(pv.fc, 60)],
+    [95.7, 1, ...mid], [96.6, 1.4, ...cen(og.aphids)], [98.4, 1.4, ...cen(og.aphids)], [99.2, 1.35, ...cen(og.week)], [101.0, 1.35, ...cen(og.week)], [101.8, 1.4, ...cen(og.fungi)], [104.4, 1.4, ...cen(og.fungi)],
+    [104.6, 1, ...mid], [105.4, 1.1, ...cen(r.strats)], [109.4, 1.1, ...cen(r.strats)], [110.2, 1.35, ...cen(r.evalBox)], [111.8, 1.35, ...cen(r.evalBox)], [112.6, 1.35, ...cen(r.avo, -120)], [115.6, 1.35, ...cen(r.avo, -120)],
+    [116.8, 1.4, ...cen(r.dx, -60)], [120.2, 1.4, ...cen(r.dx, -60)], [120.9, 1.05, 1100, 400], [121.3, 1.05, 1100, 400], [122.1, 1.4, ...cen(dl.menu, 20)], [123.6, 1.4, ...cen(dl.menu, 20)],
+    [124.4, 1.3, ...cen(r.confirm, 120)], [126.0, 1.3, ...cen(r.confirm, 120)], [126.4, 1.0, ...mid], [999, 1, ...mid],
+  ];
+  // the software's reticle: [t, rect | null, label?, amber?]  (it snaps with overshoot from the last rect to the next)
+  AMBER = Lt('g5a.2', .15); PROMISE = Lt('g7.0') + 0.2;
+  RET = [
+    [21.6, GLOBE_RET], [OPEN[0], GLOBE_RET], [OPEN[0] + 0.01, null],
+    [27.0, R(p0.gps, 4)], [28.0, R(p0.search, 4)], [29.0, R(p0.card, 4)], [29.75, null],
+    [31.2, R(p1.point, 4)], [32.1, R(p1.outline, 4)], [32.9, R(p1.ret, 4)], [33.9, R(p1.area, 10), TXT.area], [37.0, null],
+    [41.5, R(row(234))], [42.6, R(row(326))], [43.8, R(row(420))], [45.1, R(it.dunno, 4)], [46.5, null],
+    [48.4, R(ch.tiles, 6)], [50.8, R(ch.blurry, 6)], [52.4, R(ch.photo3, 6)], [54.6, null],
+    [57.0, R(d.ret, 4)], [58.4, R(d.layers, 4)], [59.5, null],
+    [60.6, R(dc.chart, 4)], [62.2, null],
+    [Math.min(AMBER - 0.2, 62.9), R(d.temp, 6), 'POWER · ~50 km', 1], [65.5, null],
+    [65.8, R({ x: 40, y: 150, w: 515, h: 410 }, 0), 'NASA SMAP · 9 km'], [68.4, null],
+    [68.8, R(d.ret, 4), 'Sentinel-2 · 10 m'], [71.7, R(d.vigor, 6)], [72.6, null],
+    [72.9, R(d.temp, 6)], [74.4, R(d.vigor, 6), TXT.yours], [76.9, R(d.soil, 6), TXT.region], [79.9, null],
+    [80.2, R(d.aphid, 6), TXT.gens], [86.4, null],
+    [90.6, R(pv.counts, 6)], [92.5, R(pv.fc, 6), TXT.fc], [95.4, null],
+    [96.3, R(og.aphids, 6), TXT.allies], [99.4, R(og.week, 6)], [101.5, R(og.fungi, 6), 'Trichoderma · Bt'], [104.4, null],
+    [105.2, R(r.cur, 6)], [106.2, R(r.best, 6)], [107.0, R(r.green, 6)], [108.0, R(r.strats, 6)], [109.6, null],
+    [110.6, R(r.input, 6)], [112.6, R(r.avo, 6), TXT.same], [115.6, null],
+    [117.3, R(r.dx, 6)], [118.9, R(r.confirm, 8)], [120.4, null],
+    [121.6, R(dl.sheet, 6), TXT.cited], [124.5, R(r.confirm, 8)], [125.9, null],
+    [CLOSE[1], GLOBE_RET], [128.3, null],
+  ];
+  // the farmer's cursor: [t, stage x, stage y]
+  CUR = [
+    [25.0, ...A(900, 720)], [26.8, ...P(p0.gps)], [27.8, ...P(p0.search, .3)], [29.2, ...P(p0.card, .4)], [29.6, ...P(p0.card, .4)],
+    [31.0, ...P(p1.point)], [31.9, ...P(p1.outline)], [33.4, ...A(560, 640)], [36.2, ...P(p1.use, .62)], [37.4, ...P(p1.use, .62)],
+    [38.0, ...A(700, 700)], [44.6, ...A(1200, 300)], [45.4, ...P(it.dunno, .5, .6)], [46.7, ...P(it.dunno, .5, .6)],
+    [47.1, ...A(330, 700)], [47.7, ...P(ch.camera)], [48.1, ...P(ch.camera)], [49.0, ...A(300, 700)], [49.6, ...P(ch.mic)], [50.4, ...P(ch.mic)],
+    [51.4, ...A(700, 640)], [54.6, ...P(ch.dashTab, .45, .55)], [55.6, ...P(ch.dashTab, .45, .55)],
+    [56.1, ...A(860, 520)], [58.2, ...P(d.smBtn, .5)], [59.4, ...A(900, 600)], [86.6, ...A(1000, 500)],
+    [88.0, ...A(700, 640)], [104.0, ...A(900, 600)], [109.6, ...A(700, 600)], [110.3, ...P(r.input, .2)], [111.2, ...P(r.input, .2)],
+    [116.0, ...A(900, 700)], [120.4, ...P(r.download, .5)], [121.4, ...P(r.download, .5)], [122.4, ...P(dl.sheet, .5, .4)], [125.8, ...P(dl.sheet, .5, .4)],
+  ];
+  CLICKS = [29.65, 37.0, 47.9, 55.5, 110.4, 121.25];
+  CHAPTERS = [[OPEN[1], '01', TXT.c1], [37.6, '02', TXT.c2], [55.9, '03', TXT.c3], [87.0, '04', TXT.c4], [116.4, '05', TXT.c5], [CLOSE[0], null, null]];
+  END_AT = Math.max(134.2, TL.cues[TL.cues.length - 1].t1 + 0.1);
+  const whips = Object.entries(TRANS).filter(([, k]) => k === 'whip').map(([t]) => +t);
+  EV = [
+    { t: 0.0, type: 'orbit' }, { t: 13.0, type: 'dive' }, ...OPENING_EV(), { t: 21.6, type: 'lock' }, { t: OPEN[0], type: 'suck' }, { t: OPEN[0] + 0.25, type: 'open' },
+    ...CLICKS.map((t) => ({ t, type: 'click' })), { t: 48.1, type: 'photos' },
+    ...whips.map((t) => ({ t, type: 'whip' })), ...Object.entries(TRANS).filter(([, k]) => k !== 'whip').map(([t]) => ({ t: +t, type: 'swish' })),
+    ...RET.filter(([t, rr], i) => rr && i > 2 && t < CLOSE[0]).map(([t]) => ({ t, type: 'snap' })),
+    { t: AMBER - 0.55, type: 'suck' }, { t: AMBER, type: 'amber' }, { t: PROMISE, type: 'promise' },
+    { t: CLOSE[0], type: 'close' }, { t: CLOSE[1] - 0.05, type: 'lock' }, { t: END_AT - 0.3, type: 'end' },
+    ...CHAPTERS.filter((c) => c[1]).map((c) => ({ t: c[0], type: 'chapter', n: c[1] })),
+  ].sort((a, b) => a.t - b.t);
+  window.EV = EV;
+}
+
+function keyed(keys, t, n) {
+  if (t <= keys[0][0]) return keys[0].slice(1, 1 + n);
+  for (let i = 0; i < keys.length - 1; i++) {
+    const [a, ...va] = keys[i], [b, ...vb] = keys[i + 1];
+    if (t < b) { const e = eio(seg(t, a, b)); return va.slice(0, n).map((v, k) => lerp(v, vb[k], e)); }
+  }
+  return keys[keys.length - 1].slice(1, 1 + n);
+}
+function camAt(t) {
+  let [s, fx, fy] = keyed(CAM, t, 3);
+  const live = ss(seg(t, OPEN[1], OPEN[1] + .6)) * (1 - ss(seg(t, CLOSE[0] - .4, CLOSE[0])));
+  s *= 1 + 0.012 * live * (0.5 + 0.5 * Math.sin(t * 0.7));
+  fx += 6 * live * Math.sin(t * 0.43); fy += 4 * live * Math.cos(t * 0.37);
+  const hw = 960 / s, hh = 540 / s;
+  fx = clamp(fx, hw, 1920 - hw); fy = clamp(fy, hh, 1080 - hh);
+  return { s, fx, fy };
+}
+function retAt(t) {
+  let i = -1; for (let k = 0; k < RET.length; k++) if (t >= RET[k][0]) i = k;
+  if (i < 0) return null;
+  const [t1, r1, label, amber] = RET[i]; if (!r1) return null;
+  let r0 = null; for (let k = i - 1; k >= 0; k--) { if (RET[k][1]) { r0 = RET[k][1]; break; } if (!RET[k][1]) break; }
+  const u = seg(t, t1, t1 + 0.42), e = back(u, 1.9);
+  const lab = label ? { text: label, amber: !!amber, a: ss(seg(t, t1 + .1, t1 + .3)) } : null;
+  if (!r0) { const k = lerp(1.5, 1, e), [cx, cy] = C(r1); return { x: cx - r1.w * k / 2, y: cy - r1.h * k / 2, w: r1.w * k, h: r1.h * k, a: clamp(u * 3), lab }; }
+  return { x: lerp(r0.x, r1.x, e), y: lerp(r0.y, r1.y, e), w: lerp(r0.w, r1.w, e), h: lerp(r0.h, r1.h, e), a: 1, lab };
+}
+function curAt(t) {
+  if (t < CUR[0][0] || t > CLOSE[0]) return null;
+  for (let i = 0; i < CUR.length - 1; i++) {
+    const [a, ax, ay] = CUR[i], [b, bx, by] = CUR[i + 1];
+    if (t < b) { const u = seg(t, a, b), e = 1 - Math.pow(1 - eio(u), 1.4); return [lerp(ax, bx, e), lerp(ay, by, e)]; }
+  }
+  const l = CUR[CUR.length - 1]; return [l[1], l[2]];
+}
+function takeAt(t) { let i = -1; for (let k = 0; k < TAKES.length; k++) if (t >= TAKES[k][0]) i = k; return i; }
+
+function brackets(r, sw, alpha = 1, color = '#f2f5f6') {
+  const L = Math.max(14, Math.min(r.w, r.h) * 0.22);
+  const p = (x, y, dx, dy) => `M${x + dx * L},${y} L${x},${y} L${x},${y + dy * L}`;
+  const d = p(r.x, r.y, 1, 1) + p(r.x + r.w, r.y, -1, 1) + p(r.x, r.y + r.h, 1, -1) + p(r.x + r.w, r.y + r.h, -1, -1);
+  return `<path d="${d}" fill="none" stroke="rgba(3,6,12,.55)" stroke-width="${sw + 3}" stroke-linecap="square" opacity="${alpha}"/>` +
+         `<path d="${d}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="square" opacity="${alpha}"/>`;
+}
+const CURSOR = 'M0,0 L0,25 L6.2,19.2 L10.4,28.6 L14.6,26.8 L10.5,17.6 L18.8,17.6 Z';
+function cursorSvg(x, y, s, press) {
+  const k = 1.15 * (1 - 0.12 * press) / s;
+  return `<g transform="translate(${x},${y}) scale(${k})"><path d="${CURSOR}" fill="rgba(0,0,0,.28)" transform="translate(1.5,2.5)"/>` +
+    `<path d="${CURSOR}" fill="#ffffff" stroke="#11151b" stroke-width="1.6" stroke-linejoin="round"/></g>`;
+}
+function lerpRect(a, b, e) { return { x: lerp(a.x, b.x, e), y: lerp(a.y, b.y, e), w: lerp(a.w, b.w, e), h: lerp(a.h, b.h, e) }; }
+
+const imgs = {};
+function load(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('missing ' + src)); i.src = src; }); }
+async function setSrc(el, src) { if (el.dataset.src === src) return; el.dataset.src = src; el.src = src; try { await el.decode(); } catch (e) { /* superseded */ } }
+// ---------------------------------------------------------------- the opening (0–23 s): the reading, the trace, the field log, the scale ladder
+let OD = null, GCAM = null;                                  // opening-data.json (real NASA POWER months + aphid generations), globe cameras
+const OT = {
+  en: { lossK: 'Crops lost to pests', lossU: 'up to', lossS: 'FAO 2021 · global estimate', trT: 'Huaral · monthly mean temperature · NASA POWER',
+    trN: 'normal 1985–2024', trY: 'this year', trE: (v, n) => `Nov 2026 so far: ${v} °C · normal ${n} °C`, gT: 'Pea aphid generations · degree-days',
+    gN: 'normal', gY: 'this season', logT: 'In the field', l1: 'Sprays', l2: 'Costs', l3: 'Soil life', logS: 'Illustrative · from an agronomist interview, Huaral',
+    power: 'NASA POWER · ~50 km cell', smap: 'NASA SMAP · 9 km', s2: 'Sentinel-2 · 10 m pixels', months: 'DJFMAMJJASON' },
+  es: { lossK: 'Cultivos perdidos por plagas', lossU: 'hasta', lossS: 'FAO 2021 · estimación global', trT: 'Huaral · temperatura media mensual · NASA POWER',
+    trN: 'normal 1985–2024', trY: 'este año', trE: (v, n) => `Nov 2026 hasta hoy: ${v} °C · normal ${n} °C`, gT: 'Generaciones de pulgón · grados-día',
+    gN: 'normal', gY: 'esta campaña', logT: 'En el campo', l1: 'Fumigaciones', l2: 'Costos', l3: 'Vida del suelo', logS: 'Ilustrativo · según una agrónoma entrevistada, Huaral',
+    power: 'NASA POWER · celda ~50 km', smap: 'NASA SMAP · 9 km', s2: 'Sentinel-2 · píxeles de 10 m', months: 'DEFMAMJJASON' },
+}[LANG];
+const HOPS_T = [1.0, 2.0, 3.0, 4.0, 5.0];
+const GEN_T0 = 6.9, GEN_T1 = 8.5, LOG_T = [8.6, 13.0];
+const SPRAYS = [1, 3, 4, 6, 7, 8, 9, 10, 11];                 // calendar cells that fill in, denser towards the end (illustrative)
+function OPENING_EV() {
+  const e = HOPS_T.map((t) => ({ t, type: 'hop' }));
+  for (let i = 0; i < 13; i++) e.push({ t: GEN_T0 + (GEN_T1 - GEN_T0) * (i + 1) / 13.4, type: 'gen', n: 1 });
+  for (let i = 0; i < 10; i++) e.push({ t: GEN_T0 + (GEN_T1 - GEN_T0) * (i + 1) / 10.4 + 0.03, type: 'gen', n: 0 });
+  SPRAYS.forEach((k, i) => e.push({ t: LOG_T[0] + 0.5 + i * 0.28, type: 'spray' }));
+  e.push({ t: 13.05, type: 'ladder' }, { t: 16.3, type: 'ladder' }, { t: 19.8, type: 'ladder' });
+  return e;
+}
+const fmt = (v) => LANG === 'es' ? String(v).replace('.', ',') : String(v);
+function panel(x, y, w, h, a) { return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="rgba(3,6,12,${(0.62 * a).toFixed(3)})" stroke="rgba(244,247,248,${(0.22 * a).toFixed(3)})"/>`; }
+function txt(x, y, s, size, a, opt = {}) {
+  const fam = opt.f || 'Plex', col = opt.c || '#f4f7f8', w = opt.w || 500, anchor = opt.anchor || 'start', it = opt.it ? 'italic' : 'normal';
+  return `<text x="${x}" y="${y}" font-family="${fam}" font-size="${size}" font-weight="${w}" font-style="${it}" text-anchor="${anchor}" fill="${col}" opacity="${a.toFixed(3)}">${s}</text>`;
+}
+// an instrument label with its own dark backing, readable over any terrain
+function tag(x, y, s, a, col) {
+  const w = s.length * 12.4 + 20;
+  return `<rect x="${(x - 10).toFixed(1)}" y="${(y - 23).toFixed(1)}" width="${w.toFixed(1)}" height="32" rx="6" fill="rgba(3,6,12,${(0.8 * a).toFixed(3)})" stroke="rgba(244,247,248,${(0.25 * a).toFixed(3)})"/>` + txt(x, y, s, 20, a, { c: col });
+}
+function openingSvg(t, push) {
+  let o = '';
+  // 1. the reading over the world tour
+  const ra = ss(seg(t, 1.25, 1.6)) * (1 - ss(seg(t, 4.75, 5.1)));
+  if (ra > 0.01) {
+    const v = Math.round(40 * eio(seg(t, 1.4, 2.6)));
+    o += panel(96, 300, 470, 236, ra) + txt(124, 348, OT.lossK, 24, ra) +
+      txt(124, 452, `<tspan font-size="40" font-family="Sans" font-weight="400" font-style="normal" fill="#f4f7f8">${OT.lossU} </tspan>${v}%`, 104, ra, { f: 'Serif', it: true, c: '#ffbe55' }) +
+      txt(124, 506, OT.lossS, 20, ra * .85);
+  }
+  // 2. the temperature trace (real monthly NASA POWER values) and the generations it drives
+  const ta = ss(seg(t, 5.3, 5.7)) * (1 - ss(seg(t, 8.5, 8.9)));
+  if (ta > 0.01 && OD) {
+    const X = 110, Y = 500, Wd = 800, Hd = 380, px = X + 40, pw = Wd - 80, py = Y + 80, ph = 150;
+    const M = OD.months, lo = 15.5, hi = 24, yv = (v) => py + ph - (v - lo) / (hi - lo) * ph, xv = (i) => px + i * pw / (M.length - 1);
+    o += panel(X, Y, Wd, Hd, ta) + txt(X + 24, Y + 40, OT.trT, 20, ta);
+    const band = M.map((m, i) => `${xv(i)},${yv(m.hi)}`).join(' ') + ' ' + M.map((m, i) => `${xv(i)},${yv(m.lo)}`).reverse().join(' ');
+    o += `<polygon points="${band}" fill="rgba(200,215,230,${(0.28 * ta).toFixed(3)})"/>`;
+    const u = eio(seg(t, 5.7, 7.2)) * (M.length - 1), k = Math.floor(u);
+    const pts = []; for (let i = 0; i <= Math.min(k, M.length - 1); i++) pts.push(`${xv(i)},${yv(M[i].t)}`);
+    if (k < M.length - 1) { const f = u - k; pts.push(`${xv(k) + f * pw / (M.length - 1)},${yv(M[k].t + (M[k + 1].t - M[k].t) * f)}`); }
+    o += `<polyline points="${pts.join(' ')}" fill="none" stroke="#ffbe55" stroke-width="3.5" stroke-linejoin="round" opacity="${ta.toFixed(3)}"/>`;
+    M.forEach((m, i) => { o += txt(xv(i), py + ph + 24, OT.months[i], 16, ta * .7, { anchor: 'middle', w: 400 }); });
+    o += txt(px, py - 14, `— ${OT.trY}`, 16, ta, { c: '#ffbe55' }) + txt(px + 170, py - 14, `▬ ${OT.trN}`, 16, ta * .8, { c: '#c8d7e6' });
+    const last = M[M.length - 1], ea = ta * ss(seg(t, 7.1, 7.4));
+    if (ea > 0.01) o += txt(px + pw, yv(last.t) - 14, OT.trE(fmt(last.t.toFixed(1)), fmt(last.mu.toFixed(1))), 17, ea, { anchor: 'end', c: '#ffbe55' });
+    // generations: two rows over the same weeks; this season completes more of them
+    const gy = Y + 300;
+    o += txt(X + 24, gy - 22, OT.gT, 17, ta * .9);
+    const row = (n, y, label, col) => {
+      let r = txt(X + 24, y + 6, label, 15, ta * .8, { w: 400, c: col });
+      const done = n * seg(t, GEN_T0, GEN_T1), full = Math.floor(done);
+      for (let i = 0; i < Math.ceil(n); i++) {
+        const on = i < full ? 1 : i === full ? done - full : 0; if (on <= 0) continue;
+        const frac = i === Math.floor(n) ? n - Math.floor(n) : 1;
+        r += `<rect x="${X + 170 + i * 36}" y="${y - 8}" width="${(28 * frac * Math.min(1, on * 3)).toFixed(1)}" height="14" rx="3" fill="${col}" opacity="${ta.toFixed(3)}"/>`;
+      }
+      return r + (done >= n - 0.01 ? txt(X + 170 + Math.ceil(n) * 36 + 6, y + 6, fmt(n.toFixed(1)), 18, ta, { c: col }) : '');
+    };
+    o += row(OD.aphid.normal, gy + 8, OT.gN, '#c8d7e6') + row(OD.aphid.now, gy + 38, OT.gY, '#ffbe55');
+  }
+  // 3. the field log (illustrative, from the interview): sprays fill in, costs climb, soil life fades
+  const la = ss(seg(t, LOG_T[0], LOG_T[0] + .4)) * (1 - ss(seg(t, LOG_T[1] - .4, LOG_T[1])));
+  if (la > 0.01) {
+    const X = 1110, Y = 500, Wd = 710, Hd = 340, c0x = X + 210;
+    o += panel(X, Y, Wd, Hd, la) + txt(X + 24, Y + 42, OT.logT, 22, la);
+    o += txt(X + 24, Y + 104, OT.l1, 18, la, { w: 400 });
+    for (let i = 0; i < 12; i++) {
+      const cx = c0x + i * 38, k = SPRAYS.indexOf(i), on = k >= 0 ? ss(seg(t, LOG_T[0] + 0.5 + k * 0.28, LOG_T[0] + 0.62 + k * 0.28)) : 0;
+      o += `<rect x="${cx}" y="${Y + 84}" width="30" height="30" rx="5" fill="none" stroke="rgba(244,247,248,${(0.35 * la).toFixed(3)})"/>`;
+      if (on > 0) o += `<circle cx="${cx + 15}" cy="${Y + 99}" r="${(8 * on).toFixed(1)}" fill="#ffbe55" opacity="${la.toFixed(3)}"/>`;
+    }
+    const cu = eio(seg(t, 10.0, 11.6)), c1x = X + 660;
+    o += txt(X + 24, Y + 176, OT.l2, 18, la, { w: 400 });
+    o += `<polyline points="${c0x},${Y + 186} ${(c0x + (c1x - c0x) * cu).toFixed(1)},${(Y + 186 - 44 * cu * cu).toFixed(1)}" fill="none" stroke="#ffbe55" stroke-width="3" opacity="${la.toFixed(3)}"/>`;
+    const su = 1 - 0.7 * eio(seg(t, 11.0, 12.6));
+    o += txt(X + 24, Y + 246, OT.l3, 18, la, { w: 400 });
+    o += `<rect x="${c0x}" y="${Y + 230}" width="450" height="20" rx="4" fill="none" stroke="rgba(244,247,248,${(0.35 * la).toFixed(3)})"/>` +
+         `<rect x="${c0x}" y="${Y + 230}" width="${(450 * su).toFixed(1)}" height="20" rx="4" fill="#7fc79a" opacity="${(la * (0.4 + 0.6 * su)).toFixed(3)}"/>`;
+    o += txt(X + 24, Y + 310, OT.logS, 15, la * .75, { w: 400 });
+  }
+  // 4. the scale ladder: true-size footprints around the field as the camera dives (the globe's camera per frame)
+  if (GCAM && t >= 12.4 && t < OPEN[0]) {
+    const c = GCAM[Math.min(GCAM.length - 1, Math.round(t * 30))].cam; if (!c) return o;
+    const ppm = c.scaleBarPx / c.scaleBarMeters, cx = 960 + (c.targetScreen.x - 960) * push, cy = 540 + (c.targetScreen.y - 540) * push;
+    const box = (wm, hm, label, a0, a1, col) => {
+      const w = wm * ppm * push, h = hm * ppm * push;
+      const a = ss(seg(t, a0, a0 + .4)) * (1 - ss(seg(t, a1 - .4, a1))) * clamp((1900 - w) / 500);
+      if (a <= 0.01 || w < 24) return '';
+      const lx = Math.max(30, cx - w / 2), ly = Math.max(150, cy - h / 2 - 14);
+      return brackets({ x: cx - w / 2, y: cy - h / 2, w, h }, 2.4, a, col) + (label ? tag(lx, ly, label, a, col) : '');
+    };
+    o += box(68200, 55600, OT.power, 13.05, 16.9, '#ffbe55');
+    o += box(9000, 9000, OT.smap, 16.3, 18.6, '#9fd3ff');
+    const g = 10 * ppm * push, ga = ss(seg(t, 19.8, 20.3)) * (1 - ss(seg(t, 22.9, 23.3)));
+    if (g >= 3.5 && ga > 0.01) {
+      const half = 90; let d = '';
+      for (let x = -half; x <= half + 0.1; x += g) d += `M${(cx + x).toFixed(1)},${cy - half} L${(cx + x).toFixed(1)},${cy + half} `;
+      for (let y = -half; y <= half + 0.1; y += g) d += `M${cx - half},${(cy + y).toFixed(1)} L${cx + half},${(cy + y).toFixed(1)} `;
+      o += `<path d="${d}" stroke="rgba(244,247,248,${(0.45 * ga).toFixed(3)})" stroke-width="1" fill="none"/>` + tag(cx - half, cy + half + 34, OT.s2, ga, '#f4f7f8');
+    }
+  }
+  return o;
+}
+
+function globeSrc(t) {
+  const F = (n) => String(n).padStart(4, '0');
+  if (t >= CLIMB0) return `globe-climb/f${F(Math.min(143, Math.round((t - CLIMB0) * 30)))}.jpg`;
+  return `globe-world-${LANG}/f${F(Math.min(704, Math.round(t * 30)))}.jpg`;
+}
+
+window.render = async (t) => {
+  const bg = $('bg');
+  await setSrc(bg, globeSrc(t));
+  // the orbit hold and the end hold get a slow push so the frame never freezes
+  const push = t < 13.0 ? 1 + 0.04 * ss(seg(t, 5.8, 13.0)) : t > CLIMB0 + 4.8 ? 1 + 0.035 * ss(seg(t, CLIMB0 + 4.8, DUR)) : 1;
+  bg.style.transform = `scale(${push.toFixed(4)})`;
+  const app = clamp(ss(seg(t, OPEN[0], OPEN[1] + .5)) - ss(seg(t, CLOSE[0], CLOSE[1] + .1)), 0, 1);
+  bg.style.filter = app > 0.001 ? `blur(${(16 * app).toFixed(2)}px) saturate(${1 - .25 * app}) brightness(${1 + .12 * app})` : 'none';
+  $('dawn').style.opacity = (0.85 * app).toFixed(3);
+
+  // the window and its take, with the transition into it
+  const win = $('win'), i = takeAt(t), on = i >= 0 && t < CLOSE[1];
+  let frame = null;
+  if (t >= OPEN[0] && t < OPEN[1]) frame = lerpRect(GLOBE_RET, WIN, back(seg(t, OPEN[0], OPEN[1]), 1.1));
+  else if (t >= CLOSE[0] && t < CLOSE[1]) frame = lerpRect(WIN, GLOBE_RET, eio(seg(t, CLOSE[0], CLOSE[1])));
+  if (on) {
+    win.style.display = 'block';
+    Object.assign(win.style, { left: WIN.x + 'px', top: WIN.y + 'px', width: WIN.w + 'px', height: WIN.h + 'px' });
+    $('content').style.transform = `scale(${K})`;
+    const [t0, nm] = TAKES[i], kind = TRANS[t0], prev = i > 0 ? TAKES[i - 1][1] : null;
+    const a1 = $('app'), a2 = $('app2');
+    await setSrc(a1, imgs[nm].src);
+    let u = 1;
+    if ((kind === 'dissolve' || kind === 'scrollUp' || kind === 'scrollDown') && prev) u = eio(seg(t, t0, t0 + .55));
+    if (u < 1) {
+      await setSrc(a2, imgs[prev].src); a2.style.display = 'block';
+      const dy = kind === 'scrollUp' ? -1 : kind === 'scrollDown' ? 1 : 0;
+      a2.style.transform = `translateY(${(dy * 380 * u).toFixed(1)}px)`; a2.style.opacity = (1 - u).toFixed(3);
+      a1.style.transform = `translateY(${(-dy * 380 * (1 - u)).toFixed(1)}px)`; a1.style.opacity = u.toFixed(3);
+    } else { a2.style.display = 'none'; a1.style.transform = 'none'; a1.style.opacity = 1; }
+    const f = frame || WIN;
+    const top = f.y - WIN.y, left = f.x - WIN.x, right = WIN.x + WIN.w - (f.x + f.w), bot = WIN.y + WIN.h - (f.y + f.h);
+    win.style.clipPath = frame ? `inset(${top}px ${right}px ${bot}px ${left}px round 10px)` : 'none';
+  } else win.style.display = 'none';
+
+  // camera, with the whip pans at the seams
+  const c = camAt(t);
+  let wx = 0, blur = 0;
+  for (const [ts, k] of [...Object.entries(TRANS), ...HOPS_T.map((h) => [h, 'whip'])]) { if (k !== 'whip') continue; const u = (t - ts) / 0.16; if (Math.abs(u) < 1) { const w = 1 - Math.abs(u); blur = Math.max(blur, 34 * w * w); wx += u < 0 ? -110 * (1 + u) : 110 * (1 - u); } }
+  $('stage').style.transform = `translate(${960 - c.fx * c.s + wx}px, ${540 - c.fy * c.s}px) scale(${c.s})`;
+  $('hbs').setAttribute('stdDeviation', `${blur.toFixed(1)} 0`);
+  $('whip').style.filter = blur > 0.3 ? 'url(#hb)' : 'none';
+
+  // overlay: open/close brackets, reticle (+ its instrument label), cursor
+  let svg = '';
+  const sw = 3.2 / c.s;
+  if (frame) svg += brackets(frame, 3.2, 1);
+  const r = retAt(t), lab = $('lab');
+  lab.style.display = 'none';
+  if (r && !frame) {
+    svg += brackets(r, Math.max(2.4 / c.s, sw * 1.15), r.a, r.lab && r.lab.amber ? '#ffbe55' : '#f2f5f6');
+    if (r.lab && r.lab.a > 0.01) {   // label in screen space above the reticle's top-left corner
+      const sx = 960 + (r.x - c.fx) * c.s + wx, sy = 540 + (r.y - c.fy) * c.s;
+      lab.style.display = 'block'; lab.textContent = r.lab.text; lab.className = r.lab.amber ? 'amber' : '';
+      const w = lab.offsetWidth, y = sy - 44 < 84 ? 540 + (r.y + r.h - c.fy) * c.s + 10 : sy - 44;
+      lab.style.left = clamp(sx, 24, 1896 - w) + 'px'; lab.style.top = y + 'px'; lab.style.opacity = (r.lab.a * r.a).toFixed(3);
+    }
+  }
+  const cp = curAt(t);
+  if (cp) {
+    let press = 0, ring = '';
+    for (const tc of CLICKS) {
+      const u = (t - tc) / 0.14; if (Math.abs(u) < 1) press = Math.max(press, 1 - Math.abs(u));
+      const v = seg(t, tc, tc + 0.45); if (v > 0 && v < 1) ring += `<circle cx="${cp[0]}" cy="${cp[1]}" r="${(8 + 30 * eio(v)) / c.s}" fill="none" stroke="rgba(255,255,255,${(0.75 * (1 - v)).toFixed(3)})" stroke-width="${2.4 / c.s}"/>`;
+    }
+    const vis = ss(seg(t, CUR[0][0], CUR[0][0] + .2)) * (1 - ss(seg(t, CLOSE[0] - .3, CLOSE[0])));
+    svg += ring + `<g opacity="${vis}">${cursorSvg(cp[0], cp[1], c.s, press)}</g>`;
+  }
+  if (t < OPEN[0] + 0.2) svg += openingSvg(t, push);
+  $('ovl').innerHTML = svg;
+
+  // the one promise: push-in with a vignette on the pre-diagnosis card
+  const vo = ss(seg(t, PROMISE, PROMISE + .5)) * (1 - ss(seg(t, 120.0, 120.5))) * 0.9;
+  const vg = $('vign'); vg.style.opacity = vo.toFixed(3);
+  if (vo > 0) { const [vx, vy] = C(AR(B.rot.dx)); const sx = 960 + (vx - c.fx) * c.s, sy = 540 + (vy - c.fy) * c.s;
+    vg.style.background = `radial-gradient(ellipse 32% 56% at ${(sx / 19.2).toFixed(1)}% ${(sy / 10.8).toFixed(1)}%, rgba(0,0,0,0) 60%, rgba(4,8,14,.8) 100%)`; }
+
+  // HUD: title, chapter pill, captions (strip over the globe, pill in the app), end card
+  const tk = ss(seg(t, 0.3, 0.9)) * (1 - ss(seg(t, 5.2, 5.8)));
+  $('title').style.opacity = tk.toFixed(3); $('sub').style.opacity = (tk * ss(seg(t, 0.8, 1.3))).toFixed(3);
+  let ch = null; for (const c2 of CHAPTERS) if (t >= c2[0]) ch = c2;
+  const chap = $('chap');
+  if (ch && ch[1]) { chap.style.display = 'block'; chap.innerHTML = `<b>${ch[1]}</b>${ch[2]}`;
+    const k = ss(seg(t, ch[0], ch[0] + .3)); chap.style.opacity = k.toFixed(3); chap.style.transform = `translateY(${(1 - k) * -14}px)`; }
+  else chap.style.display = 'none';
+  const cue = TL.cues.find((q) => t >= q.t0 && t < q.t1);
+  const strip = $('strip'), cap = $('cap');
+  strip.style.display = cap.style.display = 'none';
+  if (cue) {
+    const el = (cue.t0 < OPEN[0] || cue.t0 >= CLOSE[0]) ? strip : cap;
+    el.style.display = 'block'; el.textContent = cue.text;
+    el.style.opacity = (ss(seg(t, cue.t0, cue.t0 + .15)) * (1 - ss(seg(t, cue.t1 - .15, cue.t1)))).toFixed(3);
+  }
+  const e = $('end'); const ek = ss(seg(t, END_AT, END_AT + .4));
+  e.style.display = ek > 0 ? 'block' : 'none'; e.style.opacity = ek.toFixed(3);
+};
+
+// every text on screen, for readcheck (computed from t)
+window.TEXTS = (t) => {
+  const out = [];
+  if (ss(seg(t, 1.25, 1.6)) * (1 - ss(seg(t, 4.75, 5.1))) > 0.95) out.push({ id: 'loss', text: OT.lossK + ' ' + OT.lossU + ' 40%', x0: 96, y0: 300, x1: 566, y1: 536 });
+  if (ss(seg(t, 5.3, 5.7)) * (1 - ss(seg(t, 8.5, 8.9))) > 0.95) out.push({ id: 'trace', text: OT.trT, pass: true, x0: 110, y0: 520, x1: 890, y1: 880 });
+  if (ss(seg(t, 8.6, 9.0)) * (1 - ss(seg(t, 12.6, 13.0))) > 0.95) out.push({ id: 'log', text: OT.logT + ' ' + OT.l1 + ' ' + OT.l2 + ' ' + OT.l3, x0: 1130, y0: 520, x1: 1820, y1: 850 });
+  if (ss(seg(t, 0.3, 0.9)) * (1 - ss(seg(t, 5.2, 5.8))) > 0.95) { out.push({ id: 'title', text: 'Field Shift', x0: 760, y0: 34, x1: 1160, y1: 110 }); out.push({ id: 'sub', text: TXT.sub, x0: 800, y0: 112, x1: 1120, y1: 142 }); }
+  let ch = null; for (const c2 of CHAPTERS) if (t >= c2[0]) ch = c2;
+  if (ch && ch[1] && t >= ch[0] + 0.3) out.push({ id: 'chap' + ch[1], text: ch[1] + ' ' + ch[2], x0: 36, y0: 24, x1: 420, y1: 70 });
+  const r = retAt(t);
+  if (r && r.lab && r.lab.a > 0.95 && !(t >= OPEN[0] && t < OPEN[1])) out.push({ id: 'lab:' + r.lab.text, text: r.lab.text, x0: 0, y0: 0, x1: 10, y1: 10 });
+  if (t >= END_AT + .4) { out.push({ id: 'end1', text: 'Field Shift', x0: 700, y0: 92, x1: 1220, y1: 190 }); out.push({ id: 'end2', text: 'Team InnoHuando', x0: 800, y0: 206, x1: 1120, y1: 252 });
+    out.push({ id: 'end3h', text: 'NASA Space Apps Challenge 2026', x0: 720, y0: 256, x1: 1200, y1: 300 }); out.push({ id: 'end4', text: 'fieldshift.earth', x0: 800, y0: 330, x1: 1120, y1: 372 });
+    out.push({ id: 'end3', text: 'credits', pass: true, x0: 250, y0: 822, x1: 1670, y1: 906 }); }
+  out.push({ id: 'si', text: TXT.si, x0: 1660, y0: 16, x1: 1896, y1: 50 });
+  return out;
+};
+
+(async () => {
+  [OD, GCAM] = await Promise.all([fetch('opening-data.json').then((r) => r.json()), fetch(`globe-world-${LANG}/cams.json`).then((r) => r.json())]);
+  [B, TL] = await Promise.all([fetch(`${APP}/boxes.json`).then((r) => r.json()), fetch(`timeline-${LANG}.json`).then((r) => r.json())]);
+  DUR = window.DUR = TL.dur;
+  $('sub').textContent = TXT.sub; $('si').textContent = TXT.si; document.querySelector('#end .cr').innerHTML = TXT.cr; document.documentElement.lang = LANG;
+  build();
+  for (const n of ['pick0', 'pick1', 'intake', 'chat', 'dash', 'dashSm', 'dashChart', 'prev', 'org', 'rot', 'dl']) imgs[n] = await load(`${APP}/${n}.jpg`);
+  await document.fonts.ready;
+  for (const f of ['400 20px Plex', '500 20px Plex', '400 20px Sans', '600 20px Sans', 'italic 500 20px Serif']) await document.fonts.load(f);
+  await window.render(0);
+  window.READY = true;
+})();
+</script>
+</body>
+</html>

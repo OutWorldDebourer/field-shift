@@ -1,6 +1,7 @@
 // Field selection (App 1): My GPS | Example site, place search, drop a point or draw an outline with live area,
 // on a licence-clean satellite map (Leaflet + EOX Sentinel-2 cloudless 2016). "Use this field" → POST /api/analyses.
 import type * as Leaflet from 'leaflet';
+import { tourLinkHtml } from '../../shared/tour';
 import { parseCoords } from './coords';
 import { createAnalysis, examples, type ClientAnalysis, type Example } from '../../shared/api';
 import type { FieldGeom } from '../../shared/contract';
@@ -58,6 +59,7 @@ export function mountFieldSelection(host: HTMLElement, opts: { site?: string | n
     <aside class="fs__panel glass" aria-labelledby="fs-t">
       <h1 id="fs-t" class="serif fs__title" data-i18n="fs_title">${esc(t('fs_title'))}</h1>
       <p class="fs__lede" data-i18n="fs_lede">${esc(t('fs_lede'))}</p>
+      ${tourLinkHtml('line')}
       <div class="seg" role="radiogroup" aria-label="${esc(t('fs_mode'))}" data-i18n-attr="aria-label:fs_mode">
         <button type="button" role="radio" data-mode="gps">${icon('gps')}<span data-i18n="fs_gps">${esc(t('fs_gps'))}</span></button>
         <button type="button" role="radio" data-mode="example">${icon('pin')}<span data-i18n="fs_example">${esc(t('fs_example'))}</span></button>

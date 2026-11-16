@@ -20,6 +20,10 @@ Setup (orbit, the question) → turn (lock-on: this field, this season is much w
 - Learn: the scale-as-camera continuity of a single powers-of-ten zoom; calm guided-tour product films (one feature per sentence, real UI, cursor smoothing).
 - Don't take: any layout, typeface, music, shot or logo of those works. No NASA logos or insignia.
 
+## Revision 2026-11-15
+
+Re-cut on the current app (screens re-captured from fieldshift.earth, example `demo-huaral`): the dive now prints the scale ladder (true-size POWER ~50 km cell → SMAP 9 km → Sentinel-2 10 m grid) and the reticle carries instrument labels on the readings (`POWER · ~50 km`, `Degree-days · NASA POWER`). Narration, music grid and shot timing are unchanged.
+
 ## Shot list (29.96 s, as built)
 
 | # | Time | Framing / move | What | Why |

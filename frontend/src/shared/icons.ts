@@ -16,6 +16,7 @@ const P: Record<string, string> = {
   camera: '<path d="M4 8h3l1.6-2.5h6.8L17 8h3v11H4Z"/><circle cx="12" cy="13.2" r="3.6"/>',
   send: '<path d="M4 12 20 4l-5.5 16-3-6.5Z"/><path d="M11.5 13.5 20 4"/>',
   arrow: '<path d="M4 12h15M13 6l6 6-6 6"/>',
+  play: '<path d="M8.5 5.5v13l10-6.5Z" fill="currentColor"/>',
   back: '<path d="M20 12H5M11 6l-6 6 6 6"/>',
   lock: '<rect x="5.5" y="10.5" width="13" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
   sheet: '<path d="M6 3h8l4 4v14H6Z"/><path d="M14 3v4h4M9 12h6M9 15.5h6M9 9h2"/>',

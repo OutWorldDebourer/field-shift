@@ -1,0 +1,514 @@
+{
+ "dur": 141.5,
+ "fps": 30,
+ "lang": "en",
+ "clips": [
+  {
+   "g": "g1",
+   "file": "g1-en.wav",
+   "in": 0.0,
+   "at": 1.0,
+   "tempo": 1.0
+  },
+  {
+   "g": "g2",
+   "file": "g2-en.wav",
+   "in": 0.0,
+   "at": 14.0,
+   "tempo": 1.0
+  },
+  {
+   "g": "g3",
+   "file": "g3-en.wav",
+   "in": 0.0,
+   "at": 24.6,
+   "tempo": 1.0
+  },
+  {
+   "g": "g4",
+   "file": "g4-en.wav",
+   "in": 0.0,
+   "at": 38.3,
+   "tempo": 1.0
+  },
+  {
+   "g": "g5a",
+   "file": "g5a-en.wav",
+   "in": 0.0,
+   "at": 56.5,
+   "tempo": 1.0
+  },
+  {
+   "g": "g5b",
+   "file": "g5b-en.wav",
+   "in": 21.3,
+   "at": 79.6,
+   "tempo": 1.0
+  },
+  {
+   "g": "g6",
+   "file": "g6-en.wav",
+   "in": 0.0,
+   "at": 87.6,
+   "tempo": 1.0
+  },
+  {
+   "g": "g7",
+   "file": "g7-en.wav",
+   "in": 0.0,
+   "at": 117.0,
+   "tempo": 1.0
+  },
+  {
+   "g": "g8",
+   "file": "g8-en.wav",
+   "in": 0.0,
+   "at": 129.0,
+   "tempo": 1.0
+  }
+ ],
+ "lines": {
+  "g1.0": [
+   1.0,
+   4.98
+  ],
+  "g1.1": [
+   4.98,
+   8.34
+  ],
+  "g1.2": [
+   8.34,
+   10.34
+  ],
+  "g1.3": [
+   10.34,
+   13.0
+  ],
+  "g2.0": [
+   14.0,
+   16.64
+  ],
+  "g2.1": [
+   16.64,
+   18.44
+  ],
+  "g2.2": [
+   19.1,
+   20.96
+  ],
+  "g2.3": [
+   20.96,
+   22.7
+  ],
+  "g3.0": [
+   24.6,
+   29.88
+  ],
+  "g3.1": [
+   30.62,
+   32.92
+  ],
+  "g3.2": [
+   33.88,
+   35.88
+  ],
+  "g4.0": [
+   38.42,
+   40.92
+  ],
+  "g4.1": [
+   41.4,
+   44.58
+  ],
+  "g4.2": [
+   45.0,
+   46.52
+  ],
+  "g4.3": [
+   47.16,
+   50.1
+  ],
+  "g4.4": [
+   50.64,
+   54.36
+  ],
+  "g5a.0": [
+   56.5,
+   59.14
+  ],
+  "g5a.1": [
+   59.92,
+   62.52
+  ],
+  "g5a.2": [
+   62.52,
+   64.58
+  ],
+  "g5a.3": [
+   65.4,
+   67.7
+  ],
+  "g5a.4": [
+   68.5,
+   71.9
+  ],
+  "g5a.5": [
+   72.8,
+   74.78
+  ],
+  "g5a.6": [
+   75.14,
+   77.76
+  ],
+  "g5b.0": [
+   79.72,
+   82.46
+  ],
+  "g5b.1": [
+   83.32,
+   85.48
+  ],
+  "g6.0": [
+   87.6,
+   89.6
+  ],
+  "g6.1": [
+   90.52,
+   92.38
+  ],
+  "g6.2": [
+   92.38,
+   95.16
+  ],
+  "g6.3": [
+   95.8,
+   98.52
+  ],
+  "g6.4": [
+   98.52,
+   101.28
+  ],
+  "g6.5": [
+   101.28,
+   103.78
+  ],
+  "g6.6": [
+   104.72,
+   107.4
+  ],
+  "g6.7": [
+   107.4,
+   109.82
+  ],
+  "g6.8": [
+   109.82,
+   112.64
+  ],
+  "g6.9": [
+   113.14,
+   114.26
+  ],
+  "g7.0": [
+   117.0,
+   120.56
+  ],
+  "g7.1": [
+   120.56,
+   123.86
+  ],
+  "g7.2": [
+   123.86,
+   125.84
+  ],
+  "g8.0": [
+   129.1,
+   130.94
+  ],
+  "g8.1": [
+   131.66,
+   133.54
+  ]
+ },
+ "cues": [
+  {
+   "id": "g1.0",
+   "t0": 0.95,
+   "t1": 4.88,
+   "speech_end": 4.98,
+   "text": "Every year, pests destroy up to 40% of the world's crops."
+  },
+  {
+   "id": "g1.1",
+   "t0": 4.93,
+   "t1": 8.24,
+   "speech_end": 8.34,
+   "text": "And as the climate warms, many of them breed faster."
+  },
+  {
+   "id": "g1.2",
+   "t0": 8.29,
+   "t1": 10.24,
+   "speech_end": 10.34,
+   "text": "So farmers spray more often,"
+  },
+  {
+   "id": "g1.3",
+   "t0": 10.29,
+   "t1": 13.45,
+   "speech_end": 13.0,
+   "text": "pay more, and their soil grows poorer."
+  },
+  {
+   "id": "g2.0",
+   "t0": 13.95,
+   "t1": 16.54,
+   "speech_end": 16.64,
+   "text": "Field Shift turns NASA's view of the Earth"
+  },
+  {
+   "id": "g2.1",
+   "t0": 16.59,
+   "t1": 18.89,
+   "speech_end": 18.44,
+   "text": "into advice for one field."
+  },
+  {
+   "id": "g2.2",
+   "t0": 19.05,
+   "t1": 20.86,
+   "speech_end": 20.96,
+   "text": "Here is how it works, on a pea field"
+  },
+  {
+   "id": "g2.3",
+   "t0": 20.91,
+   "t1": 23.15,
+   "speech_end": 22.7,
+   "text": "in the Huaral valley, in Peru."
+  },
+  {
+   "id": "g3.0",
+   "t0": 24.55,
+   "t1": 30.33,
+   "speech_end": 29.88,
+   "text": "Start with your field. Use your GPS, search a place, or open the example site."
+  },
+  {
+   "id": "g3.1",
+   "t0": 30.57,
+   "t1": 33.37,
+   "speech_end": 32.92,
+   "text": "Drop a point, or draw the outline."
+  },
+  {
+   "id": "g3.2",
+   "t0": 33.83,
+   "t1": 36.33,
+   "speech_end": 35.88,
+   "text": "Field Shift measures the area for you."
+  },
+  {
+   "id": "g4.0",
+   "t0": 38.37,
+   "t1": 41.3,
+   "speech_end": 40.92,
+   "text": "Then tell it what you would tell your agronomist."
+  },
+  {
+   "id": "g4.1",
+   "t0": 41.35,
+   "t1": 44.9,
+   "speech_end": 44.58,
+   "text": "What grows now, what grew before, how you water."
+  },
+  {
+   "id": "g4.2",
+   "t0": 44.95,
+   "t1": 46.97,
+   "speech_end": 46.52,
+   "text": "If you don't know, say so."
+  },
+  {
+   "id": "g4.3",
+   "t0": 47.11,
+   "t1": 50.54,
+   "speech_end": 50.1,
+   "text": "Send photos at full resolution, or simply talk."
+  },
+  {
+   "id": "g4.4",
+   "t0": 50.59,
+   "t1": 54.81,
+   "speech_end": 54.36,
+   "text": "It asks for what is missing, like a closer look at the underside of a leaf."
+  },
+  {
+   "id": "g5a.0",
+   "t0": 56.45,
+   "t1": 59.59,
+   "speech_end": 59.14,
+   "text": "Meanwhile, NASA data reads your field."
+  },
+  {
+   "id": "g5a.1",
+   "t0": 59.87,
+   "t1": 62.42,
+   "speech_end": 62.52,
+   "text": "40 years of NASA POWER weather show these weeks"
+  },
+  {
+   "id": "g5a.2",
+   "t0": 62.47,
+   "t1": 65.03,
+   "speech_end": 64.58,
+   "text": "running 5 °C warmer than normal."
+  },
+  {
+   "id": "g5a.3",
+   "t0": 65.35,
+   "t1": 68.15,
+   "speech_end": 67.7,
+   "text": "NASA's SMAP satellite measures soil moisture."
+  },
+  {
+   "id": "g5a.4",
+   "t0": 68.45,
+   "t1": 72.35,
+   "speech_end": 71.9,
+   "text": "Sentinel-2 maps crop vigor, 10 m per pixel."
+  },
+  {
+   "id": "g5a.5",
+   "t0": 72.75,
+   "t1": 75.04,
+   "speech_end": 74.78,
+   "text": "Every reading shows its source, its date,"
+  },
+  {
+   "id": "g5a.6",
+   "t0": 75.09,
+   "t1": 78.21,
+   "speech_end": 77.76,
+   "text": "and whether it describes your field or the whole region."
+  },
+  {
+   "id": "g5b.0",
+   "t0": 79.67,
+   "t1": 82.91,
+   "speech_end": 82.46,
+   "text": "From the temperature, degree-days count pest generations:"
+  },
+  {
+   "id": "g5b.1",
+   "t0": 83.27,
+   "t1": 85.93,
+   "speech_end": 85.48,
+   "text": "aphids here complete about 3 more generations than normal."
+  },
+  {
+   "id": "g6.0",
+   "t0": 87.55,
+   "t1": 90.05,
+   "speech_end": 89.6,
+   "text": "Then the readings become a plan."
+  },
+  {
+   "id": "g6.1",
+   "t0": 90.47,
+   "t1": 92.28,
+   "speech_end": 92.38,
+   "text": "Prevention ranks the pests likely on your field,"
+  },
+  {
+   "id": "g6.2",
+   "t0": 92.33,
+   "t1": 95.61,
+   "speech_end": 95.16,
+   "text": "with NASA's GEOS-FP weather forecast."
+  },
+  {
+   "id": "g6.3",
+   "t0": 95.75,
+   "t1": 98.42,
+   "speech_end": 98.52,
+   "text": "Organic care names the natural enemies to protect,"
+  },
+  {
+   "id": "g6.4",
+   "t0": 98.47,
+   "t1": 101.18,
+   "speech_end": 101.28,
+   "text": "like lady beetles and parasitoid wasps,"
+  },
+  {
+   "id": "g6.5",
+   "t0": 101.23,
+   "t1": 104.23,
+   "speech_end": 103.78,
+   "text": "and beneficial fungi such as Trichoderma."
+  },
+  {
+   "id": "g6.6",
+   "t0": 104.67,
+   "t1": 107.3,
+   "speech_end": 107.4,
+   "text": "Rotation compares your current rotation with two alternatives,"
+  },
+  {
+   "id": "g6.7",
+   "t0": 107.35,
+   "t1": 109.72,
+   "speech_end": 109.82,
+   "text": "for soil health, water and pest cycles."
+  },
+  {
+   "id": "g6.8",
+   "t0": 109.77,
+   "t1": 113.04,
+   "speech_end": 112.64,
+   "text": "And you can ask: what if I grow avocado?"
+  },
+  {
+   "id": "g6.9",
+   "t0": 113.09,
+   "t1": 114.89,
+   "speech_end": 114.26,
+   "text": "It is scored the same way."
+  },
+  {
+   "id": "g7.0",
+   "t0": 116.95,
+   "t1": 120.46,
+   "speech_end": 120.56,
+   "text": "It all ends in a pre-diagnosis, not a diagnosis."
+  },
+  {
+   "id": "g7.1",
+   "t0": 120.51,
+   "t1": 123.76,
+   "speech_end": 123.86,
+   "text": "Download the technical sheet, with every number cited,"
+  },
+  {
+   "id": "g7.2",
+   "t0": 123.81,
+   "t1": 126.29,
+   "speech_end": 125.84,
+   "text": "and confirm it with your agronomist."
+  },
+  {
+   "id": "g8.0",
+   "t0": 129.05,
+   "t1": 131.39,
+   "speech_end": 130.94,
+   "text": "NASA watches the whole planet."
+  },
+  {
+   "id": "g8.1",
+   "t0": 131.61,
+   "t1": 133.99,
+   "speech_end": 133.54,
+   "text": "Field Shift helps you read your own field."
+  }
+ ]
+}

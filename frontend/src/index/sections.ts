@@ -8,6 +8,7 @@ import { fmt, fmtDate, t } from '../shared/i18n';
 import { icon, type IconName } from '../shared/icons';
 import { langSwitchHtml } from '../shared/langswitch';
 import { glassPhoneHtml } from '../shared/phone';
+import { tourCardHtml, tourLinkHtml } from '../shared/tour';
 import type { StrKey } from '../shared/strings';
 
 const T = (k: StrKey, tag = 'span', cls = '') => `<${tag}${cls ? ` class="${cls}"` : ''} data-i18n="${k}">${esc(t(k))}</${tag}>`;
@@ -37,7 +38,7 @@ export function hud(): string {
 
 const ctas = (cls = '') => `<div class="ctas ${cls}">
   <a class="btn btn--solid" href="app.html">${T('start')}${icon('arrow')}</a>
-  <a class="btn btn--glass" href="app.html?site=huaral">${T('try_example')}</a>
+  <a class="btn btn--glass" href="app.html?a=demo-huaral&amp;tab=dashboard">${T('try_example')}</a>
 </div>`;
 
 function hero(): string {
@@ -46,6 +47,7 @@ function hero(): string {
       <h1 id="hero-t" class="serif hero__title">${T('ix_hero_title')}</h1>
       <p class="hero__lede">${T('ix_hero_lede')}</p>
       ${ctas()}
+      ${tourLinkHtml('hero')}
     </div>
     <div class="hero__phone" id="hero-phone">${glassPhoneHtml()}</div>
     <a class="scroll-cue mono" href="#how">${icon('down')}${T('scroll_cue')}</a>
@@ -70,6 +72,7 @@ function how(): string {
           <a class="how__hook-s mono" href="https://openknowledge.fao.org/handle/20.500.14283/cb4769en" target="_blank" rel="noopener">${T('ix_how_hook_src')}</a></figcaption>
       </figure>
     </div>
+    ${tourCardHtml()}
     <ol class="steps">
       ${step('01', 'ix_how_1_t', 'ix_how_1_b', 'ix_how_1_c', 'camera')}
       ${step('02', 'ix_how_2_t', 'ix_how_2_b', 'ix_how_2_c', 'orbit')}
@@ -150,7 +153,7 @@ function dash(): string {
       <p class="sec-lede">${T('ix_dash_lede')}</p>
     </div>
     <div class="preview" id="dash-preview"></div>
-    <a class="btn btn--day dash__open" href="app.html?site=huaral&amp;go=1&amp;tab=dashboard">${T('ix_dash_open')}${icon('arrow')}</a>
+    <a class="btn btn--day dash__open" href="app.html?a=demo-huaral&amp;tab=dashboard">${T('ix_dash_open')}${icon('arrow')}</a>
   </section>`;
 }
 
