@@ -1,6 +1,6 @@
 # Space Apps project page: submission copy
 
-The text entered on https://www.spaceappschallenge.org/2026/find-a-team/innohuando/?tab=project (all fields must be in English). Keep this file in step with the form.
+The text entered on https://www.spaceappschallenge.org/2026/find-a-team/innohuando/?tab=project (all fields must be in English). Keep this file in step with the form. Saved on the site 2026-11-15 20:59 (not yet submitted for judging).
 
 ## Project Name
 
@@ -58,7 +58,7 @@ TRY IT
 
 ## Use of Super Intelligence (SI)
 
-Options to select: as offered by the form (code, text, images, audio, data used with AI assistance). Our disclosure (`AI_USE.md`, handbook page 8): Claude via Claude Code wrote most of the code and documentation under the team's direction; the in-app consultant is Claude (`claude-opus-5-5`); AI-researched crop items are labelled; illustrative images carry the "SI-assisted visuals" tag; film narration is Gemini TTS, acknowledged on screen and in metadata. The idea and the approach are the team's.
+Options selected: Research or Information Gathering; Data Analysis and Interpretation; Building SI/ML Into the Project; Coding, Debugging, or Troubleshooting; Writing, Editing, or Translation; Visual Design or Image Creation; Presentation, Video, or Audio. Not selected: Ideation or Brainstorming (the idea is the team's). Our disclosure (`AI_USE.md`, handbook page 8): Claude via Claude Code wrote most of the code and documentation under the team's direction; the in-app consultant is Claude (`claude-opus-5-5`); AI-researched crop items are labelled; illustrative images carry the "SI-assisted visuals" tag; film narration is Gemini TTS, acknowledged on screen and in metadata. The idea and the approach are the team's.
 
 ## NASA Data (link text → URL)
 
@@ -97,5 +97,6 @@ Options to select: as offered by the form (code, text, images, audio, data used 
 | MapLibre GL JS (BSD-3-Clause) | https://maplibre.org/ |
 | Fonts: Source Serif 4, Source Sans 3, IBM Plex Mono (OFL), via Fontsource | https://fontsource.org/ |
 | Music samples: VS Chamber Orchestra CE and VCSL (CC0) | https://versilian-studios.com/ |
+| Field Shift source code (Apache-2.0), with all sources and licences | https://github.com/OutWorldDebourer/field-shift |
 
 The crop knowledge base cites 103 + 41 further sources; they are listed with their licences in the repository (`backend/crates/crops/data/README.md`).
